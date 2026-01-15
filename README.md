@@ -2,6 +2,12 @@
 
 Writing gRPC adapters for https://chromedevtools.github.io/devtools-protocol/ (definition at eg https://source.chromium.org/chromium/chromium/src/+/main:third_party/blink/public/devtools_protocol/domains/Page.pdl) in a way that's compatible with the rest of our rpc tooling.
 
+The dream:
+
+```bash
+./runrpc Stream.captureScreenshotRequest pages.binarypb | ./runrpc Page.captureScreenshot > screenshots.binarypb
+```
+
 ## Starting Out
 
 Milestone1: able to send a grpc to headless multiclient (https://developer.chrome.com/blog/new-in-devtools-63/#multi-client) chrome to:
