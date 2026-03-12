@@ -82,16 +82,21 @@ message ServiceWorkerVersion {
 
 // ==================== Requests / Responses ====================
 
-message EnableRequest {}
+message EnableRequest {
+  string session_id = 99;
+}
 message EnableResponse {}
 
-message DisableRequest {}
+message DisableRequest {
+  string session_id = 99;
+}
 message DisableResponse {}
 
 message DeliverPushMessageRequest {
   string origin = 1;
   string registration_id = 2;
   string data = 3;
+  string session_id = 99;
 }
 message DeliverPushMessageResponse {}
 
@@ -100,6 +105,7 @@ message DispatchSyncEventRequest {
   string registration_id = 2;
   string tag = 3;
   bool last_chance = 4;
+  string session_id = 99;
 }
 message DispatchSyncEventResponse {}
 
@@ -107,50 +113,62 @@ message DispatchPeriodicSyncEventRequest {
   string origin = 1;
   string registration_id = 2;
   string tag = 3;
+  string session_id = 99;
 }
 message DispatchPeriodicSyncEventResponse {}
 
 message InspectWorkerRequest {
   string version_id = 1;
+  string session_id = 99;
 }
 message InspectWorkerResponse {}
 
 message SetForceUpdateOnPageLoadRequest {
   bool force_update_on_page_load = 1;
+  string session_id = 99;
 }
 message SetForceUpdateOnPageLoadResponse {}
 
 message SkipWaitingRequest {
   string scope_url = 1;
+  string session_id = 99;
 }
 message SkipWaitingResponse {}
 
 message StartWorkerRequest {
   string scope_url = 1;
+  string session_id = 99;
 }
 message StartWorkerResponse {}
 
-message StopAllWorkersRequest {}
+message StopAllWorkersRequest {
+  string session_id = 99;
+}
 message StopAllWorkersResponse {}
 
 message StopWorkerRequest {
   string version_id = 1;
+  string session_id = 99;
 }
 message StopWorkerResponse {}
 
 message UnregisterRequest {
   string scope_url = 1;
+  string session_id = 99;
 }
 message UnregisterResponse {}
 
 message UpdateRegistrationRequest {
   string scope_url = 1;
+  string session_id = 99;
 }
 message UpdateRegistrationResponse {}
 
 // ==================== Events ====================
 
-message SubscribeEventsRequest {}
+message SubscribeEventsRequest {
+  string session_id = 99;
+}
 
 message ServiceWorkerEvent {
   oneof event {

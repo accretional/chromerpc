@@ -23,6 +23,16 @@ func New(client *cdpclient.Client) *Server {
 	return &Server{client: client}
 }
 
+// send routes a CDP command through the specified session, falling back
+// to the client's default session if sessionID is empty.
+func (s *Server) send(ctx context.Context, sessionID string, method string, params interface{}) (json.RawMessage, error) {
+	if sessionID != "" {
+		return s.client.SendWithSession(ctx, method, params, sessionID)
+	}
+	return s.client.Send(ctx, method, params)
+}
+
+
 func (s *Server) Enable(ctx context.Context, req *pb.EnableRequest) (*pb.EnableResponse, error) {
 	params := map[string]interface{}{}
 	if len(req.Patterns) > 0 {
@@ -47,9 +57,9 @@ func (s *Server) Enable(ctx context.Context, req *pb.EnableRequest) (*pb.EnableR
 	}
 	var err error
 	if len(params) > 0 {
-		_, err = s.client.Send(ctx, "Fetch.enable", params)
+		_, err = s.send(ctx, req.SessionId, "Fetch.enable", params)
 	} else {
-		_, err = s.client.Send(ctx, "Fetch.enable", nil)
+		_, err = s.send(ctx, req.SessionId, "Fetch.enable", nil)
 	}
 	if err != nil {
 		return nil, fmt.Errorf("Fetch.enable: %w", err)
@@ -58,7 +68,7 @@ func (s *Server) Enable(ctx context.Context, req *pb.EnableRequest) (*pb.EnableR
 }
 
 func (s *Server) Disable(ctx context.Context, req *pb.DisableRequest) (*pb.DisableResponse, error) {
-	if _, err := s.client.Send(ctx, "Fetch.disable", nil); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Fetch.disable", nil); err != nil {
 		return nil, fmt.Errorf("Fetch.disable: %w", err)
 	}
 	return &pb.DisableResponse{}, nil
@@ -83,7 +93,7 @@ func (s *Server) ContinueRequest(ctx context.Context, req *pb.ContinueRequestReq
 	if req.InterceptResponse {
 		params["interceptResponse"] = true
 	}
-	if _, err := s.client.Send(ctx, "Fetch.continueRequest", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Fetch.continueRequest", params); err != nil {
 		return nil, fmt.Errorf("Fetch.continueRequest: %w", err)
 	}
 	return &pb.ContinueRequestResponse{}, nil
@@ -106,7 +116,7 @@ func (s *Server) FulfillRequest(ctx context.Context, req *pb.FulfillRequestReque
 	if req.BinaryResponseHeaders != "" {
 		params["binaryResponseHeaders"] = req.BinaryResponseHeaders
 	}
-	if _, err := s.client.Send(ctx, "Fetch.fulfillRequest", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Fetch.fulfillRequest", params); err != nil {
 		return nil, fmt.Errorf("Fetch.fulfillRequest: %w", err)
 	}
 	return &pb.FulfillRequestResponse{}, nil
@@ -117,7 +127,7 @@ func (s *Server) FailRequest(ctx context.Context, req *pb.FailRequestRequest) (*
 		"requestId": req.RequestId,
 		"reason":    req.Reason,
 	}
-	if _, err := s.client.Send(ctx, "Fetch.failRequest", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Fetch.failRequest", params); err != nil {
 		return nil, fmt.Errorf("Fetch.failRequest: %w", err)
 	}
 	return &pb.FailRequestResponse{}, nil
@@ -139,7 +149,7 @@ func (s *Server) ContinueWithAuth(ctx context.Context, req *pb.ContinueWithAuthR
 		}
 		params["authChallengeResponse"] = acr
 	}
-	if _, err := s.client.Send(ctx, "Fetch.continueWithAuth", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Fetch.continueWithAuth", params); err != nil {
 		return nil, fmt.Errorf("Fetch.continueWithAuth: %w", err)
 	}
 	return &pb.ContinueWithAuthResponse{}, nil
@@ -149,7 +159,7 @@ func (s *Server) GetResponseBody(ctx context.Context, req *pb.GetResponseBodyReq
 	params := map[string]interface{}{
 		"requestId": req.RequestId,
 	}
-	result, err := s.client.Send(ctx, "Fetch.getResponseBody", params)
+	result, err := s.send(ctx, req.SessionId, "Fetch.getResponseBody", params)
 	if err != nil {
 		return nil, fmt.Errorf("Fetch.getResponseBody: %w", err)
 	}
@@ -170,7 +180,7 @@ func (s *Server) TakeResponseBodyAsStream(ctx context.Context, req *pb.TakeRespo
 	params := map[string]interface{}{
 		"requestId": req.RequestId,
 	}
-	result, err := s.client.Send(ctx, "Fetch.takeResponseBodyAsStream", params)
+	result, err := s.send(ctx, req.SessionId, "Fetch.takeResponseBodyAsStream", params)
 	if err != nil {
 		return nil, fmt.Errorf("Fetch.takeResponseBodyAsStream: %w", err)
 	}
@@ -201,7 +211,7 @@ func (s *Server) ContinueResponse(ctx context.Context, req *pb.ContinueResponseR
 	if req.BinaryResponseHeaders != "" {
 		params["binaryResponseHeaders"] = req.BinaryResponseHeaders
 	}
-	if _, err := s.client.Send(ctx, "Fetch.continueResponse", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Fetch.continueResponse", params); err != nil {
 		return nil, fmt.Errorf("Fetch.continueResponse: %w", err)
 	}
 	return &pb.ContinueResponseResponse{}, nil

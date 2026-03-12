@@ -74,14 +74,19 @@ message SamplingHeapProfile {
 
 // ==================== Requests / Responses ====================
 
-message EnableRequest {}
+message EnableRequest {
+  string session_id = 99;
+}
 message EnableResponse {}
 
-message DisableRequest {}
+message DisableRequest {
+  string session_id = 99;
+}
 message DisableResponse {}
 
 message StartTrackingHeapObjectsRequest {
   bool track_allocations = 1;
+  string session_id = 99;
 }
 message StartTrackingHeapObjectsResponse {}
 
@@ -90,6 +95,7 @@ message StopTrackingHeapObjectsRequest {
   bool treat_global_objects_as_roots = 2;
   bool capture_numeric_value = 3;
   bool expose_internals = 4;
+  string session_id = 99;
 }
 message StopTrackingHeapObjectsResponse {}
 
@@ -98,15 +104,19 @@ message TakeHeapSnapshotRequest {
   bool treat_global_objects_as_roots = 2;
   bool capture_numeric_value = 3;
   bool expose_internals = 4;
+  string session_id = 99;
 }
 message TakeHeapSnapshotResponse {}
 
-message CollectGarbageRequest {}
+message CollectGarbageRequest {
+  string session_id = 99;
+}
 message CollectGarbageResponse {}
 
 message GetObjectByHeapObjectIdRequest {
   string object_id = 1;
   string object_group = 2;
+  string session_id = 99;
 }
 message GetObjectByHeapObjectIdResponse {
   string result = 1;
@@ -114,11 +124,13 @@ message GetObjectByHeapObjectIdResponse {
 
 message AddInspectedHeapObjectRequest {
   string heap_object_id = 1;
+  string session_id = 99;
 }
 message AddInspectedHeapObjectResponse {}
 
 message GetHeapObjectIdRequest {
   string object_id = 1;
+  string session_id = 99;
 }
 message GetHeapObjectIdResponse {
   string heap_snapshot_object_id = 1;
@@ -128,17 +140,22 @@ message StartSamplingRequest {
   double sampling_interval = 1;
   bool include_objects_collected_by_major_gc = 2;
   bool include_objects_collected_by_minor_gc = 3;
+  string session_id = 99;
 }
 message StartSamplingResponse {}
 
-message StopSamplingRequest {}
+message StopSamplingRequest {
+  string session_id = 99;
+}
 message StopSamplingResponse {
   SamplingHeapProfile profile = 1;
 }
 
 // ==================== Events ====================
 
-message SubscribeEventsRequest {}
+message SubscribeEventsRequest {
+  string session_id = 99;
+}
 
 message HeapProfilerEvent {
   oneof event {

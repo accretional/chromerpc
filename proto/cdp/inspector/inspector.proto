@@ -19,10 +19,14 @@ service InspectorService {
 
 // ==================== Requests / Responses ====================
 
-message EnableRequest {}
+message EnableRequest {
+  string session_id = 99;
+}
 message EnableResponse {}
 
-message DisableRequest {}
+message DisableRequest {
+  string session_id = 99;
+}
 message DisableResponse {}
 
 // ==================== Event Streaming ====================

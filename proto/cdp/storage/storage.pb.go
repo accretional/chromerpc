@@ -373,6 +373,7 @@ type ClearDataForOriginRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Origin        string                 `protobuf:"bytes,1,opt,name=origin,proto3" json:"origin,omitempty"`
 	StorageTypes  string                 `protobuf:"bytes,2,opt,name=storage_types,json=storageTypes,proto3" json:"storage_types,omitempty"` // comma-separated: "appcache,cookies,file_systems,indexeddb,local_storage,shader_cache,websql,service_workers,cache_storage,interest_groups,shared_storage,storage_buckets,all,other"
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -421,6 +422,13 @@ func (x *ClearDataForOriginRequest) GetStorageTypes() string {
 	return ""
 }
 
+func (x *ClearDataForOriginRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type ClearDataForOriginResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -461,6 +469,7 @@ type ClearDataForStorageKeyRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	StorageKey    string                 `protobuf:"bytes,1,opt,name=storage_key,json=storageKey,proto3" json:"storage_key,omitempty"`
 	StorageTypes  string                 `protobuf:"bytes,2,opt,name=storage_types,json=storageTypes,proto3" json:"storage_types,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -509,6 +518,13 @@ func (x *ClearDataForStorageKeyRequest) GetStorageTypes() string {
 	return ""
 }
 
+func (x *ClearDataForStorageKeyRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type ClearDataForStorageKeyResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -548,6 +564,7 @@ func (*ClearDataForStorageKeyResponse) Descriptor() ([]byte, []int) {
 type GetUsageAndQuotaRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Origin        string                 `protobuf:"bytes,1,opt,name=origin,proto3" json:"origin,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -585,6 +602,13 @@ func (*GetUsageAndQuotaRequest) Descriptor() ([]byte, []int) {
 func (x *GetUsageAndQuotaRequest) GetOrigin() string {
 	if x != nil {
 		return x.Origin
+	}
+	return ""
+}
+
+func (x *GetUsageAndQuotaRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -660,6 +684,7 @@ func (x *GetUsageAndQuotaResponse) GetUsageBreakdown() []*UsageForType {
 type GetCookiesRequest struct {
 	state            protoimpl.MessageState `protogen:"open.v1"`
 	BrowserContextId string                 `protobuf:"bytes,1,opt,name=browser_context_id,json=browserContextId,proto3" json:"browser_context_id,omitempty"`
+	SessionId        string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields    protoimpl.UnknownFields
 	sizeCache        protoimpl.SizeCache
 }
@@ -697,6 +722,13 @@ func (*GetCookiesRequest) Descriptor() ([]byte, []int) {
 func (x *GetCookiesRequest) GetBrowserContextId() string {
 	if x != nil {
 		return x.BrowserContextId
+	}
+	return ""
+}
+
+func (x *GetCookiesRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -749,6 +781,7 @@ type SetCookiesRequest struct {
 	state            protoimpl.MessageState `protogen:"open.v1"`
 	Cookies          []*CookieParam         `protobuf:"bytes,1,rep,name=cookies,proto3" json:"cookies,omitempty"`
 	BrowserContextId string                 `protobuf:"bytes,2,opt,name=browser_context_id,json=browserContextId,proto3" json:"browser_context_id,omitempty"`
+	SessionId        string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields    protoimpl.UnknownFields
 	sizeCache        protoimpl.SizeCache
 }
@@ -797,6 +830,13 @@ func (x *SetCookiesRequest) GetBrowserContextId() string {
 	return ""
 }
 
+func (x *SetCookiesRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type SetCookiesResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -836,6 +876,7 @@ func (*SetCookiesResponse) Descriptor() ([]byte, []int) {
 type ClearCookiesRequest struct {
 	state            protoimpl.MessageState `protogen:"open.v1"`
 	BrowserContextId string                 `protobuf:"bytes,1,opt,name=browser_context_id,json=browserContextId,proto3" json:"browser_context_id,omitempty"`
+	SessionId        string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields    protoimpl.UnknownFields
 	sizeCache        protoimpl.SizeCache
 }
@@ -873,6 +914,13 @@ func (*ClearCookiesRequest) Descriptor() ([]byte, []int) {
 func (x *ClearCookiesRequest) GetBrowserContextId() string {
 	if x != nil {
 		return x.BrowserContextId
+	}
+	return ""
+}
+
+func (x *ClearCookiesRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -916,6 +964,7 @@ func (*ClearCookiesResponse) Descriptor() ([]byte, []int) {
 type TrackIndexedDBForOriginRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Origin        string                 `protobuf:"bytes,1,opt,name=origin,proto3" json:"origin,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -953,6 +1002,13 @@ func (*TrackIndexedDBForOriginRequest) Descriptor() ([]byte, []int) {
 func (x *TrackIndexedDBForOriginRequest) GetOrigin() string {
 	if x != nil {
 		return x.Origin
+	}
+	return ""
+}
+
+func (x *TrackIndexedDBForOriginRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -996,6 +1052,7 @@ func (*TrackIndexedDBForOriginResponse) Descriptor() ([]byte, []int) {
 type UntrackIndexedDBForOriginRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Origin        string                 `protobuf:"bytes,1,opt,name=origin,proto3" json:"origin,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1033,6 +1090,13 @@ func (*UntrackIndexedDBForOriginRequest) Descriptor() ([]byte, []int) {
 func (x *UntrackIndexedDBForOriginRequest) GetOrigin() string {
 	if x != nil {
 		return x.Origin
+	}
+	return ""
+}
+
+func (x *UntrackIndexedDBForOriginRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -1076,6 +1140,7 @@ func (*UntrackIndexedDBForOriginResponse) Descriptor() ([]byte, []int) {
 type TrackCacheStorageForOriginRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Origin        string                 `protobuf:"bytes,1,opt,name=origin,proto3" json:"origin,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1113,6 +1178,13 @@ func (*TrackCacheStorageForOriginRequest) Descriptor() ([]byte, []int) {
 func (x *TrackCacheStorageForOriginRequest) GetOrigin() string {
 	if x != nil {
 		return x.Origin
+	}
+	return ""
+}
+
+func (x *TrackCacheStorageForOriginRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -1156,6 +1228,7 @@ func (*TrackCacheStorageForOriginResponse) Descriptor() ([]byte, []int) {
 type UntrackCacheStorageForOriginRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Origin        string                 `protobuf:"bytes,1,opt,name=origin,proto3" json:"origin,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1193,6 +1266,13 @@ func (*UntrackCacheStorageForOriginRequest) Descriptor() ([]byte, []int) {
 func (x *UntrackCacheStorageForOriginRequest) GetOrigin() string {
 	if x != nil {
 		return x.Origin
+	}
+	return ""
+}
+
+func (x *UntrackCacheStorageForOriginRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -1235,6 +1315,7 @@ func (*UntrackCacheStorageForOriginResponse) Descriptor() ([]byte, []int) {
 
 type SubscribeEventsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1267,6 +1348,13 @@ func (x *SubscribeEventsRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use SubscribeEventsRequest.ProtoReflect.Descriptor instead.
 func (*SubscribeEventsRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_storage_storage_proto_rawDescGZIP(), []int{23}
+}
+
+func (x *SubscribeEventsRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type StorageEvent struct {
@@ -1690,47 +1778,69 @@ const file_proto_cdp_storage_storage_proto_rawDesc = "" +
 	"\rsource_scheme\x18\f \x01(\tR\fsourceScheme\x12\x1f\n" +
 	"\vsource_port\x18\r \x01(\x05R\n" +
 	"sourcePort\x12#\n" +
-	"\rpartition_key\x18\x0e \x01(\tR\fpartitionKey\"X\n" +
+	"\rpartition_key\x18\x0e \x01(\tR\fpartitionKey\"w\n" +
 	"\x19ClearDataForOriginRequest\x12\x16\n" +
 	"\x06origin\x18\x01 \x01(\tR\x06origin\x12#\n" +
-	"\rstorage_types\x18\x02 \x01(\tR\fstorageTypes\"\x1c\n" +
-	"\x1aClearDataForOriginResponse\"e\n" +
+	"\rstorage_types\x18\x02 \x01(\tR\fstorageTypes\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x1c\n" +
+	"\x1aClearDataForOriginResponse\"\x84\x01\n" +
 	"\x1dClearDataForStorageKeyRequest\x12\x1f\n" +
 	"\vstorage_key\x18\x01 \x01(\tR\n" +
 	"storageKey\x12#\n" +
-	"\rstorage_types\x18\x02 \x01(\tR\fstorageTypes\" \n" +
-	"\x1eClearDataForStorageKeyResponse\"1\n" +
+	"\rstorage_types\x18\x02 \x01(\tR\fstorageTypes\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\" \n" +
+	"\x1eClearDataForStorageKeyResponse\"P\n" +
 	"\x17GetUsageAndQuotaRequest\x12\x16\n" +
-	"\x06origin\x18\x01 \x01(\tR\x06origin\"\xb3\x01\n" +
+	"\x06origin\x18\x01 \x01(\tR\x06origin\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\xb3\x01\n" +
 	"\x18GetUsageAndQuotaResponse\x12\x14\n" +
 	"\x05usage\x18\x01 \x01(\x01R\x05usage\x12\x14\n" +
 	"\x05quota\x18\x02 \x01(\x01R\x05quota\x12'\n" +
 	"\x0foverride_active\x18\x03 \x01(\bR\x0eoverrideActive\x12B\n" +
-	"\x0fusage_breakdown\x18\x04 \x03(\v2\x19.cdp.storage.UsageForTypeR\x0eusageBreakdown\"A\n" +
+	"\x0fusage_breakdown\x18\x04 \x03(\v2\x19.cdp.storage.UsageForTypeR\x0eusageBreakdown\"`\n" +
 	"\x11GetCookiesRequest\x12,\n" +
-	"\x12browser_context_id\x18\x01 \x01(\tR\x10browserContextId\"J\n" +
+	"\x12browser_context_id\x18\x01 \x01(\tR\x10browserContextId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"J\n" +
 	"\x12GetCookiesResponse\x124\n" +
-	"\acookies\x18\x01 \x03(\v2\x1a.cdp.storage.StorageCookieR\acookies\"u\n" +
+	"\acookies\x18\x01 \x03(\v2\x1a.cdp.storage.StorageCookieR\acookies\"\x94\x01\n" +
 	"\x11SetCookiesRequest\x122\n" +
 	"\acookies\x18\x01 \x03(\v2\x18.cdp.storage.CookieParamR\acookies\x12,\n" +
-	"\x12browser_context_id\x18\x02 \x01(\tR\x10browserContextId\"\x14\n" +
-	"\x12SetCookiesResponse\"C\n" +
+	"\x12browser_context_id\x18\x02 \x01(\tR\x10browserContextId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x14\n" +
+	"\x12SetCookiesResponse\"b\n" +
 	"\x13ClearCookiesRequest\x12,\n" +
-	"\x12browser_context_id\x18\x01 \x01(\tR\x10browserContextId\"\x16\n" +
-	"\x14ClearCookiesResponse\"8\n" +
+	"\x12browser_context_id\x18\x01 \x01(\tR\x10browserContextId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x16\n" +
+	"\x14ClearCookiesResponse\"W\n" +
 	"\x1eTrackIndexedDBForOriginRequest\x12\x16\n" +
-	"\x06origin\x18\x01 \x01(\tR\x06origin\"!\n" +
-	"\x1fTrackIndexedDBForOriginResponse\":\n" +
+	"\x06origin\x18\x01 \x01(\tR\x06origin\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"!\n" +
+	"\x1fTrackIndexedDBForOriginResponse\"Y\n" +
 	" UntrackIndexedDBForOriginRequest\x12\x16\n" +
-	"\x06origin\x18\x01 \x01(\tR\x06origin\"#\n" +
-	"!UntrackIndexedDBForOriginResponse\";\n" +
+	"\x06origin\x18\x01 \x01(\tR\x06origin\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"#\n" +
+	"!UntrackIndexedDBForOriginResponse\"Z\n" +
 	"!TrackCacheStorageForOriginRequest\x12\x16\n" +
-	"\x06origin\x18\x01 \x01(\tR\x06origin\"$\n" +
-	"\"TrackCacheStorageForOriginResponse\"=\n" +
+	"\x06origin\x18\x01 \x01(\tR\x06origin\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"$\n" +
+	"\"TrackCacheStorageForOriginResponse\"\\\n" +
 	"#UntrackCacheStorageForOriginRequest\x12\x16\n" +
-	"\x06origin\x18\x01 \x01(\tR\x06origin\"&\n" +
-	"$UntrackCacheStorageForOriginResponse\"\x18\n" +
-	"\x16SubscribeEventsRequest\"\xbf\x03\n" +
+	"\x06origin\x18\x01 \x01(\tR\x06origin\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"&\n" +
+	"$UntrackCacheStorageForOriginResponse\"7\n" +
+	"\x16SubscribeEventsRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\xbf\x03\n" +
 	"\fStorageEvent\x12q\n" +
 	"\x1dcache_storage_content_updated\x18\x01 \x01(\v2,.cdp.storage.CacheStorageContentUpdatedEventH\x00R\x1acacheStorageContentUpdated\x12h\n" +
 	"\x1acache_storage_list_updated\x18\x02 \x01(\v2).cdp.storage.CacheStorageListUpdatedEventH\x00R\x17cacheStorageListUpdated\x12h\n" +

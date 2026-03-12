@@ -24,6 +24,7 @@ const (
 type EnableRequest struct {
 	state           protoimpl.MessageState `protogen:"open.v1"`
 	PresentationUrl *string                `protobuf:"bytes,1,opt,name=presentation_url,json=presentationUrl,proto3,oneof" json:"presentation_url,omitempty"`
+	SessionId       string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
 }
@@ -61,6 +62,13 @@ func (*EnableRequest) Descriptor() ([]byte, []int) {
 func (x *EnableRequest) GetPresentationUrl() string {
 	if x != nil && x.PresentationUrl != nil {
 		return *x.PresentationUrl
+	}
+	return ""
+}
+
+func (x *EnableRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -103,6 +111,7 @@ func (*EnableResponse) Descriptor() ([]byte, []int) {
 
 type DisableRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -135,6 +144,13 @@ func (x *DisableRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use DisableRequest.ProtoReflect.Descriptor instead.
 func (*DisableRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_cast_cast_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *DisableRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type DisableResponse struct {
@@ -176,6 +192,7 @@ func (*DisableResponse) Descriptor() ([]byte, []int) {
 type SetSinkToUseRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	SinkName      string                 `protobuf:"bytes,1,opt,name=sink_name,json=sinkName,proto3" json:"sink_name,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -213,6 +230,13 @@ func (*SetSinkToUseRequest) Descriptor() ([]byte, []int) {
 func (x *SetSinkToUseRequest) GetSinkName() string {
 	if x != nil {
 		return x.SinkName
+	}
+	return ""
+}
+
+func (x *SetSinkToUseRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -256,6 +280,7 @@ func (*SetSinkToUseResponse) Descriptor() ([]byte, []int) {
 type StartDesktopMirroringRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	SinkName      string                 `protobuf:"bytes,1,opt,name=sink_name,json=sinkName,proto3" json:"sink_name,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -293,6 +318,13 @@ func (*StartDesktopMirroringRequest) Descriptor() ([]byte, []int) {
 func (x *StartDesktopMirroringRequest) GetSinkName() string {
 	if x != nil {
 		return x.SinkName
+	}
+	return ""
+}
+
+func (x *StartDesktopMirroringRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -336,6 +368,7 @@ func (*StartDesktopMirroringResponse) Descriptor() ([]byte, []int) {
 type StartTabMirroringRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	SinkName      string                 `protobuf:"bytes,1,opt,name=sink_name,json=sinkName,proto3" json:"sink_name,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -373,6 +406,13 @@ func (*StartTabMirroringRequest) Descriptor() ([]byte, []int) {
 func (x *StartTabMirroringRequest) GetSinkName() string {
 	if x != nil {
 		return x.SinkName
+	}
+	return ""
+}
+
+func (x *StartTabMirroringRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -416,6 +456,7 @@ func (*StartTabMirroringResponse) Descriptor() ([]byte, []int) {
 type StopCastingRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	SinkName      string                 `protobuf:"bytes,1,opt,name=sink_name,json=sinkName,proto3" json:"sink_name,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -453,6 +494,13 @@ func (*StopCastingRequest) Descriptor() ([]byte, []int) {
 func (x *StopCastingRequest) GetSinkName() string {
 	if x != nil {
 		return x.SinkName
+	}
+	return ""
+}
+
+func (x *StopCastingRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -771,24 +819,36 @@ var File_proto_cdp_cast_cast_proto protoreflect.FileDescriptor
 
 const file_proto_cdp_cast_cast_proto_rawDesc = "" +
 	"\n" +
-	"\x19proto/cdp/cast/cast.proto\x12\bcdp.cast\"T\n" +
+	"\x19proto/cdp/cast/cast.proto\x12\bcdp.cast\"s\n" +
 	"\rEnableRequest\x12.\n" +
-	"\x10presentation_url\x18\x01 \x01(\tH\x00R\x0fpresentationUrl\x88\x01\x01B\x13\n" +
+	"\x10presentation_url\x18\x01 \x01(\tH\x00R\x0fpresentationUrl\x88\x01\x01\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionIdB\x13\n" +
 	"\x11_presentation_url\"\x10\n" +
-	"\x0eEnableResponse\"\x10\n" +
-	"\x0eDisableRequest\"\x11\n" +
-	"\x0fDisableResponse\"2\n" +
+	"\x0eEnableResponse\"/\n" +
+	"\x0eDisableRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x11\n" +
+	"\x0fDisableResponse\"Q\n" +
 	"\x13SetSinkToUseRequest\x12\x1b\n" +
-	"\tsink_name\x18\x01 \x01(\tR\bsinkName\"\x16\n" +
-	"\x14SetSinkToUseResponse\";\n" +
+	"\tsink_name\x18\x01 \x01(\tR\bsinkName\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x16\n" +
+	"\x14SetSinkToUseResponse\"Z\n" +
 	"\x1cStartDesktopMirroringRequest\x12\x1b\n" +
-	"\tsink_name\x18\x01 \x01(\tR\bsinkName\"\x1f\n" +
-	"\x1dStartDesktopMirroringResponse\"7\n" +
+	"\tsink_name\x18\x01 \x01(\tR\bsinkName\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x1f\n" +
+	"\x1dStartDesktopMirroringResponse\"V\n" +
 	"\x18StartTabMirroringRequest\x12\x1b\n" +
-	"\tsink_name\x18\x01 \x01(\tR\bsinkName\"\x1b\n" +
-	"\x19StartTabMirroringResponse\"1\n" +
+	"\tsink_name\x18\x01 \x01(\tR\bsinkName\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x1b\n" +
+	"\x19StartTabMirroringResponse\"P\n" +
 	"\x12StopCastingRequest\x12\x1b\n" +
-	"\tsink_name\x18\x01 \x01(\tR\bsinkName\"\x15\n" +
+	"\tsink_name\x18\x01 \x01(\tR\bsinkName\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x15\n" +
 	"\x13StopCastingResponse\";\n" +
 	"\x1aSubscribeCastEventsRequest\x12\x1d\n" +
 	"\n" +

@@ -240,6 +240,7 @@ func (x *PlayerError) GetStack() string {
 
 type EnableRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -272,6 +273,13 @@ func (x *EnableRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use EnableRequest.ProtoReflect.Descriptor instead.
 func (*EnableRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_media_media_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *EnableRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type EnableResponse struct {
@@ -312,6 +320,7 @@ func (*EnableResponse) Descriptor() ([]byte, []int) {
 
 type DisableRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -344,6 +353,13 @@ func (x *DisableRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use DisableRequest.ProtoReflect.Descriptor instead.
 func (*DisableRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_media_media_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *DisableRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type DisableResponse struct {
@@ -384,6 +400,7 @@ func (*DisableResponse) Descriptor() ([]byte, []int) {
 
 type SubscribeEventsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -416,6 +433,13 @@ func (x *SubscribeEventsRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use SubscribeEventsRequest.ProtoReflect.Descriptor instead.
 func (*SubscribeEventsRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_media_media_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *SubscribeEventsRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type MediaEvent struct {
@@ -862,12 +886,18 @@ const file_proto_cdp_media_media_proto_rawDesc = "" +
 	"\x04type\x18\x01 \x01(\tR\x04type\x12\x1d\n" +
 	"\n" +
 	"error_code\x18\x02 \x01(\tR\terrorCode\x12\x14\n" +
-	"\x05stack\x18\x03 \x01(\tR\x05stack\"\x0f\n" +
-	"\rEnableRequest\"\x10\n" +
-	"\x0eEnableResponse\"\x10\n" +
-	"\x0eDisableRequest\"\x11\n" +
-	"\x0fDisableResponse\"\x18\n" +
-	"\x16SubscribeEventsRequest\"\xd2\x03\n" +
+	"\x05stack\x18\x03 \x01(\tR\x05stack\".\n" +
+	"\rEnableRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x10\n" +
+	"\x0eEnableResponse\"/\n" +
+	"\x0eDisableRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x11\n" +
+	"\x0fDisableResponse\"7\n" +
+	"\x16SubscribeEventsRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\xd2\x03\n" +
 	"\n" +
 	"MediaEvent\x12e\n" +
 	"\x19player_properties_changed\x18\x01 \x01(\v2'.cdp.media.PlayerPropertiesChangedEventH\x00R\x17playerPropertiesChanged\x12S\n" +

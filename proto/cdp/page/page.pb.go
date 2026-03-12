@@ -2393,7 +2393,8 @@ func (x *SearchMatch) GetLineContent() string {
 type EnableRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Whether to also enable the FileChooserOpened event (experimental).
-	EnableFileChooserOpenedEvent bool `protobuf:"varint,1,opt,name=enable_file_chooser_opened_event,json=enableFileChooserOpenedEvent,proto3" json:"enable_file_chooser_opened_event,omitempty"`
+	EnableFileChooserOpenedEvent bool   `protobuf:"varint,1,opt,name=enable_file_chooser_opened_event,json=enableFileChooserOpenedEvent,proto3" json:"enable_file_chooser_opened_event,omitempty"`
+	SessionId                    string `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields                protoimpl.UnknownFields
 	sizeCache                    protoimpl.SizeCache
 }
@@ -2435,6 +2436,13 @@ func (x *EnableRequest) GetEnableFileChooserOpenedEvent() bool {
 	return false
 }
 
+func (x *EnableRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type EnableResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -2473,6 +2481,7 @@ func (*EnableResponse) Descriptor() ([]byte, []int) {
 
 type DisableRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2505,6 +2514,13 @@ func (x *DisableRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use DisableRequest.ProtoReflect.Descriptor instead.
 func (*DisableRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_page_page_proto_rawDescGZIP(), []int{26}
+}
+
+func (x *DisableRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type DisableResponse struct {
@@ -2550,6 +2566,7 @@ type NavigateRequest struct {
 	TransitionType TransitionType         `protobuf:"varint,3,opt,name=transition_type,json=transitionType,proto3,enum=cdp.page.TransitionType" json:"transition_type,omitempty"`
 	FrameId        string                 `protobuf:"bytes,4,opt,name=frame_id,json=frameId,proto3" json:"frame_id,omitempty"`
 	ReferrerPolicy ReferrerPolicy         `protobuf:"varint,5,opt,name=referrer_policy,json=referrerPolicy,proto3,enum=cdp.page.ReferrerPolicy" json:"referrer_policy,omitempty"` // experimental
+	SessionId      string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
@@ -2619,6 +2636,13 @@ func (x *NavigateRequest) GetReferrerPolicy() ReferrerPolicy {
 	return ReferrerPolicy_REFERRER_POLICY_UNSPECIFIED
 }
 
+func (x *NavigateRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type NavigateResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	FrameId       string                 `protobuf:"bytes,1,opt,name=frame_id,json=frameId,proto3" json:"frame_id,omitempty"`
@@ -2684,6 +2708,7 @@ type ReloadRequest struct {
 	IgnoreCache            bool                   `protobuf:"varint,1,opt,name=ignore_cache,json=ignoreCache,proto3" json:"ignore_cache,omitempty"`
 	ScriptToEvaluateOnLoad string                 `protobuf:"bytes,2,opt,name=script_to_evaluate_on_load,json=scriptToEvaluateOnLoad,proto3" json:"script_to_evaluate_on_load,omitempty"`
 	LoaderId               string                 `protobuf:"bytes,3,opt,name=loader_id,json=loaderId,proto3" json:"loader_id,omitempty"` // experimental
+	SessionId              string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields          protoimpl.UnknownFields
 	sizeCache              protoimpl.SizeCache
 }
@@ -2739,6 +2764,13 @@ func (x *ReloadRequest) GetLoaderId() string {
 	return ""
 }
 
+func (x *ReloadRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type ReloadResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -2777,6 +2809,7 @@ func (*ReloadResponse) Descriptor() ([]byte, []int) {
 
 type StopLoadingRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2809,6 +2842,13 @@ func (x *StopLoadingRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use StopLoadingRequest.ProtoReflect.Descriptor instead.
 func (*StopLoadingRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_page_page_proto_rawDescGZIP(), []int{32}
+}
+
+func (x *StopLoadingRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type StopLoadingResponse struct {
@@ -2849,6 +2889,7 @@ func (*StopLoadingResponse) Descriptor() ([]byte, []int) {
 
 type GetNavigationHistoryRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2881,6 +2922,13 @@ func (x *GetNavigationHistoryRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use GetNavigationHistoryRequest.ProtoReflect.Descriptor instead.
 func (*GetNavigationHistoryRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_page_page_proto_rawDescGZIP(), []int{34}
+}
+
+func (x *GetNavigationHistoryRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type GetNavigationHistoryResponse struct {
@@ -2938,6 +2986,7 @@ func (x *GetNavigationHistoryResponse) GetEntries() []*NavigationEntry {
 type NavigateToHistoryEntryRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	EntryId       int32                  `protobuf:"varint,1,opt,name=entry_id,json=entryId,proto3" json:"entry_id,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2979,6 +3028,13 @@ func (x *NavigateToHistoryEntryRequest) GetEntryId() int32 {
 	return 0
 }
 
+func (x *NavigateToHistoryEntryRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type NavigateToHistoryEntryResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -3017,6 +3073,7 @@ func (*NavigateToHistoryEntryResponse) Descriptor() ([]byte, []int) {
 
 type ResetNavigationHistoryRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -3049,6 +3106,13 @@ func (x *ResetNavigationHistoryRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use ResetNavigationHistoryRequest.ProtoReflect.Descriptor instead.
 func (*ResetNavigationHistoryRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_page_page_proto_rawDescGZIP(), []int{38}
+}
+
+func (x *ResetNavigationHistoryRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type ResetNavigationHistoryResponse struct {
@@ -3099,7 +3163,8 @@ type CaptureScreenshotRequest struct {
 	// Capture the screenshot beyond the viewport (experimental).
 	CaptureBeyondViewport bool `protobuf:"varint,5,opt,name=capture_beyond_viewport,json=captureBeyondViewport,proto3" json:"capture_beyond_viewport,omitempty"`
 	// Optimize image encoding for speed, not for resulting size (experimental).
-	OptimizeForSpeed bool `protobuf:"varint,6,opt,name=optimize_for_speed,json=optimizeForSpeed,proto3" json:"optimize_for_speed,omitempty"`
+	OptimizeForSpeed bool   `protobuf:"varint,6,opt,name=optimize_for_speed,json=optimizeForSpeed,proto3" json:"optimize_for_speed,omitempty"`
+	SessionId        string `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields    protoimpl.UnknownFields
 	sizeCache        protoimpl.SizeCache
 }
@@ -3176,6 +3241,13 @@ func (x *CaptureScreenshotRequest) GetOptimizeForSpeed() bool {
 	return false
 }
 
+func (x *CaptureScreenshotRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type CaptureScreenshotResponse struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Base64-encoded image data.
@@ -3224,6 +3296,7 @@ func (x *CaptureScreenshotResponse) GetData() []byte {
 type CaptureSnapshotRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Format        CaptureSnapshotFormat  `protobuf:"varint,1,opt,name=format,proto3,enum=cdp.page.CaptureSnapshotFormat" json:"format,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -3263,6 +3336,13 @@ func (x *CaptureSnapshotRequest) GetFormat() CaptureSnapshotFormat {
 		return x.Format
 	}
 	return CaptureSnapshotFormat_CAPTURE_SNAPSHOT_FORMAT_UNSPECIFIED
+}
+
+func (x *CaptureSnapshotRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type CaptureSnapshotResponse struct {
@@ -3341,7 +3421,8 @@ type PrintToPDFRequest struct {
 	// Whether to generate tagged (accessible) PDF (experimental).
 	GenerateTaggedPdf bool `protobuf:"varint,16,opt,name=generate_tagged_pdf,json=generateTaggedPdf,proto3" json:"generate_tagged_pdf,omitempty"`
 	// Whether to embed the document outline into the PDF (experimental).
-	GenerateDocumentOutline bool `protobuf:"varint,17,opt,name=generate_document_outline,json=generateDocumentOutline,proto3" json:"generate_document_outline,omitempty"`
+	GenerateDocumentOutline bool   `protobuf:"varint,17,opt,name=generate_document_outline,json=generateDocumentOutline,proto3" json:"generate_document_outline,omitempty"`
+	SessionId               string `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields           protoimpl.UnknownFields
 	sizeCache               protoimpl.SizeCache
 }
@@ -3495,6 +3576,13 @@ func (x *PrintToPDFRequest) GetGenerateDocumentOutline() bool {
 	return false
 }
 
+func (x *PrintToPDFRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type PrintToPDFResponse struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Base64-encoded pdf data. Empty if transfer_mode was ReturnAsStream.
@@ -3551,6 +3639,7 @@ func (x *PrintToPDFResponse) GetStream() string {
 
 type GetFrameTreeRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -3583,6 +3672,13 @@ func (x *GetFrameTreeRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use GetFrameTreeRequest.ProtoReflect.Descriptor instead.
 func (*GetFrameTreeRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_page_page_proto_rawDescGZIP(), []int{46}
+}
+
+func (x *GetFrameTreeRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type GetFrameTreeResponse struct {
@@ -3631,6 +3727,7 @@ func (x *GetFrameTreeResponse) GetFrameTree() *FrameTree {
 
 type GetLayoutMetricsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -3663,6 +3760,13 @@ func (x *GetLayoutMetricsRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use GetLayoutMetricsRequest.ProtoReflect.Descriptor instead.
 func (*GetLayoutMetricsRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_page_page_proto_rawDescGZIP(), []int{48}
+}
+
+func (x *GetLayoutMetricsRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type GetLayoutMetricsResponse struct {
@@ -3799,6 +3903,7 @@ type SetDocumentContentRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	FrameId       string                 `protobuf:"bytes,1,opt,name=frame_id,json=frameId,proto3" json:"frame_id,omitempty"`
 	Html          string                 `protobuf:"bytes,2,opt,name=html,proto3" json:"html,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -3847,6 +3952,13 @@ func (x *SetDocumentContentRequest) GetHtml() string {
 	return ""
 }
 
+func (x *SetDocumentContentRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type SetDocumentContentResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -3885,6 +3997,7 @@ func (*SetDocumentContentResponse) Descriptor() ([]byte, []int) {
 
 type BringToFrontRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -3917,6 +4030,13 @@ func (x *BringToFrontRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use BringToFrontRequest.ProtoReflect.Descriptor instead.
 func (*BringToFrontRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_page_page_proto_rawDescGZIP(), []int{53}
+}
+
+func (x *BringToFrontRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type BringToFrontResponse struct {
@@ -3957,6 +4077,7 @@ func (*BringToFrontResponse) Descriptor() ([]byte, []int) {
 
 type CloseRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -3989,6 +4110,13 @@ func (x *CloseRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use CloseRequest.ProtoReflect.Descriptor instead.
 func (*CloseRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_page_page_proto_rawDescGZIP(), []int{55}
+}
+
+func (x *CloseRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type CloseResponse struct {
@@ -4035,7 +4163,8 @@ type AddScriptToEvaluateOnNewDocumentRequest struct {
 	// Whether to include command line API in the created context (experimental).
 	IncludeCommandLineApi bool `protobuf:"varint,3,opt,name=include_command_line_api,json=includeCommandLineApi,proto3" json:"include_command_line_api,omitempty"`
 	// If true, the script will be injected into all frames immediately (experimental).
-	RunImmediately bool `protobuf:"varint,4,opt,name=run_immediately,json=runImmediately,proto3" json:"run_immediately,omitempty"`
+	RunImmediately bool   `protobuf:"varint,4,opt,name=run_immediately,json=runImmediately,proto3" json:"run_immediately,omitempty"`
+	SessionId      string `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
@@ -4098,6 +4227,13 @@ func (x *AddScriptToEvaluateOnNewDocumentRequest) GetRunImmediately() bool {
 	return false
 }
 
+func (x *AddScriptToEvaluateOnNewDocumentRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type AddScriptToEvaluateOnNewDocumentResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Identifier    string                 `protobuf:"bytes,1,opt,name=identifier,proto3" json:"identifier,omitempty"`
@@ -4145,6 +4281,7 @@ func (x *AddScriptToEvaluateOnNewDocumentResponse) GetIdentifier() string {
 type RemoveScriptToEvaluateOnNewDocumentRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Identifier    string                 `protobuf:"bytes,1,opt,name=identifier,proto3" json:"identifier,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -4182,6 +4319,13 @@ func (*RemoveScriptToEvaluateOnNewDocumentRequest) Descriptor() ([]byte, []int) 
 func (x *RemoveScriptToEvaluateOnNewDocumentRequest) GetIdentifier() string {
 	if x != nil {
 		return x.Identifier
+	}
+	return ""
+}
+
+func (x *RemoveScriptToEvaluateOnNewDocumentRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -4225,6 +4369,7 @@ func (*RemoveScriptToEvaluateOnNewDocumentResponse) Descriptor() ([]byte, []int)
 type SetAdBlockingEnabledRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Enabled       bool                   `protobuf:"varint,1,opt,name=enabled,proto3" json:"enabled,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -4266,6 +4411,13 @@ func (x *SetAdBlockingEnabledRequest) GetEnabled() bool {
 	return false
 }
 
+func (x *SetAdBlockingEnabledRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type SetAdBlockingEnabledResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -4305,6 +4457,7 @@ func (*SetAdBlockingEnabledResponse) Descriptor() ([]byte, []int) {
 type SetBypassCSPRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Enabled       bool                   `protobuf:"varint,1,opt,name=enabled,proto3" json:"enabled,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -4346,6 +4499,13 @@ func (x *SetBypassCSPRequest) GetEnabled() bool {
 	return false
 }
 
+func (x *SetBypassCSPRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type SetBypassCSPResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -4385,6 +4545,7 @@ func (*SetBypassCSPResponse) Descriptor() ([]byte, []int) {
 type SetLifecycleEventsEnabledRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Enabled       bool                   `protobuf:"varint,1,opt,name=enabled,proto3" json:"enabled,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -4424,6 +4585,13 @@ func (x *SetLifecycleEventsEnabledRequest) GetEnabled() bool {
 		return x.Enabled
 	}
 	return false
+}
+
+func (x *SetLifecycleEventsEnabledRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type SetLifecycleEventsEnabledResponse struct {
@@ -4466,6 +4634,7 @@ type HandleJavaScriptDialogRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Accept        bool                   `protobuf:"varint,1,opt,name=accept,proto3" json:"accept,omitempty"`
 	PromptText    string                 `protobuf:"bytes,2,opt,name=prompt_text,json=promptText,proto3" json:"prompt_text,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -4514,6 +4683,13 @@ func (x *HandleJavaScriptDialogRequest) GetPromptText() string {
 	return ""
 }
 
+func (x *HandleJavaScriptDialogRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type HandleJavaScriptDialogResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -4554,6 +4730,7 @@ type GetResourceContentRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	FrameId       string                 `protobuf:"bytes,1,opt,name=frame_id,json=frameId,proto3" json:"frame_id,omitempty"`
 	Url           string                 `protobuf:"bytes,2,opt,name=url,proto3" json:"url,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -4598,6 +4775,13 @@ func (x *GetResourceContentRequest) GetFrameId() string {
 func (x *GetResourceContentRequest) GetUrl() string {
 	if x != nil {
 		return x.Url
+	}
+	return ""
+}
+
+func (x *GetResourceContentRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -4656,6 +4840,7 @@ func (x *GetResourceContentResponse) GetBase64Encoded() bool {
 
 type GetResourceTreeRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -4688,6 +4873,13 @@ func (x *GetResourceTreeRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use GetResourceTreeRequest.ProtoReflect.Descriptor instead.
 func (*GetResourceTreeRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_page_page_proto_rawDescGZIP(), []int{71}
+}
+
+func (x *GetResourceTreeRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type GetResourceTreeResponse struct {
@@ -4741,6 +4933,7 @@ type SearchInResourceRequest struct {
 	Query         string                 `protobuf:"bytes,3,opt,name=query,proto3" json:"query,omitempty"`
 	CaseSensitive bool                   `protobuf:"varint,4,opt,name=case_sensitive,json=caseSensitive,proto3" json:"case_sensitive,omitempty"`
 	IsRegex       bool                   `protobuf:"varint,5,opt,name=is_regex,json=isRegex,proto3" json:"is_regex,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -4810,6 +5003,13 @@ func (x *SearchInResourceRequest) GetIsRegex() bool {
 	return false
 }
 
+func (x *SearchInResourceRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type SearchInResourceResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Result        []*SearchMatch         `protobuf:"bytes,1,rep,name=result,proto3" json:"result,omitempty"`
@@ -4859,6 +5059,7 @@ type CreateIsolatedWorldRequest struct {
 	FrameId              string                 `protobuf:"bytes,1,opt,name=frame_id,json=frameId,proto3" json:"frame_id,omitempty"`
 	WorldName            string                 `protobuf:"bytes,2,opt,name=world_name,json=worldName,proto3" json:"world_name,omitempty"`
 	GrantUniversalAccess bool                   `protobuf:"varint,3,opt,name=grant_universal_access,json=grantUniversalAccess,proto3" json:"grant_universal_access,omitempty"`
+	SessionId            string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields        protoimpl.UnknownFields
 	sizeCache            protoimpl.SizeCache
 }
@@ -4914,6 +5115,13 @@ func (x *CreateIsolatedWorldRequest) GetGrantUniversalAccess() bool {
 	return false
 }
 
+func (x *CreateIsolatedWorldRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type CreateIsolatedWorldResponse struct {
 	state              protoimpl.MessageState `protogen:"open.v1"`
 	ExecutionContextId int32                  `protobuf:"varint,1,opt,name=execution_context_id,json=executionContextId,proto3" json:"execution_context_id,omitempty"`
@@ -4965,6 +5173,7 @@ type StartScreencastRequest struct {
 	MaxWidth      int32                  `protobuf:"varint,3,opt,name=max_width,json=maxWidth,proto3" json:"max_width,omitempty"`
 	MaxHeight     int32                  `protobuf:"varint,4,opt,name=max_height,json=maxHeight,proto3" json:"max_height,omitempty"`
 	EveryNthFrame int32                  `protobuf:"varint,5,opt,name=every_nth_frame,json=everyNthFrame,proto3" json:"every_nth_frame,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -5034,6 +5243,13 @@ func (x *StartScreencastRequest) GetEveryNthFrame() int32 {
 	return 0
 }
 
+func (x *StartScreencastRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type StartScreencastResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -5072,6 +5288,7 @@ func (*StartScreencastResponse) Descriptor() ([]byte, []int) {
 
 type StopScreencastRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -5104,6 +5321,13 @@ func (x *StopScreencastRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use StopScreencastRequest.ProtoReflect.Descriptor instead.
 func (*StopScreencastRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_page_page_proto_rawDescGZIP(), []int{79}
+}
+
+func (x *StopScreencastRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type StopScreencastResponse struct {
@@ -5143,10 +5367,11 @@ func (*StopScreencastResponse) Descriptor() ([]byte, []int) {
 }
 
 type ScreencastFrameAckRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	SessionId     int32                  `protobuf:"varint,1,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state           protoimpl.MessageState `protogen:"open.v1"`
+	SessionId       int32                  `protobuf:"varint,1,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
+	TargetSessionId string                 `protobuf:"bytes,99,opt,name=target_session_id,json=targetSessionId,proto3" json:"target_session_id,omitempty"`
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
 }
 
 func (x *ScreencastFrameAckRequest) Reset() {
@@ -5184,6 +5409,13 @@ func (x *ScreencastFrameAckRequest) GetSessionId() int32 {
 		return x.SessionId
 	}
 	return 0
+}
+
+func (x *ScreencastFrameAckRequest) GetTargetSessionId() string {
+	if x != nil {
+		return x.TargetSessionId
+	}
+	return ""
 }
 
 type ScreencastFrameAckResponse struct {
@@ -5226,6 +5458,7 @@ type SetFontFamiliesRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	FontFamilies  *FontFamilies          `protobuf:"bytes,1,opt,name=font_families,json=fontFamilies,proto3" json:"font_families,omitempty"`
 	ForScripts    []*ScriptFontFamilies  `protobuf:"bytes,2,rep,name=for_scripts,json=forScripts,proto3" json:"for_scripts,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -5274,6 +5507,13 @@ func (x *SetFontFamiliesRequest) GetForScripts() []*ScriptFontFamilies {
 	return nil
 }
 
+func (x *SetFontFamiliesRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type SetFontFamiliesResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -5313,6 +5553,7 @@ func (*SetFontFamiliesResponse) Descriptor() ([]byte, []int) {
 type SetFontSizesRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	FontSizes     *FontSizes             `protobuf:"bytes,1,opt,name=font_sizes,json=fontSizes,proto3" json:"font_sizes,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -5354,6 +5595,13 @@ func (x *SetFontSizesRequest) GetFontSizes() *FontSizes {
 	return nil
 }
 
+func (x *SetFontSizesRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type SetFontSizesResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -5393,6 +5641,7 @@ func (*SetFontSizesResponse) Descriptor() ([]byte, []int) {
 type SetInterceptFileChooserDialogRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Enabled       bool                   `protobuf:"varint,1,opt,name=enabled,proto3" json:"enabled,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -5434,6 +5683,13 @@ func (x *SetInterceptFileChooserDialogRequest) GetEnabled() bool {
 	return false
 }
 
+func (x *SetInterceptFileChooserDialogRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type SetInterceptFileChooserDialogResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -5472,6 +5728,7 @@ func (*SetInterceptFileChooserDialogResponse) Descriptor() ([]byte, []int) {
 
 type CrashRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -5504,6 +5761,13 @@ func (x *CrashRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use CrashRequest.ProtoReflect.Descriptor instead.
 func (*CrashRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_page_page_proto_rawDescGZIP(), []int{89}
+}
+
+func (x *CrashRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type CrashResponse struct {
@@ -5546,6 +5810,7 @@ type GenerateTestReportRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Message       string                 `protobuf:"bytes,1,opt,name=message,proto3" json:"message,omitempty"`
 	Group         string                 `protobuf:"bytes,2,opt,name=group,proto3" json:"group,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -5594,6 +5859,13 @@ func (x *GenerateTestReportRequest) GetGroup() string {
 	return ""
 }
 
+func (x *GenerateTestReportRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type GenerateTestReportResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -5632,6 +5904,7 @@ func (*GenerateTestReportResponse) Descriptor() ([]byte, []int) {
 
 type WaitForDebuggerRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -5664,6 +5937,13 @@ func (x *WaitForDebuggerRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use WaitForDebuggerRequest.ProtoReflect.Descriptor instead.
 func (*WaitForDebuggerRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_page_page_proto_rawDescGZIP(), []int{93}
+}
+
+func (x *WaitForDebuggerRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type WaitForDebuggerResponse struct {
@@ -5705,6 +5985,7 @@ func (*WaitForDebuggerResponse) Descriptor() ([]byte, []int) {
 type SetWebLifecycleStateRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	State         WebLifecycleState      `protobuf:"varint,1,opt,name=state,proto3,enum=cdp.page.WebLifecycleState" json:"state,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -5746,6 +6027,13 @@ func (x *SetWebLifecycleStateRequest) GetState() WebLifecycleState {
 	return WebLifecycleState_WEB_LIFECYCLE_STATE_UNSPECIFIED
 }
 
+func (x *SetWebLifecycleStateRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type SetWebLifecycleStateResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -5784,6 +6072,7 @@ func (*SetWebLifecycleStateResponse) Descriptor() ([]byte, []int) {
 
 type GetInstallabilityErrorsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -5816,6 +6105,13 @@ func (x *GetInstallabilityErrorsRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use GetInstallabilityErrorsRequest.ProtoReflect.Descriptor instead.
 func (*GetInstallabilityErrorsRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_page_page_proto_rawDescGZIP(), []int{97}
+}
+
+func (x *GetInstallabilityErrorsRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type GetInstallabilityErrorsResponse struct {
@@ -5865,6 +6161,7 @@ func (x *GetInstallabilityErrorsResponse) GetInstallabilityErrors() []*Installab
 type GetAppManifestRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	ManifestId    string                 `protobuf:"bytes,1,opt,name=manifest_id,json=manifestId,proto3" json:"manifest_id,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -5902,6 +6199,13 @@ func (*GetAppManifestRequest) Descriptor() ([]byte, []int) {
 func (x *GetAppManifestRequest) GetManifestId() string {
 	if x != nil {
 		return x.ManifestId
+	}
+	return ""
+}
+
+func (x *GetAppManifestRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -5968,6 +6272,7 @@ func (x *GetAppManifestResponse) GetData() string {
 
 type GetAppIdRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -6000,6 +6305,13 @@ func (x *GetAppIdRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use GetAppIdRequest.ProtoReflect.Descriptor instead.
 func (*GetAppIdRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_page_page_proto_rawDescGZIP(), []int{101}
+}
+
+func (x *GetAppIdRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type GetAppIdResponse struct {
@@ -6057,6 +6369,7 @@ func (x *GetAppIdResponse) GetRecommendedId() string {
 type GetPermissionsPolicyStateRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	FrameId       string                 `protobuf:"bytes,1,opt,name=frame_id,json=frameId,proto3" json:"frame_id,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -6094,6 +6407,13 @@ func (*GetPermissionsPolicyStateRequest) Descriptor() ([]byte, []int) {
 func (x *GetPermissionsPolicyStateRequest) GetFrameId() string {
 	if x != nil {
 		return x.FrameId
+	}
+	return ""
+}
+
+func (x *GetPermissionsPolicyStateRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -6145,6 +6465,7 @@ func (x *GetPermissionsPolicyStateResponse) GetStates() []*PermissionsPolicyFeat
 type GetOriginTrialsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	FrameId       string                 `protobuf:"bytes,1,opt,name=frame_id,json=frameId,proto3" json:"frame_id,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -6182,6 +6503,13 @@ func (*GetOriginTrialsRequest) Descriptor() ([]byte, []int) {
 func (x *GetOriginTrialsRequest) GetFrameId() string {
 	if x != nil {
 		return x.FrameId
+	}
+	return ""
+}
+
+func (x *GetOriginTrialsRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -6233,6 +6561,7 @@ func (x *GetOriginTrialsResponse) GetOriginTrials() []*OriginTrial {
 type ProduceCompilationCacheRequest struct {
 	state         protoimpl.MessageState    `protogen:"open.v1"`
 	Scripts       []*CompilationCacheParams `protobuf:"bytes,1,rep,name=scripts,proto3" json:"scripts,omitempty"`
+	SessionId     string                    `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -6272,6 +6601,13 @@ func (x *ProduceCompilationCacheRequest) GetScripts() []*CompilationCacheParams 
 		return x.Scripts
 	}
 	return nil
+}
+
+func (x *ProduceCompilationCacheRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type ProduceCompilationCacheResponse struct {
@@ -6315,6 +6651,7 @@ type AddCompilationCacheRequest struct {
 	Url   string                 `protobuf:"bytes,1,opt,name=url,proto3" json:"url,omitempty"`
 	// Base64-encoded data.
 	Data          []byte `protobuf:"bytes,2,opt,name=data,proto3" json:"data,omitempty"`
+	SessionId     string `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -6363,6 +6700,13 @@ func (x *AddCompilationCacheRequest) GetData() []byte {
 	return nil
 }
 
+func (x *AddCompilationCacheRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type AddCompilationCacheResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -6401,6 +6745,7 @@ func (*AddCompilationCacheResponse) Descriptor() ([]byte, []int) {
 
 type ClearCompilationCacheRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -6433,6 +6778,13 @@ func (x *ClearCompilationCacheRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use ClearCompilationCacheRequest.ProtoReflect.Descriptor instead.
 func (*ClearCompilationCacheRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_page_page_proto_rawDescGZIP(), []int{111}
+}
+
+func (x *ClearCompilationCacheRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type ClearCompilationCacheResponse struct {
@@ -6474,6 +6826,7 @@ func (*ClearCompilationCacheResponse) Descriptor() ([]byte, []int) {
 type SetPrerenderingAllowedRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	IsAllowed     bool                   `protobuf:"varint,1,opt,name=is_allowed,json=isAllowed,proto3" json:"is_allowed,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -6513,6 +6866,13 @@ func (x *SetPrerenderingAllowedRequest) GetIsAllowed() bool {
 		return x.IsAllowed
 	}
 	return false
+}
+
+func (x *SetPrerenderingAllowedRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type SetPrerenderingAllowedResponse struct {
@@ -7685,6 +8045,7 @@ type FrameRequestedNavigationEvent struct {
 	Reason        string                 `protobuf:"bytes,2,opt,name=reason,proto3" json:"reason,omitempty"`
 	Url           string                 `protobuf:"bytes,3,opt,name=url,proto3" json:"url,omitempty"`
 	Disposition   string                 `protobuf:"bytes,4,opt,name=disposition,proto3" json:"disposition,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -7743,6 +8104,13 @@ func (x *FrameRequestedNavigationEvent) GetUrl() string {
 func (x *FrameRequestedNavigationEvent) GetDisposition() string {
 	if x != nil {
 		return x.Disposition
+	}
+	return ""
+}
+
+func (x *FrameRequestedNavigationEvent) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -8428,52 +8796,72 @@ const file_proto_cdp_page_page_proto_rawDesc = "" +
 	"\vSearchMatch\x12\x1f\n" +
 	"\vline_number\x18\x01 \x01(\x01R\n" +
 	"lineNumber\x12!\n" +
-	"\fline_content\x18\x02 \x01(\tR\vlineContent\"W\n" +
+	"\fline_content\x18\x02 \x01(\tR\vlineContent\"v\n" +
 	"\rEnableRequest\x12F\n" +
-	" enable_file_chooser_opened_event\x18\x01 \x01(\bR\x1cenableFileChooserOpenedEvent\"\x10\n" +
-	"\x0eEnableResponse\"\x10\n" +
-	"\x0eDisableRequest\"\x11\n" +
-	"\x0fDisableResponse\"\xe0\x01\n" +
+	" enable_file_chooser_opened_event\x18\x01 \x01(\bR\x1cenableFileChooserOpenedEvent\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x10\n" +
+	"\x0eEnableResponse\"/\n" +
+	"\x0eDisableRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x11\n" +
+	"\x0fDisableResponse\"\xff\x01\n" +
 	"\x0fNavigateRequest\x12\x10\n" +
 	"\x03url\x18\x01 \x01(\tR\x03url\x12\x1a\n" +
 	"\breferrer\x18\x02 \x01(\tR\breferrer\x12A\n" +
 	"\x0ftransition_type\x18\x03 \x01(\x0e2\x18.cdp.page.TransitionTypeR\x0etransitionType\x12\x19\n" +
 	"\bframe_id\x18\x04 \x01(\tR\aframeId\x12A\n" +
-	"\x0freferrer_policy\x18\x05 \x01(\x0e2\x18.cdp.page.ReferrerPolicyR\x0ereferrerPolicy\"i\n" +
+	"\x0freferrer_policy\x18\x05 \x01(\x0e2\x18.cdp.page.ReferrerPolicyR\x0ereferrerPolicy\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"i\n" +
 	"\x10NavigateResponse\x12\x19\n" +
 	"\bframe_id\x18\x01 \x01(\tR\aframeId\x12\x1b\n" +
 	"\tloader_id\x18\x02 \x01(\tR\bloaderId\x12\x1d\n" +
 	"\n" +
-	"error_text\x18\x03 \x01(\tR\terrorText\"\x8b\x01\n" +
+	"error_text\x18\x03 \x01(\tR\terrorText\"\xaa\x01\n" +
 	"\rReloadRequest\x12!\n" +
 	"\fignore_cache\x18\x01 \x01(\bR\vignoreCache\x12:\n" +
 	"\x1ascript_to_evaluate_on_load\x18\x02 \x01(\tR\x16scriptToEvaluateOnLoad\x12\x1b\n" +
-	"\tloader_id\x18\x03 \x01(\tR\bloaderId\"\x10\n" +
-	"\x0eReloadResponse\"\x14\n" +
-	"\x12StopLoadingRequest\"\x15\n" +
-	"\x13StopLoadingResponse\"\x1d\n" +
-	"\x1bGetNavigationHistoryRequest\"x\n" +
+	"\tloader_id\x18\x03 \x01(\tR\bloaderId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x10\n" +
+	"\x0eReloadResponse\"3\n" +
+	"\x12StopLoadingRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x15\n" +
+	"\x13StopLoadingResponse\"<\n" +
+	"\x1bGetNavigationHistoryRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"x\n" +
 	"\x1cGetNavigationHistoryResponse\x12#\n" +
 	"\rcurrent_index\x18\x01 \x01(\x05R\fcurrentIndex\x123\n" +
-	"\aentries\x18\x02 \x03(\v2\x19.cdp.page.NavigationEntryR\aentries\":\n" +
+	"\aentries\x18\x02 \x03(\v2\x19.cdp.page.NavigationEntryR\aentries\"Y\n" +
 	"\x1dNavigateToHistoryEntryRequest\x12\x19\n" +
-	"\bentry_id\x18\x01 \x01(\x05R\aentryId\" \n" +
-	"\x1eNavigateToHistoryEntryResponse\"\x1f\n" +
-	"\x1dResetNavigationHistoryRequest\" \n" +
-	"\x1eResetNavigationHistoryResponse\"\x99\x02\n" +
+	"\bentry_id\x18\x01 \x01(\x05R\aentryId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\" \n" +
+	"\x1eNavigateToHistoryEntryResponse\">\n" +
+	"\x1dResetNavigationHistoryRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\" \n" +
+	"\x1eResetNavigationHistoryResponse\"\xb8\x02\n" +
 	"\x18CaptureScreenshotRequest\x122\n" +
 	"\x06format\x18\x01 \x01(\x0e2\x1a.cdp.page.ScreenshotFormatR\x06format\x12\x18\n" +
 	"\aquality\x18\x02 \x01(\x05R\aquality\x12&\n" +
 	"\x04clip\x18\x03 \x01(\v2\x12.cdp.page.ViewportR\x04clip\x12!\n" +
 	"\ffrom_surface\x18\x04 \x01(\bR\vfromSurface\x126\n" +
 	"\x17capture_beyond_viewport\x18\x05 \x01(\bR\x15captureBeyondViewport\x12,\n" +
-	"\x12optimize_for_speed\x18\x06 \x01(\bR\x10optimizeForSpeed\"/\n" +
+	"\x12optimize_for_speed\x18\x06 \x01(\bR\x10optimizeForSpeed\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"/\n" +
 	"\x19CaptureScreenshotResponse\x12\x12\n" +
-	"\x04data\x18\x01 \x01(\fR\x04data\"Q\n" +
+	"\x04data\x18\x01 \x01(\fR\x04data\"p\n" +
 	"\x16CaptureSnapshotRequest\x127\n" +
-	"\x06format\x18\x01 \x01(\x0e2\x1f.cdp.page.CaptureSnapshotFormatR\x06format\"-\n" +
+	"\x06format\x18\x01 \x01(\x0e2\x1f.cdp.page.CaptureSnapshotFormatR\x06format\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"-\n" +
 	"\x17CaptureSnapshotResponse\x12\x12\n" +
-	"\x04data\x18\x01 \x01(\tR\x04data\"\xc9\x05\n" +
+	"\x04data\x18\x01 \x01(\tR\x04data\"\xe8\x05\n" +
 	"\x11PrintToPDFRequest\x12\x1c\n" +
 	"\tlandscape\x18\x01 \x01(\bR\tlandscape\x122\n" +
 	"\x15display_header_footer\x18\x02 \x01(\bR\x13displayHeaderFooter\x12)\n" +
@@ -8496,15 +8884,21 @@ const file_proto_cdp_page_page_proto_rawDesc = "" +
 	"\x14prefer_css_page_size\x18\x0e \x01(\bR\x11preferCssPageSize\x12E\n" +
 	"\rtransfer_mode\x18\x0f \x01(\x0e2 .cdp.page.PrintToPDFTransferModeR\ftransferMode\x12.\n" +
 	"\x13generate_tagged_pdf\x18\x10 \x01(\bR\x11generateTaggedPdf\x12:\n" +
-	"\x19generate_document_outline\x18\x11 \x01(\bR\x17generateDocumentOutline\"@\n" +
+	"\x19generate_document_outline\x18\x11 \x01(\bR\x17generateDocumentOutline\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"@\n" +
 	"\x12PrintToPDFResponse\x12\x12\n" +
 	"\x04data\x18\x01 \x01(\fR\x04data\x12\x16\n" +
-	"\x06stream\x18\x02 \x01(\tR\x06stream\"\x15\n" +
-	"\x13GetFrameTreeRequest\"J\n" +
+	"\x06stream\x18\x02 \x01(\tR\x06stream\"4\n" +
+	"\x13GetFrameTreeRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"J\n" +
 	"\x14GetFrameTreeResponse\x122\n" +
 	"\n" +
-	"frame_tree\x18\x01 \x01(\v2\x13.cdp.page.FrameTreeR\tframeTree\"\x19\n" +
-	"\x17GetLayoutMetricsRequest\"\xe8\x01\n" +
+	"frame_tree\x18\x01 \x01(\v2\x13.cdp.page.FrameTreeR\tframeTree\"8\n" +
+	"\x17GetLayoutMetricsRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\xe8\x01\n" +
 	"\x18GetLayoutMetricsResponse\x12H\n" +
 	"\x13css_layout_viewport\x18\x01 \x01(\v2\x18.cdp.page.LayoutViewportR\x11cssLayoutViewport\x12H\n" +
 	"\x13css_visual_viewport\x18\x02 \x01(\v2\x18.cdp.page.VisualViewportR\x11cssVisualViewport\x128\n" +
@@ -8513,140 +8907,203 @@ const file_proto_cdp_page_page_proto_rawDesc = "" +
 	"\x01x\x18\x01 \x01(\x01R\x01x\x12\f\n" +
 	"\x01y\x18\x02 \x01(\x01R\x01y\x12\x14\n" +
 	"\x05width\x18\x03 \x01(\x01R\x05width\x12\x16\n" +
-	"\x06height\x18\x04 \x01(\x01R\x06height\"J\n" +
+	"\x06height\x18\x04 \x01(\x01R\x06height\"i\n" +
 	"\x19SetDocumentContentRequest\x12\x19\n" +
 	"\bframe_id\x18\x01 \x01(\tR\aframeId\x12\x12\n" +
-	"\x04html\x18\x02 \x01(\tR\x04html\"\x1c\n" +
-	"\x1aSetDocumentContentResponse\"\x15\n" +
-	"\x13BringToFrontRequest\"\x16\n" +
-	"\x14BringToFrontResponse\"\x0e\n" +
-	"\fCloseRequest\"\x0f\n" +
-	"\rCloseResponse\"\xc2\x01\n" +
+	"\x04html\x18\x02 \x01(\tR\x04html\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x1c\n" +
+	"\x1aSetDocumentContentResponse\"4\n" +
+	"\x13BringToFrontRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x16\n" +
+	"\x14BringToFrontResponse\"-\n" +
+	"\fCloseRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x0f\n" +
+	"\rCloseResponse\"\xe1\x01\n" +
 	"'AddScriptToEvaluateOnNewDocumentRequest\x12\x16\n" +
 	"\x06source\x18\x01 \x01(\tR\x06source\x12\x1d\n" +
 	"\n" +
 	"world_name\x18\x02 \x01(\tR\tworldName\x127\n" +
 	"\x18include_command_line_api\x18\x03 \x01(\bR\x15includeCommandLineApi\x12'\n" +
-	"\x0frun_immediately\x18\x04 \x01(\bR\x0erunImmediately\"J\n" +
+	"\x0frun_immediately\x18\x04 \x01(\bR\x0erunImmediately\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"J\n" +
 	"(AddScriptToEvaluateOnNewDocumentResponse\x12\x1e\n" +
 	"\n" +
 	"identifier\x18\x01 \x01(\tR\n" +
-	"identifier\"L\n" +
+	"identifier\"k\n" +
 	"*RemoveScriptToEvaluateOnNewDocumentRequest\x12\x1e\n" +
 	"\n" +
 	"identifier\x18\x01 \x01(\tR\n" +
-	"identifier\"-\n" +
-	"+RemoveScriptToEvaluateOnNewDocumentResponse\"7\n" +
+	"identifier\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"-\n" +
+	"+RemoveScriptToEvaluateOnNewDocumentResponse\"V\n" +
 	"\x1bSetAdBlockingEnabledRequest\x12\x18\n" +
-	"\aenabled\x18\x01 \x01(\bR\aenabled\"\x1e\n" +
-	"\x1cSetAdBlockingEnabledResponse\"/\n" +
+	"\aenabled\x18\x01 \x01(\bR\aenabled\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x1e\n" +
+	"\x1cSetAdBlockingEnabledResponse\"N\n" +
 	"\x13SetBypassCSPRequest\x12\x18\n" +
-	"\aenabled\x18\x01 \x01(\bR\aenabled\"\x16\n" +
-	"\x14SetBypassCSPResponse\"<\n" +
+	"\aenabled\x18\x01 \x01(\bR\aenabled\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x16\n" +
+	"\x14SetBypassCSPResponse\"[\n" +
 	" SetLifecycleEventsEnabledRequest\x12\x18\n" +
-	"\aenabled\x18\x01 \x01(\bR\aenabled\"#\n" +
-	"!SetLifecycleEventsEnabledResponse\"X\n" +
+	"\aenabled\x18\x01 \x01(\bR\aenabled\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"#\n" +
+	"!SetLifecycleEventsEnabledResponse\"w\n" +
 	"\x1dHandleJavaScriptDialogRequest\x12\x16\n" +
 	"\x06accept\x18\x01 \x01(\bR\x06accept\x12\x1f\n" +
 	"\vprompt_text\x18\x02 \x01(\tR\n" +
-	"promptText\" \n" +
-	"\x1eHandleJavaScriptDialogResponse\"H\n" +
+	"promptText\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\" \n" +
+	"\x1eHandleJavaScriptDialogResponse\"g\n" +
 	"\x19GetResourceContentRequest\x12\x19\n" +
 	"\bframe_id\x18\x01 \x01(\tR\aframeId\x12\x10\n" +
-	"\x03url\x18\x02 \x01(\tR\x03url\"]\n" +
+	"\x03url\x18\x02 \x01(\tR\x03url\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"]\n" +
 	"\x1aGetResourceContentResponse\x12\x18\n" +
 	"\acontent\x18\x01 \x01(\tR\acontent\x12%\n" +
-	"\x0ebase64_encoded\x18\x02 \x01(\bR\rbase64Encoded\"\x18\n" +
-	"\x16GetResourceTreeRequest\"U\n" +
+	"\x0ebase64_encoded\x18\x02 \x01(\bR\rbase64Encoded\"7\n" +
+	"\x16GetResourceTreeRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"U\n" +
 	"\x17GetResourceTreeResponse\x12:\n" +
 	"\n" +
-	"frame_tree\x18\x01 \x01(\v2\x1b.cdp.page.FrameResourceTreeR\tframeTree\"\x9e\x01\n" +
+	"frame_tree\x18\x01 \x01(\v2\x1b.cdp.page.FrameResourceTreeR\tframeTree\"\xbd\x01\n" +
 	"\x17SearchInResourceRequest\x12\x19\n" +
 	"\bframe_id\x18\x01 \x01(\tR\aframeId\x12\x10\n" +
 	"\x03url\x18\x02 \x01(\tR\x03url\x12\x14\n" +
 	"\x05query\x18\x03 \x01(\tR\x05query\x12%\n" +
 	"\x0ecase_sensitive\x18\x04 \x01(\bR\rcaseSensitive\x12\x19\n" +
-	"\bis_regex\x18\x05 \x01(\bR\aisRegex\"I\n" +
+	"\bis_regex\x18\x05 \x01(\bR\aisRegex\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"I\n" +
 	"\x18SearchInResourceResponse\x12-\n" +
-	"\x06result\x18\x01 \x03(\v2\x15.cdp.page.SearchMatchR\x06result\"\x8c\x01\n" +
+	"\x06result\x18\x01 \x03(\v2\x15.cdp.page.SearchMatchR\x06result\"\xab\x01\n" +
 	"\x1aCreateIsolatedWorldRequest\x12\x19\n" +
 	"\bframe_id\x18\x01 \x01(\tR\aframeId\x12\x1d\n" +
 	"\n" +
 	"world_name\x18\x02 \x01(\tR\tworldName\x124\n" +
-	"\x16grant_universal_access\x18\x03 \x01(\bR\x14grantUniversalAccess\"O\n" +
+	"\x16grant_universal_access\x18\x03 \x01(\bR\x14grantUniversalAccess\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"O\n" +
 	"\x1bCreateIsolatedWorldResponse\x120\n" +
-	"\x14execution_context_id\x18\x01 \x01(\x05R\x12executionContextId\"\xca\x01\n" +
+	"\x14execution_context_id\x18\x01 \x01(\x05R\x12executionContextId\"\xe9\x01\n" +
 	"\x16StartScreencastRequest\x122\n" +
 	"\x06format\x18\x01 \x01(\x0e2\x1a.cdp.page.ScreencastFormatR\x06format\x12\x18\n" +
 	"\aquality\x18\x02 \x01(\x05R\aquality\x12\x1b\n" +
 	"\tmax_width\x18\x03 \x01(\x05R\bmaxWidth\x12\x1d\n" +
 	"\n" +
 	"max_height\x18\x04 \x01(\x05R\tmaxHeight\x12&\n" +
-	"\x0fevery_nth_frame\x18\x05 \x01(\x05R\reveryNthFrame\"\x19\n" +
-	"\x17StartScreencastResponse\"\x17\n" +
-	"\x15StopScreencastRequest\"\x18\n" +
-	"\x16StopScreencastResponse\":\n" +
+	"\x0fevery_nth_frame\x18\x05 \x01(\x05R\reveryNthFrame\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x19\n" +
+	"\x17StartScreencastResponse\"6\n" +
+	"\x15StopScreencastRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x18\n" +
+	"\x16StopScreencastResponse\"f\n" +
 	"\x19ScreencastFrameAckRequest\x12\x1d\n" +
 	"\n" +
-	"session_id\x18\x01 \x01(\x05R\tsessionId\"\x1c\n" +
-	"\x1aScreencastFrameAckResponse\"\x94\x01\n" +
+	"session_id\x18\x01 \x01(\x05R\tsessionId\x12*\n" +
+	"\x11target_session_id\x18c \x01(\tR\x0ftargetSessionId\"\x1c\n" +
+	"\x1aScreencastFrameAckResponse\"\xb3\x01\n" +
 	"\x16SetFontFamiliesRequest\x12;\n" +
 	"\rfont_families\x18\x01 \x01(\v2\x16.cdp.page.FontFamiliesR\ffontFamilies\x12=\n" +
 	"\vfor_scripts\x18\x02 \x03(\v2\x1c.cdp.page.ScriptFontFamiliesR\n" +
-	"forScripts\"\x19\n" +
-	"\x17SetFontFamiliesResponse\"I\n" +
+	"forScripts\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x19\n" +
+	"\x17SetFontFamiliesResponse\"h\n" +
 	"\x13SetFontSizesRequest\x122\n" +
 	"\n" +
-	"font_sizes\x18\x01 \x01(\v2\x13.cdp.page.FontSizesR\tfontSizes\"\x16\n" +
-	"\x14SetFontSizesResponse\"@\n" +
+	"font_sizes\x18\x01 \x01(\v2\x13.cdp.page.FontSizesR\tfontSizes\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x16\n" +
+	"\x14SetFontSizesResponse\"_\n" +
 	"$SetInterceptFileChooserDialogRequest\x12\x18\n" +
-	"\aenabled\x18\x01 \x01(\bR\aenabled\"'\n" +
-	"%SetInterceptFileChooserDialogResponse\"\x0e\n" +
-	"\fCrashRequest\"\x0f\n" +
-	"\rCrashResponse\"K\n" +
+	"\aenabled\x18\x01 \x01(\bR\aenabled\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"'\n" +
+	"%SetInterceptFileChooserDialogResponse\"-\n" +
+	"\fCrashRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x0f\n" +
+	"\rCrashResponse\"j\n" +
 	"\x19GenerateTestReportRequest\x12\x18\n" +
 	"\amessage\x18\x01 \x01(\tR\amessage\x12\x14\n" +
-	"\x05group\x18\x02 \x01(\tR\x05group\"\x1c\n" +
-	"\x1aGenerateTestReportResponse\"\x18\n" +
-	"\x16WaitForDebuggerRequest\"\x19\n" +
-	"\x17WaitForDebuggerResponse\"P\n" +
+	"\x05group\x18\x02 \x01(\tR\x05group\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x1c\n" +
+	"\x1aGenerateTestReportResponse\"7\n" +
+	"\x16WaitForDebuggerRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x19\n" +
+	"\x17WaitForDebuggerResponse\"o\n" +
 	"\x1bSetWebLifecycleStateRequest\x121\n" +
-	"\x05state\x18\x01 \x01(\x0e2\x1b.cdp.page.WebLifecycleStateR\x05state\"\x1e\n" +
-	"\x1cSetWebLifecycleStateResponse\" \n" +
-	"\x1eGetInstallabilityErrorsRequest\"u\n" +
+	"\x05state\x18\x01 \x01(\x0e2\x1b.cdp.page.WebLifecycleStateR\x05state\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x1e\n" +
+	"\x1cSetWebLifecycleStateResponse\"?\n" +
+	"\x1eGetInstallabilityErrorsRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"u\n" +
 	"\x1fGetInstallabilityErrorsResponse\x12R\n" +
-	"\x15installability_errors\x18\x01 \x03(\v2\x1d.cdp.page.InstallabilityErrorR\x14installabilityErrors\"8\n" +
+	"\x15installability_errors\x18\x01 \x03(\v2\x1d.cdp.page.InstallabilityErrorR\x14installabilityErrors\"W\n" +
 	"\x15GetAppManifestRequest\x12\x1f\n" +
 	"\vmanifest_id\x18\x01 \x01(\tR\n" +
-	"manifestId\"r\n" +
+	"manifestId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"r\n" +
 	"\x16GetAppManifestResponse\x12\x10\n" +
 	"\x03url\x18\x01 \x01(\tR\x03url\x122\n" +
 	"\x06errors\x18\x02 \x03(\v2\x1a.cdp.page.AppManifestErrorR\x06errors\x12\x12\n" +
-	"\x04data\x18\x03 \x01(\tR\x04data\"\x11\n" +
-	"\x0fGetAppIdRequest\"P\n" +
+	"\x04data\x18\x03 \x01(\tR\x04data\"0\n" +
+	"\x0fGetAppIdRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"P\n" +
 	"\x10GetAppIdResponse\x12\x15\n" +
 	"\x06app_id\x18\x01 \x01(\tR\x05appId\x12%\n" +
-	"\x0erecommended_id\x18\x02 \x01(\tR\rrecommendedId\"=\n" +
+	"\x0erecommended_id\x18\x02 \x01(\tR\rrecommendedId\"\\\n" +
 	" GetPermissionsPolicyStateRequest\x12\x19\n" +
-	"\bframe_id\x18\x01 \x01(\tR\aframeId\"d\n" +
+	"\bframe_id\x18\x01 \x01(\tR\aframeId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"d\n" +
 	"!GetPermissionsPolicyStateResponse\x12?\n" +
-	"\x06states\x18\x01 \x03(\v2'.cdp.page.PermissionsPolicyFeatureStateR\x06states\"3\n" +
+	"\x06states\x18\x01 \x03(\v2'.cdp.page.PermissionsPolicyFeatureStateR\x06states\"R\n" +
 	"\x16GetOriginTrialsRequest\x12\x19\n" +
-	"\bframe_id\x18\x01 \x01(\tR\aframeId\"U\n" +
+	"\bframe_id\x18\x01 \x01(\tR\aframeId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"U\n" +
 	"\x17GetOriginTrialsResponse\x12:\n" +
-	"\rorigin_trials\x18\x01 \x03(\v2\x15.cdp.page.OriginTrialR\foriginTrials\"\\\n" +
+	"\rorigin_trials\x18\x01 \x03(\v2\x15.cdp.page.OriginTrialR\foriginTrials\"{\n" +
 	"\x1eProduceCompilationCacheRequest\x12:\n" +
-	"\ascripts\x18\x01 \x03(\v2 .cdp.page.CompilationCacheParamsR\ascripts\"!\n" +
-	"\x1fProduceCompilationCacheResponse\"B\n" +
+	"\ascripts\x18\x01 \x03(\v2 .cdp.page.CompilationCacheParamsR\ascripts\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"!\n" +
+	"\x1fProduceCompilationCacheResponse\"a\n" +
 	"\x1aAddCompilationCacheRequest\x12\x10\n" +
 	"\x03url\x18\x01 \x01(\tR\x03url\x12\x12\n" +
-	"\x04data\x18\x02 \x01(\fR\x04data\"\x1d\n" +
-	"\x1bAddCompilationCacheResponse\"\x1e\n" +
-	"\x1cClearCompilationCacheRequest\"\x1f\n" +
-	"\x1dClearCompilationCacheResponse\">\n" +
+	"\x04data\x18\x02 \x01(\fR\x04data\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x1d\n" +
+	"\x1bAddCompilationCacheResponse\"=\n" +
+	"\x1cClearCompilationCacheRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x1f\n" +
+	"\x1dClearCompilationCacheResponse\"]\n" +
 	"\x1dSetPrerenderingAllowedRequest\x12\x1d\n" +
 	"\n" +
-	"is_allowed\x18\x01 \x01(\bR\tisAllowed\" \n" +
+	"is_allowed\x18\x01 \x01(\bR\tisAllowed\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\" \n" +
 	"\x1eSetPrerenderingAllowedResponse\";\n" +
 	"\x1aSubscribePageEventsRequest\x12\x1d\n" +
 	"\n" +
@@ -8720,12 +9177,14 @@ const file_proto_cdp_page_page_proto_rawDesc = "" +
 	"\bframe_id\x18\x01 \x01(\tR\aframeId\x12\x10\n" +
 	"\x03url\x18\x02 \x01(\tR\x03url\x12\x1b\n" +
 	"\tloader_id\x18\x03 \x01(\tR\bloaderId\x12'\n" +
-	"\x0fnavigation_type\x18\x04 \x01(\tR\x0enavigationType\"\x86\x01\n" +
+	"\x0fnavigation_type\x18\x04 \x01(\tR\x0enavigationType\"\xa5\x01\n" +
 	"\x1dFrameRequestedNavigationEvent\x12\x19\n" +
 	"\bframe_id\x18\x01 \x01(\tR\aframeId\x12\x16\n" +
 	"\x06reason\x18\x02 \x01(\tR\x06reason\x12\x10\n" +
 	"\x03url\x18\x03 \x01(\tR\x03url\x12 \n" +
-	"\vdisposition\x18\x04 \x01(\tR\vdisposition\"t\n" +
+	"\vdisposition\x18\x04 \x01(\tR\vdisposition\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"t\n" +
 	"\x1cNavigatedWithinDocumentEvent\x12\x19\n" +
 	"\bframe_id\x18\x01 \x01(\tR\aframeId\x12\x10\n" +
 	"\x03url\x18\x02 \x01(\tR\x03url\x12'\n" +

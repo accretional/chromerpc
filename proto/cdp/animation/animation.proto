@@ -70,24 +70,32 @@ message AnimationObj {
 
 // ==================== Requests / Responses ====================
 
-message EnableRequest {}
+message EnableRequest {
+  string session_id = 99;
+}
 message EnableResponse {}
 
-message DisableRequest {}
+message DisableRequest {
+  string session_id = 99;
+}
 message DisableResponse {}
 
-message GetPlaybackRateRequest {}
+message GetPlaybackRateRequest {
+  string session_id = 99;
+}
 message GetPlaybackRateResponse {
   double playback_rate = 1;
 }
 
 message SetPlaybackRateRequest {
   double playback_rate = 1;
+  string session_id = 99;
 }
 message SetPlaybackRateResponse {}
 
 message GetCurrentTimeRequest {
   string id = 1;
+  string session_id = 99;
 }
 message GetCurrentTimeResponse {
   double current_time = 1;
@@ -96,6 +104,7 @@ message GetCurrentTimeResponse {
 message SetPausedRequest {
   repeated string animations = 1;
   bool paused = 2;
+  string session_id = 99;
 }
 message SetPausedResponse {}
 
@@ -103,22 +112,26 @@ message SetTimingRequest {
   string animation_id = 1;
   double duration = 2;
   double delay = 3;
+  string session_id = 99;
 }
 message SetTimingResponse {}
 
 message SeekAnimationsRequest {
   repeated string animations = 1;
   double current_time = 2;
+  string session_id = 99;
 }
 message SeekAnimationsResponse {}
 
 message ReleaseAnimationsRequest {
   repeated string animations = 1;
+  string session_id = 99;
 }
 message ReleaseAnimationsResponse {}
 
 message ResolveAnimationRequest {
   string animation_id = 1;
+  string session_id = 99;
 }
 message ResolveAnimationResponse {
   string remote_object = 1;
@@ -126,7 +139,9 @@ message ResolveAnimationResponse {
 
 // ==================== Events ====================
 
-message SubscribeEventsRequest {}
+message SubscribeEventsRequest {
+  string session_id = 99;
+}
 
 message AnimationEvent {
   oneof event {

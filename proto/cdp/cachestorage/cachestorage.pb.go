@@ -298,6 +298,7 @@ type RequestCacheNamesRequest struct {
 	SecurityOrigin *string                `protobuf:"bytes,1,opt,name=security_origin,json=securityOrigin,proto3,oneof" json:"security_origin,omitempty"`
 	StorageKey     *string                `protobuf:"bytes,2,opt,name=storage_key,json=storageKey,proto3,oneof" json:"storage_key,omitempty"`
 	StorageBucket  *string                `protobuf:"bytes,3,opt,name=storage_bucket,json=storageBucket,proto3,oneof" json:"storage_bucket,omitempty"`
+	SessionId      string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
@@ -353,9 +354,17 @@ func (x *RequestCacheNamesRequest) GetStorageBucket() string {
 	return ""
 }
 
+func (x *RequestCacheNamesRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type RequestCacheNamesResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Caches        []*Cache               `protobuf:"bytes,1,rep,name=caches,proto3" json:"caches,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -397,12 +406,20 @@ func (x *RequestCacheNamesResponse) GetCaches() []*Cache {
 	return nil
 }
 
+func (x *RequestCacheNamesResponse) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type RequestEntriesRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	CacheId       string                 `protobuf:"bytes,1,opt,name=cache_id,json=cacheId,proto3" json:"cache_id,omitempty"`
 	SkipCount     *int32                 `protobuf:"varint,2,opt,name=skip_count,json=skipCount,proto3,oneof" json:"skip_count,omitempty"`
 	PageSize      *int32                 `protobuf:"varint,3,opt,name=page_size,json=pageSize,proto3,oneof" json:"page_size,omitempty"`
 	PathFilter    *string                `protobuf:"bytes,4,opt,name=path_filter,json=pathFilter,proto3,oneof" json:"path_filter,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -465,10 +482,18 @@ func (x *RequestEntriesRequest) GetPathFilter() string {
 	return ""
 }
 
+func (x *RequestEntriesRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type RequestEntriesResponse struct {
 	state            protoimpl.MessageState `protogen:"open.v1"`
 	CacheDataEntries []*DataEntry           `protobuf:"bytes,1,rep,name=cache_data_entries,json=cacheDataEntries,proto3" json:"cache_data_entries,omitempty"`
 	ReturnCount      float64                `protobuf:"fixed64,2,opt,name=return_count,json=returnCount,proto3" json:"return_count,omitempty"`
+	SessionId        string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields    protoimpl.UnknownFields
 	sizeCache        protoimpl.SizeCache
 }
@@ -517,11 +542,19 @@ func (x *RequestEntriesResponse) GetReturnCount() float64 {
 	return 0
 }
 
+func (x *RequestEntriesResponse) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type RequestCachedResponseRequest struct {
 	state          protoimpl.MessageState `protogen:"open.v1"`
 	CacheId        string                 `protobuf:"bytes,1,opt,name=cache_id,json=cacheId,proto3" json:"cache_id,omitempty"`
 	RequestUrl     string                 `protobuf:"bytes,2,opt,name=request_url,json=requestUrl,proto3" json:"request_url,omitempty"`
 	RequestHeaders []*Header              `protobuf:"bytes,3,rep,name=request_headers,json=requestHeaders,proto3" json:"request_headers,omitempty"`
+	SessionId      string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
@@ -577,9 +610,17 @@ func (x *RequestCachedResponseRequest) GetRequestHeaders() []*Header {
 	return nil
 }
 
+func (x *RequestCachedResponseRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type RequestCachedResponseResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Body          *CachedResponse        `protobuf:"bytes,1,opt,name=body,proto3" json:"body,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -621,9 +662,17 @@ func (x *RequestCachedResponseResponse) GetBody() *CachedResponse {
 	return nil
 }
 
+func (x *RequestCachedResponseResponse) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type DeleteCacheRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	CacheId       string                 `protobuf:"bytes,1,opt,name=cache_id,json=cacheId,proto3" json:"cache_id,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -661,6 +710,13 @@ func (*DeleteCacheRequest) Descriptor() ([]byte, []int) {
 func (x *DeleteCacheRequest) GetCacheId() string {
 	if x != nil {
 		return x.CacheId
+	}
+	return ""
+}
+
+func (x *DeleteCacheRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -705,6 +761,7 @@ type DeleteEntryRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	CacheId       string                 `protobuf:"bytes,1,opt,name=cache_id,json=cacheId,proto3" json:"cache_id,omitempty"`
 	Request       string                 `protobuf:"bytes,2,opt,name=request,proto3" json:"request,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -749,6 +806,13 @@ func (x *DeleteEntryRequest) GetCacheId() string {
 func (x *DeleteEntryRequest) GetRequest() string {
 	if x != nil {
 		return x.Request
+	}
+	return ""
+}
+
+func (x *DeleteEntryRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -817,44 +881,60 @@ const file_proto_cdp_cachestorage_cachestorage_proto_rawDesc = "" +
 	"\rresponse_type\x18\a \x01(\tR\fresponseType\x12C\n" +
 	"\x10response_headers\x18\b \x03(\v2\x18.cdp.cachestorage.HeaderR\x0fresponseHeaders\"$\n" +
 	"\x0eCachedResponse\x12\x12\n" +
-	"\x04body\x18\x01 \x01(\fR\x04body\"\xd1\x01\n" +
+	"\x04body\x18\x01 \x01(\fR\x04body\"\xf0\x01\n" +
 	"\x18RequestCacheNamesRequest\x12,\n" +
 	"\x0fsecurity_origin\x18\x01 \x01(\tH\x00R\x0esecurityOrigin\x88\x01\x01\x12$\n" +
 	"\vstorage_key\x18\x02 \x01(\tH\x01R\n" +
 	"storageKey\x88\x01\x01\x12*\n" +
-	"\x0estorage_bucket\x18\x03 \x01(\tH\x02R\rstorageBucket\x88\x01\x01B\x12\n" +
+	"\x0estorage_bucket\x18\x03 \x01(\tH\x02R\rstorageBucket\x88\x01\x01\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionIdB\x12\n" +
 	"\x10_security_originB\x0e\n" +
 	"\f_storage_keyB\x11\n" +
-	"\x0f_storage_bucket\"L\n" +
+	"\x0f_storage_bucket\"k\n" +
 	"\x19RequestCacheNamesResponse\x12/\n" +
-	"\x06caches\x18\x01 \x03(\v2\x17.cdp.cachestorage.CacheR\x06caches\"\xcb\x01\n" +
+	"\x06caches\x18\x01 \x03(\v2\x17.cdp.cachestorage.CacheR\x06caches\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\xea\x01\n" +
 	"\x15RequestEntriesRequest\x12\x19\n" +
 	"\bcache_id\x18\x01 \x01(\tR\acacheId\x12\"\n" +
 	"\n" +
 	"skip_count\x18\x02 \x01(\x05H\x00R\tskipCount\x88\x01\x01\x12 \n" +
 	"\tpage_size\x18\x03 \x01(\x05H\x01R\bpageSize\x88\x01\x01\x12$\n" +
 	"\vpath_filter\x18\x04 \x01(\tH\x02R\n" +
-	"pathFilter\x88\x01\x01B\r\n" +
+	"pathFilter\x88\x01\x01\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionIdB\r\n" +
 	"\v_skip_countB\f\n" +
 	"\n" +
 	"_page_sizeB\x0e\n" +
-	"\f_path_filter\"\x86\x01\n" +
+	"\f_path_filter\"\xa5\x01\n" +
 	"\x16RequestEntriesResponse\x12I\n" +
 	"\x12cache_data_entries\x18\x01 \x03(\v2\x1b.cdp.cachestorage.DataEntryR\x10cacheDataEntries\x12!\n" +
-	"\freturn_count\x18\x02 \x01(\x01R\vreturnCount\"\x9d\x01\n" +
+	"\freturn_count\x18\x02 \x01(\x01R\vreturnCount\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\xbc\x01\n" +
 	"\x1cRequestCachedResponseRequest\x12\x19\n" +
 	"\bcache_id\x18\x01 \x01(\tR\acacheId\x12\x1f\n" +
 	"\vrequest_url\x18\x02 \x01(\tR\n" +
 	"requestUrl\x12A\n" +
-	"\x0frequest_headers\x18\x03 \x03(\v2\x18.cdp.cachestorage.HeaderR\x0erequestHeaders\"U\n" +
+	"\x0frequest_headers\x18\x03 \x03(\v2\x18.cdp.cachestorage.HeaderR\x0erequestHeaders\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"t\n" +
 	"\x1dRequestCachedResponseResponse\x124\n" +
-	"\x04body\x18\x01 \x01(\v2 .cdp.cachestorage.CachedResponseR\x04body\"/\n" +
+	"\x04body\x18\x01 \x01(\v2 .cdp.cachestorage.CachedResponseR\x04body\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"N\n" +
 	"\x12DeleteCacheRequest\x12\x19\n" +
-	"\bcache_id\x18\x01 \x01(\tR\acacheId\"\x15\n" +
-	"\x13DeleteCacheResponse\"I\n" +
+	"\bcache_id\x18\x01 \x01(\tR\acacheId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x15\n" +
+	"\x13DeleteCacheResponse\"h\n" +
 	"\x12DeleteEntryRequest\x12\x19\n" +
 	"\bcache_id\x18\x01 \x01(\tR\acacheId\x12\x18\n" +
-	"\arequest\x18\x02 \x01(\tR\arequest\"\x15\n" +
+	"\arequest\x18\x02 \x01(\tR\arequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x15\n" +
 	"\x13DeleteEntryResponse2\x9a\x04\n" +
 	"\x13CacheStorageService\x12l\n" +
 	"\x11RequestCacheNames\x12*.cdp.cachestorage.RequestCacheNamesRequest\x1a+.cdp.cachestorage.RequestCacheNamesResponse\x12c\n" +

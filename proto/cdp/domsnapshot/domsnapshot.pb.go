@@ -23,6 +23,7 @@ const (
 
 type EnableRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -55,6 +56,13 @@ func (x *EnableRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use EnableRequest.ProtoReflect.Descriptor instead.
 func (*EnableRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_domsnapshot_domsnapshot_proto_rawDescGZIP(), []int{0}
+}
+
+func (x *EnableRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type EnableResponse struct {
@@ -95,6 +103,7 @@ func (*EnableResponse) Descriptor() ([]byte, []int) {
 
 type DisableRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -127,6 +136,13 @@ func (x *DisableRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use DisableRequest.ProtoReflect.Descriptor instead.
 func (*DisableRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_domsnapshot_domsnapshot_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *DisableRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type DisableResponse struct {
@@ -172,6 +188,7 @@ type CaptureSnapshotRequest struct {
 	IncludeDomRects                bool                   `protobuf:"varint,3,opt,name=include_dom_rects,json=includeDomRects,proto3" json:"include_dom_rects,omitempty"`
 	IncludeBlendedBackgroundColors bool                   `protobuf:"varint,4,opt,name=include_blended_background_colors,json=includeBlendedBackgroundColors,proto3" json:"include_blended_background_colors,omitempty"`
 	IncludeTextColorOpacities      bool                   `protobuf:"varint,5,opt,name=include_text_color_opacities,json=includeTextColorOpacities,proto3" json:"include_text_color_opacities,omitempty"`
+	SessionId                      string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields                  protoimpl.UnknownFields
 	sizeCache                      protoimpl.SizeCache
 }
@@ -241,6 +258,13 @@ func (x *CaptureSnapshotRequest) GetIncludeTextColorOpacities() bool {
 	return false
 }
 
+func (x *CaptureSnapshotRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type CaptureSnapshotResponse struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Raw JSON of the snapshot documents and strings arrays.
@@ -298,17 +322,23 @@ var File_proto_cdp_domsnapshot_domsnapshot_proto protoreflect.FileDescriptor
 
 const file_proto_cdp_domsnapshot_domsnapshot_proto_rawDesc = "" +
 	"\n" +
-	"'proto/cdp/domsnapshot/domsnapshot.proto\x12\x0fcdp.domsnapshot\"\x0f\n" +
-	"\rEnableRequest\"\x10\n" +
-	"\x0eEnableResponse\"\x10\n" +
-	"\x0eDisableRequest\"\x11\n" +
-	"\x0fDisableResponse\"\xa9\x02\n" +
+	"'proto/cdp/domsnapshot/domsnapshot.proto\x12\x0fcdp.domsnapshot\".\n" +
+	"\rEnableRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x10\n" +
+	"\x0eEnableResponse\"/\n" +
+	"\x0eDisableRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x11\n" +
+	"\x0fDisableResponse\"\xc8\x02\n" +
 	"\x16CaptureSnapshotRequest\x12'\n" +
 	"\x0fcomputed_styles\x18\x01 \x03(\tR\x0ecomputedStyles\x12.\n" +
 	"\x13include_paint_order\x18\x02 \x01(\bR\x11includePaintOrder\x12*\n" +
 	"\x11include_dom_rects\x18\x03 \x01(\bR\x0fincludeDomRects\x12I\n" +
 	"!include_blended_background_colors\x18\x04 \x01(\bR\x1eincludeBlendedBackgroundColors\x12?\n" +
-	"\x1cinclude_text_color_opacities\x18\x05 \x01(\bR\x19includeTextColorOpacities\"Z\n" +
+	"\x1cinclude_text_color_opacities\x18\x05 \x01(\bR\x19includeTextColorOpacities\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"Z\n" +
 	"\x17CaptureSnapshotResponse\x12%\n" +
 	"\x0edocuments_json\x18\x01 \x01(\fR\rdocumentsJson\x12\x18\n" +
 	"\astrings\x18\x02 \x03(\tR\astrings2\x93\x02\n" +

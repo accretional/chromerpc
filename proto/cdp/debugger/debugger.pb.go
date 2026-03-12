@@ -400,6 +400,7 @@ func (x *SearchMatch) GetLineContent() string {
 
 type EnableRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -432,6 +433,13 @@ func (x *EnableRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use EnableRequest.ProtoReflect.Descriptor instead.
 func (*EnableRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_debugger_debugger_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *EnableRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type EnableResponse struct {
@@ -481,6 +489,7 @@ func (x *EnableResponse) GetDebuggerId() string {
 
 type DisableRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -513,6 +522,13 @@ func (x *DisableRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use DisableRequest.ProtoReflect.Descriptor instead.
 func (*DisableRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_debugger_debugger_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *DisableRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type DisableResponse struct {
@@ -565,6 +581,7 @@ type SetBreakpointByUrlRequest struct {
 	ColumnNumber int32 `protobuf:"varint,5,opt,name=column_number,json=columnNumber,proto3" json:"column_number,omitempty"`
 	// Expression to use as a breakpoint condition.
 	Condition     string `protobuf:"bytes,6,opt,name=condition,proto3" json:"condition,omitempty"`
+	SessionId     string `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -641,6 +658,13 @@ func (x *SetBreakpointByUrlRequest) GetCondition() string {
 	return ""
 }
 
+func (x *SetBreakpointByUrlRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type SetBreakpointByUrlResponse struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Id of the created breakpoint for further reference.
@@ -701,6 +725,7 @@ type SetBreakpointRequest struct {
 	Location *Location `protobuf:"bytes,1,opt,name=location,proto3" json:"location,omitempty"`
 	// Expression to use as a breakpoint condition.
 	Condition     string `protobuf:"bytes,2,opt,name=condition,proto3" json:"condition,omitempty"`
+	SessionId     string `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -745,6 +770,13 @@ func (x *SetBreakpointRequest) GetLocation() *Location {
 func (x *SetBreakpointRequest) GetCondition() string {
 	if x != nil {
 		return x.Condition
+	}
+	return ""
+}
+
+func (x *SetBreakpointRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -806,6 +838,7 @@ func (x *SetBreakpointResponse) GetActualLocation() *Location {
 type RemoveBreakpointRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	BreakpointId  string                 `protobuf:"bytes,1,opt,name=breakpoint_id,json=breakpointId,proto3" json:"breakpoint_id,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -843,6 +876,13 @@ func (*RemoveBreakpointRequest) Descriptor() ([]byte, []int) {
 func (x *RemoveBreakpointRequest) GetBreakpointId() string {
 	if x != nil {
 		return x.BreakpointId
+	}
+	return ""
+}
+
+func (x *RemoveBreakpointRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -890,7 +930,8 @@ type GetPossibleBreakpointsRequest struct {
 	// End of range to search possible breakpoint locations in (excluding).
 	End *Location `protobuf:"bytes,2,opt,name=end,proto3" json:"end,omitempty"`
 	// Only consider locations which are in the same (non-nested) function as start.
-	RestrictToFunction bool `protobuf:"varint,3,opt,name=restrict_to_function,json=restrictToFunction,proto3" json:"restrict_to_function,omitempty"`
+	RestrictToFunction bool   `protobuf:"varint,3,opt,name=restrict_to_function,json=restrictToFunction,proto3" json:"restrict_to_function,omitempty"`
+	SessionId          string `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields      protoimpl.UnknownFields
 	sizeCache          protoimpl.SizeCache
 }
@@ -946,6 +987,13 @@ func (x *GetPossibleBreakpointsRequest) GetRestrictToFunction() bool {
 	return false
 }
 
+func (x *GetPossibleBreakpointsRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type GetPossibleBreakpointsResponse struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// List of the possible breakpoint locations.
@@ -995,6 +1043,7 @@ type GetScriptSourceRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Id of the script to get source for.
 	ScriptId      string `protobuf:"bytes,1,opt,name=script_id,json=scriptId,proto3" json:"script_id,omitempty"`
+	SessionId     string `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1032,6 +1081,13 @@ func (*GetScriptSourceRequest) Descriptor() ([]byte, []int) {
 func (x *GetScriptSourceRequest) GetScriptId() string {
 	if x != nil {
 		return x.ScriptId
+	}
+	return ""
+}
+
+func (x *GetScriptSourceRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -1097,7 +1153,8 @@ type SetScriptSourceRequest struct {
 	// New content of the script.
 	ScriptSource string `protobuf:"bytes,2,opt,name=script_source,json=scriptSource,proto3" json:"script_source,omitempty"`
 	// If true the change will not actually be applied. Dry run may be used to get result description without actually modifying the code.
-	DryRun        bool `protobuf:"varint,3,opt,name=dry_run,json=dryRun,proto3" json:"dry_run,omitempty"`
+	DryRun        bool   `protobuf:"varint,3,opt,name=dry_run,json=dryRun,proto3" json:"dry_run,omitempty"`
+	SessionId     string `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1151,6 +1208,13 @@ func (x *SetScriptSourceRequest) GetDryRun() bool {
 		return x.DryRun
 	}
 	return false
+}
+
+func (x *SetScriptSourceRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type SetScriptSourceResponse struct {
@@ -1225,7 +1289,8 @@ type SearchInContentRequest struct {
 	// If true, search is case sensitive.
 	CaseSensitive bool `protobuf:"varint,3,opt,name=case_sensitive,json=caseSensitive,proto3" json:"case_sensitive,omitempty"`
 	// If true, treats string parameter as regex.
-	IsRegex       bool `protobuf:"varint,4,opt,name=is_regex,json=isRegex,proto3" json:"is_regex,omitempty"`
+	IsRegex       bool   `protobuf:"varint,4,opt,name=is_regex,json=isRegex,proto3" json:"is_regex,omitempty"`
+	SessionId     string `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1288,6 +1353,13 @@ func (x *SearchInContentRequest) GetIsRegex() bool {
 	return false
 }
 
+func (x *SearchInContentRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type SearchInContentResponse struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// List of search matches.
@@ -1335,6 +1407,7 @@ func (x *SearchInContentResponse) GetResult() []*SearchMatch {
 
 type PauseRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1367,6 +1440,13 @@ func (x *PauseRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use PauseRequest.ProtoReflect.Descriptor instead.
 func (*PauseRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_debugger_debugger_proto_rawDescGZIP(), []int{23}
+}
+
+func (x *PauseRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type PauseResponse struct {
@@ -1408,7 +1488,8 @@ func (*PauseResponse) Descriptor() ([]byte, []int) {
 type ResumeRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Set to true to terminate execution upon resuming.
-	TerminateOnResume bool `protobuf:"varint,1,opt,name=terminate_on_resume,json=terminateOnResume,proto3" json:"terminate_on_resume,omitempty"`
+	TerminateOnResume bool   `protobuf:"varint,1,opt,name=terminate_on_resume,json=terminateOnResume,proto3" json:"terminate_on_resume,omitempty"`
+	SessionId         string `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields     protoimpl.UnknownFields
 	sizeCache         protoimpl.SizeCache
 }
@@ -1448,6 +1529,13 @@ func (x *ResumeRequest) GetTerminateOnResume() bool {
 		return x.TerminateOnResume
 	}
 	return false
+}
+
+func (x *ResumeRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type ResumeResponse struct {
@@ -1490,6 +1578,7 @@ type StepOverRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Skip pauses in the called functions.
 	SkipList      []*Location `protobuf:"bytes,1,rep,name=skip_list,json=skipList,proto3" json:"skip_list,omitempty"`
+	SessionId     string      `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1529,6 +1618,13 @@ func (x *StepOverRequest) GetSkipList() []*Location {
 		return x.SkipList
 	}
 	return nil
+}
+
+func (x *StepOverRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type StepOverResponse struct {
@@ -1573,6 +1669,7 @@ type StepIntoRequest struct {
 	BreakOnAsyncCall bool `protobuf:"varint,1,opt,name=break_on_async_call,json=breakOnAsyncCall,proto3" json:"break_on_async_call,omitempty"`
 	// Skip pauses in the called functions.
 	SkipList      []*Location `protobuf:"bytes,2,rep,name=skip_list,json=skipList,proto3" json:"skip_list,omitempty"`
+	SessionId     string      `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1621,6 +1718,13 @@ func (x *StepIntoRequest) GetSkipList() []*Location {
 	return nil
 }
 
+func (x *StepIntoRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type StepIntoResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -1659,6 +1763,7 @@ func (*StepIntoResponse) Descriptor() ([]byte, []int) {
 
 type StepOutRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1691,6 +1796,13 @@ func (x *StepOutRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use StepOutRequest.ProtoReflect.Descriptor instead.
 func (*StepOutRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_debugger_debugger_proto_rawDescGZIP(), []int{31}
+}
+
+func (x *StepOutRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type StepOutResponse struct {
@@ -1733,6 +1845,7 @@ type SetPauseOnExceptionsRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Pause on exceptions mode: "none", "uncaught", "all".
 	State         string `protobuf:"bytes,1,opt,name=state,proto3" json:"state,omitempty"`
+	SessionId     string `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1770,6 +1883,13 @@ func (*SetPauseOnExceptionsRequest) Descriptor() ([]byte, []int) {
 func (x *SetPauseOnExceptionsRequest) GetState() string {
 	if x != nil {
 		return x.State
+	}
+	return ""
+}
+
+func (x *SetPauseOnExceptionsRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -1826,6 +1946,7 @@ type EvaluateOnCallFrameRequest struct {
 	ThrowOnSideEffect bool `protobuf:"varint,6,opt,name=throw_on_side_effect,json=throwOnSideEffect,proto3" json:"throw_on_side_effect,omitempty"`
 	// Terminate execution after timing out.
 	Timeout       float64 `protobuf:"fixed64,7,opt,name=timeout,proto3" json:"timeout,omitempty"`
+	SessionId     string  `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1909,6 +2030,13 @@ func (x *EvaluateOnCallFrameRequest) GetTimeout() float64 {
 	return 0
 }
 
+func (x *EvaluateOnCallFrameRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type EvaluateOnCallFrameResponse struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Object wrapper for the evaluation result.
@@ -1967,6 +2095,7 @@ type SetBlackboxPatternsRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Array of regexps that will be used to check script url for blackbox state.
 	Patterns      []string `protobuf:"bytes,1,rep,name=patterns,proto3" json:"patterns,omitempty"`
+	SessionId     string   `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2008,6 +2137,13 @@ func (x *SetBlackboxPatternsRequest) GetPatterns() []string {
 	return nil
 }
 
+func (x *SetBlackboxPatternsRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type SetBlackboxPatternsResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -2047,7 +2183,8 @@ func (*SetBlackboxPatternsResponse) Descriptor() ([]byte, []int) {
 type SetAsyncCallStackDepthRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Maximum depth of async call stacks. Setting to 0 will effectively disable collecting async call stacks.
-	MaxDepth      int32 `protobuf:"varint,1,opt,name=max_depth,json=maxDepth,proto3" json:"max_depth,omitempty"`
+	MaxDepth      int32  `protobuf:"varint,1,opt,name=max_depth,json=maxDepth,proto3" json:"max_depth,omitempty"`
+	SessionId     string `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2089,6 +2226,13 @@ func (x *SetAsyncCallStackDepthRequest) GetMaxDepth() int32 {
 	return 0
 }
 
+func (x *SetAsyncCallStackDepthRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type SetAsyncCallStackDepthResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -2128,7 +2272,8 @@ func (*SetAsyncCallStackDepthResponse) Descriptor() ([]byte, []int) {
 type SetBreakpointsActiveRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// New value for breakpoints active state.
-	Active        bool `protobuf:"varint,1,opt,name=active,proto3" json:"active,omitempty"`
+	Active        bool   `protobuf:"varint,1,opt,name=active,proto3" json:"active,omitempty"`
+	SessionId     string `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2168,6 +2313,13 @@ func (x *SetBreakpointsActiveRequest) GetActive() bool {
 		return x.Active
 	}
 	return false
+}
+
+func (x *SetBreakpointsActiveRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type SetBreakpointsActiveResponse struct {
@@ -2878,13 +3030,17 @@ const file_proto_cdp_debugger_debugger_proto_rawDesc = "" +
 	"\vSearchMatch\x12\x1f\n" +
 	"\vline_number\x18\x01 \x01(\x01R\n" +
 	"lineNumber\x12!\n" +
-	"\fline_content\x18\x02 \x01(\tR\vlineContent\"\x0f\n" +
-	"\rEnableRequest\"1\n" +
+	"\fline_content\x18\x02 \x01(\tR\vlineContent\".\n" +
+	"\rEnableRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"1\n" +
 	"\x0eEnableResponse\x12\x1f\n" +
 	"\vdebugger_id\x18\x01 \x01(\tR\n" +
-	"debuggerId\"\x10\n" +
-	"\x0eDisableRequest\"\x11\n" +
-	"\x0fDisableResponse\"\xcf\x01\n" +
+	"debuggerId\"/\n" +
+	"\x0eDisableRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x11\n" +
+	"\x0fDisableResponse\"\xee\x01\n" +
 	"\x19SetBreakpointByUrlRequest\x12\x1f\n" +
 	"\vline_number\x18\x01 \x01(\x05R\n" +
 	"lineNumber\x12\x10\n" +
@@ -2893,63 +3049,89 @@ const file_proto_cdp_debugger_debugger_proto_rawDesc = "" +
 	"\vscript_hash\x18\x04 \x01(\tR\n" +
 	"scriptHash\x12#\n" +
 	"\rcolumn_number\x18\x05 \x01(\x05R\fcolumnNumber\x12\x1c\n" +
-	"\tcondition\x18\x06 \x01(\tR\tcondition\"w\n" +
+	"\tcondition\x18\x06 \x01(\tR\tcondition\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"w\n" +
 	"\x1aSetBreakpointByUrlResponse\x12#\n" +
 	"\rbreakpoint_id\x18\x01 \x01(\tR\fbreakpointId\x124\n" +
-	"\tlocations\x18\x02 \x03(\v2\x16.cdp.debugger.LocationR\tlocations\"h\n" +
+	"\tlocations\x18\x02 \x03(\v2\x16.cdp.debugger.LocationR\tlocations\"\x87\x01\n" +
 	"\x14SetBreakpointRequest\x122\n" +
 	"\blocation\x18\x01 \x01(\v2\x16.cdp.debugger.LocationR\blocation\x12\x1c\n" +
-	"\tcondition\x18\x02 \x01(\tR\tcondition\"}\n" +
+	"\tcondition\x18\x02 \x01(\tR\tcondition\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"}\n" +
 	"\x15SetBreakpointResponse\x12#\n" +
 	"\rbreakpoint_id\x18\x01 \x01(\tR\fbreakpointId\x12?\n" +
-	"\x0factual_location\x18\x02 \x01(\v2\x16.cdp.debugger.LocationR\x0eactualLocation\">\n" +
+	"\x0factual_location\x18\x02 \x01(\v2\x16.cdp.debugger.LocationR\x0eactualLocation\"]\n" +
 	"\x17RemoveBreakpointRequest\x12#\n" +
-	"\rbreakpoint_id\x18\x01 \x01(\tR\fbreakpointId\"\x1a\n" +
-	"\x18RemoveBreakpointResponse\"\xa9\x01\n" +
+	"\rbreakpoint_id\x18\x01 \x01(\tR\fbreakpointId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x1a\n" +
+	"\x18RemoveBreakpointResponse\"\xc8\x01\n" +
 	"\x1dGetPossibleBreakpointsRequest\x12,\n" +
 	"\x05start\x18\x01 \x01(\v2\x16.cdp.debugger.LocationR\x05start\x12(\n" +
 	"\x03end\x18\x02 \x01(\v2\x16.cdp.debugger.LocationR\x03end\x120\n" +
-	"\x14restrict_to_function\x18\x03 \x01(\bR\x12restrictToFunction\"[\n" +
+	"\x14restrict_to_function\x18\x03 \x01(\bR\x12restrictToFunction\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"[\n" +
 	"\x1eGetPossibleBreakpointsResponse\x129\n" +
-	"\tlocations\x18\x01 \x03(\v2\x1b.cdp.debugger.BreakLocationR\tlocations\"5\n" +
+	"\tlocations\x18\x01 \x03(\v2\x1b.cdp.debugger.BreakLocationR\tlocations\"T\n" +
 	"\x16GetScriptSourceRequest\x12\x1b\n" +
-	"\tscript_id\x18\x01 \x01(\tR\bscriptId\"Z\n" +
+	"\tscript_id\x18\x01 \x01(\tR\bscriptId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"Z\n" +
 	"\x17GetScriptSourceResponse\x12#\n" +
 	"\rscript_source\x18\x01 \x01(\tR\fscriptSource\x12\x1a\n" +
-	"\bbytecode\x18\x02 \x01(\tR\bbytecode\"s\n" +
+	"\bbytecode\x18\x02 \x01(\tR\bbytecode\"\x92\x01\n" +
 	"\x16SetScriptSourceRequest\x12\x1b\n" +
 	"\tscript_id\x18\x01 \x01(\tR\bscriptId\x12#\n" +
 	"\rscript_source\x18\x02 \x01(\tR\fscriptSource\x12\x17\n" +
-	"\adry_run\x18\x03 \x01(\bR\x06dryRun\"\xa5\x01\n" +
+	"\adry_run\x18\x03 \x01(\bR\x06dryRun\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\xa5\x01\n" +
 	"\x17SetScriptSourceResponse\x128\n" +
 	"\vcall_frames\x18\x01 \x03(\v2\x17.cdp.debugger.CallFrameR\n" +
 	"callFrames\x12#\n" +
 	"\rstack_changed\x18\x02 \x01(\bR\fstackChanged\x12+\n" +
-	"\x11exception_details\x18\x03 \x01(\tR\x10exceptionDetails\"\x8d\x01\n" +
+	"\x11exception_details\x18\x03 \x01(\tR\x10exceptionDetails\"\xac\x01\n" +
 	"\x16SearchInContentRequest\x12\x1b\n" +
 	"\tscript_id\x18\x01 \x01(\tR\bscriptId\x12\x14\n" +
 	"\x05query\x18\x02 \x01(\tR\x05query\x12%\n" +
 	"\x0ecase_sensitive\x18\x03 \x01(\bR\rcaseSensitive\x12\x19\n" +
-	"\bis_regex\x18\x04 \x01(\bR\aisRegex\"L\n" +
+	"\bis_regex\x18\x04 \x01(\bR\aisRegex\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"L\n" +
 	"\x17SearchInContentResponse\x121\n" +
-	"\x06result\x18\x01 \x03(\v2\x19.cdp.debugger.SearchMatchR\x06result\"\x0e\n" +
-	"\fPauseRequest\"\x0f\n" +
-	"\rPauseResponse\"?\n" +
+	"\x06result\x18\x01 \x03(\v2\x19.cdp.debugger.SearchMatchR\x06result\"-\n" +
+	"\fPauseRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x0f\n" +
+	"\rPauseResponse\"^\n" +
 	"\rResumeRequest\x12.\n" +
-	"\x13terminate_on_resume\x18\x01 \x01(\bR\x11terminateOnResume\"\x10\n" +
-	"\x0eResumeResponse\"F\n" +
+	"\x13terminate_on_resume\x18\x01 \x01(\bR\x11terminateOnResume\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x10\n" +
+	"\x0eResumeResponse\"e\n" +
 	"\x0fStepOverRequest\x123\n" +
-	"\tskip_list\x18\x01 \x03(\v2\x16.cdp.debugger.LocationR\bskipList\"\x12\n" +
-	"\x10StepOverResponse\"u\n" +
+	"\tskip_list\x18\x01 \x03(\v2\x16.cdp.debugger.LocationR\bskipList\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x12\n" +
+	"\x10StepOverResponse\"\x94\x01\n" +
 	"\x0fStepIntoRequest\x12-\n" +
 	"\x13break_on_async_call\x18\x01 \x01(\bR\x10breakOnAsyncCall\x123\n" +
-	"\tskip_list\x18\x02 \x03(\v2\x16.cdp.debugger.LocationR\bskipList\"\x12\n" +
-	"\x10StepIntoResponse\"\x10\n" +
-	"\x0eStepOutRequest\"\x11\n" +
-	"\x0fStepOutResponse\"3\n" +
+	"\tskip_list\x18\x02 \x03(\v2\x16.cdp.debugger.LocationR\bskipList\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x12\n" +
+	"\x10StepIntoResponse\"/\n" +
+	"\x0eStepOutRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x11\n" +
+	"\x0fStepOutResponse\"R\n" +
 	"\x1bSetPauseOnExceptionsRequest\x12\x14\n" +
-	"\x05state\x18\x01 \x01(\tR\x05state\"\x1e\n" +
-	"\x1cSetPauseOnExceptionsResponse\"\xa1\x02\n" +
+	"\x05state\x18\x01 \x01(\tR\x05state\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x1e\n" +
+	"\x1cSetPauseOnExceptionsResponse\"\xc0\x02\n" +
 	"\x1aEvaluateOnCallFrameRequest\x12\"\n" +
 	"\rcall_frame_id\x18\x01 \x01(\tR\vcallFrameId\x12\x1e\n" +
 	"\n" +
@@ -2959,18 +3141,26 @@ const file_proto_cdp_debugger_debugger_proto_rawDesc = "" +
 	"\x0freturn_by_value\x18\x04 \x01(\bR\rreturnByValue\x12)\n" +
 	"\x10generate_preview\x18\x05 \x01(\bR\x0fgeneratePreview\x12/\n" +
 	"\x14throw_on_side_effect\x18\x06 \x01(\bR\x11throwOnSideEffect\x12\x18\n" +
-	"\atimeout\x18\a \x01(\x01R\atimeout\"b\n" +
+	"\atimeout\x18\a \x01(\x01R\atimeout\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"b\n" +
 	"\x1bEvaluateOnCallFrameResponse\x12\x16\n" +
 	"\x06result\x18\x01 \x01(\tR\x06result\x12+\n" +
-	"\x11exception_details\x18\x02 \x01(\tR\x10exceptionDetails\"8\n" +
+	"\x11exception_details\x18\x02 \x01(\tR\x10exceptionDetails\"W\n" +
 	"\x1aSetBlackboxPatternsRequest\x12\x1a\n" +
-	"\bpatterns\x18\x01 \x03(\tR\bpatterns\"\x1d\n" +
-	"\x1bSetBlackboxPatternsResponse\"<\n" +
+	"\bpatterns\x18\x01 \x03(\tR\bpatterns\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x1d\n" +
+	"\x1bSetBlackboxPatternsResponse\"[\n" +
 	"\x1dSetAsyncCallStackDepthRequest\x12\x1b\n" +
-	"\tmax_depth\x18\x01 \x01(\x05R\bmaxDepth\" \n" +
-	"\x1eSetAsyncCallStackDepthResponse\"5\n" +
+	"\tmax_depth\x18\x01 \x01(\x05R\bmaxDepth\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\" \n" +
+	"\x1eSetAsyncCallStackDepthResponse\"T\n" +
 	"\x1bSetBreakpointsActiveRequest\x12\x16\n" +
-	"\x06active\x18\x01 \x01(\bR\x06active\"\x1e\n" +
+	"\x06active\x18\x01 \x01(\bR\x06active\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x1e\n" +
 	"\x1cSetBreakpointsActiveResponse\"?\n" +
 	"\x1eSubscribeDebuggerEventsRequest\x12\x1d\n" +
 	"\n" +

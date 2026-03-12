@@ -19,15 +19,25 @@ func New(client *cdpclient.Client) *Server {
 	return &Server{client: client}
 }
 
+// send routes a CDP command through the specified session, falling back
+// to the client's default session if sessionID is empty.
+func (s *Server) send(ctx context.Context, sessionID string, method string, params interface{}) (json.RawMessage, error) {
+	if sessionID != "" {
+		return s.client.SendWithSession(ctx, method, params, sessionID)
+	}
+	return s.client.Send(ctx, method, params)
+}
+
+
 func (s *Server) Enable(ctx context.Context, req *pb.EnableRequest) (*pb.EnableResponse, error) {
-	if _, err := s.client.Send(ctx, "LayerTree.enable", nil); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "LayerTree.enable", nil); err != nil {
 		return nil, fmt.Errorf("LayerTree.enable: %w", err)
 	}
 	return &pb.EnableResponse{}, nil
 }
 
 func (s *Server) Disable(ctx context.Context, req *pb.DisableRequest) (*pb.DisableResponse, error) {
-	if _, err := s.client.Send(ctx, "LayerTree.disable", nil); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "LayerTree.disable", nil); err != nil {
 		return nil, fmt.Errorf("LayerTree.disable: %w", err)
 	}
 	return &pb.DisableResponse{}, nil
@@ -37,7 +47,7 @@ func (s *Server) CompositingReasons(ctx context.Context, req *pb.CompositingReas
 	params := map[string]interface{}{
 		"layerId": req.LayerId,
 	}
-	result, err := s.client.Send(ctx, "LayerTree.compositingReasons", params)
+	result, err := s.send(ctx, req.SessionId, "LayerTree.compositingReasons", params)
 	if err != nil {
 		return nil, fmt.Errorf("LayerTree.compositingReasons: %w", err)
 	}
@@ -58,7 +68,7 @@ func (s *Server) MakeSnapshot(ctx context.Context, req *pb.MakeSnapshotRequest) 
 	params := map[string]interface{}{
 		"layerId": req.LayerId,
 	}
-	result, err := s.client.Send(ctx, "LayerTree.makeSnapshot", params)
+	result, err := s.send(ctx, req.SessionId, "LayerTree.makeSnapshot", params)
 	if err != nil {
 		return nil, fmt.Errorf("LayerTree.makeSnapshot: %w", err)
 	}
@@ -84,7 +94,7 @@ func (s *Server) LoadSnapshot(ctx context.Context, req *pb.LoadSnapshotRequest) 
 	params := map[string]interface{}{
 		"tiles": tiles,
 	}
-	result, err := s.client.Send(ctx, "LayerTree.loadSnapshot", params)
+	result, err := s.send(ctx, req.SessionId, "LayerTree.loadSnapshot", params)
 	if err != nil {
 		return nil, fmt.Errorf("LayerTree.loadSnapshot: %w", err)
 	}
@@ -101,7 +111,7 @@ func (s *Server) ReleaseSnapshot(ctx context.Context, req *pb.ReleaseSnapshotReq
 	params := map[string]interface{}{
 		"snapshotId": req.SnapshotId,
 	}
-	if _, err := s.client.Send(ctx, "LayerTree.releaseSnapshot", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "LayerTree.releaseSnapshot", params); err != nil {
 		return nil, fmt.Errorf("LayerTree.releaseSnapshot: %w", err)
 	}
 	return &pb.ReleaseSnapshotResponse{}, nil
@@ -120,7 +130,7 @@ func (s *Server) ReplaySnapshot(ctx context.Context, req *pb.ReplaySnapshotReque
 	if req.Scale != 0 {
 		params["scale"] = req.Scale
 	}
-	result, err := s.client.Send(ctx, "LayerTree.replaySnapshot", params)
+	result, err := s.send(ctx, req.SessionId, "LayerTree.replaySnapshot", params)
 	if err != nil {
 		return nil, fmt.Errorf("LayerTree.replaySnapshot: %w", err)
 	}
@@ -151,7 +161,7 @@ func (s *Server) ProfileSnapshot(ctx context.Context, req *pb.ProfileSnapshotReq
 			"height": req.ClipRect.Height,
 		}
 	}
-	result, err := s.client.Send(ctx, "LayerTree.profileSnapshot", params)
+	result, err := s.send(ctx, req.SessionId, "LayerTree.profileSnapshot", params)
 	if err != nil {
 		return nil, fmt.Errorf("LayerTree.profileSnapshot: %w", err)
 	}
@@ -168,7 +178,7 @@ func (s *Server) SnapshotCommandLog(ctx context.Context, req *pb.SnapshotCommand
 	params := map[string]interface{}{
 		"snapshotId": req.SnapshotId,
 	}
-	result, err := s.client.Send(ctx, "LayerTree.snapshotCommandLog", params)
+	result, err := s.send(ctx, req.SessionId, "LayerTree.snapshotCommandLog", params)
 	if err != nil {
 		return nil, fmt.Errorf("LayerTree.snapshotCommandLog: %w", err)
 	}

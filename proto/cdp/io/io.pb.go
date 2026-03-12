@@ -28,7 +28,8 @@ type ReadRequest struct {
 	// Seek to the specified offset before reading (optional).
 	Offset int32 `protobuf:"varint,2,opt,name=offset,proto3" json:"offset,omitempty"`
 	// Maximum number of bytes to read (optional, defaults to 32768).
-	Size          int32 `protobuf:"varint,3,opt,name=size,proto3" json:"size,omitempty"`
+	Size          int32  `protobuf:"varint,3,opt,name=size,proto3" json:"size,omitempty"`
+	SessionId     string `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -82,6 +83,13 @@ func (x *ReadRequest) GetSize() int32 {
 		return x.Size
 	}
 	return 0
+}
+
+func (x *ReadRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type ReadResponse struct {
@@ -151,6 +159,7 @@ type CloseRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Handle of the stream to close.
 	Handle        string `protobuf:"bytes,1,opt,name=handle,proto3" json:"handle,omitempty"`
+	SessionId     string `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -188,6 +197,13 @@ func (*CloseRequest) Descriptor() ([]byte, []int) {
 func (x *CloseRequest) GetHandle() string {
 	if x != nil {
 		return x.Handle
+	}
+	return ""
+}
+
+func (x *CloseRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -232,6 +248,7 @@ type ResolveBlobRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Object id of a Blob object wrapper.
 	ObjectId      string `protobuf:"bytes,1,opt,name=object_id,json=objectId,proto3" json:"object_id,omitempty"`
+	SessionId     string `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -269,6 +286,13 @@ func (*ResolveBlobRequest) Descriptor() ([]byte, []int) {
 func (x *ResolveBlobRequest) GetObjectId() string {
 	if x != nil {
 		return x.ObjectId
+	}
+	return ""
+}
+
+func (x *ResolveBlobRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -322,20 +346,26 @@ var File_proto_cdp_io_io_proto protoreflect.FileDescriptor
 
 const file_proto_cdp_io_io_proto_rawDesc = "" +
 	"\n" +
-	"\x15proto/cdp/io/io.proto\x12\x06cdp.io\"Q\n" +
+	"\x15proto/cdp/io/io.proto\x12\x06cdp.io\"p\n" +
 	"\vReadRequest\x12\x16\n" +
 	"\x06handle\x18\x01 \x01(\tR\x06handle\x12\x16\n" +
 	"\x06offset\x18\x02 \x01(\x05R\x06offset\x12\x12\n" +
-	"\x04size\x18\x03 \x01(\x05R\x04size\"[\n" +
+	"\x04size\x18\x03 \x01(\x05R\x04size\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"[\n" +
 	"\fReadResponse\x12\x12\n" +
 	"\x04data\x18\x01 \x01(\tR\x04data\x12%\n" +
 	"\x0ebase64_encoded\x18\x02 \x01(\bR\rbase64Encoded\x12\x10\n" +
-	"\x03eof\x18\x03 \x01(\bR\x03eof\"&\n" +
+	"\x03eof\x18\x03 \x01(\bR\x03eof\"E\n" +
 	"\fCloseRequest\x12\x16\n" +
-	"\x06handle\x18\x01 \x01(\tR\x06handle\"\x0f\n" +
-	"\rCloseResponse\"1\n" +
+	"\x06handle\x18\x01 \x01(\tR\x06handle\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x0f\n" +
+	"\rCloseResponse\"P\n" +
 	"\x12ResolveBlobRequest\x12\x1b\n" +
-	"\tobject_id\x18\x01 \x01(\tR\bobjectId\")\n" +
+	"\tobject_id\x18\x01 \x01(\tR\bobjectId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\")\n" +
 	"\x13ResolveBlobResponse\x12\x12\n" +
 	"\x04uuid\x18\x01 \x01(\tR\x04uuid2\xbc\x01\n" +
 	"\tIOService\x121\n" +

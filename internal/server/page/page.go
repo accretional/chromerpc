@@ -22,6 +22,16 @@ func New(client *cdpclient.Client) *Server {
 	return &Server{client: client}
 }
 
+// send routes a CDP command through the specified session, falling back
+// to the client's default session if sessionID is empty.
+func (s *Server) send(ctx context.Context, sessionID string, method string, params interface{}) (json.RawMessage, error) {
+	if sessionID != "" {
+		return s.client.SendWithSession(ctx, method, params, sessionID)
+	}
+	return s.client.Send(ctx, method, params)
+}
+
+
 func (s *Server) Enable(ctx context.Context, req *pb.EnableRequest) (*pb.EnableResponse, error) {
 	params := map[string]interface{}{}
 	if req.EnableFileChooserOpenedEvent {
@@ -29,9 +39,9 @@ func (s *Server) Enable(ctx context.Context, req *pb.EnableRequest) (*pb.EnableR
 	}
 	var err error
 	if len(params) > 0 {
-		_, err = s.client.Send(ctx, "Page.enable", params)
+		_, err = s.send(ctx, req.SessionId, "Page.enable", params)
 	} else {
-		_, err = s.client.Send(ctx, "Page.enable", nil)
+		_, err = s.send(ctx, req.SessionId, "Page.enable", nil)
 	}
 	if err != nil {
 		return nil, fmt.Errorf("Page.enable: %w", err)
@@ -40,7 +50,7 @@ func (s *Server) Enable(ctx context.Context, req *pb.EnableRequest) (*pb.EnableR
 }
 
 func (s *Server) Disable(ctx context.Context, req *pb.DisableRequest) (*pb.DisableResponse, error) {
-	if _, err := s.client.Send(ctx, "Page.disable", nil); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Page.disable", nil); err != nil {
 		return nil, fmt.Errorf("Page.disable: %w", err)
 	}
 	return &pb.DisableResponse{}, nil
@@ -63,7 +73,7 @@ func (s *Server) Navigate(ctx context.Context, req *pb.NavigateRequest) (*pb.Nav
 		params["referrerPolicy"] = referrerPolicyToString(req.ReferrerPolicy)
 	}
 
-	result, err := s.client.Send(ctx, "Page.navigate", params)
+	result, err := s.send(ctx, req.SessionId, "Page.navigate", params)
 	if err != nil {
 		return nil, fmt.Errorf("Page.navigate: %w", err)
 	}
@@ -95,12 +105,12 @@ func (s *Server) Reload(ctx context.Context, req *pb.ReloadRequest) (*pb.ReloadR
 		params["loaderId"] = req.LoaderId
 	}
 	if len(params) > 0 {
-		_, err := s.client.Send(ctx, "Page.reload", params)
+		_, err := s.send(ctx, req.SessionId, "Page.reload", params)
 		if err != nil {
 			return nil, fmt.Errorf("Page.reload: %w", err)
 		}
 	} else {
-		_, err := s.client.Send(ctx, "Page.reload", nil)
+		_, err := s.send(ctx, req.SessionId, "Page.reload", nil)
 		if err != nil {
 			return nil, fmt.Errorf("Page.reload: %w", err)
 		}
@@ -109,14 +119,14 @@ func (s *Server) Reload(ctx context.Context, req *pb.ReloadRequest) (*pb.ReloadR
 }
 
 func (s *Server) StopLoading(ctx context.Context, req *pb.StopLoadingRequest) (*pb.StopLoadingResponse, error) {
-	if _, err := s.client.Send(ctx, "Page.stopLoading", nil); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Page.stopLoading", nil); err != nil {
 		return nil, fmt.Errorf("Page.stopLoading: %w", err)
 	}
 	return &pb.StopLoadingResponse{}, nil
 }
 
 func (s *Server) GetNavigationHistory(ctx context.Context, req *pb.GetNavigationHistoryRequest) (*pb.GetNavigationHistoryResponse, error) {
-	result, err := s.client.Send(ctx, "Page.getNavigationHistory", nil)
+	result, err := s.send(ctx, req.SessionId, "Page.getNavigationHistory", nil)
 	if err != nil {
 		return nil, fmt.Errorf("Page.getNavigationHistory: %w", err)
 	}
@@ -153,14 +163,14 @@ func (s *Server) NavigateToHistoryEntry(ctx context.Context, req *pb.NavigateToH
 	params := map[string]interface{}{
 		"entryId": req.EntryId,
 	}
-	if _, err := s.client.Send(ctx, "Page.navigateToHistoryEntry", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Page.navigateToHistoryEntry", params); err != nil {
 		return nil, fmt.Errorf("Page.navigateToHistoryEntry: %w", err)
 	}
 	return &pb.NavigateToHistoryEntryResponse{}, nil
 }
 
 func (s *Server) ResetNavigationHistory(ctx context.Context, req *pb.ResetNavigationHistoryRequest) (*pb.ResetNavigationHistoryResponse, error) {
-	if _, err := s.client.Send(ctx, "Page.resetNavigationHistory", nil); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Page.resetNavigationHistory", nil); err != nil {
 		return nil, fmt.Errorf("Page.resetNavigationHistory: %w", err)
 	}
 	return &pb.ResetNavigationHistoryResponse{}, nil
@@ -197,9 +207,9 @@ func (s *Server) CaptureScreenshot(ctx context.Context, req *pb.CaptureScreensho
 	var result json.RawMessage
 	var err error
 	if len(params) > 0 {
-		result, err = s.client.Send(ctx, "Page.captureScreenshot", params)
+		result, err = s.send(ctx, req.SessionId, "Page.captureScreenshot", params)
 	} else {
-		result, err = s.client.Send(ctx, "Page.captureScreenshot", nil)
+		result, err = s.send(ctx, req.SessionId, "Page.captureScreenshot", nil)
 	}
 	if err != nil {
 		return nil, fmt.Errorf("Page.captureScreenshot: %w", err)
@@ -230,9 +240,9 @@ func (s *Server) CaptureSnapshot(ctx context.Context, req *pb.CaptureSnapshotReq
 	var result json.RawMessage
 	var err error
 	if len(params) > 0 {
-		result, err = s.client.Send(ctx, "Page.captureSnapshot", params)
+		result, err = s.send(ctx, req.SessionId, "Page.captureSnapshot", params)
 	} else {
-		result, err = s.client.Send(ctx, "Page.captureSnapshot", nil)
+		result, err = s.send(ctx, req.SessionId, "Page.captureSnapshot", nil)
 	}
 	if err != nil {
 		return nil, fmt.Errorf("Page.captureSnapshot: %w", err)
@@ -310,9 +320,9 @@ func (s *Server) PrintToPDF(ctx context.Context, req *pb.PrintToPDFRequest) (*pb
 	var result json.RawMessage
 	var err error
 	if len(params) > 0 {
-		result, err = s.client.Send(ctx, "Page.printToPDF", params)
+		result, err = s.send(ctx, req.SessionId, "Page.printToPDF", params)
 	} else {
-		result, err = s.client.Send(ctx, "Page.printToPDF", nil)
+		result, err = s.send(ctx, req.SessionId, "Page.printToPDF", nil)
 	}
 	if err != nil {
 		return nil, fmt.Errorf("Page.printToPDF: %w", err)
@@ -341,7 +351,7 @@ func (s *Server) PrintToPDF(ctx context.Context, req *pb.PrintToPDFRequest) (*pb
 }
 
 func (s *Server) GetFrameTree(ctx context.Context, req *pb.GetFrameTreeRequest) (*pb.GetFrameTreeResponse, error) {
-	result, err := s.client.Send(ctx, "Page.getFrameTree", nil)
+	result, err := s.send(ctx, req.SessionId, "Page.getFrameTree", nil)
 	if err != nil {
 		return nil, fmt.Errorf("Page.getFrameTree: %w", err)
 	}
@@ -355,7 +365,7 @@ func (s *Server) GetFrameTree(ctx context.Context, req *pb.GetFrameTreeRequest) 
 }
 
 func (s *Server) GetLayoutMetrics(ctx context.Context, req *pb.GetLayoutMetricsRequest) (*pb.GetLayoutMetricsResponse, error) {
-	result, err := s.client.Send(ctx, "Page.getLayoutMetrics", nil)
+	result, err := s.send(ctx, req.SessionId, "Page.getLayoutMetrics", nil)
 	if err != nil {
 		return nil, fmt.Errorf("Page.getLayoutMetrics: %w", err)
 	}
@@ -417,21 +427,21 @@ func (s *Server) SetDocumentContent(ctx context.Context, req *pb.SetDocumentCont
 		"frameId": req.FrameId,
 		"html":    req.Html,
 	}
-	if _, err := s.client.Send(ctx, "Page.setDocumentContent", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Page.setDocumentContent", params); err != nil {
 		return nil, fmt.Errorf("Page.setDocumentContent: %w", err)
 	}
 	return &pb.SetDocumentContentResponse{}, nil
 }
 
 func (s *Server) BringToFront(ctx context.Context, req *pb.BringToFrontRequest) (*pb.BringToFrontResponse, error) {
-	if _, err := s.client.Send(ctx, "Page.bringToFront", nil); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Page.bringToFront", nil); err != nil {
 		return nil, fmt.Errorf("Page.bringToFront: %w", err)
 	}
 	return &pb.BringToFrontResponse{}, nil
 }
 
 func (s *Server) Close(ctx context.Context, req *pb.CloseRequest) (*pb.CloseResponse, error) {
-	if _, err := s.client.Send(ctx, "Page.close", nil); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Page.close", nil); err != nil {
 		return nil, fmt.Errorf("Page.close: %w", err)
 	}
 	return &pb.CloseResponse{}, nil
@@ -450,7 +460,7 @@ func (s *Server) AddScriptToEvaluateOnNewDocument(ctx context.Context, req *pb.A
 	if req.RunImmediately {
 		params["runImmediately"] = true
 	}
-	result, err := s.client.Send(ctx, "Page.addScriptToEvaluateOnNewDocument", params)
+	result, err := s.send(ctx, req.SessionId, "Page.addScriptToEvaluateOnNewDocument", params)
 	if err != nil {
 		return nil, fmt.Errorf("Page.addScriptToEvaluateOnNewDocument: %w", err)
 	}
@@ -467,7 +477,7 @@ func (s *Server) RemoveScriptToEvaluateOnNewDocument(ctx context.Context, req *p
 	params := map[string]interface{}{
 		"identifier": req.Identifier,
 	}
-	if _, err := s.client.Send(ctx, "Page.removeScriptToEvaluateOnNewDocument", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Page.removeScriptToEvaluateOnNewDocument", params); err != nil {
 		return nil, fmt.Errorf("Page.removeScriptToEvaluateOnNewDocument: %w", err)
 	}
 	return &pb.RemoveScriptToEvaluateOnNewDocumentResponse{}, nil
@@ -475,7 +485,7 @@ func (s *Server) RemoveScriptToEvaluateOnNewDocument(ctx context.Context, req *p
 
 func (s *Server) SetAdBlockingEnabled(ctx context.Context, req *pb.SetAdBlockingEnabledRequest) (*pb.SetAdBlockingEnabledResponse, error) {
 	params := map[string]interface{}{"enabled": req.Enabled}
-	if _, err := s.client.Send(ctx, "Page.setAdBlockingEnabled", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Page.setAdBlockingEnabled", params); err != nil {
 		return nil, fmt.Errorf("Page.setAdBlockingEnabled: %w", err)
 	}
 	return &pb.SetAdBlockingEnabledResponse{}, nil
@@ -483,7 +493,7 @@ func (s *Server) SetAdBlockingEnabled(ctx context.Context, req *pb.SetAdBlocking
 
 func (s *Server) SetBypassCSP(ctx context.Context, req *pb.SetBypassCSPRequest) (*pb.SetBypassCSPResponse, error) {
 	params := map[string]interface{}{"enabled": req.Enabled}
-	if _, err := s.client.Send(ctx, "Page.setBypassCSP", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Page.setBypassCSP", params); err != nil {
 		return nil, fmt.Errorf("Page.setBypassCSP: %w", err)
 	}
 	return &pb.SetBypassCSPResponse{}, nil
@@ -491,7 +501,7 @@ func (s *Server) SetBypassCSP(ctx context.Context, req *pb.SetBypassCSPRequest) 
 
 func (s *Server) SetLifecycleEventsEnabled(ctx context.Context, req *pb.SetLifecycleEventsEnabledRequest) (*pb.SetLifecycleEventsEnabledResponse, error) {
 	params := map[string]interface{}{"enabled": req.Enabled}
-	if _, err := s.client.Send(ctx, "Page.setLifecycleEventsEnabled", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Page.setLifecycleEventsEnabled", params); err != nil {
 		return nil, fmt.Errorf("Page.setLifecycleEventsEnabled: %w", err)
 	}
 	return &pb.SetLifecycleEventsEnabledResponse{}, nil
@@ -502,7 +512,7 @@ func (s *Server) HandleJavaScriptDialog(ctx context.Context, req *pb.HandleJavaS
 	if req.PromptText != "" {
 		params["promptText"] = req.PromptText
 	}
-	if _, err := s.client.Send(ctx, "Page.handleJavaScriptDialog", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Page.handleJavaScriptDialog", params); err != nil {
 		return nil, fmt.Errorf("Page.handleJavaScriptDialog: %w", err)
 	}
 	return &pb.HandleJavaScriptDialogResponse{}, nil
@@ -513,7 +523,7 @@ func (s *Server) GetResourceContent(ctx context.Context, req *pb.GetResourceCont
 		"frameId": req.FrameId,
 		"url":     req.Url,
 	}
-	result, err := s.client.Send(ctx, "Page.getResourceContent", params)
+	result, err := s.send(ctx, req.SessionId, "Page.getResourceContent", params)
 	if err != nil {
 		return nil, fmt.Errorf("Page.getResourceContent: %w", err)
 	}
@@ -531,7 +541,7 @@ func (s *Server) GetResourceContent(ctx context.Context, req *pb.GetResourceCont
 }
 
 func (s *Server) GetResourceTree(ctx context.Context, req *pb.GetResourceTreeRequest) (*pb.GetResourceTreeResponse, error) {
-	result, err := s.client.Send(ctx, "Page.getResourceTree", nil)
+	result, err := s.send(ctx, req.SessionId, "Page.getResourceTree", nil)
 	if err != nil {
 		return nil, fmt.Errorf("Page.getResourceTree: %w", err)
 	}
@@ -556,7 +566,7 @@ func (s *Server) SearchInResource(ctx context.Context, req *pb.SearchInResourceR
 	if req.IsRegex {
 		params["isRegex"] = true
 	}
-	result, err := s.client.Send(ctx, "Page.searchInResource", params)
+	result, err := s.send(ctx, req.SessionId, "Page.searchInResource", params)
 	if err != nil {
 		return nil, fmt.Errorf("Page.searchInResource: %w", err)
 	}
@@ -589,7 +599,7 @@ func (s *Server) CreateIsolatedWorld(ctx context.Context, req *pb.CreateIsolated
 	if req.GrantUniversalAccess {
 		params["grantUniveralAccess"] = true // note: CDP has the typo
 	}
-	result, err := s.client.Send(ctx, "Page.createIsolatedWorld", params)
+	result, err := s.send(ctx, req.SessionId, "Page.createIsolatedWorld", params)
 	if err != nil {
 		return nil, fmt.Errorf("Page.createIsolatedWorld: %w", err)
 	}
@@ -625,12 +635,12 @@ func (s *Server) StartScreencast(ctx context.Context, req *pb.StartScreencastReq
 		params["everyNthFrame"] = req.EveryNthFrame
 	}
 	if len(params) > 0 {
-		_, err := s.client.Send(ctx, "Page.startScreencast", params)
+		_, err := s.send(ctx, req.SessionId, "Page.startScreencast", params)
 		if err != nil {
 			return nil, fmt.Errorf("Page.startScreencast: %w", err)
 		}
 	} else {
-		_, err := s.client.Send(ctx, "Page.startScreencast", nil)
+		_, err := s.send(ctx, req.SessionId, "Page.startScreencast", nil)
 		if err != nil {
 			return nil, fmt.Errorf("Page.startScreencast: %w", err)
 		}
@@ -639,7 +649,7 @@ func (s *Server) StartScreencast(ctx context.Context, req *pb.StartScreencastReq
 }
 
 func (s *Server) StopScreencast(ctx context.Context, req *pb.StopScreencastRequest) (*pb.StopScreencastResponse, error) {
-	if _, err := s.client.Send(ctx, "Page.stopScreencast", nil); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Page.stopScreencast", nil); err != nil {
 		return nil, fmt.Errorf("Page.stopScreencast: %w", err)
 	}
 	return &pb.StopScreencastResponse{}, nil
@@ -647,7 +657,7 @@ func (s *Server) StopScreencast(ctx context.Context, req *pb.StopScreencastReque
 
 func (s *Server) ScreencastFrameAck(ctx context.Context, req *pb.ScreencastFrameAckRequest) (*pb.ScreencastFrameAckResponse, error) {
 	params := map[string]interface{}{"sessionId": req.SessionId}
-	if _, err := s.client.Send(ctx, "Page.screencastFrameAck", params); err != nil {
+	if _, err := s.send(ctx, req.TargetSessionId, "Page.screencastFrameAck", params); err != nil {
 		return nil, fmt.Errorf("Page.screencastFrameAck: %w", err)
 	}
 	return &pb.ScreencastFrameAckResponse{}, nil
@@ -680,7 +690,7 @@ func (s *Server) SetFontFamilies(ctx context.Context, req *pb.SetFontFamiliesReq
 		}
 		params["fontFamilies"] = ff
 	}
-	if _, err := s.client.Send(ctx, "Page.setFontFamilies", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Page.setFontFamilies", params); err != nil {
 		return nil, fmt.Errorf("Page.setFontFamilies: %w", err)
 	}
 	return &pb.SetFontFamiliesResponse{}, nil
@@ -698,7 +708,7 @@ func (s *Server) SetFontSizes(ctx context.Context, req *pb.SetFontSizesRequest) 
 		}
 		params["fontSizes"] = fs
 	}
-	if _, err := s.client.Send(ctx, "Page.setFontSizes", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Page.setFontSizes", params); err != nil {
 		return nil, fmt.Errorf("Page.setFontSizes: %w", err)
 	}
 	return &pb.SetFontSizesResponse{}, nil
@@ -706,14 +716,14 @@ func (s *Server) SetFontSizes(ctx context.Context, req *pb.SetFontSizesRequest) 
 
 func (s *Server) SetInterceptFileChooserDialog(ctx context.Context, req *pb.SetInterceptFileChooserDialogRequest) (*pb.SetInterceptFileChooserDialogResponse, error) {
 	params := map[string]interface{}{"enabled": req.Enabled}
-	if _, err := s.client.Send(ctx, "Page.setInterceptFileChooserDialog", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Page.setInterceptFileChooserDialog", params); err != nil {
 		return nil, fmt.Errorf("Page.setInterceptFileChooserDialog: %w", err)
 	}
 	return &pb.SetInterceptFileChooserDialogResponse{}, nil
 }
 
 func (s *Server) Crash(ctx context.Context, req *pb.CrashRequest) (*pb.CrashResponse, error) {
-	if _, err := s.client.Send(ctx, "Page.crash", nil); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Page.crash", nil); err != nil {
 		return nil, fmt.Errorf("Page.crash: %w", err)
 	}
 	return &pb.CrashResponse{}, nil
@@ -724,14 +734,14 @@ func (s *Server) GenerateTestReport(ctx context.Context, req *pb.GenerateTestRep
 	if req.Group != "" {
 		params["group"] = req.Group
 	}
-	if _, err := s.client.Send(ctx, "Page.generateTestReport", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Page.generateTestReport", params); err != nil {
 		return nil, fmt.Errorf("Page.generateTestReport: %w", err)
 	}
 	return &pb.GenerateTestReportResponse{}, nil
 }
 
 func (s *Server) WaitForDebugger(ctx context.Context, req *pb.WaitForDebuggerRequest) (*pb.WaitForDebuggerResponse, error) {
-	if _, err := s.client.Send(ctx, "Page.waitForDebugger", nil); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Page.waitForDebugger", nil); err != nil {
 		return nil, fmt.Errorf("Page.waitForDebugger: %w", err)
 	}
 	return &pb.WaitForDebuggerResponse{}, nil
@@ -743,14 +753,14 @@ func (s *Server) SetWebLifecycleState(ctx context.Context, req *pb.SetWebLifecyc
 		stateStr = "frozen"
 	}
 	params := map[string]interface{}{"state": stateStr}
-	if _, err := s.client.Send(ctx, "Page.setWebLifecycleState", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Page.setWebLifecycleState", params); err != nil {
 		return nil, fmt.Errorf("Page.setWebLifecycleState: %w", err)
 	}
 	return &pb.SetWebLifecycleStateResponse{}, nil
 }
 
 func (s *Server) GetInstallabilityErrors(ctx context.Context, req *pb.GetInstallabilityErrorsRequest) (*pb.GetInstallabilityErrorsResponse, error) {
-	result, err := s.client.Send(ctx, "Page.getInstallabilityErrors", nil)
+	result, err := s.send(ctx, req.SessionId, "Page.getInstallabilityErrors", nil)
 	if err != nil {
 		return nil, fmt.Errorf("Page.getInstallabilityErrors: %w", err)
 	}
@@ -785,9 +795,9 @@ func (s *Server) GetAppManifest(ctx context.Context, req *pb.GetAppManifestReque
 	var result json.RawMessage
 	var err error
 	if len(params) > 0 {
-		result, err = s.client.Send(ctx, "Page.getAppManifest", params)
+		result, err = s.send(ctx, req.SessionId, "Page.getAppManifest", params)
 	} else {
-		result, err = s.client.Send(ctx, "Page.getAppManifest", nil)
+		result, err = s.send(ctx, req.SessionId, "Page.getAppManifest", nil)
 	}
 	if err != nil {
 		return nil, fmt.Errorf("Page.getAppManifest: %w", err)
@@ -822,7 +832,7 @@ func (s *Server) GetAppManifest(ctx context.Context, req *pb.GetAppManifestReque
 }
 
 func (s *Server) GetAppId(ctx context.Context, req *pb.GetAppIdRequest) (*pb.GetAppIdResponse, error) {
-	result, err := s.client.Send(ctx, "Page.getAppId", nil)
+	result, err := s.send(ctx, req.SessionId, "Page.getAppId", nil)
 	if err != nil {
 		return nil, fmt.Errorf("Page.getAppId: %w", err)
 	}
@@ -838,7 +848,7 @@ func (s *Server) GetAppId(ctx context.Context, req *pb.GetAppIdRequest) (*pb.Get
 
 func (s *Server) GetPermissionsPolicyState(ctx context.Context, req *pb.GetPermissionsPolicyStateRequest) (*pb.GetPermissionsPolicyStateResponse, error) {
 	params := map[string]interface{}{"frameId": req.FrameId}
-	result, err := s.client.Send(ctx, "Page.getPermissionsPolicyState", params)
+	result, err := s.send(ctx, req.SessionId, "Page.getPermissionsPolicyState", params)
 	if err != nil {
 		return nil, fmt.Errorf("Page.getPermissionsPolicyState: %w", err)
 	}
@@ -874,7 +884,7 @@ func (s *Server) GetPermissionsPolicyState(ctx context.Context, req *pb.GetPermi
 
 func (s *Server) GetOriginTrials(ctx context.Context, req *pb.GetOriginTrialsRequest) (*pb.GetOriginTrialsResponse, error) {
 	params := map[string]interface{}{"frameId": req.FrameId}
-	result, err := s.client.Send(ctx, "Page.getOriginTrials", params)
+	result, err := s.send(ctx, req.SessionId, "Page.getOriginTrials", params)
 	if err != nil {
 		return nil, fmt.Errorf("Page.getOriginTrials: %w", err)
 	}
@@ -938,7 +948,7 @@ func (s *Server) ProduceCompilationCache(ctx context.Context, req *pb.ProduceCom
 		scripts[i] = s
 	}
 	params := map[string]interface{}{"scripts": scripts}
-	if _, err := s.client.Send(ctx, "Page.produceCompilationCache", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Page.produceCompilationCache", params); err != nil {
 		return nil, fmt.Errorf("Page.produceCompilationCache: %w", err)
 	}
 	return &pb.ProduceCompilationCacheResponse{}, nil
@@ -949,14 +959,14 @@ func (s *Server) AddCompilationCache(ctx context.Context, req *pb.AddCompilation
 		"url":  req.Url,
 		"data": base64.StdEncoding.EncodeToString(req.Data),
 	}
-	if _, err := s.client.Send(ctx, "Page.addCompilationCache", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Page.addCompilationCache", params); err != nil {
 		return nil, fmt.Errorf("Page.addCompilationCache: %w", err)
 	}
 	return &pb.AddCompilationCacheResponse{}, nil
 }
 
 func (s *Server) ClearCompilationCache(ctx context.Context, req *pb.ClearCompilationCacheRequest) (*pb.ClearCompilationCacheResponse, error) {
-	if _, err := s.client.Send(ctx, "Page.clearCompilationCache", nil); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Page.clearCompilationCache", nil); err != nil {
 		return nil, fmt.Errorf("Page.clearCompilationCache: %w", err)
 	}
 	return &pb.ClearCompilationCacheResponse{}, nil
@@ -964,7 +974,7 @@ func (s *Server) ClearCompilationCache(ctx context.Context, req *pb.ClearCompila
 
 func (s *Server) SetPrerenderingAllowed(ctx context.Context, req *pb.SetPrerenderingAllowedRequest) (*pb.SetPrerenderingAllowedResponse, error) {
 	params := map[string]interface{}{"isAllowed": req.IsAllowed}
-	if _, err := s.client.Send(ctx, "Page.setPrerenderingAllowed", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Page.setPrerenderingAllowed", params); err != nil {
 		return nil, fmt.Errorf("Page.setPrerenderingAllowed: %w", err)
 	}
 	return &pb.SetPrerenderingAllowedResponse{}, nil

@@ -22,6 +22,16 @@ func New(client *cdpclient.Client) *Server {
 	return &Server{client: client}
 }
 
+// send routes a CDP command through the specified session, falling back
+// to the client's default session if sessionID is empty.
+func (s *Server) send(ctx context.Context, sessionID string, method string, params interface{}) (json.RawMessage, error) {
+	if sessionID != "" {
+		return s.client.SendWithSession(ctx, method, params, sessionID)
+	}
+	return s.client.Send(ctx, method, params)
+}
+
+
 // --- internal CDP types ---
 
 type cdpSourceRange struct {
@@ -291,14 +301,14 @@ func (f *cdpPlatformFontUsage) toProto() *pb.PlatformFontUsage {
 // --- RPC implementations ---
 
 func (s *Server) Enable(ctx context.Context, req *pb.EnableRequest) (*pb.EnableResponse, error) {
-	if _, err := s.client.Send(ctx, "CSS.enable", nil); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "CSS.enable", nil); err != nil {
 		return nil, fmt.Errorf("CSS.enable: %w", err)
 	}
 	return &pb.EnableResponse{}, nil
 }
 
 func (s *Server) Disable(ctx context.Context, req *pb.DisableRequest) (*pb.DisableResponse, error) {
-	if _, err := s.client.Send(ctx, "CSS.disable", nil); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "CSS.disable", nil); err != nil {
 		return nil, fmt.Errorf("CSS.disable: %w", err)
 	}
 	return &pb.DisableResponse{}, nil
@@ -308,7 +318,7 @@ func (s *Server) GetMatchedStylesForNode(ctx context.Context, req *pb.GetMatched
 	params := map[string]interface{}{
 		"nodeId": req.NodeId,
 	}
-	result, err := s.client.Send(ctx, "CSS.getMatchedStylesForNode", params)
+	result, err := s.send(ctx, req.SessionId, "CSS.getMatchedStylesForNode", params)
 	if err != nil {
 		return nil, fmt.Errorf("CSS.getMatchedStylesForNode: %w", err)
 	}
@@ -346,7 +356,7 @@ func (s *Server) GetComputedStyleForNode(ctx context.Context, req *pb.GetCompute
 	params := map[string]interface{}{
 		"nodeId": req.NodeId,
 	}
-	result, err := s.client.Send(ctx, "CSS.getComputedStyleForNode", params)
+	result, err := s.send(ctx, req.SessionId, "CSS.getComputedStyleForNode", params)
 	if err != nil {
 		return nil, fmt.Errorf("CSS.getComputedStyleForNode: %w", err)
 	}
@@ -373,7 +383,7 @@ func (s *Server) GetInlineStylesForNode(ctx context.Context, req *pb.GetInlineSt
 	params := map[string]interface{}{
 		"nodeId": req.NodeId,
 	}
-	result, err := s.client.Send(ctx, "CSS.getInlineStylesForNode", params)
+	result, err := s.send(ctx, req.SessionId, "CSS.getInlineStylesForNode", params)
 	if err != nil {
 		return nil, fmt.Errorf("CSS.getInlineStylesForNode: %w", err)
 	}
@@ -394,7 +404,7 @@ func (s *Server) GetStyleSheetText(ctx context.Context, req *pb.GetStyleSheetTex
 	params := map[string]interface{}{
 		"styleSheetId": req.StyleSheetId,
 	}
-	result, err := s.client.Send(ctx, "CSS.getStyleSheetText", params)
+	result, err := s.send(ctx, req.SessionId, "CSS.getStyleSheetText", params)
 	if err != nil {
 		return nil, fmt.Errorf("CSS.getStyleSheetText: %w", err)
 	}
@@ -412,7 +422,7 @@ func (s *Server) SetStyleSheetText(ctx context.Context, req *pb.SetStyleSheetTex
 		"styleSheetId": req.StyleSheetId,
 		"text":         req.Text,
 	}
-	result, err := s.client.Send(ctx, "CSS.setStyleSheetText", params)
+	result, err := s.send(ctx, req.SessionId, "CSS.setStyleSheetText", params)
 	if err != nil {
 		return nil, fmt.Errorf("CSS.setStyleSheetText: %w", err)
 	}
@@ -452,7 +462,7 @@ func (s *Server) SetStyleTexts(ctx context.Context, req *pb.SetStyleTextsRequest
 	params := map[string]interface{}{
 		"edits": edits,
 	}
-	result, err := s.client.Send(ctx, "CSS.setStyleTexts", params)
+	result, err := s.send(ctx, req.SessionId, "CSS.setStyleTexts", params)
 	if err != nil {
 		return nil, fmt.Errorf("CSS.setStyleTexts: %w", err)
 	}
@@ -477,7 +487,7 @@ func (s *Server) AddRule(ctx context.Context, req *pb.AddRuleRequest) (*pb.AddRu
 	if req.Location != nil {
 		params["location"] = sourceRangeToMap(req.Location)
 	}
-	result, err := s.client.Send(ctx, "CSS.addRule", params)
+	result, err := s.send(ctx, req.SessionId, "CSS.addRule", params)
 	if err != nil {
 		return nil, fmt.Errorf("CSS.addRule: %w", err)
 	}
@@ -494,7 +504,7 @@ func (s *Server) CreateStyleSheet(ctx context.Context, req *pb.CreateStyleSheetR
 	params := map[string]interface{}{
 		"frameId": req.FrameId,
 	}
-	result, err := s.client.Send(ctx, "CSS.createStyleSheet", params)
+	result, err := s.send(ctx, req.SessionId, "CSS.createStyleSheet", params)
 	if err != nil {
 		return nil, fmt.Errorf("CSS.createStyleSheet: %w", err)
 	}
@@ -511,7 +521,7 @@ func (s *Server) GetBackgroundColors(ctx context.Context, req *pb.GetBackgroundC
 	params := map[string]interface{}{
 		"nodeId": req.NodeId,
 	}
-	result, err := s.client.Send(ctx, "CSS.getBackgroundColors", params)
+	result, err := s.send(ctx, req.SessionId, "CSS.getBackgroundColors", params)
 	if err != nil {
 		return nil, fmt.Errorf("CSS.getBackgroundColors: %w", err)
 	}
@@ -534,7 +544,7 @@ func (s *Server) GetPlatformFontsForNode(ctx context.Context, req *pb.GetPlatfor
 	params := map[string]interface{}{
 		"nodeId": req.NodeId,
 	}
-	result, err := s.client.Send(ctx, "CSS.getPlatformFontsForNode", params)
+	result, err := s.send(ctx, req.SessionId, "CSS.getPlatformFontsForNode", params)
 	if err != nil {
 		return nil, fmt.Errorf("CSS.getPlatformFontsForNode: %w", err)
 	}
@@ -552,7 +562,7 @@ func (s *Server) GetPlatformFontsForNode(ctx context.Context, req *pb.GetPlatfor
 }
 
 func (s *Server) GetMediaQueries(ctx context.Context, req *pb.GetMediaQueriesRequest) (*pb.GetMediaQueriesResponse, error) {
-	result, err := s.client.Send(ctx, "CSS.getMediaQueries", nil)
+	result, err := s.send(ctx, req.SessionId, "CSS.getMediaQueries", nil)
 	if err != nil {
 		return nil, fmt.Errorf("CSS.getMediaQueries: %w", err)
 	}
@@ -570,14 +580,14 @@ func (s *Server) GetMediaQueries(ctx context.Context, req *pb.GetMediaQueriesReq
 }
 
 func (s *Server) StartRuleUsageTracking(ctx context.Context, req *pb.StartRuleUsageTrackingRequest) (*pb.StartRuleUsageTrackingResponse, error) {
-	if _, err := s.client.Send(ctx, "CSS.startRuleUsageTracking", nil); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "CSS.startRuleUsageTracking", nil); err != nil {
 		return nil, fmt.Errorf("CSS.startRuleUsageTracking: %w", err)
 	}
 	return &pb.StartRuleUsageTrackingResponse{}, nil
 }
 
 func (s *Server) StopRuleUsageTracking(ctx context.Context, req *pb.StopRuleUsageTrackingRequest) (*pb.StopRuleUsageTrackingResponse, error) {
-	result, err := s.client.Send(ctx, "CSS.stopRuleUsageTracking", nil)
+	result, err := s.send(ctx, req.SessionId, "CSS.stopRuleUsageTracking", nil)
 	if err != nil {
 		return nil, fmt.Errorf("CSS.stopRuleUsageTracking: %w", err)
 	}
@@ -595,7 +605,7 @@ func (s *Server) StopRuleUsageTracking(ctx context.Context, req *pb.StopRuleUsag
 }
 
 func (s *Server) TakeCoverageDelta(ctx context.Context, req *pb.TakeCoverageDeltaRequest) (*pb.TakeCoverageDeltaResponse, error) {
-	result, err := s.client.Send(ctx, "CSS.takeCoverageDelta", nil)
+	result, err := s.send(ctx, req.SessionId, "CSS.takeCoverageDelta", nil)
 	if err != nil {
 		return nil, fmt.Errorf("CSS.takeCoverageDelta: %w", err)
 	}
@@ -620,7 +630,7 @@ func (s *Server) CollectClassNames(ctx context.Context, req *pb.CollectClassName
 	params := map[string]interface{}{
 		"styleSheetId": req.StyleSheetId,
 	}
-	result, err := s.client.Send(ctx, "CSS.collectClassNames", params)
+	result, err := s.send(ctx, req.SessionId, "CSS.collectClassNames", params)
 	if err != nil {
 		return nil, fmt.Errorf("CSS.collectClassNames: %w", err)
 	}
@@ -641,7 +651,7 @@ func (s *Server) SetRuleSelector(ctx context.Context, req *pb.SetRuleSelectorReq
 	if req.Range != nil {
 		params["range"] = sourceRangeToMap(req.Range)
 	}
-	result, err := s.client.Send(ctx, "CSS.setRuleSelector", params)
+	result, err := s.send(ctx, req.SessionId, "CSS.setRuleSelector", params)
 	if err != nil {
 		return nil, fmt.Errorf("CSS.setRuleSelector: %w", err)
 	}
@@ -663,7 +673,7 @@ func (s *Server) ForcePseudoState(ctx context.Context, req *pb.ForcePseudoStateR
 		"nodeId":              req.NodeId,
 		"forcedPseudoClasses": req.ForcedPseudoClasses,
 	}
-	if _, err := s.client.Send(ctx, "CSS.forcePseudoState", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "CSS.forcePseudoState", params); err != nil {
 		return nil, fmt.Errorf("CSS.forcePseudoState: %w", err)
 	}
 	return &pb.ForcePseudoStateResponse{}, nil

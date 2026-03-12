@@ -10,17 +10,23 @@ service DeviceAccessService {
   rpc SubscribeEvents(SubscribeDeviceAccessEventsRequest) returns (stream DeviceAccessEvent);
 }
 
-message EnableRequest {}
+message EnableRequest {
+  string session_id = 99;
+}
 message EnableResponse {}
-message DisableRequest {}
+message DisableRequest {
+  string session_id = 99;
+}
 message DisableResponse {}
 message SelectPromptRequest {
   string id = 1;
   string device_id = 2;
+  string session_id = 99;
 }
 message SelectPromptResponse {}
 message CancelPromptRequest {
   string id = 1;
+  string session_id = 99;
 }
 message CancelPromptResponse {}
 
@@ -37,6 +43,7 @@ message DeviceAccessEvent {
 message DeviceRequestPromptedEvent {
   string id = 1;
   repeated PromptDevice devices = 2;
+  string session_id = 99;
 }
 
 message PromptDevice {

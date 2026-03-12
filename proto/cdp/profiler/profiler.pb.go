@@ -491,6 +491,7 @@ func (x *CoverageRange) GetCount() int32 {
 
 type EnableRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -523,6 +524,13 @@ func (x *EnableRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use EnableRequest.ProtoReflect.Descriptor instead.
 func (*EnableRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_profiler_profiler_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *EnableRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type EnableResponse struct {
@@ -563,6 +571,7 @@ func (*EnableResponse) Descriptor() ([]byte, []int) {
 
 type DisableRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -595,6 +604,13 @@ func (x *DisableRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use DisableRequest.ProtoReflect.Descriptor instead.
 func (*DisableRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_profiler_profiler_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *DisableRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type DisableResponse struct {
@@ -636,6 +652,7 @@ func (*DisableResponse) Descriptor() ([]byte, []int) {
 type SetSamplingIntervalRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Interval      int32                  `protobuf:"varint,1,opt,name=interval,proto3" json:"interval,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -677,6 +694,13 @@ func (x *SetSamplingIntervalRequest) GetInterval() int32 {
 	return 0
 }
 
+func (x *SetSamplingIntervalRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type SetSamplingIntervalResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -715,6 +739,7 @@ func (*SetSamplingIntervalResponse) Descriptor() ([]byte, []int) {
 
 type StartRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -747,6 +772,13 @@ func (x *StartRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use StartRequest.ProtoReflect.Descriptor instead.
 func (*StartRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_profiler_profiler_proto_rawDescGZIP(), []int{13}
+}
+
+func (x *StartRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type StartResponse struct {
@@ -787,6 +819,7 @@ func (*StartResponse) Descriptor() ([]byte, []int) {
 
 type StopRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -819,6 +852,13 @@ func (x *StopRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use StopRequest.ProtoReflect.Descriptor instead.
 func (*StopRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_profiler_profiler_proto_rawDescGZIP(), []int{15}
+}
+
+func (x *StopRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type StopResponse struct {
@@ -870,6 +910,7 @@ type StartPreciseCoverageRequest struct {
 	CallCount             bool                   `protobuf:"varint,1,opt,name=call_count,json=callCount,proto3" json:"call_count,omitempty"`
 	Detailed              bool                   `protobuf:"varint,2,opt,name=detailed,proto3" json:"detailed,omitempty"`
 	AllowTriggeredUpdates bool                   `protobuf:"varint,3,opt,name=allow_triggered_updates,json=allowTriggeredUpdates,proto3" json:"allow_triggered_updates,omitempty"`
+	SessionId             string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields         protoimpl.UnknownFields
 	sizeCache             protoimpl.SizeCache
 }
@@ -925,6 +966,13 @@ func (x *StartPreciseCoverageRequest) GetAllowTriggeredUpdates() bool {
 	return false
 }
 
+func (x *StartPreciseCoverageRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type StartPreciseCoverageResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Timestamp     float64                `protobuf:"fixed64,1,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
@@ -971,6 +1019,7 @@ func (x *StartPreciseCoverageResponse) GetTimestamp() float64 {
 
 type StopPreciseCoverageRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1003,6 +1052,13 @@ func (x *StopPreciseCoverageRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use StopPreciseCoverageRequest.ProtoReflect.Descriptor instead.
 func (*StopPreciseCoverageRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_profiler_profiler_proto_rawDescGZIP(), []int{19}
+}
+
+func (x *StopPreciseCoverageRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type StopPreciseCoverageResponse struct {
@@ -1043,6 +1099,7 @@ func (*StopPreciseCoverageResponse) Descriptor() ([]byte, []int) {
 
 type TakePreciseCoverageRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1075,6 +1132,13 @@ func (x *TakePreciseCoverageRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use TakePreciseCoverageRequest.ProtoReflect.Descriptor instead.
 func (*TakePreciseCoverageRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_profiler_profiler_proto_rawDescGZIP(), []int{21}
+}
+
+func (x *TakePreciseCoverageRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type TakePreciseCoverageResponse struct {
@@ -1131,6 +1195,7 @@ func (x *TakePreciseCoverageResponse) GetTimestamp() float64 {
 
 type GetBestEffortCoverageRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1163,6 +1228,13 @@ func (x *GetBestEffortCoverageRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use GetBestEffortCoverageRequest.ProtoReflect.Descriptor instead.
 func (*GetBestEffortCoverageRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_profiler_profiler_proto_rawDescGZIP(), []int{23}
+}
+
+func (x *GetBestEffortCoverageRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type GetBestEffortCoverageResponse struct {
@@ -1211,6 +1283,7 @@ func (x *GetBestEffortCoverageResponse) GetResult() []*ScriptCoverage {
 
 type SubscribeEventsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1243,6 +1316,13 @@ func (x *SubscribeEventsRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use SubscribeEventsRequest.ProtoReflect.Descriptor instead.
 func (*SubscribeEventsRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_profiler_profiler_proto_rawDescGZIP(), []int{25}
+}
+
+func (x *SubscribeEventsRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type ProfilerEvent struct {
@@ -1574,36 +1654,56 @@ const file_proto_cdp_profiler_profiler_proto_rawDesc = "" +
 	"\fstart_offset\x18\x01 \x01(\x05R\vstartOffset\x12\x1d\n" +
 	"\n" +
 	"end_offset\x18\x02 \x01(\x05R\tendOffset\x12\x14\n" +
-	"\x05count\x18\x03 \x01(\x05R\x05count\"\x0f\n" +
-	"\rEnableRequest\"\x10\n" +
-	"\x0eEnableResponse\"\x10\n" +
-	"\x0eDisableRequest\"\x11\n" +
-	"\x0fDisableResponse\"8\n" +
+	"\x05count\x18\x03 \x01(\x05R\x05count\".\n" +
+	"\rEnableRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x10\n" +
+	"\x0eEnableResponse\"/\n" +
+	"\x0eDisableRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x11\n" +
+	"\x0fDisableResponse\"W\n" +
 	"\x1aSetSamplingIntervalRequest\x12\x1a\n" +
-	"\binterval\x18\x01 \x01(\x05R\binterval\"\x1d\n" +
-	"\x1bSetSamplingIntervalResponse\"\x0e\n" +
-	"\fStartRequest\"\x0f\n" +
-	"\rStartResponse\"\r\n" +
-	"\vStopRequest\"?\n" +
+	"\binterval\x18\x01 \x01(\x05R\binterval\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x1d\n" +
+	"\x1bSetSamplingIntervalResponse\"-\n" +
+	"\fStartRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x0f\n" +
+	"\rStartResponse\",\n" +
+	"\vStopRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"?\n" +
 	"\fStopResponse\x12/\n" +
-	"\aprofile\x18\x01 \x01(\v2\x15.cdp.profiler.ProfileR\aprofile\"\x90\x01\n" +
+	"\aprofile\x18\x01 \x01(\v2\x15.cdp.profiler.ProfileR\aprofile\"\xaf\x01\n" +
 	"\x1bStartPreciseCoverageRequest\x12\x1d\n" +
 	"\n" +
 	"call_count\x18\x01 \x01(\bR\tcallCount\x12\x1a\n" +
 	"\bdetailed\x18\x02 \x01(\bR\bdetailed\x126\n" +
-	"\x17allow_triggered_updates\x18\x03 \x01(\bR\x15allowTriggeredUpdates\"<\n" +
+	"\x17allow_triggered_updates\x18\x03 \x01(\bR\x15allowTriggeredUpdates\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"<\n" +
 	"\x1cStartPreciseCoverageResponse\x12\x1c\n" +
-	"\ttimestamp\x18\x01 \x01(\x01R\ttimestamp\"\x1c\n" +
-	"\x1aStopPreciseCoverageRequest\"\x1d\n" +
-	"\x1bStopPreciseCoverageResponse\"\x1c\n" +
-	"\x1aTakePreciseCoverageRequest\"q\n" +
+	"\ttimestamp\x18\x01 \x01(\x01R\ttimestamp\";\n" +
+	"\x1aStopPreciseCoverageRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x1d\n" +
+	"\x1bStopPreciseCoverageResponse\";\n" +
+	"\x1aTakePreciseCoverageRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"q\n" +
 	"\x1bTakePreciseCoverageResponse\x124\n" +
 	"\x06result\x18\x01 \x03(\v2\x1c.cdp.profiler.ScriptCoverageR\x06result\x12\x1c\n" +
-	"\ttimestamp\x18\x02 \x01(\x01R\ttimestamp\"\x1e\n" +
-	"\x1cGetBestEffortCoverageRequest\"U\n" +
+	"\ttimestamp\x18\x02 \x01(\x01R\ttimestamp\"=\n" +
+	"\x1cGetBestEffortCoverageRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"U\n" +
 	"\x1dGetBestEffortCoverageResponse\x124\n" +
-	"\x06result\x18\x01 \x03(\v2\x1c.cdp.profiler.ScriptCoverageR\x06result\"\x18\n" +
-	"\x16SubscribeEventsRequest\"\xd7\x02\n" +
+	"\x06result\x18\x01 \x03(\v2\x1c.cdp.profiler.ScriptCoverageR\x06result\"7\n" +
+	"\x16SubscribeEventsRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\xd7\x02\n" +
 	"\rProfilerEvent\x12b\n" +
 	"\x17console_profile_started\x18\x01 \x01(\v2(.cdp.profiler.ConsoleProfileStartedEventH\x00R\x15consoleProfileStarted\x12e\n" +
 	"\x18console_profile_finished\x18\x02 \x01(\v2).cdp.profiler.ConsoleProfileFinishedEventH\x00R\x16consoleProfileFinished\x12r\n" +

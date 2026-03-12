@@ -91,6 +91,7 @@ func (x *ContextRealtimeData) GetCallbackIntervalVariance() float64 {
 
 type EnableRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -123,6 +124,13 @@ func (x *EnableRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use EnableRequest.ProtoReflect.Descriptor instead.
 func (*EnableRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_webaudio_webaudio_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *EnableRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type EnableResponse struct {
@@ -163,6 +171,7 @@ func (*EnableResponse) Descriptor() ([]byte, []int) {
 
 type DisableRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -195,6 +204,13 @@ func (x *DisableRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use DisableRequest.ProtoReflect.Descriptor instead.
 func (*DisableRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_webaudio_webaudio_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *DisableRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type DisableResponse struct {
@@ -236,6 +252,7 @@ func (*DisableResponse) Descriptor() ([]byte, []int) {
 type GetRealtimeDataRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	ContextId     string                 `protobuf:"bytes,1,opt,name=context_id,json=contextId,proto3" json:"context_id,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -273,6 +290,13 @@ func (*GetRealtimeDataRequest) Descriptor() ([]byte, []int) {
 func (x *GetRealtimeDataRequest) GetContextId() string {
 	if x != nil {
 		return x.ContextId
+	}
+	return ""
+}
+
+func (x *GetRealtimeDataRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -1340,14 +1364,20 @@ const file_proto_cdp_webaudio_webaudio_proto_rawDesc = "" +
 	"\fcurrent_time\x18\x01 \x01(\x01R\vcurrentTime\x12'\n" +
 	"\x0frender_capacity\x18\x02 \x01(\x01R\x0erenderCapacity\x124\n" +
 	"\x16callback_interval_mean\x18\x03 \x01(\x01R\x14callbackIntervalMean\x12<\n" +
-	"\x1acallback_interval_variance\x18\x04 \x01(\x01R\x18callbackIntervalVariance\"\x0f\n" +
-	"\rEnableRequest\"\x10\n" +
-	"\x0eEnableResponse\"\x10\n" +
-	"\x0eDisableRequest\"\x11\n" +
-	"\x0fDisableResponse\"7\n" +
+	"\x1acallback_interval_variance\x18\x04 \x01(\x01R\x18callbackIntervalVariance\".\n" +
+	"\rEnableRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x10\n" +
+	"\x0eEnableResponse\"/\n" +
+	"\x0eDisableRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x11\n" +
+	"\x0fDisableResponse\"V\n" +
 	"\x16GetRealtimeDataRequest\x12\x1d\n" +
 	"\n" +
-	"context_id\x18\x01 \x01(\tR\tcontextId\"a\n" +
+	"context_id\x18\x01 \x01(\tR\tcontextId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"a\n" +
 	"\x17GetRealtimeDataResponse\x12F\n" +
 	"\rrealtime_data\x18\x01 \x01(\v2!.cdp.webaudio.ContextRealtimeDataR\frealtimeData\"\xcd\x02\n" +
 	"\x10BaseAudioContext\x12\x1d\n" +

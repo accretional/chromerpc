@@ -105,6 +105,7 @@ message DispatchKeyEventRequest {
   repeated string commands = 14;
   // DOM UI Events Location.
   int32 location = 15;
+  string session_id = 99;
 }
 message DispatchKeyEventResponse {}
 
@@ -141,6 +142,7 @@ message DispatchMouseEventRequest {
   double delta_y = 15;
   // Pointer type.
   string pointer_type = 16; // "mouse","pen"
+  string session_id = 99;
 }
 message DispatchMouseEventResponse {}
 
@@ -153,17 +155,20 @@ message DispatchTouchEventRequest {
   int32 modifiers = 3;
   // Time at which the event occurred.
   double timestamp = 4;
+  string session_id = 99;
 }
 message DispatchTouchEventResponse {}
 
 message InsertTextRequest {
   // The text to insert.
   string text = 1;
+  string session_id = 99;
 }
 message InsertTextResponse {}
 
 message SetIgnoreInputEventsRequest {
   bool ignore = 1;
+  string session_id = 99;
 }
 message SetIgnoreInputEventsResponse {}
 
@@ -173,6 +178,7 @@ message DispatchDragEventRequest {
   double y = 3;
   DragData data = 4;
   int32 modifiers = 5;
+  string session_id = 99;
 }
 message DispatchDragEventResponse {}
 
@@ -182,6 +188,7 @@ message SynthesizePinchGestureRequest {
   double scale_factor = 3;
   int32 relative_speed = 4;
   string gesture_source_type = 5; // "default","touch","mouse"
+  string session_id = 99;
 }
 message SynthesizePinchGestureResponse {}
 
@@ -198,6 +205,7 @@ message SynthesizeScrollGestureRequest {
   int32 repeat_count = 10;
   int32 repeat_delay_ms = 11;
   string interaction_marker_name = 12;
+  string session_id = 99;
 }
 message SynthesizeScrollGestureResponse {}
 
@@ -207,10 +215,13 @@ message SynthesizeTapGestureRequest {
   int32 duration = 3;
   int32 tap_count = 4;
   string gesture_source_type = 5;
+  string session_id = 99;
 }
 message SynthesizeTapGestureResponse {}
 
-message CancelDraggingRequest {}
+message CancelDraggingRequest {
+  string session_id = 99;
+}
 message CancelDraggingResponse {}
 
 message ImeSetCompositionRequest {
@@ -219,5 +230,6 @@ message ImeSetCompositionRequest {
   int32 selection_end = 3;
   int32 replacement_start = 4;
   int32 replacement_end = 5;
+  string session_id = 99;
 }
 message ImeSetCompositionResponse {}

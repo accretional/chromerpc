@@ -8,9 +8,13 @@ service DOMSnapshotService {
   rpc CaptureSnapshot(CaptureSnapshotRequest) returns (CaptureSnapshotResponse);
 }
 
-message EnableRequest {}
+message EnableRequest {
+  string session_id = 99;
+}
 message EnableResponse {}
-message DisableRequest {}
+message DisableRequest {
+  string session_id = 99;
+}
 message DisableResponse {}
 
 message CaptureSnapshotRequest {
@@ -19,6 +23,7 @@ message CaptureSnapshotRequest {
   bool include_dom_rects = 3;
   bool include_blended_background_colors = 4;
   bool include_text_color_opacities = 5;
+  string session_id = 99;
 }
 
 message CaptureSnapshotResponse {

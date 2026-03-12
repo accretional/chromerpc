@@ -23,6 +23,7 @@ message BucketFileSystemLocator {
 
 message GetDirectoryRequest {
   BucketFileSystemLocator bucket_file_system_locator = 1;
+  string session_id = 99;
 }
 
 message GetDirectoryResponse {

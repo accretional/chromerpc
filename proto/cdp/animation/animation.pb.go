@@ -247,6 +247,7 @@ func (x *AnimationObj) GetCssId() string {
 
 type EnableRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -279,6 +280,13 @@ func (x *EnableRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use EnableRequest.ProtoReflect.Descriptor instead.
 func (*EnableRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_animation_animation_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *EnableRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type EnableResponse struct {
@@ -319,6 +327,7 @@ func (*EnableResponse) Descriptor() ([]byte, []int) {
 
 type DisableRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -351,6 +360,13 @@ func (x *DisableRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use DisableRequest.ProtoReflect.Descriptor instead.
 func (*DisableRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_animation_animation_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *DisableRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type DisableResponse struct {
@@ -391,6 +407,7 @@ func (*DisableResponse) Descriptor() ([]byte, []int) {
 
 type GetPlaybackRateRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -423,6 +440,13 @@ func (x *GetPlaybackRateRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use GetPlaybackRateRequest.ProtoReflect.Descriptor instead.
 func (*GetPlaybackRateRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_animation_animation_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *GetPlaybackRateRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type GetPlaybackRateResponse struct {
@@ -472,6 +496,7 @@ func (x *GetPlaybackRateResponse) GetPlaybackRate() float64 {
 type SetPlaybackRateRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	PlaybackRate  float64                `protobuf:"fixed64,1,opt,name=playback_rate,json=playbackRate,proto3" json:"playback_rate,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -513,6 +538,13 @@ func (x *SetPlaybackRateRequest) GetPlaybackRate() float64 {
 	return 0
 }
 
+func (x *SetPlaybackRateRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type SetPlaybackRateResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -552,6 +584,7 @@ func (*SetPlaybackRateResponse) Descriptor() ([]byte, []int) {
 type GetCurrentTimeRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -589,6 +622,13 @@ func (*GetCurrentTimeRequest) Descriptor() ([]byte, []int) {
 func (x *GetCurrentTimeRequest) GetId() string {
 	if x != nil {
 		return x.Id
+	}
+	return ""
+}
+
+func (x *GetCurrentTimeRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -641,6 +681,7 @@ type SetPausedRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Animations    []string               `protobuf:"bytes,1,rep,name=animations,proto3" json:"animations,omitempty"`
 	Paused        bool                   `protobuf:"varint,2,opt,name=paused,proto3" json:"paused,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -689,6 +730,13 @@ func (x *SetPausedRequest) GetPaused() bool {
 	return false
 }
 
+func (x *SetPausedRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type SetPausedResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -730,6 +778,7 @@ type SetTimingRequest struct {
 	AnimationId   string                 `protobuf:"bytes,1,opt,name=animation_id,json=animationId,proto3" json:"animation_id,omitempty"`
 	Duration      float64                `protobuf:"fixed64,2,opt,name=duration,proto3" json:"duration,omitempty"`
 	Delay         float64                `protobuf:"fixed64,3,opt,name=delay,proto3" json:"delay,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -785,6 +834,13 @@ func (x *SetTimingRequest) GetDelay() float64 {
 	return 0
 }
 
+func (x *SetTimingRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type SetTimingResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -825,6 +881,7 @@ type SeekAnimationsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Animations    []string               `protobuf:"bytes,1,rep,name=animations,proto3" json:"animations,omitempty"`
 	CurrentTime   float64                `protobuf:"fixed64,2,opt,name=current_time,json=currentTime,proto3" json:"current_time,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -873,6 +930,13 @@ func (x *SeekAnimationsRequest) GetCurrentTime() float64 {
 	return 0
 }
 
+func (x *SeekAnimationsRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type SeekAnimationsResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -912,6 +976,7 @@ func (*SeekAnimationsResponse) Descriptor() ([]byte, []int) {
 type ReleaseAnimationsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Animations    []string               `protobuf:"bytes,1,rep,name=animations,proto3" json:"animations,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -953,6 +1018,13 @@ func (x *ReleaseAnimationsRequest) GetAnimations() []string {
 	return nil
 }
 
+func (x *ReleaseAnimationsRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type ReleaseAnimationsResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -992,6 +1064,7 @@ func (*ReleaseAnimationsResponse) Descriptor() ([]byte, []int) {
 type ResolveAnimationRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	AnimationId   string                 `protobuf:"bytes,1,opt,name=animation_id,json=animationId,proto3" json:"animation_id,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1029,6 +1102,13 @@ func (*ResolveAnimationRequest) Descriptor() ([]byte, []int) {
 func (x *ResolveAnimationRequest) GetAnimationId() string {
 	if x != nil {
 		return x.AnimationId
+	}
+	return ""
+}
+
+func (x *ResolveAnimationRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -1079,6 +1159,7 @@ func (x *ResolveAnimationResponse) GetRemoteObject() string {
 
 type SubscribeEventsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1111,6 +1192,13 @@ func (x *SubscribeEventsRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use SubscribeEventsRequest.ProtoReflect.Descriptor instead.
 func (*SubscribeEventsRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_animation_animation_proto_rawDescGZIP(), []int{22}
+}
+
+func (x *SubscribeEventsRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type AnimationEvent struct {
@@ -1373,48 +1461,70 @@ const file_proto_cdp_animation_animation_proto_rawDesc = "" +
 	"\x04type\x18\b \x01(\tR\x04type\x126\n" +
 	"\x06source\x18\t \x01(\v2\x1e.cdp.animation.AnimationEffectR\x06source\x12\x15\n" +
 	"\x06css_id\x18\n" +
-	" \x01(\tR\x05cssId\"\x0f\n" +
-	"\rEnableRequest\"\x10\n" +
-	"\x0eEnableResponse\"\x10\n" +
-	"\x0eDisableRequest\"\x11\n" +
-	"\x0fDisableResponse\"\x18\n" +
-	"\x16GetPlaybackRateRequest\">\n" +
+	" \x01(\tR\x05cssId\".\n" +
+	"\rEnableRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x10\n" +
+	"\x0eEnableResponse\"/\n" +
+	"\x0eDisableRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x11\n" +
+	"\x0fDisableResponse\"7\n" +
+	"\x16GetPlaybackRateRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\">\n" +
 	"\x17GetPlaybackRateResponse\x12#\n" +
-	"\rplayback_rate\x18\x01 \x01(\x01R\fplaybackRate\"=\n" +
+	"\rplayback_rate\x18\x01 \x01(\x01R\fplaybackRate\"\\\n" +
 	"\x16SetPlaybackRateRequest\x12#\n" +
-	"\rplayback_rate\x18\x01 \x01(\x01R\fplaybackRate\"\x19\n" +
-	"\x17SetPlaybackRateResponse\"'\n" +
+	"\rplayback_rate\x18\x01 \x01(\x01R\fplaybackRate\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x19\n" +
+	"\x17SetPlaybackRateResponse\"F\n" +
 	"\x15GetCurrentTimeRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\";\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\";\n" +
 	"\x16GetCurrentTimeResponse\x12!\n" +
-	"\fcurrent_time\x18\x01 \x01(\x01R\vcurrentTime\"J\n" +
+	"\fcurrent_time\x18\x01 \x01(\x01R\vcurrentTime\"i\n" +
 	"\x10SetPausedRequest\x12\x1e\n" +
 	"\n" +
 	"animations\x18\x01 \x03(\tR\n" +
 	"animations\x12\x16\n" +
-	"\x06paused\x18\x02 \x01(\bR\x06paused\"\x13\n" +
-	"\x11SetPausedResponse\"g\n" +
+	"\x06paused\x18\x02 \x01(\bR\x06paused\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x13\n" +
+	"\x11SetPausedResponse\"\x86\x01\n" +
 	"\x10SetTimingRequest\x12!\n" +
 	"\fanimation_id\x18\x01 \x01(\tR\vanimationId\x12\x1a\n" +
 	"\bduration\x18\x02 \x01(\x01R\bduration\x12\x14\n" +
-	"\x05delay\x18\x03 \x01(\x01R\x05delay\"\x13\n" +
-	"\x11SetTimingResponse\"Z\n" +
+	"\x05delay\x18\x03 \x01(\x01R\x05delay\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x13\n" +
+	"\x11SetTimingResponse\"y\n" +
 	"\x15SeekAnimationsRequest\x12\x1e\n" +
 	"\n" +
 	"animations\x18\x01 \x03(\tR\n" +
 	"animations\x12!\n" +
-	"\fcurrent_time\x18\x02 \x01(\x01R\vcurrentTime\"\x18\n" +
-	"\x16SeekAnimationsResponse\":\n" +
+	"\fcurrent_time\x18\x02 \x01(\x01R\vcurrentTime\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x18\n" +
+	"\x16SeekAnimationsResponse\"Y\n" +
 	"\x18ReleaseAnimationsRequest\x12\x1e\n" +
 	"\n" +
 	"animations\x18\x01 \x03(\tR\n" +
-	"animations\"\x1b\n" +
-	"\x19ReleaseAnimationsResponse\"<\n" +
+	"animations\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x1b\n" +
+	"\x19ReleaseAnimationsResponse\"[\n" +
 	"\x17ResolveAnimationRequest\x12!\n" +
-	"\fanimation_id\x18\x01 \x01(\tR\vanimationId\"?\n" +
+	"\fanimation_id\x18\x01 \x01(\tR\vanimationId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"?\n" +
 	"\x18ResolveAnimationResponse\x12#\n" +
-	"\rremote_object\x18\x01 \x01(\tR\fremoteObject\"\x18\n" +
-	"\x16SubscribeEventsRequest\"\x9b\x02\n" +
+	"\rremote_object\x18\x01 \x01(\tR\fremoteObject\"7\n" +
+	"\x16SubscribeEventsRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x9b\x02\n" +
 	"\x0eAnimationEvent\x12S\n" +
 	"\x11animation_created\x18\x01 \x01(\v2$.cdp.animation.AnimationCreatedEventH\x00R\x10animationCreated\x12S\n" +
 	"\x11animation_started\x18\x02 \x01(\v2$.cdp.animation.AnimationStartedEventH\x00R\x10animationStarted\x12V\n" +

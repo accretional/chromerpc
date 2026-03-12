@@ -172,10 +172,14 @@ message SerializationOptions {
 
 // ==================== Requests / Responses ====================
 
-message EnableRequest {}
+message EnableRequest {
+  string session_id = 99;
+}
 message EnableResponse {}
 
-message DisableRequest {}
+message DisableRequest {
+  string session_id = 99;
+}
 message DisableResponse {}
 
 message EvaluateRequest {
@@ -211,6 +215,7 @@ message EvaluateRequest {
   string unique_context_id = 15;
   // Specifies resultant serialization.
   SerializationOptions serialization_options = 16;
+  string session_id = 99;
 }
 
 message EvaluateResponse {
@@ -245,6 +250,7 @@ message CallFunctionOnRequest {
   string unique_context_id = 12;
   // Specifies resultant serialization.
   SerializationOptions serialization_options = 13;
+  string session_id = 99;
 }
 
 message CallFunctionOnResponse {
@@ -263,6 +269,7 @@ message GetPropertiesRequest {
   bool generate_preview = 4;
   // If true, returns non-indexed properties only.
   bool non_indexed_properties_only = 5;
+  string session_id = 99;
 }
 
 message GetPropertiesResponse {
@@ -276,6 +283,7 @@ message AwaitPromiseRequest {
   string promise_object_id = 1;
   bool return_by_value = 2;
   bool generate_preview = 3;
+  string session_id = 99;
 }
 
 message AwaitPromiseResponse {
@@ -285,11 +293,13 @@ message AwaitPromiseResponse {
 
 message ReleaseObjectRequest {
   string object_id = 1;
+  string session_id = 99;
 }
 message ReleaseObjectResponse {}
 
 message ReleaseObjectGroupRequest {
   string object_group = 1;
+  string session_id = 99;
 }
 message ReleaseObjectGroupResponse {}
 
@@ -298,6 +308,7 @@ message CompileScriptRequest {
   string source_url = 2;
   bool persist_script = 3;
   int32 execution_context_id = 4;
+  string session_id = 99;
 }
 
 message CompileScriptResponse {
@@ -314,6 +325,7 @@ message RunScriptRequest {
   bool return_by_value = 6;
   bool generate_preview = 7;
   bool await_promise = 8;
+  string session_id = 99;
 }
 
 message RunScriptResponse {
@@ -321,26 +333,33 @@ message RunScriptResponse {
   ExceptionDetails exception_details = 2;
 }
 
-message RunIfWaitingForDebuggerRequest {}
+message RunIfWaitingForDebuggerRequest {
+  string session_id = 99;
+}
 message RunIfWaitingForDebuggerResponse {}
 
-message DiscardConsoleEntriesRequest {}
+message DiscardConsoleEntriesRequest {
+  string session_id = 99;
+}
 message DiscardConsoleEntriesResponse {}
 
 message AddBindingRequest {
   string name = 1;
   int32 execution_context_id = 2;
   string execution_context_name = 3;
+  string session_id = 99;
 }
 message AddBindingResponse {}
 
 message RemoveBindingRequest {
   string name = 1;
+  string session_id = 99;
 }
 message RemoveBindingResponse {}
 
 message GlobalLexicalScopeNamesRequest {
   int32 execution_context_id = 1;
+  string session_id = 99;
 }
 message GlobalLexicalScopeNamesResponse {
   repeated string names = 1;

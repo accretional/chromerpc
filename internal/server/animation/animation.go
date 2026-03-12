@@ -19,22 +19,32 @@ func New(client *cdpclient.Client) *Server {
 	return &Server{client: client}
 }
 
+// send routes a CDP command through the specified session, falling back
+// to the client's default session if sessionID is empty.
+func (s *Server) send(ctx context.Context, sessionID string, method string, params interface{}) (json.RawMessage, error) {
+	if sessionID != "" {
+		return s.client.SendWithSession(ctx, method, params, sessionID)
+	}
+	return s.client.Send(ctx, method, params)
+}
+
+
 func (s *Server) Enable(ctx context.Context, req *pb.EnableRequest) (*pb.EnableResponse, error) {
-	if _, err := s.client.Send(ctx, "Animation.enable", nil); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Animation.enable", nil); err != nil {
 		return nil, fmt.Errorf("Animation.enable: %w", err)
 	}
 	return &pb.EnableResponse{}, nil
 }
 
 func (s *Server) Disable(ctx context.Context, req *pb.DisableRequest) (*pb.DisableResponse, error) {
-	if _, err := s.client.Send(ctx, "Animation.disable", nil); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Animation.disable", nil); err != nil {
 		return nil, fmt.Errorf("Animation.disable: %w", err)
 	}
 	return &pb.DisableResponse{}, nil
 }
 
 func (s *Server) GetPlaybackRate(ctx context.Context, req *pb.GetPlaybackRateRequest) (*pb.GetPlaybackRateResponse, error) {
-	result, err := s.client.Send(ctx, "Animation.getPlaybackRate", nil)
+	result, err := s.send(ctx, req.SessionId, "Animation.getPlaybackRate", nil)
 	if err != nil {
 		return nil, fmt.Errorf("Animation.getPlaybackRate: %w", err)
 	}
@@ -51,7 +61,7 @@ func (s *Server) SetPlaybackRate(ctx context.Context, req *pb.SetPlaybackRateReq
 	params := map[string]interface{}{
 		"playbackRate": req.PlaybackRate,
 	}
-	if _, err := s.client.Send(ctx, "Animation.setPlaybackRate", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Animation.setPlaybackRate", params); err != nil {
 		return nil, fmt.Errorf("Animation.setPlaybackRate: %w", err)
 	}
 	return &pb.SetPlaybackRateResponse{}, nil
@@ -61,7 +71,7 @@ func (s *Server) GetCurrentTime(ctx context.Context, req *pb.GetCurrentTimeReque
 	params := map[string]interface{}{
 		"id": req.Id,
 	}
-	result, err := s.client.Send(ctx, "Animation.getCurrentTime", params)
+	result, err := s.send(ctx, req.SessionId, "Animation.getCurrentTime", params)
 	if err != nil {
 		return nil, fmt.Errorf("Animation.getCurrentTime: %w", err)
 	}
@@ -79,7 +89,7 @@ func (s *Server) SetPaused(ctx context.Context, req *pb.SetPausedRequest) (*pb.S
 		"animations": req.Animations,
 		"paused":     req.Paused,
 	}
-	if _, err := s.client.Send(ctx, "Animation.setPaused", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Animation.setPaused", params); err != nil {
 		return nil, fmt.Errorf("Animation.setPaused: %w", err)
 	}
 	return &pb.SetPausedResponse{}, nil
@@ -91,7 +101,7 @@ func (s *Server) SetTiming(ctx context.Context, req *pb.SetTimingRequest) (*pb.S
 		"duration":    req.Duration,
 		"delay":       req.Delay,
 	}
-	if _, err := s.client.Send(ctx, "Animation.setTiming", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Animation.setTiming", params); err != nil {
 		return nil, fmt.Errorf("Animation.setTiming: %w", err)
 	}
 	return &pb.SetTimingResponse{}, nil
@@ -102,7 +112,7 @@ func (s *Server) SeekAnimations(ctx context.Context, req *pb.SeekAnimationsReque
 		"animations":  req.Animations,
 		"currentTime": req.CurrentTime,
 	}
-	if _, err := s.client.Send(ctx, "Animation.seekAnimations", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Animation.seekAnimations", params); err != nil {
 		return nil, fmt.Errorf("Animation.seekAnimations: %w", err)
 	}
 	return &pb.SeekAnimationsResponse{}, nil
@@ -112,7 +122,7 @@ func (s *Server) ReleaseAnimations(ctx context.Context, req *pb.ReleaseAnimation
 	params := map[string]interface{}{
 		"animations": req.Animations,
 	}
-	if _, err := s.client.Send(ctx, "Animation.releaseAnimations", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Animation.releaseAnimations", params); err != nil {
 		return nil, fmt.Errorf("Animation.releaseAnimations: %w", err)
 	}
 	return &pb.ReleaseAnimationsResponse{}, nil
@@ -122,7 +132,7 @@ func (s *Server) ResolveAnimation(ctx context.Context, req *pb.ResolveAnimationR
 	params := map[string]interface{}{
 		"animationId": req.AnimationId,
 	}
-	result, err := s.client.Send(ctx, "Animation.resolveAnimation", params)
+	result, err := s.send(ctx, req.SessionId, "Animation.resolveAnimation", params)
 	if err != nil {
 		return nil, fmt.Errorf("Animation.resolveAnimation: %w", err)
 	}

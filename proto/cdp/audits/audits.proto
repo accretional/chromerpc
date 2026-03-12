@@ -28,10 +28,14 @@ service AuditsService {
 
 // ==================== Requests / Responses ====================
 
-message EnableRequest {}
+message EnableRequest {
+  string session_id = 99;
+}
 message EnableResponse {}
 
-message DisableRequest {}
+message DisableRequest {
+  string session_id = 99;
+}
 message DisableResponse {}
 
 message GetEncodedResponseRequest {
@@ -43,6 +47,7 @@ message GetEncodedResponseRequest {
   optional double quality = 3;
   // Whether to only return the size information (defaults to false).
   optional bool size_only = 4;
+  string session_id = 99;
 }
 
 message GetEncodedResponseResponse {
@@ -57,10 +62,13 @@ message GetEncodedResponseResponse {
 message CheckContrastRequest {
   // Whether to report WCAG AAA level issues. Default is false.
   optional bool report_aaa = 1;
+  string session_id = 99;
 }
 message CheckContrastResponse {}
 
-message CheckFormsIssuesRequest {}
+message CheckFormsIssuesRequest {
+  string session_id = 99;
+}
 message CheckFormsIssuesResponse {
   // List of form issues found. Each entry is a JSON-encoded GenericIssueDetails.
   repeated string form_issues = 1;
@@ -68,7 +76,9 @@ message CheckFormsIssuesResponse {
 
 // ==================== Events ====================
 
-message SubscribeEventsRequest {}
+message SubscribeEventsRequest {
+  string session_id = 99;
+}
 
 message AuditsEvent {
   oneof event {

@@ -19,15 +19,25 @@ func New(client *cdpclient.Client) *Server {
 	return &Server{client: client}
 }
 
+// send routes a CDP command through the specified session, falling back
+// to the client's default session if sessionID is empty.
+func (s *Server) send(ctx context.Context, sessionID string, method string, params interface{}) (json.RawMessage, error) {
+	if sessionID != "" {
+		return s.client.SendWithSession(ctx, method, params, sessionID)
+	}
+	return s.client.Send(ctx, method, params)
+}
+
+
 func (s *Server) Enable(ctx context.Context, req *pb.EnableRequest) (*pb.EnableResponse, error) {
-	if _, err := s.client.Send(ctx, "Profiler.enable", nil); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Profiler.enable", nil); err != nil {
 		return nil, fmt.Errorf("Profiler.enable: %w", err)
 	}
 	return &pb.EnableResponse{}, nil
 }
 
 func (s *Server) Disable(ctx context.Context, req *pb.DisableRequest) (*pb.DisableResponse, error) {
-	if _, err := s.client.Send(ctx, "Profiler.disable", nil); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Profiler.disable", nil); err != nil {
 		return nil, fmt.Errorf("Profiler.disable: %w", err)
 	}
 	return &pb.DisableResponse{}, nil
@@ -37,21 +47,21 @@ func (s *Server) SetSamplingInterval(ctx context.Context, req *pb.SetSamplingInt
 	params := map[string]interface{}{
 		"interval": req.Interval,
 	}
-	if _, err := s.client.Send(ctx, "Profiler.setSamplingInterval", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Profiler.setSamplingInterval", params); err != nil {
 		return nil, fmt.Errorf("Profiler.setSamplingInterval: %w", err)
 	}
 	return &pb.SetSamplingIntervalResponse{}, nil
 }
 
 func (s *Server) Start(ctx context.Context, req *pb.StartRequest) (*pb.StartResponse, error) {
-	if _, err := s.client.Send(ctx, "Profiler.start", nil); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Profiler.start", nil); err != nil {
 		return nil, fmt.Errorf("Profiler.start: %w", err)
 	}
 	return &pb.StartResponse{}, nil
 }
 
 func (s *Server) Stop(ctx context.Context, req *pb.StopRequest) (*pb.StopResponse, error) {
-	result, err := s.client.Send(ctx, "Profiler.stop", nil)
+	result, err := s.send(ctx, req.SessionId, "Profiler.stop", nil)
 	if err != nil {
 		return nil, fmt.Errorf("Profiler.stop: %w", err)
 	}
@@ -74,7 +84,7 @@ func (s *Server) StartPreciseCoverage(ctx context.Context, req *pb.StartPreciseC
 		"detailed":              req.Detailed,
 		"allowTriggeredUpdates": req.AllowTriggeredUpdates,
 	}
-	result, err := s.client.Send(ctx, "Profiler.startPreciseCoverage", params)
+	result, err := s.send(ctx, req.SessionId, "Profiler.startPreciseCoverage", params)
 	if err != nil {
 		return nil, fmt.Errorf("Profiler.startPreciseCoverage: %w", err)
 	}
@@ -88,14 +98,14 @@ func (s *Server) StartPreciseCoverage(ctx context.Context, req *pb.StartPreciseC
 }
 
 func (s *Server) StopPreciseCoverage(ctx context.Context, req *pb.StopPreciseCoverageRequest) (*pb.StopPreciseCoverageResponse, error) {
-	if _, err := s.client.Send(ctx, "Profiler.stopPreciseCoverage", nil); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Profiler.stopPreciseCoverage", nil); err != nil {
 		return nil, fmt.Errorf("Profiler.stopPreciseCoverage: %w", err)
 	}
 	return &pb.StopPreciseCoverageResponse{}, nil
 }
 
 func (s *Server) TakePreciseCoverage(ctx context.Context, req *pb.TakePreciseCoverageRequest) (*pb.TakePreciseCoverageResponse, error) {
-	result, err := s.client.Send(ctx, "Profiler.takePreciseCoverage", nil)
+	result, err := s.send(ctx, req.SessionId, "Profiler.takePreciseCoverage", nil)
 	if err != nil {
 		return nil, fmt.Errorf("Profiler.takePreciseCoverage: %w", err)
 	}
@@ -113,7 +123,7 @@ func (s *Server) TakePreciseCoverage(ctx context.Context, req *pb.TakePreciseCov
 }
 
 func (s *Server) GetBestEffortCoverage(ctx context.Context, req *pb.GetBestEffortCoverageRequest) (*pb.GetBestEffortCoverageResponse, error) {
-	result, err := s.client.Send(ctx, "Profiler.getBestEffortCoverage", nil)
+	result, err := s.send(ctx, req.SessionId, "Profiler.getBestEffortCoverage", nil)
 	if err != nil {
 		return nil, fmt.Errorf("Profiler.getBestEffortCoverage: %w", err)
 	}

@@ -39,22 +39,26 @@ enum ServiceName {
 
 message StartObservingRequest {
   ServiceName service = 1;
+  string session_id = 99;
 }
 message StartObservingResponse {}
 
 message StopObservingRequest {
   ServiceName service = 1;
+  string session_id = 99;
 }
 message StopObservingResponse {}
 
 message SetRecordingRequest {
   bool should_record = 1;
   ServiceName service = 2;
+  string session_id = 99;
 }
 message SetRecordingResponse {}
 
 message ClearEventsRequest {
   ServiceName service = 1;
+  string session_id = 99;
 }
 message ClearEventsResponse {}
 

@@ -19,15 +19,25 @@ func New(client *cdpclient.Client) *Server {
 	return &Server{client: client}
 }
 
+// send routes a CDP command through the specified session, falling back
+// to the client's default session if sessionID is empty.
+func (s *Server) send(ctx context.Context, sessionID string, method string, params interface{}) (json.RawMessage, error) {
+	if sessionID != "" {
+		return s.client.SendWithSession(ctx, method, params, sessionID)
+	}
+	return s.client.Send(ctx, method, params)
+}
+
+
 func (s *Server) Enable(ctx context.Context, req *pb.EnableRequest) (*pb.EnableResponse, error) {
-	if _, err := s.client.Send(ctx, "Accessibility.enable", nil); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Accessibility.enable", nil); err != nil {
 		return nil, fmt.Errorf("Accessibility.enable: %w", err)
 	}
 	return &pb.EnableResponse{}, nil
 }
 
 func (s *Server) Disable(ctx context.Context, req *pb.DisableRequest) (*pb.DisableResponse, error) {
-	if _, err := s.client.Send(ctx, "Accessibility.disable", nil); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Accessibility.disable", nil); err != nil {
 		return nil, fmt.Errorf("Accessibility.disable: %w", err)
 	}
 	return &pb.DisableResponse{}, nil
@@ -53,9 +63,9 @@ func (s *Server) GetPartialAXTree(ctx context.Context, req *pb.GetPartialAXTreeR
 	var result json.RawMessage
 	var err error
 	if len(params) > 0 {
-		result, err = s.client.Send(ctx, "Accessibility.getPartialAXTree", params)
+		result, err = s.send(ctx, req.SessionId, "Accessibility.getPartialAXTree", params)
 	} else {
-		result, err = s.client.Send(ctx, "Accessibility.getPartialAXTree", nil)
+		result, err = s.send(ctx, req.SessionId, "Accessibility.getPartialAXTree", nil)
 	}
 	if err != nil {
 		return nil, fmt.Errorf("Accessibility.getPartialAXTree: %w", err)
@@ -84,9 +94,9 @@ func (s *Server) GetFullAXTree(ctx context.Context, req *pb.GetFullAXTreeRequest
 	var result json.RawMessage
 	var err error
 	if len(params) > 0 {
-		result, err = s.client.Send(ctx, "Accessibility.getFullAXTree", params)
+		result, err = s.send(ctx, req.SessionId, "Accessibility.getFullAXTree", params)
 	} else {
-		result, err = s.client.Send(ctx, "Accessibility.getFullAXTree", nil)
+		result, err = s.send(ctx, req.SessionId, "Accessibility.getFullAXTree", nil)
 	}
 	if err != nil {
 		return nil, fmt.Errorf("Accessibility.getFullAXTree: %w", err)
@@ -112,9 +122,9 @@ func (s *Server) GetRootAXNode(ctx context.Context, req *pb.GetRootAXNodeRequest
 	var result json.RawMessage
 	var err error
 	if len(params) > 0 {
-		result, err = s.client.Send(ctx, "Accessibility.getRootAXNode", params)
+		result, err = s.send(ctx, req.SessionId, "Accessibility.getRootAXNode", params)
 	} else {
-		result, err = s.client.Send(ctx, "Accessibility.getRootAXNode", nil)
+		result, err = s.send(ctx, req.SessionId, "Accessibility.getRootAXNode", nil)
 	}
 	if err != nil {
 		return nil, fmt.Errorf("Accessibility.getRootAXNode: %w", err)
@@ -142,9 +152,9 @@ func (s *Server) GetAXNodeAndAncestors(ctx context.Context, req *pb.GetAXNodeAnd
 	var result json.RawMessage
 	var err error
 	if len(params) > 0 {
-		result, err = s.client.Send(ctx, "Accessibility.getAXNodeAndAncestors", params)
+		result, err = s.send(ctx, req.SessionId, "Accessibility.getAXNodeAndAncestors", params)
 	} else {
-		result, err = s.client.Send(ctx, "Accessibility.getAXNodeAndAncestors", nil)
+		result, err = s.send(ctx, req.SessionId, "Accessibility.getAXNodeAndAncestors", nil)
 	}
 	if err != nil {
 		return nil, fmt.Errorf("Accessibility.getAXNodeAndAncestors: %w", err)
@@ -169,7 +179,7 @@ func (s *Server) GetChildAXNodes(ctx context.Context, req *pb.GetChildAXNodesReq
 	if req.FrameId != "" {
 		params["frameId"] = req.FrameId
 	}
-	result, err := s.client.Send(ctx, "Accessibility.getChildAXNodes", params)
+	result, err := s.send(ctx, req.SessionId, "Accessibility.getChildAXNodes", params)
 	if err != nil {
 		return nil, fmt.Errorf("Accessibility.getChildAXNodes: %w", err)
 	}
@@ -206,9 +216,9 @@ func (s *Server) QueryAXTree(ctx context.Context, req *pb.QueryAXTreeRequest) (*
 	var result json.RawMessage
 	var err error
 	if len(params) > 0 {
-		result, err = s.client.Send(ctx, "Accessibility.queryAXTree", params)
+		result, err = s.send(ctx, req.SessionId, "Accessibility.queryAXTree", params)
 	} else {
-		result, err = s.client.Send(ctx, "Accessibility.queryAXTree", nil)
+		result, err = s.send(ctx, req.SessionId, "Accessibility.queryAXTree", nil)
 	}
 	if err != nil {
 		return nil, fmt.Errorf("Accessibility.queryAXTree: %w", err)

@@ -132,13 +132,17 @@ message SearchMatch {
 
 // ==================== Requests / Responses ====================
 
-message EnableRequest {}
+message EnableRequest {
+  string session_id = 99;
+}
 message EnableResponse {
   // Unique identifier of the debugger.
   string debugger_id = 1;
 }
 
-message DisableRequest {}
+message DisableRequest {
+  string session_id = 99;
+}
 message DisableResponse {}
 
 message SetBreakpointByUrlRequest {
@@ -154,6 +158,7 @@ message SetBreakpointByUrlRequest {
   int32 column_number = 5;
   // Expression to use as a breakpoint condition.
   string condition = 6;
+  string session_id = 99;
 }
 
 message SetBreakpointByUrlResponse {
@@ -168,6 +173,7 @@ message SetBreakpointRequest {
   Location location = 1;
   // Expression to use as a breakpoint condition.
   string condition = 2;
+  string session_id = 99;
 }
 
 message SetBreakpointResponse {
@@ -179,6 +185,7 @@ message SetBreakpointResponse {
 
 message RemoveBreakpointRequest {
   string breakpoint_id = 1;
+  string session_id = 99;
 }
 message RemoveBreakpointResponse {}
 
@@ -189,6 +196,7 @@ message GetPossibleBreakpointsRequest {
   Location end = 2;
   // Only consider locations which are in the same (non-nested) function as start.
   bool restrict_to_function = 3;
+  string session_id = 99;
 }
 
 message GetPossibleBreakpointsResponse {
@@ -199,6 +207,7 @@ message GetPossibleBreakpointsResponse {
 message GetScriptSourceRequest {
   // Id of the script to get source for.
   string script_id = 1;
+  string session_id = 99;
 }
 
 message GetScriptSourceResponse {
@@ -215,6 +224,7 @@ message SetScriptSourceRequest {
   string script_source = 2;
   // If true the change will not actually be applied. Dry run may be used to get result description without actually modifying the code.
   bool dry_run = 3;
+  string session_id = 99;
 }
 
 message SetScriptSourceResponse {
@@ -235,6 +245,7 @@ message SearchInContentRequest {
   bool case_sensitive = 3;
   // If true, treats string parameter as regex.
   bool is_regex = 4;
+  string session_id = 99;
 }
 
 message SearchInContentResponse {
@@ -242,18 +253,22 @@ message SearchInContentResponse {
   repeated SearchMatch result = 1;
 }
 
-message PauseRequest {}
+message PauseRequest {
+  string session_id = 99;
+}
 message PauseResponse {}
 
 message ResumeRequest {
   // Set to true to terminate execution upon resuming.
   bool terminate_on_resume = 1;
+  string session_id = 99;
 }
 message ResumeResponse {}
 
 message StepOverRequest {
   // Skip pauses in the called functions.
   repeated Location skip_list = 1;
+  string session_id = 99;
 }
 message StepOverResponse {}
 
@@ -262,15 +277,19 @@ message StepIntoRequest {
   bool break_on_async_call = 1;
   // Skip pauses in the called functions.
   repeated Location skip_list = 2;
+  string session_id = 99;
 }
 message StepIntoResponse {}
 
-message StepOutRequest {}
+message StepOutRequest {
+  string session_id = 99;
+}
 message StepOutResponse {}
 
 message SetPauseOnExceptionsRequest {
   // Pause on exceptions mode: "none", "uncaught", "all".
   string state = 1;
+  string session_id = 99;
 }
 message SetPauseOnExceptionsResponse {}
 
@@ -289,6 +308,7 @@ message EvaluateOnCallFrameRequest {
   bool throw_on_side_effect = 6;
   // Terminate execution after timing out.
   double timeout = 7;
+  string session_id = 99;
 }
 
 message EvaluateOnCallFrameResponse {
@@ -301,18 +321,21 @@ message EvaluateOnCallFrameResponse {
 message SetBlackboxPatternsRequest {
   // Array of regexps that will be used to check script url for blackbox state.
   repeated string patterns = 1;
+  string session_id = 99;
 }
 message SetBlackboxPatternsResponse {}
 
 message SetAsyncCallStackDepthRequest {
   // Maximum depth of async call stacks. Setting to 0 will effectively disable collecting async call stacks.
   int32 max_depth = 1;
+  string session_id = 99;
 }
 message SetAsyncCallStackDepthResponse {}
 
 message SetBreakpointsActiveRequest {
   // New value for breakpoints active state.
   bool active = 1;
+  string session_id = 99;
 }
 message SetBreakpointsActiveResponse {}
 

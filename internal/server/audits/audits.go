@@ -19,15 +19,25 @@ func New(client *cdpclient.Client) *Server {
 	return &Server{client: client}
 }
 
+// send routes a CDP command through the specified session, falling back
+// to the client's default session if sessionID is empty.
+func (s *Server) send(ctx context.Context, sessionID string, method string, params interface{}) (json.RawMessage, error) {
+	if sessionID != "" {
+		return s.client.SendWithSession(ctx, method, params, sessionID)
+	}
+	return s.client.Send(ctx, method, params)
+}
+
+
 func (s *Server) Enable(ctx context.Context, req *pb.EnableRequest) (*pb.EnableResponse, error) {
-	if _, err := s.client.Send(ctx, "Audits.enable", nil); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Audits.enable", nil); err != nil {
 		return nil, fmt.Errorf("Audits.enable: %w", err)
 	}
 	return &pb.EnableResponse{}, nil
 }
 
 func (s *Server) Disable(ctx context.Context, req *pb.DisableRequest) (*pb.DisableResponse, error) {
-	if _, err := s.client.Send(ctx, "Audits.disable", nil); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Audits.disable", nil); err != nil {
 		return nil, fmt.Errorf("Audits.disable: %w", err)
 	}
 	return &pb.DisableResponse{}, nil
@@ -44,7 +54,7 @@ func (s *Server) GetEncodedResponse(ctx context.Context, req *pb.GetEncodedRespo
 	if req.SizeOnly != nil {
 		params["sizeOnly"] = *req.SizeOnly
 	}
-	result, err := s.client.Send(ctx, "Audits.getEncodedResponse", params)
+	result, err := s.send(ctx, req.SessionId, "Audits.getEncodedResponse", params)
 	if err != nil {
 		return nil, fmt.Errorf("Audits.getEncodedResponse: %w", err)
 	}
@@ -73,14 +83,14 @@ func (s *Server) CheckContrast(ctx context.Context, req *pb.CheckContrastRequest
 			"reportAAA": *req.ReportAaa,
 		}
 	}
-	if _, err := s.client.Send(ctx, "Audits.checkContrast", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Audits.checkContrast", params); err != nil {
 		return nil, fmt.Errorf("Audits.checkContrast: %w", err)
 	}
 	return &pb.CheckContrastResponse{}, nil
 }
 
 func (s *Server) CheckFormsIssues(ctx context.Context, req *pb.CheckFormsIssuesRequest) (*pb.CheckFormsIssuesResponse, error) {
-	result, err := s.client.Send(ctx, "Audits.checkFormsIssues", nil)
+	result, err := s.send(ctx, req.SessionId, "Audits.checkFormsIssues", nil)
 	if err != nil {
 		return nil, fmt.Errorf("Audits.checkFormsIssues: %w", err)
 	}

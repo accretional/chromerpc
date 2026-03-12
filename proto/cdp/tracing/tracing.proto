@@ -50,34 +50,44 @@ message StartRequest {
   string stream_format = 5;
   string stream_compression = 6;
   TraceConfig trace_config = 7;
+  string session_id = 99;
 }
 message StartResponse {}
 
-message EndRequest {}
+message EndRequest {
+  string session_id = 99;
+}
 message EndResponse {}
 
-message GetCategoriesRequest {}
+message GetCategoriesRequest {
+  string session_id = 99;
+}
 message GetCategoriesResponse {
   repeated string categories = 1;
 }
 
 message RecordClockSyncMarkerRequest {
   string sync_id = 1;
+  string session_id = 99;
 }
 message RecordClockSyncMarkerResponse {}
 
 message RequestMemoryDumpRequest {
   bool deterministic = 1;
   string level_of_detail = 2;
+  string session_id = 99;
 }
 message RequestMemoryDumpResponse {
   string dump_guid = 1;
   bool success = 2;
+  string session_id = 99;
 }
 
 // ==================== Events ====================
 
-message SubscribeEventsRequest {}
+message SubscribeEventsRequest {
+  string session_id = 99;
+}
 
 message TracingEvent {
   oneof event {

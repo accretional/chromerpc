@@ -39,18 +39,26 @@ message ConsoleMessage {
 
 // ==================== Requests / Responses ====================
 
-message EnableRequest {}
+message EnableRequest {
+  string session_id = 99;
+}
 message EnableResponse {}
 
-message DisableRequest {}
+message DisableRequest {
+  string session_id = 99;
+}
 message DisableResponse {}
 
-message ClearMessagesRequest {}
+message ClearMessagesRequest {
+  string session_id = 99;
+}
 message ClearMessagesResponse {}
 
 // ==================== Events ====================
 
-message SubscribeEventsRequest {}
+message SubscribeEventsRequest {
+  string session_id = 99;
+}
 
 message ConsoleEvent {
   oneof event {

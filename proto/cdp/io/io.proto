@@ -26,6 +26,7 @@ message ReadRequest {
   int32 offset = 2;
   // Maximum number of bytes to read (optional, defaults to 32768).
   int32 size = 3;
+  string session_id = 99;
 }
 message ReadResponse {
   // Data chunk read from the stream (base64 encoded if base64_encoded is true).
@@ -39,12 +40,14 @@ message ReadResponse {
 message CloseRequest {
   // Handle of the stream to close.
   string handle = 1;
+  string session_id = 99;
 }
 message CloseResponse {}
 
 message ResolveBlobRequest {
   // Object id of a Blob object wrapper.
   string object_id = 1;
+  string session_id = 99;
 }
 message ResolveBlobResponse {
   // UUID of the specified Blob.

@@ -24,6 +24,7 @@ const (
 type GetOsAppStateRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	ManifestId    string                 `protobuf:"bytes,1,opt,name=manifest_id,json=manifestId,proto3" json:"manifest_id,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -61,6 +62,13 @@ func (*GetOsAppStateRequest) Descriptor() ([]byte, []int) {
 func (x *GetOsAppStateRequest) GetManifestId() string {
 	if x != nil {
 		return x.ManifestId
+	}
+	return ""
+}
+
+func (x *GetOsAppStateRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -131,6 +139,7 @@ type InstallRequest struct {
 	state                 protoimpl.MessageState `protogen:"open.v1"`
 	ManifestId            string                 `protobuf:"bytes,1,opt,name=manifest_id,json=manifestId,proto3" json:"manifest_id,omitempty"`
 	InstallUrlOrBundleUrl *string                `protobuf:"bytes,2,opt,name=install_url_or_bundle_url,json=installUrlOrBundleUrl,proto3,oneof" json:"install_url_or_bundle_url,omitempty"`
+	SessionId             string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields         protoimpl.UnknownFields
 	sizeCache             protoimpl.SizeCache
 }
@@ -179,6 +188,13 @@ func (x *InstallRequest) GetInstallUrlOrBundleUrl() string {
 	return ""
 }
 
+func (x *InstallRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type InstallResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -218,6 +234,7 @@ func (*InstallResponse) Descriptor() ([]byte, []int) {
 type UninstallRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	ManifestId    string                 `protobuf:"bytes,1,opt,name=manifest_id,json=manifestId,proto3" json:"manifest_id,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -255,6 +272,13 @@ func (*UninstallRequest) Descriptor() ([]byte, []int) {
 func (x *UninstallRequest) GetManifestId() string {
 	if x != nil {
 		return x.ManifestId
+	}
+	return ""
+}
+
+func (x *UninstallRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -299,6 +323,7 @@ type LaunchRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	ManifestId    string                 `protobuf:"bytes,1,opt,name=manifest_id,json=manifestId,proto3" json:"manifest_id,omitempty"`
 	Url           *string                `protobuf:"bytes,2,opt,name=url,proto3,oneof" json:"url,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -343,6 +368,13 @@ func (x *LaunchRequest) GetManifestId() string {
 func (x *LaunchRequest) GetUrl() string {
 	if x != nil && x.Url != nil {
 		return *x.Url
+	}
+	return ""
+}
+
+func (x *LaunchRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -395,6 +427,7 @@ type LaunchFilesInAppRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	ManifestId    string                 `protobuf:"bytes,1,opt,name=manifest_id,json=manifestId,proto3" json:"manifest_id,omitempty"`
 	Files         []string               `protobuf:"bytes,2,rep,name=files,proto3" json:"files,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -441,6 +474,13 @@ func (x *LaunchFilesInAppRequest) GetFiles() []string {
 		return x.Files
 	}
 	return nil
+}
+
+func (x *LaunchFilesInAppRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type LaunchFilesInAppResponse struct {
@@ -492,6 +532,7 @@ type ChangeAppUserSettingsRequest struct {
 	ManifestId    string                 `protobuf:"bytes,1,opt,name=manifest_id,json=manifestId,proto3" json:"manifest_id,omitempty"`
 	LinkCapturing *bool                  `protobuf:"varint,2,opt,name=link_capturing,json=linkCapturing,proto3,oneof" json:"link_capturing,omitempty"`
 	DisplayMode   *string                `protobuf:"bytes,3,opt,name=display_mode,json=displayMode,proto3,oneof" json:"display_mode,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -547,6 +588,13 @@ func (x *ChangeAppUserSettingsRequest) GetDisplayMode() string {
 	return ""
 }
 
+func (x *ChangeAppUserSettingsRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type ChangeAppUserSettingsResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -587,44 +635,56 @@ var File_proto_cdp_pwa_pwa_proto protoreflect.FileDescriptor
 
 const file_proto_cdp_pwa_pwa_proto_rawDesc = "" +
 	"\n" +
-	"\x17proto/cdp/pwa/pwa.proto\x12\acdp.pwa\"7\n" +
+	"\x17proto/cdp/pwa/pwa.proto\x12\acdp.pwa\"V\n" +
 	"\x14GetOsAppStateRequest\x12\x1f\n" +
 	"\vmanifest_id\x18\x01 \x01(\tR\n" +
-	"manifestId\"\x8a\x01\n" +
+	"manifestId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x8a\x01\n" +
 	"\x15GetOsAppStateResponse\x12\x1f\n" +
 	"\vbadge_count\x18\x01 \x01(\x05R\n" +
 	"badgeCount\x12-\n" +
 	"\x12installation_state\x18\x02 \x01(\tR\x11installationState\x12!\n" +
-	"\fdisplay_mode\x18\x03 \x01(\tR\vdisplayMode\"\x8e\x01\n" +
+	"\fdisplay_mode\x18\x03 \x01(\tR\vdisplayMode\"\xad\x01\n" +
 	"\x0eInstallRequest\x12\x1f\n" +
 	"\vmanifest_id\x18\x01 \x01(\tR\n" +
 	"manifestId\x12=\n" +
-	"\x19install_url_or_bundle_url\x18\x02 \x01(\tH\x00R\x15installUrlOrBundleUrl\x88\x01\x01B\x1c\n" +
+	"\x19install_url_or_bundle_url\x18\x02 \x01(\tH\x00R\x15installUrlOrBundleUrl\x88\x01\x01\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionIdB\x1c\n" +
 	"\x1a_install_url_or_bundle_url\"\x11\n" +
-	"\x0fInstallResponse\"3\n" +
+	"\x0fInstallResponse\"R\n" +
 	"\x10UninstallRequest\x12\x1f\n" +
 	"\vmanifest_id\x18\x01 \x01(\tR\n" +
-	"manifestId\"\x13\n" +
-	"\x11UninstallResponse\"O\n" +
+	"manifestId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x13\n" +
+	"\x11UninstallResponse\"n\n" +
 	"\rLaunchRequest\x12\x1f\n" +
 	"\vmanifest_id\x18\x01 \x01(\tR\n" +
 	"manifestId\x12\x15\n" +
-	"\x03url\x18\x02 \x01(\tH\x00R\x03url\x88\x01\x01B\x06\n" +
+	"\x03url\x18\x02 \x01(\tH\x00R\x03url\x88\x01\x01\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionIdB\x06\n" +
 	"\x04_url\"-\n" +
 	"\x0eLaunchResponse\x12\x1b\n" +
-	"\ttarget_id\x18\x01 \x01(\tR\btargetId\"P\n" +
+	"\ttarget_id\x18\x01 \x01(\tR\btargetId\"o\n" +
 	"\x17LaunchFilesInAppRequest\x12\x1f\n" +
 	"\vmanifest_id\x18\x01 \x01(\tR\n" +
 	"manifestId\x12\x14\n" +
-	"\x05files\x18\x02 \x03(\tR\x05files\"9\n" +
+	"\x05files\x18\x02 \x03(\tR\x05files\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"9\n" +
 	"\x18LaunchFilesInAppResponse\x12\x1d\n" +
 	"\n" +
-	"target_ids\x18\x01 \x03(\tR\ttargetIds\"\xb7\x01\n" +
+	"target_ids\x18\x01 \x03(\tR\ttargetIds\"\xd6\x01\n" +
 	"\x1cChangeAppUserSettingsRequest\x12\x1f\n" +
 	"\vmanifest_id\x18\x01 \x01(\tR\n" +
 	"manifestId\x12*\n" +
 	"\x0elink_capturing\x18\x02 \x01(\bH\x00R\rlinkCapturing\x88\x01\x01\x12&\n" +
-	"\fdisplay_mode\x18\x03 \x01(\tH\x01R\vdisplayMode\x88\x01\x01B\x11\n" +
+	"\fdisplay_mode\x18\x03 \x01(\tH\x01R\vdisplayMode\x88\x01\x01\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionIdB\x11\n" +
 	"\x0f_link_capturingB\x0f\n" +
 	"\r_display_mode\"\x1f\n" +
 	"\x1dChangeAppUserSettingsResponse2\xda\x03\n" +

@@ -212,6 +212,7 @@ func (x *ViolationSetting) GetThreshold() float64 {
 
 type EnableRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -244,6 +245,13 @@ func (x *EnableRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use EnableRequest.ProtoReflect.Descriptor instead.
 func (*EnableRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_log_log_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *EnableRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type EnableResponse struct {
@@ -284,6 +292,7 @@ func (*EnableResponse) Descriptor() ([]byte, []int) {
 
 type DisableRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -316,6 +325,13 @@ func (x *DisableRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use DisableRequest.ProtoReflect.Descriptor instead.
 func (*DisableRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_log_log_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *DisableRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type DisableResponse struct {
@@ -356,6 +372,7 @@ func (*DisableResponse) Descriptor() ([]byte, []int) {
 
 type ClearRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -388,6 +405,13 @@ func (x *ClearRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use ClearRequest.ProtoReflect.Descriptor instead.
 func (*ClearRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_log_log_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *ClearRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type ClearResponse struct {
@@ -429,6 +453,7 @@ func (*ClearResponse) Descriptor() ([]byte, []int) {
 type StartViolationsReportRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Config        []*ViolationSetting    `protobuf:"bytes,1,rep,name=config,proto3" json:"config,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -470,6 +495,13 @@ func (x *StartViolationsReportRequest) GetConfig() []*ViolationSetting {
 	return nil
 }
 
+func (x *StartViolationsReportRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type StartViolationsReportResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -508,6 +540,7 @@ func (*StartViolationsReportResponse) Descriptor() ([]byte, []int) {
 
 type StopViolationsReportRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -540,6 +573,13 @@ func (x *StopViolationsReportRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use StopViolationsReportRequest.ProtoReflect.Descriptor instead.
 func (*StopViolationsReportRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_log_log_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *StopViolationsReportRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type StopViolationsReportResponse struct {
@@ -580,6 +620,7 @@ func (*StopViolationsReportResponse) Descriptor() ([]byte, []int) {
 
 type SubscribeEventsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -612,6 +653,13 @@ func (x *SubscribeEventsRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use SubscribeEventsRequest.ProtoReflect.Descriptor instead.
 func (*SubscribeEventsRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_log_log_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *SubscribeEventsRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type LogEvent struct {
@@ -746,19 +794,31 @@ const file_proto_cdp_log_log_proto_rawDesc = "" +
 	"\bcategory\x18\v \x01(\tR\bcategory\"D\n" +
 	"\x10ViolationSetting\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12\x1c\n" +
-	"\tthreshold\x18\x02 \x01(\x01R\tthreshold\"\x0f\n" +
-	"\rEnableRequest\"\x10\n" +
-	"\x0eEnableResponse\"\x10\n" +
-	"\x0eDisableRequest\"\x11\n" +
-	"\x0fDisableResponse\"\x0e\n" +
-	"\fClearRequest\"\x0f\n" +
-	"\rClearResponse\"Q\n" +
+	"\tthreshold\x18\x02 \x01(\x01R\tthreshold\".\n" +
+	"\rEnableRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x10\n" +
+	"\x0eEnableResponse\"/\n" +
+	"\x0eDisableRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x11\n" +
+	"\x0fDisableResponse\"-\n" +
+	"\fClearRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x0f\n" +
+	"\rClearResponse\"p\n" +
 	"\x1cStartViolationsReportRequest\x121\n" +
-	"\x06config\x18\x01 \x03(\v2\x19.cdp.log.ViolationSettingR\x06config\"\x1f\n" +
-	"\x1dStartViolationsReportResponse\"\x1d\n" +
-	"\x1bStopViolationsReportRequest\"\x1e\n" +
-	"\x1cStopViolationsReportResponse\"\x18\n" +
-	"\x16SubscribeEventsRequest\"P\n" +
+	"\x06config\x18\x01 \x03(\v2\x19.cdp.log.ViolationSettingR\x06config\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x1f\n" +
+	"\x1dStartViolationsReportResponse\"<\n" +
+	"\x1bStopViolationsReportRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x1e\n" +
+	"\x1cStopViolationsReportResponse\"7\n" +
+	"\x16SubscribeEventsRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"P\n" +
 	"\bLogEvent\x12;\n" +
 	"\ventry_added\x18\x01 \x01(\v2\x18.cdp.log.EntryAddedEventH\x00R\n" +
 	"entryAddedB\a\n" +

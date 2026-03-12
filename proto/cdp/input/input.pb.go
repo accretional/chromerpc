@@ -306,7 +306,8 @@ type DispatchKeyEventRequest struct {
 	// Editing commands to send with the key event.
 	Commands []string `protobuf:"bytes,14,rep,name=commands,proto3" json:"commands,omitempty"`
 	// DOM UI Events Location.
-	Location      int32 `protobuf:"varint,15,opt,name=location,proto3" json:"location,omitempty"`
+	Location      int32  `protobuf:"varint,15,opt,name=location,proto3" json:"location,omitempty"`
+	SessionId     string `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -446,6 +447,13 @@ func (x *DispatchKeyEventRequest) GetLocation() int32 {
 	return 0
 }
 
+func (x *DispatchKeyEventRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type DispatchKeyEventResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -516,6 +524,7 @@ type DispatchMouseEventRequest struct {
 	DeltaY float64 `protobuf:"fixed64,15,opt,name=delta_y,json=deltaY,proto3" json:"delta_y,omitempty"`
 	// Pointer type.
 	PointerType   string `protobuf:"bytes,16,opt,name=pointer_type,json=pointerType,proto3" json:"pointer_type,omitempty"` // "mouse","pen"
+	SessionId     string `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -662,6 +671,13 @@ func (x *DispatchMouseEventRequest) GetPointerType() string {
 	return ""
 }
 
+func (x *DispatchMouseEventRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type DispatchMouseEventResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -708,6 +724,7 @@ type DispatchTouchEventRequest struct {
 	Modifiers int32 `protobuf:"varint,3,opt,name=modifiers,proto3" json:"modifiers,omitempty"`
 	// Time at which the event occurred.
 	Timestamp     float64 `protobuf:"fixed64,4,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
+	SessionId     string  `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -770,6 +787,13 @@ func (x *DispatchTouchEventRequest) GetTimestamp() float64 {
 	return 0
 }
 
+func (x *DispatchTouchEventRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type DispatchTouchEventResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -810,6 +834,7 @@ type InsertTextRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// The text to insert.
 	Text          string `protobuf:"bytes,1,opt,name=text,proto3" json:"text,omitempty"`
+	SessionId     string `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -847,6 +872,13 @@ func (*InsertTextRequest) Descriptor() ([]byte, []int) {
 func (x *InsertTextRequest) GetText() string {
 	if x != nil {
 		return x.Text
+	}
+	return ""
+}
+
+func (x *InsertTextRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -890,6 +922,7 @@ func (*InsertTextResponse) Descriptor() ([]byte, []int) {
 type SetIgnoreInputEventsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Ignore        bool                   `protobuf:"varint,1,opt,name=ignore,proto3" json:"ignore,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -929,6 +962,13 @@ func (x *SetIgnoreInputEventsRequest) GetIgnore() bool {
 		return x.Ignore
 	}
 	return false
+}
+
+func (x *SetIgnoreInputEventsRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type SetIgnoreInputEventsResponse struct {
@@ -974,6 +1014,7 @@ type DispatchDragEventRequest struct {
 	Y             float64                `protobuf:"fixed64,3,opt,name=y,proto3" json:"y,omitempty"`
 	Data          *DragData              `protobuf:"bytes,4,opt,name=data,proto3" json:"data,omitempty"`
 	Modifiers     int32                  `protobuf:"varint,5,opt,name=modifiers,proto3" json:"modifiers,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1043,6 +1084,13 @@ func (x *DispatchDragEventRequest) GetModifiers() int32 {
 	return 0
 }
 
+func (x *DispatchDragEventRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type DispatchDragEventResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -1086,6 +1134,7 @@ type SynthesizePinchGestureRequest struct {
 	ScaleFactor       float64                `protobuf:"fixed64,3,opt,name=scale_factor,json=scaleFactor,proto3" json:"scale_factor,omitempty"`
 	RelativeSpeed     int32                  `protobuf:"varint,4,opt,name=relative_speed,json=relativeSpeed,proto3" json:"relative_speed,omitempty"`
 	GestureSourceType string                 `protobuf:"bytes,5,opt,name=gesture_source_type,json=gestureSourceType,proto3" json:"gesture_source_type,omitempty"` // "default","touch","mouse"
+	SessionId         string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields     protoimpl.UnknownFields
 	sizeCache         protoimpl.SizeCache
 }
@@ -1155,6 +1204,13 @@ func (x *SynthesizePinchGestureRequest) GetGestureSourceType() string {
 	return ""
 }
 
+func (x *SynthesizePinchGestureRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type SynthesizePinchGestureResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -1205,6 +1261,7 @@ type SynthesizeScrollGestureRequest struct {
 	RepeatCount           int32                  `protobuf:"varint,10,opt,name=repeat_count,json=repeatCount,proto3" json:"repeat_count,omitempty"`
 	RepeatDelayMs         int32                  `protobuf:"varint,11,opt,name=repeat_delay_ms,json=repeatDelayMs,proto3" json:"repeat_delay_ms,omitempty"`
 	InteractionMarkerName string                 `protobuf:"bytes,12,opt,name=interaction_marker_name,json=interactionMarkerName,proto3" json:"interaction_marker_name,omitempty"`
+	SessionId             string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields         protoimpl.UnknownFields
 	sizeCache             protoimpl.SizeCache
 }
@@ -1323,6 +1380,13 @@ func (x *SynthesizeScrollGestureRequest) GetInteractionMarkerName() string {
 	return ""
 }
 
+func (x *SynthesizeScrollGestureRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type SynthesizeScrollGestureResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -1366,6 +1430,7 @@ type SynthesizeTapGestureRequest struct {
 	Duration          int32                  `protobuf:"varint,3,opt,name=duration,proto3" json:"duration,omitempty"`
 	TapCount          int32                  `protobuf:"varint,4,opt,name=tap_count,json=tapCount,proto3" json:"tap_count,omitempty"`
 	GestureSourceType string                 `protobuf:"bytes,5,opt,name=gesture_source_type,json=gestureSourceType,proto3" json:"gesture_source_type,omitempty"`
+	SessionId         string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields     protoimpl.UnknownFields
 	sizeCache         protoimpl.SizeCache
 }
@@ -1435,6 +1500,13 @@ func (x *SynthesizeTapGestureRequest) GetGestureSourceType() string {
 	return ""
 }
 
+func (x *SynthesizeTapGestureRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type SynthesizeTapGestureResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -1473,6 +1545,7 @@ func (*SynthesizeTapGestureResponse) Descriptor() ([]byte, []int) {
 
 type CancelDraggingRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1505,6 +1578,13 @@ func (x *CancelDraggingRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use CancelDraggingRequest.ProtoReflect.Descriptor instead.
 func (*CancelDraggingRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_input_input_proto_rawDescGZIP(), []int{21}
+}
+
+func (x *CancelDraggingRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type CancelDraggingResponse struct {
@@ -1550,6 +1630,7 @@ type ImeSetCompositionRequest struct {
 	SelectionEnd     int32                  `protobuf:"varint,3,opt,name=selection_end,json=selectionEnd,proto3" json:"selection_end,omitempty"`
 	ReplacementStart int32                  `protobuf:"varint,4,opt,name=replacement_start,json=replacementStart,proto3" json:"replacement_start,omitempty"`
 	ReplacementEnd   int32                  `protobuf:"varint,5,opt,name=replacement_end,json=replacementEnd,proto3" json:"replacement_end,omitempty"`
+	SessionId        string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields    protoimpl.UnknownFields
 	sizeCache        protoimpl.SizeCache
 }
@@ -1619,6 +1700,13 @@ func (x *ImeSetCompositionRequest) GetReplacementEnd() int32 {
 	return 0
 }
 
+func (x *ImeSetCompositionRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type ImeSetCompositionResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -1682,7 +1770,7 @@ const file_proto_cdp_input_input_proto_rawDesc = "" +
 	"\tmime_type\x18\x01 \x01(\tR\bmimeType\x12\x12\n" +
 	"\x04data\x18\x02 \x01(\tR\x04data\x12\x14\n" +
 	"\x05title\x18\x03 \x01(\tR\x05title\x12\x19\n" +
-	"\bbase_url\x18\x04 \x01(\tR\abaseUrl\"\xfd\x03\n" +
+	"\bbase_url\x18\x04 \x01(\tR\abaseUrl\"\x9c\x04\n" +
 	"\x17DispatchKeyEventRequest\x12\x12\n" +
 	"\x04type\x18\x01 \x01(\tR\x04type\x12\x1c\n" +
 	"\tmodifiers\x18\x02 \x01(\x05R\tmodifiers\x12\x1c\n" +
@@ -1700,8 +1788,10 @@ const file_proto_cdp_input_input_proto_rawDesc = "" +
 	"\tis_keypad\x18\f \x01(\bR\bisKeypad\x12\"\n" +
 	"\ris_system_key\x18\r \x01(\bR\visSystemKey\x12\x1a\n" +
 	"\bcommands\x18\x0e \x03(\tR\bcommands\x12\x1a\n" +
-	"\blocation\x18\x0f \x01(\x05R\blocation\"\x1a\n" +
-	"\x18DispatchKeyEventResponse\"\xba\x03\n" +
+	"\blocation\x18\x0f \x01(\x05R\blocation\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x1a\n" +
+	"\x18DispatchKeyEventResponse\"\xd9\x03\n" +
 	"\x19DispatchMouseEventRequest\x12\x12\n" +
 	"\x04type\x18\x01 \x01(\tR\x04type\x12\f\n" +
 	"\x01x\x18\x02 \x01(\x01R\x01x\x12\f\n" +
@@ -1720,34 +1810,46 @@ const file_proto_cdp_input_input_proto_rawDesc = "" +
 	"\x05twist\x18\r \x01(\x05R\x05twist\x12\x17\n" +
 	"\adelta_x\x18\x0e \x01(\x01R\x06deltaX\x12\x17\n" +
 	"\adelta_y\x18\x0f \x01(\x01R\x06deltaY\x12!\n" +
-	"\fpointer_type\x18\x10 \x01(\tR\vpointerType\"\x1c\n" +
-	"\x1aDispatchMouseEventResponse\"\xa5\x01\n" +
+	"\fpointer_type\x18\x10 \x01(\tR\vpointerType\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x1c\n" +
+	"\x1aDispatchMouseEventResponse\"\xc4\x01\n" +
 	"\x19DispatchTouchEventRequest\x12\x12\n" +
 	"\x04type\x18\x01 \x01(\tR\x04type\x128\n" +
 	"\ftouch_points\x18\x02 \x03(\v2\x15.cdp.input.TouchPointR\vtouchPoints\x12\x1c\n" +
 	"\tmodifiers\x18\x03 \x01(\x05R\tmodifiers\x12\x1c\n" +
-	"\ttimestamp\x18\x04 \x01(\x01R\ttimestamp\"\x1c\n" +
-	"\x1aDispatchTouchEventResponse\"'\n" +
+	"\ttimestamp\x18\x04 \x01(\x01R\ttimestamp\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x1c\n" +
+	"\x1aDispatchTouchEventResponse\"F\n" +
 	"\x11InsertTextRequest\x12\x12\n" +
-	"\x04text\x18\x01 \x01(\tR\x04text\"\x14\n" +
-	"\x12InsertTextResponse\"5\n" +
+	"\x04text\x18\x01 \x01(\tR\x04text\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x14\n" +
+	"\x12InsertTextResponse\"T\n" +
 	"\x1bSetIgnoreInputEventsRequest\x12\x16\n" +
-	"\x06ignore\x18\x01 \x01(\bR\x06ignore\"\x1e\n" +
-	"\x1cSetIgnoreInputEventsResponse\"\x91\x01\n" +
+	"\x06ignore\x18\x01 \x01(\bR\x06ignore\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x1e\n" +
+	"\x1cSetIgnoreInputEventsResponse\"\xb0\x01\n" +
 	"\x18DispatchDragEventRequest\x12\x12\n" +
 	"\x04type\x18\x01 \x01(\tR\x04type\x12\f\n" +
 	"\x01x\x18\x02 \x01(\x01R\x01x\x12\f\n" +
 	"\x01y\x18\x03 \x01(\x01R\x01y\x12'\n" +
 	"\x04data\x18\x04 \x01(\v2\x13.cdp.input.DragDataR\x04data\x12\x1c\n" +
-	"\tmodifiers\x18\x05 \x01(\x05R\tmodifiers\"\x1b\n" +
-	"\x19DispatchDragEventResponse\"\xb5\x01\n" +
+	"\tmodifiers\x18\x05 \x01(\x05R\tmodifiers\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x1b\n" +
+	"\x19DispatchDragEventResponse\"\xd4\x01\n" +
 	"\x1dSynthesizePinchGestureRequest\x12\f\n" +
 	"\x01x\x18\x01 \x01(\x01R\x01x\x12\f\n" +
 	"\x01y\x18\x02 \x01(\x01R\x01y\x12!\n" +
 	"\fscale_factor\x18\x03 \x01(\x01R\vscaleFactor\x12%\n" +
 	"\x0erelative_speed\x18\x04 \x01(\x05R\rrelativeSpeed\x12.\n" +
-	"\x13gesture_source_type\x18\x05 \x01(\tR\x11gestureSourceType\" \n" +
-	"\x1eSynthesizePinchGestureResponse\"\xae\x03\n" +
+	"\x13gesture_source_type\x18\x05 \x01(\tR\x11gestureSourceType\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\" \n" +
+	"\x1eSynthesizePinchGestureResponse\"\xcd\x03\n" +
 	"\x1eSynthesizeScrollGestureRequest\x12\f\n" +
 	"\x01x\x18\x01 \x01(\x01R\x01x\x12\f\n" +
 	"\x01y\x18\x02 \x01(\x01R\x01y\x12\x1d\n" +
@@ -1763,23 +1865,31 @@ const file_proto_cdp_input_input_proto_rawDesc = "" +
 	"\frepeat_count\x18\n" +
 	" \x01(\x05R\vrepeatCount\x12&\n" +
 	"\x0frepeat_delay_ms\x18\v \x01(\x05R\rrepeatDelayMs\x126\n" +
-	"\x17interaction_marker_name\x18\f \x01(\tR\x15interactionMarkerName\"!\n" +
-	"\x1fSynthesizeScrollGestureResponse\"\xa2\x01\n" +
+	"\x17interaction_marker_name\x18\f \x01(\tR\x15interactionMarkerName\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"!\n" +
+	"\x1fSynthesizeScrollGestureResponse\"\xc1\x01\n" +
 	"\x1bSynthesizeTapGestureRequest\x12\f\n" +
 	"\x01x\x18\x01 \x01(\x01R\x01x\x12\f\n" +
 	"\x01y\x18\x02 \x01(\x01R\x01y\x12\x1a\n" +
 	"\bduration\x18\x03 \x01(\x05R\bduration\x12\x1b\n" +
 	"\ttap_count\x18\x04 \x01(\x05R\btapCount\x12.\n" +
-	"\x13gesture_source_type\x18\x05 \x01(\tR\x11gestureSourceType\"\x1e\n" +
-	"\x1cSynthesizeTapGestureResponse\"\x17\n" +
-	"\x15CancelDraggingRequest\"\x18\n" +
-	"\x16CancelDraggingResponse\"\xd2\x01\n" +
+	"\x13gesture_source_type\x18\x05 \x01(\tR\x11gestureSourceType\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x1e\n" +
+	"\x1cSynthesizeTapGestureResponse\"6\n" +
+	"\x15CancelDraggingRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x18\n" +
+	"\x16CancelDraggingResponse\"\xf1\x01\n" +
 	"\x18ImeSetCompositionRequest\x12\x12\n" +
 	"\x04text\x18\x01 \x01(\tR\x04text\x12'\n" +
 	"\x0fselection_start\x18\x02 \x01(\x05R\x0eselectionStart\x12#\n" +
 	"\rselection_end\x18\x03 \x01(\x05R\fselectionEnd\x12+\n" +
 	"\x11replacement_start\x18\x04 \x01(\x05R\x10replacementStart\x12'\n" +
-	"\x0freplacement_end\x18\x05 \x01(\x05R\x0ereplacementEnd\"\x1b\n" +
+	"\x0freplacement_end\x18\x05 \x01(\x05R\x0ereplacementEnd\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x1b\n" +
 	"\x19ImeSetCompositionResponse2\xc6\b\n" +
 	"\fInputService\x12[\n" +
 	"\x10DispatchKeyEvent\x12\".cdp.input.DispatchKeyEventRequest\x1a#.cdp.input.DispatchKeyEventResponse\x12a\n" +

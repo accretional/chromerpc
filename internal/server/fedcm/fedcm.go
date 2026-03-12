@@ -19,19 +19,29 @@ func New(client *cdpclient.Client) *Server {
 	return &Server{client: client}
 }
 
+// send routes a CDP command through the specified session, falling back
+// to the client's default session if sessionID is empty.
+func (s *Server) send(ctx context.Context, sessionID string, method string, params interface{}) (json.RawMessage, error) {
+	if sessionID != "" {
+		return s.client.SendWithSession(ctx, method, params, sessionID)
+	}
+	return s.client.Send(ctx, method, params)
+}
+
+
 func (s *Server) Enable(ctx context.Context, req *pb.EnableRequest) (*pb.EnableResponse, error) {
 	params := map[string]interface{}{}
 	if req.DisableRejectionDelay != nil {
 		params["disableRejectionDelay"] = *req.DisableRejectionDelay
 	}
-	if _, err := s.client.Send(ctx, "FedCm.enable", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "FedCm.enable", params); err != nil {
 		return nil, fmt.Errorf("FedCm.enable: %w", err)
 	}
 	return &pb.EnableResponse{}, nil
 }
 
 func (s *Server) Disable(ctx context.Context, req *pb.DisableRequest) (*pb.DisableResponse, error) {
-	if _, err := s.client.Send(ctx, "FedCm.disable", nil); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "FedCm.disable", nil); err != nil {
 		return nil, fmt.Errorf("FedCm.disable: %w", err)
 	}
 	return &pb.DisableResponse{}, nil
@@ -42,7 +52,7 @@ func (s *Server) SelectAccount(ctx context.Context, req *pb.SelectAccountRequest
 		"dialogId":     req.DialogId,
 		"accountIndex": req.AccountIndex,
 	}
-	if _, err := s.client.Send(ctx, "FedCm.selectAccount", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "FedCm.selectAccount", params); err != nil {
 		return nil, fmt.Errorf("FedCm.selectAccount: %w", err)
 	}
 	return &pb.SelectAccountResponse{}, nil
@@ -53,7 +63,7 @@ func (s *Server) ClickDialogButton(ctx context.Context, req *pb.ClickDialogButto
 		"dialogId":     req.DialogId,
 		"dialogButton": req.DialogButton,
 	}
-	if _, err := s.client.Send(ctx, "FedCm.clickDialogButton", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "FedCm.clickDialogButton", params); err != nil {
 		return nil, fmt.Errorf("FedCm.clickDialogButton: %w", err)
 	}
 	return &pb.ClickDialogButtonResponse{}, nil
@@ -65,7 +75,7 @@ func (s *Server) OpenUrl(ctx context.Context, req *pb.OpenUrlRequest) (*pb.OpenU
 		"accountIndex":   req.AccountIndex,
 		"accountUrlType": req.AccountUrlType,
 	}
-	if _, err := s.client.Send(ctx, "FedCm.openUrl", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "FedCm.openUrl", params); err != nil {
 		return nil, fmt.Errorf("FedCm.openUrl: %w", err)
 	}
 	return &pb.OpenUrlResponse{}, nil
@@ -78,14 +88,14 @@ func (s *Server) DismissDialog(ctx context.Context, req *pb.DismissDialogRequest
 	if req.TriggerCooldown != nil {
 		params["triggerCooldown"] = *req.TriggerCooldown
 	}
-	if _, err := s.client.Send(ctx, "FedCm.dismissDialog", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "FedCm.dismissDialog", params); err != nil {
 		return nil, fmt.Errorf("FedCm.dismissDialog: %w", err)
 	}
 	return &pb.DismissDialogResponse{}, nil
 }
 
 func (s *Server) ResetCooldown(ctx context.Context, req *pb.ResetCooldownRequest) (*pb.ResetCooldownResponse, error) {
-	if _, err := s.client.Send(ctx, "FedCm.resetCooldown", nil); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "FedCm.resetCooldown", nil); err != nil {
 		return nil, fmt.Errorf("FedCm.resetCooldown: %w", err)
 	}
 	return &pb.ResetCooldownResponse{}, nil

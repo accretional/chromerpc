@@ -19,18 +19,28 @@ func New(client *cdpclient.Client) *Server {
 	return &Server{client: client}
 }
 
+// send routes a CDP command through the specified session, falling back
+// to the client's default session if sessionID is empty.
+func (s *Server) send(ctx context.Context, sessionID string, method string, params interface{}) (json.RawMessage, error) {
+	if sessionID != "" {
+		return s.client.SendWithSession(ctx, method, params, sessionID)
+	}
+	return s.client.Send(ctx, method, params)
+}
+
+
 func (s *Server) Enable(ctx context.Context, req *pb.EnableRequest) (*pb.EnableResponse, error) {
 	params := map[string]interface{}{}
 	if req.TimeDomain != "" {
 		params["timeDomain"] = req.TimeDomain
 	}
 	if len(params) > 0 {
-		_, err := s.client.Send(ctx, "Performance.enable", params)
+		_, err := s.send(ctx, req.SessionId, "Performance.enable", params)
 		if err != nil {
 			return nil, fmt.Errorf("Performance.enable: %w", err)
 		}
 	} else {
-		if _, err := s.client.Send(ctx, "Performance.enable", nil); err != nil {
+		if _, err := s.send(ctx, req.SessionId, "Performance.enable", nil); err != nil {
 			return nil, fmt.Errorf("Performance.enable: %w", err)
 		}
 	}
@@ -38,14 +48,14 @@ func (s *Server) Enable(ctx context.Context, req *pb.EnableRequest) (*pb.EnableR
 }
 
 func (s *Server) Disable(ctx context.Context, req *pb.DisableRequest) (*pb.DisableResponse, error) {
-	if _, err := s.client.Send(ctx, "Performance.disable", nil); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Performance.disable", nil); err != nil {
 		return nil, fmt.Errorf("Performance.disable: %w", err)
 	}
 	return &pb.DisableResponse{}, nil
 }
 
 func (s *Server) GetMetrics(ctx context.Context, req *pb.GetMetricsRequest) (*pb.GetMetricsResponse, error) {
-	result, err := s.client.Send(ctx, "Performance.getMetrics", nil)
+	result, err := s.send(ctx, req.SessionId, "Performance.getMetrics", nil)
 	if err != nil {
 		return nil, fmt.Errorf("Performance.getMetrics: %w", err)
 	}

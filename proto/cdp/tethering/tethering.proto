@@ -9,9 +9,11 @@ service TetheringService {
 
 message BindRequest {
   int32 port = 1;
+  string session_id = 99;
 }
 message BindResponse {}
 message UnbindRequest {
   int32 port = 1;
+  string session_id = 99;
 }
 message UnbindResponse {}

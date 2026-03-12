@@ -35,6 +35,7 @@ type Request struct {
 	ReferrerPolicy   string                 `protobuf:"bytes,9,opt,name=referrer_policy,json=referrerPolicy,proto3" json:"referrer_policy,omitempty"`
 	IsLinkPreload    bool                   `protobuf:"varint,10,opt,name=is_link_preload,json=isLinkPreload,proto3" json:"is_link_preload,omitempty"`
 	IsSameSite       bool                   `protobuf:"varint,11,opt,name=is_same_site,json=isSameSite,proto3" json:"is_same_site,omitempty"`
+	SessionId        string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields    protoimpl.UnknownFields
 	sizeCache        protoimpl.SizeCache
 }
@@ -144,6 +145,13 @@ func (x *Request) GetIsSameSite() bool {
 		return x.IsSameSite
 	}
 	return false
+}
+
+func (x *Request) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 // HTTP response data.
@@ -905,6 +913,7 @@ type RequestPattern struct {
 	UrlPattern        string                 `protobuf:"bytes,1,opt,name=url_pattern,json=urlPattern,proto3" json:"url_pattern,omitempty"`
 	ResourceType      string                 `protobuf:"bytes,2,opt,name=resource_type,json=resourceType,proto3" json:"resource_type,omitempty"`
 	InterceptionStage string                 `protobuf:"bytes,3,opt,name=interception_stage,json=interceptionStage,proto3" json:"interception_stage,omitempty"` // "Request" or "HeadersReceived"
+	SessionId         string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields     protoimpl.UnknownFields
 	sizeCache         protoimpl.SizeCache
 }
@@ -956,6 +965,13 @@ func (x *RequestPattern) GetResourceType() string {
 func (x *RequestPattern) GetInterceptionStage() string {
 	if x != nil {
 		return x.InterceptionStage
+	}
+	return ""
+}
+
+func (x *RequestPattern) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -1052,7 +1068,8 @@ type EnableRequest struct {
 	// Per-resource buffer size.
 	MaxResourceBufferSize int32 `protobuf:"varint,2,opt,name=max_resource_buffer_size,json=maxResourceBufferSize,proto3" json:"max_resource_buffer_size,omitempty"`
 	// Longest post body size (in bytes) that would be included in requestWillBeSent.
-	MaxPostDataSize int32 `protobuf:"varint,3,opt,name=max_post_data_size,json=maxPostDataSize,proto3" json:"max_post_data_size,omitempty"`
+	MaxPostDataSize int32  `protobuf:"varint,3,opt,name=max_post_data_size,json=maxPostDataSize,proto3" json:"max_post_data_size,omitempty"`
+	SessionId       string `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
 }
@@ -1108,6 +1125,13 @@ func (x *EnableRequest) GetMaxPostDataSize() int32 {
 	return 0
 }
 
+func (x *EnableRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type EnableResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -1146,6 +1170,7 @@ func (*EnableResponse) Descriptor() ([]byte, []int) {
 
 type DisableRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1178,6 +1203,13 @@ func (x *DisableRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use DisableRequest.ProtoReflect.Descriptor instead.
 func (*DisableRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_network_network_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *DisableRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type DisableResponse struct {
@@ -1219,6 +1251,7 @@ func (*DisableResponse) Descriptor() ([]byte, []int) {
 type SetCacheDisabledRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	CacheDisabled bool                   `protobuf:"varint,1,opt,name=cache_disabled,json=cacheDisabled,proto3" json:"cache_disabled,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1260,6 +1293,13 @@ func (x *SetCacheDisabledRequest) GetCacheDisabled() bool {
 	return false
 }
 
+func (x *SetCacheDisabledRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type SetCacheDisabledResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -1299,6 +1339,7 @@ func (*SetCacheDisabledResponse) Descriptor() ([]byte, []int) {
 type SetExtraHTTPHeadersRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Headers       map[string]string      `protobuf:"bytes,1,rep,name=headers,proto3" json:"headers,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1340,6 +1381,13 @@ func (x *SetExtraHTTPHeadersRequest) GetHeaders() map[string]string {
 	return nil
 }
 
+func (x *SetExtraHTTPHeadersRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type SetExtraHTTPHeadersResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -1379,6 +1427,7 @@ func (*SetExtraHTTPHeadersResponse) Descriptor() ([]byte, []int) {
 type GetResponseBodyRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	RequestId     string                 `protobuf:"bytes,1,opt,name=request_id,json=requestId,proto3" json:"request_id,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1416,6 +1465,13 @@ func (*GetResponseBodyRequest) Descriptor() ([]byte, []int) {
 func (x *GetResponseBodyRequest) GetRequestId() string {
 	if x != nil {
 		return x.RequestId
+	}
+	return ""
+}
+
+func (x *GetResponseBodyRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -1475,6 +1531,7 @@ func (x *GetResponseBodyResponse) GetBase64Encoded() bool {
 type GetCookiesRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Urls          []string               `protobuf:"bytes,1,rep,name=urls,proto3" json:"urls,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1514,6 +1571,13 @@ func (x *GetCookiesRequest) GetUrls() []string {
 		return x.Urls
 	}
 	return nil
+}
+
+func (x *GetCookiesRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type GetCookiesResponse struct {
@@ -1574,6 +1638,7 @@ type SetCookieRequest struct {
 	Priority      string                 `protobuf:"bytes,10,opt,name=priority,proto3" json:"priority,omitempty"`
 	SourceScheme  string                 `protobuf:"bytes,11,opt,name=source_scheme,json=sourceScheme,proto3" json:"source_scheme,omitempty"`
 	SourcePort    int32                  `protobuf:"varint,12,opt,name=source_port,json=sourcePort,proto3" json:"source_port,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1692,6 +1757,13 @@ func (x *SetCookieRequest) GetSourcePort() int32 {
 	return 0
 }
 
+func (x *SetCookieRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type SetCookieResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
@@ -1742,6 +1814,7 @@ type DeleteCookiesRequest struct {
 	Url           string                 `protobuf:"bytes,2,opt,name=url,proto3" json:"url,omitempty"`
 	Domain        string                 `protobuf:"bytes,3,opt,name=domain,proto3" json:"domain,omitempty"`
 	Path          string                 `protobuf:"bytes,4,opt,name=path,proto3" json:"path,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1804,6 +1877,13 @@ func (x *DeleteCookiesRequest) GetPath() string {
 	return ""
 }
 
+func (x *DeleteCookiesRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type DeleteCookiesResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -1842,6 +1922,7 @@ func (*DeleteCookiesResponse) Descriptor() ([]byte, []int) {
 
 type ClearBrowserCookiesRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1874,6 +1955,13 @@ func (x *ClearBrowserCookiesRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use ClearBrowserCookiesRequest.ProtoReflect.Descriptor instead.
 func (*ClearBrowserCookiesRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_network_network_proto_rawDescGZIP(), []int{24}
+}
+
+func (x *ClearBrowserCookiesRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type ClearBrowserCookiesResponse struct {
@@ -1914,6 +2002,7 @@ func (*ClearBrowserCookiesResponse) Descriptor() ([]byte, []int) {
 
 type ClearBrowserCacheRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1946,6 +2035,13 @@ func (x *ClearBrowserCacheRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use ClearBrowserCacheRequest.ProtoReflect.Descriptor instead.
 func (*ClearBrowserCacheRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_network_network_proto_rawDescGZIP(), []int{26}
+}
+
+func (x *ClearBrowserCacheRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type ClearBrowserCacheResponse struct {
@@ -1991,6 +2087,7 @@ type EmulateNetworkConditionsRequest struct {
 	DownloadThroughput float64                `protobuf:"fixed64,3,opt,name=download_throughput,json=downloadThroughput,proto3" json:"download_throughput,omitempty"` // Maximal aggregated download throughput (bytes/sec). -1 disables.
 	UploadThroughput   float64                `protobuf:"fixed64,4,opt,name=upload_throughput,json=uploadThroughput,proto3" json:"upload_throughput,omitempty"`       // Maximal aggregated upload throughput (bytes/sec). -1 disables.
 	ConnectionType     string                 `protobuf:"bytes,5,opt,name=connection_type,json=connectionType,proto3" json:"connection_type,omitempty"`               // none, cellular2g, cellular3g, cellular4g, bluetooth, ethernet, wifi, wimax, other
+	SessionId          string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields      protoimpl.UnknownFields
 	sizeCache          protoimpl.SizeCache
 }
@@ -2060,6 +2157,13 @@ func (x *EmulateNetworkConditionsRequest) GetConnectionType() string {
 	return ""
 }
 
+func (x *EmulateNetworkConditionsRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type EmulateNetworkConditionsResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -2101,6 +2205,7 @@ type SetUserAgentOverrideRequest struct {
 	UserAgent      string                 `protobuf:"bytes,1,opt,name=user_agent,json=userAgent,proto3" json:"user_agent,omitempty"`
 	AcceptLanguage string                 `protobuf:"bytes,2,opt,name=accept_language,json=acceptLanguage,proto3" json:"accept_language,omitempty"`
 	Platform       string                 `protobuf:"bytes,3,opt,name=platform,proto3" json:"platform,omitempty"`
+	SessionId      string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
@@ -2156,6 +2261,13 @@ func (x *SetUserAgentOverrideRequest) GetPlatform() string {
 	return ""
 }
 
+func (x *SetUserAgentOverrideRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type SetUserAgentOverrideResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -2195,6 +2307,7 @@ func (*SetUserAgentOverrideResponse) Descriptor() ([]byte, []int) {
 type GetCertificateRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Origin        string                 `protobuf:"bytes,1,opt,name=origin,proto3" json:"origin,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2232,6 +2345,13 @@ func (*GetCertificateRequest) Descriptor() ([]byte, []int) {
 func (x *GetCertificateRequest) GetOrigin() string {
 	if x != nil {
 		return x.Origin
+	}
+	return ""
+}
+
+func (x *GetCertificateRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -2283,6 +2403,7 @@ func (x *GetCertificateResponse) GetTableNames() []string {
 type SetRequestInterceptionRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Patterns      []*RequestPattern      `protobuf:"bytes,1,rep,name=patterns,proto3" json:"patterns,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2324,8 +2445,16 @@ func (x *SetRequestInterceptionRequest) GetPatterns() []*RequestPattern {
 	return nil
 }
 
+func (x *SetRequestInterceptionRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type SetRequestInterceptionResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2360,12 +2489,20 @@ func (*SetRequestInterceptionResponse) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_network_network_proto_rawDescGZIP(), []int{35}
 }
 
+func (x *SetRequestInterceptionResponse) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type SearchInResponseBodyRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	RequestId     string                 `protobuf:"bytes,1,opt,name=request_id,json=requestId,proto3" json:"request_id,omitempty"`
 	Query         string                 `protobuf:"bytes,2,opt,name=query,proto3" json:"query,omitempty"`
 	CaseSensitive bool                   `protobuf:"varint,3,opt,name=case_sensitive,json=caseSensitive,proto3" json:"case_sensitive,omitempty"`
 	IsRegex       bool                   `protobuf:"varint,4,opt,name=is_regex,json=isRegex,proto3" json:"is_regex,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2426,6 +2563,13 @@ func (x *SearchInResponseBodyRequest) GetIsRegex() bool {
 		return x.IsRegex
 	}
 	return false
+}
+
+func (x *SearchInResponseBodyRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type SearchInResponseBodyResponse struct {
@@ -2527,6 +2671,7 @@ func (x *SearchMatch) GetLineContent() string {
 type SetBlockedURLsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Urls          []string               `protobuf:"bytes,1,rep,name=urls,proto3" json:"urls,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2568,6 +2713,13 @@ func (x *SetBlockedURLsRequest) GetUrls() []string {
 	return nil
 }
 
+func (x *SetBlockedURLsRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type SetBlockedURLsResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -2607,6 +2759,7 @@ func (*SetBlockedURLsResponse) Descriptor() ([]byte, []int) {
 type GetSecurityIsolationStatusRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	FrameId       string                 `protobuf:"bytes,1,opt,name=frame_id,json=frameId,proto3" json:"frame_id,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2644,6 +2797,13 @@ func (*GetSecurityIsolationStatusRequest) Descriptor() ([]byte, []int) {
 func (x *GetSecurityIsolationStatusRequest) GetFrameId() string {
 	if x != nil {
 		return x.FrameId
+	}
+	return ""
+}
+
+func (x *GetSecurityIsolationStatusRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -2698,6 +2858,7 @@ type LoadNetworkResourceRequest struct {
 	FrameId       string                      `protobuf:"bytes,1,opt,name=frame_id,json=frameId,proto3" json:"frame_id,omitempty"`
 	Url           string                      `protobuf:"bytes,2,opt,name=url,proto3" json:"url,omitempty"`
 	Options       *LoadNetworkResourceOptions `protobuf:"bytes,3,opt,name=options,proto3" json:"options,omitempty"`
+	SessionId     string                      `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2751,6 +2912,13 @@ func (x *LoadNetworkResourceRequest) GetOptions() *LoadNetworkResourceOptions {
 		return x.Options
 	}
 	return nil
+}
+
+func (x *LoadNetworkResourceRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type LoadNetworkResourceOptions struct {
@@ -3052,6 +3220,7 @@ type RequestWillBeSentEvent struct {
 	Type             string                 `protobuf:"bytes,9,opt,name=type,proto3" json:"type,omitempty"` // ResourceType
 	FrameId          string                 `protobuf:"bytes,10,opt,name=frame_id,json=frameId,proto3" json:"frame_id,omitempty"`
 	HasUserGesture   bool                   `protobuf:"varint,11,opt,name=has_user_gesture,json=hasUserGesture,proto3" json:"has_user_gesture,omitempty"`
+	SessionId        string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields    protoimpl.UnknownFields
 	sizeCache        protoimpl.SizeCache
 }
@@ -3161,6 +3330,13 @@ func (x *RequestWillBeSentEvent) GetHasUserGesture() bool {
 		return x.HasUserGesture
 	}
 	return false
+}
+
+func (x *RequestWillBeSentEvent) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type ResponseReceivedEvent struct {
@@ -3470,6 +3646,7 @@ func (x *LoadingFailedEvent) GetBlockedReason() string {
 type RequestServedFromCacheEvent struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	RequestId     string                 `protobuf:"bytes,1,opt,name=request_id,json=requestId,proto3" json:"request_id,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -3511,11 +3688,18 @@ func (x *RequestServedFromCacheEvent) GetRequestId() string {
 	return ""
 }
 
+func (x *RequestServedFromCacheEvent) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 var File_proto_cdp_network_network_proto protoreflect.FileDescriptor
 
 const file_proto_cdp_network_network_proto_rawDesc = "" +
 	"\n" +
-	"\x1fproto/cdp/network/network.proto\x12\vcdp.network\"\xdc\x03\n" +
+	"\x1fproto/cdp/network/network.proto\x12\vcdp.network\"\xfb\x03\n" +
 	"\aRequest\x12\x10\n" +
 	"\x03url\x18\x01 \x01(\tR\x03url\x12!\n" +
 	"\furl_fragment\x18\x02 \x01(\tR\vurlFragment\x12\x16\n" +
@@ -3529,7 +3713,9 @@ const file_proto_cdp_network_network_proto_rawDesc = "" +
 	"\x0fis_link_preload\x18\n" +
 	" \x01(\bR\risLinkPreload\x12 \n" +
 	"\fis_same_site\x18\v \x01(\bR\n" +
-	"isSameSite\x1a:\n" +
+	"isSameSite\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\x1a:\n" +
 	"\fHeadersEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
 	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\xb5\a\n" +
@@ -3627,12 +3813,14 @@ const file_proto_cdp_network_network_proto_rawDesc = "" +
 	" \x01(\tR\bpriority\x12#\n" +
 	"\rsource_scheme\x18\v \x01(\tR\fsourceScheme\x12\x1f\n" +
 	"\vsource_port\x18\f \x01(\x05R\n" +
-	"sourcePort\"\x85\x01\n" +
+	"sourcePort\"\xa4\x01\n" +
 	"\x0eRequestPattern\x12\x1f\n" +
 	"\vurl_pattern\x18\x01 \x01(\tR\n" +
 	"urlPattern\x12#\n" +
 	"\rresource_type\x18\x02 \x01(\tR\fresourceType\x12-\n" +
-	"\x12interception_stage\x18\x03 \x01(\tR\x11interceptionStage\"\xcd\x02\n" +
+	"\x12interception_stage\x18\x03 \x01(\tR\x11interceptionStage\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\xcd\x02\n" +
 	"\x1dLoadNetworkResourcePageResult\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x1b\n" +
 	"\tnet_error\x18\x02 \x01(\x01R\bnetError\x12$\n" +
@@ -3642,33 +3830,45 @@ const file_proto_cdp_network_network_proto_rawDesc = "" +
 	"\aheaders\x18\x06 \x03(\v27.cdp.network.LoadNetworkResourcePageResult.HeadersEntryR\aheaders\x1a:\n" +
 	"\fHeadersEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\xa8\x01\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\xc7\x01\n" +
 	"\rEnableRequest\x121\n" +
 	"\x15max_total_buffer_size\x18\x01 \x01(\x05R\x12maxTotalBufferSize\x127\n" +
 	"\x18max_resource_buffer_size\x18\x02 \x01(\x05R\x15maxResourceBufferSize\x12+\n" +
-	"\x12max_post_data_size\x18\x03 \x01(\x05R\x0fmaxPostDataSize\"\x10\n" +
-	"\x0eEnableResponse\"\x10\n" +
-	"\x0eDisableRequest\"\x11\n" +
-	"\x0fDisableResponse\"@\n" +
+	"\x12max_post_data_size\x18\x03 \x01(\x05R\x0fmaxPostDataSize\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x10\n" +
+	"\x0eEnableResponse\"/\n" +
+	"\x0eDisableRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x11\n" +
+	"\x0fDisableResponse\"_\n" +
 	"\x17SetCacheDisabledRequest\x12%\n" +
-	"\x0ecache_disabled\x18\x01 \x01(\bR\rcacheDisabled\"\x1a\n" +
-	"\x18SetCacheDisabledResponse\"\xa8\x01\n" +
+	"\x0ecache_disabled\x18\x01 \x01(\bR\rcacheDisabled\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x1a\n" +
+	"\x18SetCacheDisabledResponse\"\xc7\x01\n" +
 	"\x1aSetExtraHTTPHeadersRequest\x12N\n" +
-	"\aheaders\x18\x01 \x03(\v24.cdp.network.SetExtraHTTPHeadersRequest.HeadersEntryR\aheaders\x1a:\n" +
+	"\aheaders\x18\x01 \x03(\v24.cdp.network.SetExtraHTTPHeadersRequest.HeadersEntryR\aheaders\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\x1a:\n" +
 	"\fHeadersEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
 	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\x1d\n" +
-	"\x1bSetExtraHTTPHeadersResponse\"7\n" +
+	"\x1bSetExtraHTTPHeadersResponse\"V\n" +
 	"\x16GetResponseBodyRequest\x12\x1d\n" +
 	"\n" +
-	"request_id\x18\x01 \x01(\tR\trequestId\"T\n" +
+	"request_id\x18\x01 \x01(\tR\trequestId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"T\n" +
 	"\x17GetResponseBodyResponse\x12\x12\n" +
 	"\x04body\x18\x01 \x01(\tR\x04body\x12%\n" +
-	"\x0ebase64_encoded\x18\x02 \x01(\bR\rbase64Encoded\"'\n" +
+	"\x0ebase64_encoded\x18\x02 \x01(\bR\rbase64Encoded\"F\n" +
 	"\x11GetCookiesRequest\x12\x12\n" +
-	"\x04urls\x18\x01 \x03(\tR\x04urls\"C\n" +
+	"\x04urls\x18\x01 \x03(\tR\x04urls\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"C\n" +
 	"\x12GetCookiesResponse\x12-\n" +
-	"\acookies\x18\x01 \x03(\v2\x13.cdp.network.CookieR\acookies\"\xc8\x02\n" +
+	"\acookies\x18\x01 \x03(\v2\x13.cdp.network.CookieR\acookies\"\xe7\x02\n" +
 	"\x10SetCookieRequest\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12\x14\n" +
 	"\x05value\x18\x02 \x01(\tR\x05value\x12\x10\n" +
@@ -3683,63 +3883,89 @@ const file_proto_cdp_network_network_proto_rawDesc = "" +
 	" \x01(\tR\bpriority\x12#\n" +
 	"\rsource_scheme\x18\v \x01(\tR\fsourceScheme\x12\x1f\n" +
 	"\vsource_port\x18\f \x01(\x05R\n" +
-	"sourcePort\"-\n" +
+	"sourcePort\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"-\n" +
 	"\x11SetCookieResponse\x12\x18\n" +
-	"\asuccess\x18\x01 \x01(\bR\asuccess\"h\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\"\x87\x01\n" +
 	"\x14DeleteCookiesRequest\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12\x10\n" +
 	"\x03url\x18\x02 \x01(\tR\x03url\x12\x16\n" +
 	"\x06domain\x18\x03 \x01(\tR\x06domain\x12\x12\n" +
-	"\x04path\x18\x04 \x01(\tR\x04path\"\x17\n" +
-	"\x15DeleteCookiesResponse\"\x1c\n" +
-	"\x1aClearBrowserCookiesRequest\"\x1d\n" +
-	"\x1bClearBrowserCookiesResponse\"\x1a\n" +
-	"\x18ClearBrowserCacheRequest\"\x1b\n" +
-	"\x19ClearBrowserCacheResponse\"\xdc\x01\n" +
+	"\x04path\x18\x04 \x01(\tR\x04path\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x17\n" +
+	"\x15DeleteCookiesResponse\";\n" +
+	"\x1aClearBrowserCookiesRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x1d\n" +
+	"\x1bClearBrowserCookiesResponse\"9\n" +
+	"\x18ClearBrowserCacheRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x1b\n" +
+	"\x19ClearBrowserCacheResponse\"\xfb\x01\n" +
 	"\x1fEmulateNetworkConditionsRequest\x12\x18\n" +
 	"\aoffline\x18\x01 \x01(\bR\aoffline\x12\x18\n" +
 	"\alatency\x18\x02 \x01(\x01R\alatency\x12/\n" +
 	"\x13download_throughput\x18\x03 \x01(\x01R\x12downloadThroughput\x12+\n" +
 	"\x11upload_throughput\x18\x04 \x01(\x01R\x10uploadThroughput\x12'\n" +
-	"\x0fconnection_type\x18\x05 \x01(\tR\x0econnectionType\"\"\n" +
-	" EmulateNetworkConditionsResponse\"\x81\x01\n" +
+	"\x0fconnection_type\x18\x05 \x01(\tR\x0econnectionType\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\"\n" +
+	" EmulateNetworkConditionsResponse\"\xa0\x01\n" +
 	"\x1bSetUserAgentOverrideRequest\x12\x1d\n" +
 	"\n" +
 	"user_agent\x18\x01 \x01(\tR\tuserAgent\x12'\n" +
 	"\x0faccept_language\x18\x02 \x01(\tR\x0eacceptLanguage\x12\x1a\n" +
-	"\bplatform\x18\x03 \x01(\tR\bplatform\"\x1e\n" +
-	"\x1cSetUserAgentOverrideResponse\"/\n" +
+	"\bplatform\x18\x03 \x01(\tR\bplatform\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x1e\n" +
+	"\x1cSetUserAgentOverrideResponse\"N\n" +
 	"\x15GetCertificateRequest\x12\x16\n" +
-	"\x06origin\x18\x01 \x01(\tR\x06origin\"9\n" +
+	"\x06origin\x18\x01 \x01(\tR\x06origin\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"9\n" +
 	"\x16GetCertificateResponse\x12\x1f\n" +
 	"\vtable_names\x18\x01 \x03(\tR\n" +
-	"tableNames\"X\n" +
+	"tableNames\"w\n" +
 	"\x1dSetRequestInterceptionRequest\x127\n" +
-	"\bpatterns\x18\x01 \x03(\v2\x1b.cdp.network.RequestPatternR\bpatterns\" \n" +
-	"\x1eSetRequestInterceptionResponse\"\x94\x01\n" +
+	"\bpatterns\x18\x01 \x03(\v2\x1b.cdp.network.RequestPatternR\bpatterns\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"?\n" +
+	"\x1eSetRequestInterceptionResponse\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\xb3\x01\n" +
 	"\x1bSearchInResponseBodyRequest\x12\x1d\n" +
 	"\n" +
 	"request_id\x18\x01 \x01(\tR\trequestId\x12\x14\n" +
 	"\x05query\x18\x02 \x01(\tR\x05query\x12%\n" +
 	"\x0ecase_sensitive\x18\x03 \x01(\bR\rcaseSensitive\x12\x19\n" +
-	"\bis_regex\x18\x04 \x01(\bR\aisRegex\"P\n" +
+	"\bis_regex\x18\x04 \x01(\bR\aisRegex\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"P\n" +
 	"\x1cSearchInResponseBodyResponse\x120\n" +
 	"\x06result\x18\x01 \x03(\v2\x18.cdp.network.SearchMatchR\x06result\"Q\n" +
 	"\vSearchMatch\x12\x1f\n" +
 	"\vline_number\x18\x01 \x01(\x01R\n" +
 	"lineNumber\x12!\n" +
-	"\fline_content\x18\x02 \x01(\tR\vlineContent\"+\n" +
+	"\fline_content\x18\x02 \x01(\tR\vlineContent\"J\n" +
 	"\x15SetBlockedURLsRequest\x12\x12\n" +
-	"\x04urls\x18\x01 \x03(\tR\x04urls\"\x18\n" +
-	"\x16SetBlockedURLsResponse\">\n" +
+	"\x04urls\x18\x01 \x03(\tR\x04urls\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x18\n" +
+	"\x16SetBlockedURLsResponse\"]\n" +
 	"!GetSecurityIsolationStatusRequest\x12\x19\n" +
-	"\bframe_id\x18\x01 \x01(\tR\aframeId\"<\n" +
+	"\bframe_id\x18\x01 \x01(\tR\aframeId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"<\n" +
 	"\"GetSecurityIsolationStatusResponse\x12\x16\n" +
-	"\x06status\x18\x01 \x01(\tR\x06status\"\x8c\x01\n" +
+	"\x06status\x18\x01 \x01(\tR\x06status\"\xab\x01\n" +
 	"\x1aLoadNetworkResourceRequest\x12\x19\n" +
 	"\bframe_id\x18\x01 \x01(\tR\aframeId\x12\x10\n" +
 	"\x03url\x18\x02 \x01(\tR\x03url\x12A\n" +
-	"\aoptions\x18\x03 \x01(\v2'.cdp.network.LoadNetworkResourceOptionsR\aoptions\"r\n" +
+	"\aoptions\x18\x03 \x01(\v2'.cdp.network.LoadNetworkResourceOptionsR\aoptions\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"r\n" +
 	"\x1aLoadNetworkResourceOptions\x12#\n" +
 	"\rdisable_cache\x18\x01 \x01(\bR\fdisableCache\x12/\n" +
 	"\x13include_credentials\x18\x02 \x01(\bR\x12includeCredentials\"e\n" +
@@ -3755,7 +3981,7 @@ const file_proto_cdp_network_network_proto_rawDesc = "" +
 	"\x10loading_finished\x18\x04 \x01(\v2!.cdp.network.LoadingFinishedEventH\x00R\x0floadingFinished\x12H\n" +
 	"\x0eloading_failed\x18\x05 \x01(\v2\x1f.cdp.network.LoadingFailedEventH\x00R\rloadingFailed\x12e\n" +
 	"\x19request_served_from_cache\x18\x06 \x01(\v2(.cdp.network.RequestServedFromCacheEventH\x00R\x16requestServedFromCacheB\a\n" +
-	"\x05event\"\xa6\x03\n" +
+	"\x05event\"\xc5\x03\n" +
 	"\x16RequestWillBeSentEvent\x12\x1d\n" +
 	"\n" +
 	"request_id\x18\x01 \x01(\tR\trequestId\x12\x1b\n" +
@@ -3769,7 +3995,9 @@ const file_proto_cdp_network_network_proto_rawDesc = "" +
 	"\x04type\x18\t \x01(\tR\x04type\x12\x19\n" +
 	"\bframe_id\x18\n" +
 	" \x01(\tR\aframeId\x12(\n" +
-	"\x10has_user_gesture\x18\v \x01(\bR\x0ehasUserGesture\"\xf9\x01\n" +
+	"\x10has_user_gesture\x18\v \x01(\bR\x0ehasUserGesture\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\xf9\x01\n" +
 	"\x15ResponseReceivedEvent\x12\x1d\n" +
 	"\n" +
 	"request_id\x18\x01 \x01(\tR\trequestId\x12\x1b\n" +
@@ -3799,10 +4027,12 @@ const file_proto_cdp_network_network_proto_rawDesc = "" +
 	"\n" +
 	"error_text\x18\x04 \x01(\tR\terrorText\x12\x1a\n" +
 	"\bcanceled\x18\x05 \x01(\bR\bcanceled\x12%\n" +
-	"\x0eblocked_reason\x18\x06 \x01(\tR\rblockedReason\"<\n" +
+	"\x0eblocked_reason\x18\x06 \x01(\tR\rblockedReason\"[\n" +
 	"\x1bRequestServedFromCacheEvent\x12\x1d\n" +
 	"\n" +
-	"request_id\x18\x01 \x01(\tR\trequestId2\xc4\x0e\n" +
+	"request_id\x18\x01 \x01(\tR\trequestId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId2\xc4\x0e\n" +
 	"\x0eNetworkService\x12A\n" +
 	"\x06Enable\x12\x1a.cdp.network.EnableRequest\x1a\x1b.cdp.network.EnableResponse\x12D\n" +
 	"\aDisable\x12\x1b.cdp.network.DisableRequest\x1a\x1c.cdp.network.DisableResponse\x12_\n" +

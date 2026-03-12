@@ -44,6 +44,7 @@ message RequestPattern {
   string url_pattern = 1;
   string resource_type = 2;
   string request_stage = 3; // "Request", "Response"
+  string session_id = 99;
 }
 
 message HeaderEntry {
@@ -56,10 +57,13 @@ message HeaderEntry {
 message EnableRequest {
   repeated RequestPattern patterns = 1;
   bool handle_auth_requests = 2;
+  string session_id = 99;
 }
 message EnableResponse {}
 
-message DisableRequest {}
+message DisableRequest {
+  string session_id = 99;
+}
 message DisableResponse {}
 
 message ContinueRequestRequest {
@@ -69,8 +73,11 @@ message ContinueRequestRequest {
   string post_data = 4;
   repeated HeaderEntry headers = 5;
   bool intercept_response = 6;
+  string session_id = 99;
 }
-message ContinueRequestResponse {}
+message ContinueRequestResponse {
+  string session_id = 99;
+}
 
 message FulfillRequestRequest {
   string request_id = 1;
@@ -79,18 +86,25 @@ message FulfillRequestRequest {
   bytes body = 4;
   string response_phrase = 5;
   string binary_response_headers = 6;
+  string session_id = 99;
 }
-message FulfillRequestResponse {}
+message FulfillRequestResponse {
+  string session_id = 99;
+}
 
 message FailRequestRequest {
   string request_id = 1;
   string reason = 2; // Network.ErrorReason
+  string session_id = 99;
 }
-message FailRequestResponse {}
+message FailRequestResponse {
+  string session_id = 99;
+}
 
 message ContinueWithAuthRequest {
   string request_id = 1;
   AuthChallengeResponse auth_challenge_response = 2;
+  string session_id = 99;
 }
 message ContinueWithAuthResponse {}
 
@@ -102,6 +116,7 @@ message AuthChallengeResponse {
 
 message GetResponseBodyRequest {
   string request_id = 1;
+  string session_id = 99;
 }
 message GetResponseBodyResponse {
   string body = 1;
@@ -110,6 +125,7 @@ message GetResponseBodyResponse {
 
 message TakeResponseBodyAsStreamRequest {
   string request_id = 1;
+  string session_id = 99;
 }
 message TakeResponseBodyAsStreamResponse {
   string stream = 1;
@@ -121,12 +137,15 @@ message ContinueResponseRequest {
   string response_phrase = 3;
   repeated HeaderEntry response_headers = 4;
   string binary_response_headers = 5;
+  string session_id = 99;
 }
 message ContinueResponseResponse {}
 
 // ==================== Events ====================
 
-message SubscribeEventsRequest {}
+message SubscribeEventsRequest {
+  string session_id = 99;
+}
 
 message FetchEvent {
   oneof event {
@@ -146,6 +165,7 @@ message RequestPausedEvent {
   repeated HeaderEntry response_headers = 8;
   string network_id = 9;
   string redirected_request_id = 10;
+  string session_id = 99;
 }
 
 message RequestInfo {
@@ -153,6 +173,7 @@ message RequestInfo {
   string method = 2;
   string post_data = 3;
   map<string, string> headers = 4;
+  string session_id = 99;
 }
 
 message AuthChallenge {

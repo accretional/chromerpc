@@ -27,6 +27,7 @@ service ExtensionsService {
 
 message LoadUnpackedRequest {
   string path = 1;
+  string session_id = 99;
 }
 message LoadUnpackedResponse {
   string id = 1;
@@ -36,6 +37,7 @@ message GetStorageItemsRequest {
   string id = 1;
   string storage_area = 2; // session, local, sync, managed
   repeated string keys = 3; // optional: if empty, returns all items
+  string session_id = 99;
 }
 message GetStorageItemsResponse {
   bytes data = 1; // JSON-encoded object
@@ -45,12 +47,14 @@ message RemoveStorageItemsRequest {
   string id = 1;
   string storage_area = 2;
   repeated string keys = 3;
+  string session_id = 99;
 }
 message RemoveStorageItemsResponse {}
 
 message ClearStorageItemsRequest {
   string id = 1;
   string storage_area = 2;
+  string session_id = 99;
 }
 message ClearStorageItemsResponse {}
 
@@ -58,5 +62,6 @@ message SetStorageItemsRequest {
   string id = 1;
   string storage_area = 2;
   string values = 3; // JSON-encoded object
+  string session_id = 99;
 }
 message SetStorageItemsResponse {}

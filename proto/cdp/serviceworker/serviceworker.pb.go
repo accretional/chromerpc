@@ -283,6 +283,7 @@ func (x *ServiceWorkerVersion) GetRouterRules() string {
 
 type EnableRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -315,6 +316,13 @@ func (x *EnableRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use EnableRequest.ProtoReflect.Descriptor instead.
 func (*EnableRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_serviceworker_serviceworker_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *EnableRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type EnableResponse struct {
@@ -355,6 +363,7 @@ func (*EnableResponse) Descriptor() ([]byte, []int) {
 
 type DisableRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -387,6 +396,13 @@ func (x *DisableRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use DisableRequest.ProtoReflect.Descriptor instead.
 func (*DisableRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_serviceworker_serviceworker_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *DisableRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type DisableResponse struct {
@@ -430,6 +446,7 @@ type DeliverPushMessageRequest struct {
 	Origin         string                 `protobuf:"bytes,1,opt,name=origin,proto3" json:"origin,omitempty"`
 	RegistrationId string                 `protobuf:"bytes,2,opt,name=registration_id,json=registrationId,proto3" json:"registration_id,omitempty"`
 	Data           string                 `protobuf:"bytes,3,opt,name=data,proto3" json:"data,omitempty"`
+	SessionId      string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
@@ -485,6 +502,13 @@ func (x *DeliverPushMessageRequest) GetData() string {
 	return ""
 }
 
+func (x *DeliverPushMessageRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type DeliverPushMessageResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -527,6 +551,7 @@ type DispatchSyncEventRequest struct {
 	RegistrationId string                 `protobuf:"bytes,2,opt,name=registration_id,json=registrationId,proto3" json:"registration_id,omitempty"`
 	Tag            string                 `protobuf:"bytes,3,opt,name=tag,proto3" json:"tag,omitempty"`
 	LastChance     bool                   `protobuf:"varint,4,opt,name=last_chance,json=lastChance,proto3" json:"last_chance,omitempty"`
+	SessionId      string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
@@ -589,6 +614,13 @@ func (x *DispatchSyncEventRequest) GetLastChance() bool {
 	return false
 }
 
+func (x *DispatchSyncEventRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type DispatchSyncEventResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -630,6 +662,7 @@ type DispatchPeriodicSyncEventRequest struct {
 	Origin         string                 `protobuf:"bytes,1,opt,name=origin,proto3" json:"origin,omitempty"`
 	RegistrationId string                 `protobuf:"bytes,2,opt,name=registration_id,json=registrationId,proto3" json:"registration_id,omitempty"`
 	Tag            string                 `protobuf:"bytes,3,opt,name=tag,proto3" json:"tag,omitempty"`
+	SessionId      string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
@@ -685,6 +718,13 @@ func (x *DispatchPeriodicSyncEventRequest) GetTag() string {
 	return ""
 }
 
+func (x *DispatchPeriodicSyncEventRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type DispatchPeriodicSyncEventResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -724,6 +764,7 @@ func (*DispatchPeriodicSyncEventResponse) Descriptor() ([]byte, []int) {
 type InspectWorkerRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	VersionId     string                 `protobuf:"bytes,1,opt,name=version_id,json=versionId,proto3" json:"version_id,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -761,6 +802,13 @@ func (*InspectWorkerRequest) Descriptor() ([]byte, []int) {
 func (x *InspectWorkerRequest) GetVersionId() string {
 	if x != nil {
 		return x.VersionId
+	}
+	return ""
+}
+
+func (x *InspectWorkerRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -804,6 +852,7 @@ func (*InspectWorkerResponse) Descriptor() ([]byte, []int) {
 type SetForceUpdateOnPageLoadRequest struct {
 	state                 protoimpl.MessageState `protogen:"open.v1"`
 	ForceUpdateOnPageLoad bool                   `protobuf:"varint,1,opt,name=force_update_on_page_load,json=forceUpdateOnPageLoad,proto3" json:"force_update_on_page_load,omitempty"`
+	SessionId             string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields         protoimpl.UnknownFields
 	sizeCache             protoimpl.SizeCache
 }
@@ -845,6 +894,13 @@ func (x *SetForceUpdateOnPageLoadRequest) GetForceUpdateOnPageLoad() bool {
 	return false
 }
 
+func (x *SetForceUpdateOnPageLoadRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type SetForceUpdateOnPageLoadResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -884,6 +940,7 @@ func (*SetForceUpdateOnPageLoadResponse) Descriptor() ([]byte, []int) {
 type SkipWaitingRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	ScopeUrl      string                 `protobuf:"bytes,1,opt,name=scope_url,json=scopeUrl,proto3" json:"scope_url,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -921,6 +978,13 @@ func (*SkipWaitingRequest) Descriptor() ([]byte, []int) {
 func (x *SkipWaitingRequest) GetScopeUrl() string {
 	if x != nil {
 		return x.ScopeUrl
+	}
+	return ""
+}
+
+func (x *SkipWaitingRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -964,6 +1028,7 @@ func (*SkipWaitingResponse) Descriptor() ([]byte, []int) {
 type StartWorkerRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	ScopeUrl      string                 `protobuf:"bytes,1,opt,name=scope_url,json=scopeUrl,proto3" json:"scope_url,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1001,6 +1066,13 @@ func (*StartWorkerRequest) Descriptor() ([]byte, []int) {
 func (x *StartWorkerRequest) GetScopeUrl() string {
 	if x != nil {
 		return x.ScopeUrl
+	}
+	return ""
+}
+
+func (x *StartWorkerRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -1043,6 +1115,7 @@ func (*StartWorkerResponse) Descriptor() ([]byte, []int) {
 
 type StopAllWorkersRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1075,6 +1148,13 @@ func (x *StopAllWorkersRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use StopAllWorkersRequest.ProtoReflect.Descriptor instead.
 func (*StopAllWorkersRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_serviceworker_serviceworker_proto_rawDescGZIP(), []int{21}
+}
+
+func (x *StopAllWorkersRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type StopAllWorkersResponse struct {
@@ -1116,6 +1196,7 @@ func (*StopAllWorkersResponse) Descriptor() ([]byte, []int) {
 type StopWorkerRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	VersionId     string                 `protobuf:"bytes,1,opt,name=version_id,json=versionId,proto3" json:"version_id,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1153,6 +1234,13 @@ func (*StopWorkerRequest) Descriptor() ([]byte, []int) {
 func (x *StopWorkerRequest) GetVersionId() string {
 	if x != nil {
 		return x.VersionId
+	}
+	return ""
+}
+
+func (x *StopWorkerRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -1196,6 +1284,7 @@ func (*StopWorkerResponse) Descriptor() ([]byte, []int) {
 type UnregisterRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	ScopeUrl      string                 `protobuf:"bytes,1,opt,name=scope_url,json=scopeUrl,proto3" json:"scope_url,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1233,6 +1322,13 @@ func (*UnregisterRequest) Descriptor() ([]byte, []int) {
 func (x *UnregisterRequest) GetScopeUrl() string {
 	if x != nil {
 		return x.ScopeUrl
+	}
+	return ""
+}
+
+func (x *UnregisterRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -1276,6 +1372,7 @@ func (*UnregisterResponse) Descriptor() ([]byte, []int) {
 type UpdateRegistrationRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	ScopeUrl      string                 `protobuf:"bytes,1,opt,name=scope_url,json=scopeUrl,proto3" json:"scope_url,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1313,6 +1410,13 @@ func (*UpdateRegistrationRequest) Descriptor() ([]byte, []int) {
 func (x *UpdateRegistrationRequest) GetScopeUrl() string {
 	if x != nil {
 		return x.ScopeUrl
+	}
+	return ""
+}
+
+func (x *UpdateRegistrationRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -1355,6 +1459,7 @@ func (*UpdateRegistrationResponse) Descriptor() ([]byte, []int) {
 
 type SubscribeEventsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1387,6 +1492,13 @@ func (x *SubscribeEventsRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use SubscribeEventsRequest.ProtoReflect.Descriptor instead.
 func (*SubscribeEventsRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_serviceworker_serviceworker_proto_rawDescGZIP(), []int{29}
+}
+
+func (x *SubscribeEventsRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type ServiceWorkerEvent struct {
@@ -1657,54 +1769,82 @@ const file_proto_cdp_serviceworker_serviceworker_proto_rawDesc = "" +
 	"\x15_script_response_timeB\f\n" +
 	"\n" +
 	"_target_idB\x0f\n" +
-	"\r_router_rules\"\x0f\n" +
-	"\rEnableRequest\"\x10\n" +
-	"\x0eEnableResponse\"\x10\n" +
-	"\x0eDisableRequest\"\x11\n" +
-	"\x0fDisableResponse\"p\n" +
+	"\r_router_rules\".\n" +
+	"\rEnableRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x10\n" +
+	"\x0eEnableResponse\"/\n" +
+	"\x0eDisableRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x11\n" +
+	"\x0fDisableResponse\"\x8f\x01\n" +
 	"\x19DeliverPushMessageRequest\x12\x16\n" +
 	"\x06origin\x18\x01 \x01(\tR\x06origin\x12'\n" +
 	"\x0fregistration_id\x18\x02 \x01(\tR\x0eregistrationId\x12\x12\n" +
-	"\x04data\x18\x03 \x01(\tR\x04data\"\x1c\n" +
-	"\x1aDeliverPushMessageResponse\"\x8e\x01\n" +
+	"\x04data\x18\x03 \x01(\tR\x04data\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x1c\n" +
+	"\x1aDeliverPushMessageResponse\"\xad\x01\n" +
 	"\x18DispatchSyncEventRequest\x12\x16\n" +
 	"\x06origin\x18\x01 \x01(\tR\x06origin\x12'\n" +
 	"\x0fregistration_id\x18\x02 \x01(\tR\x0eregistrationId\x12\x10\n" +
 	"\x03tag\x18\x03 \x01(\tR\x03tag\x12\x1f\n" +
 	"\vlast_chance\x18\x04 \x01(\bR\n" +
-	"lastChance\"\x1b\n" +
-	"\x19DispatchSyncEventResponse\"u\n" +
+	"lastChance\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x1b\n" +
+	"\x19DispatchSyncEventResponse\"\x94\x01\n" +
 	" DispatchPeriodicSyncEventRequest\x12\x16\n" +
 	"\x06origin\x18\x01 \x01(\tR\x06origin\x12'\n" +
 	"\x0fregistration_id\x18\x02 \x01(\tR\x0eregistrationId\x12\x10\n" +
-	"\x03tag\x18\x03 \x01(\tR\x03tag\"#\n" +
-	"!DispatchPeriodicSyncEventResponse\"5\n" +
+	"\x03tag\x18\x03 \x01(\tR\x03tag\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"#\n" +
+	"!DispatchPeriodicSyncEventResponse\"T\n" +
 	"\x14InspectWorkerRequest\x12\x1d\n" +
 	"\n" +
-	"version_id\x18\x01 \x01(\tR\tversionId\"\x17\n" +
-	"\x15InspectWorkerResponse\"[\n" +
+	"version_id\x18\x01 \x01(\tR\tversionId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x17\n" +
+	"\x15InspectWorkerResponse\"z\n" +
 	"\x1fSetForceUpdateOnPageLoadRequest\x128\n" +
-	"\x19force_update_on_page_load\x18\x01 \x01(\bR\x15forceUpdateOnPageLoad\"\"\n" +
-	" SetForceUpdateOnPageLoadResponse\"1\n" +
+	"\x19force_update_on_page_load\x18\x01 \x01(\bR\x15forceUpdateOnPageLoad\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\"\n" +
+	" SetForceUpdateOnPageLoadResponse\"P\n" +
 	"\x12SkipWaitingRequest\x12\x1b\n" +
-	"\tscope_url\x18\x01 \x01(\tR\bscopeUrl\"\x15\n" +
-	"\x13SkipWaitingResponse\"1\n" +
+	"\tscope_url\x18\x01 \x01(\tR\bscopeUrl\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x15\n" +
+	"\x13SkipWaitingResponse\"P\n" +
 	"\x12StartWorkerRequest\x12\x1b\n" +
-	"\tscope_url\x18\x01 \x01(\tR\bscopeUrl\"\x15\n" +
-	"\x13StartWorkerResponse\"\x17\n" +
-	"\x15StopAllWorkersRequest\"\x18\n" +
-	"\x16StopAllWorkersResponse\"2\n" +
+	"\tscope_url\x18\x01 \x01(\tR\bscopeUrl\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x15\n" +
+	"\x13StartWorkerResponse\"6\n" +
+	"\x15StopAllWorkersRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x18\n" +
+	"\x16StopAllWorkersResponse\"Q\n" +
 	"\x11StopWorkerRequest\x12\x1d\n" +
 	"\n" +
-	"version_id\x18\x01 \x01(\tR\tversionId\"\x14\n" +
-	"\x12StopWorkerResponse\"0\n" +
+	"version_id\x18\x01 \x01(\tR\tversionId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x14\n" +
+	"\x12StopWorkerResponse\"O\n" +
 	"\x11UnregisterRequest\x12\x1b\n" +
-	"\tscope_url\x18\x01 \x01(\tR\bscopeUrl\"\x14\n" +
-	"\x12UnregisterResponse\"8\n" +
+	"\tscope_url\x18\x01 \x01(\tR\bscopeUrl\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x14\n" +
+	"\x12UnregisterResponse\"W\n" +
 	"\x19UpdateRegistrationRequest\x12\x1b\n" +
-	"\tscope_url\x18\x01 \x01(\tR\bscopeUrl\"\x1c\n" +
-	"\x1aUpdateRegistrationResponse\"\x18\n" +
-	"\x16SubscribeEventsRequest\"\xdb\x02\n" +
+	"\tscope_url\x18\x01 \x01(\tR\bscopeUrl\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x1c\n" +
+	"\x1aUpdateRegistrationResponse\"7\n" +
+	"\x16SubscribeEventsRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\xdb\x02\n" +
 	"\x12ServiceWorkerEvent\x12a\n" +
 	"\x15worker_error_reported\x18\x01 \x01(\v2+.cdp.serviceworker.WorkerErrorReportedEventH\x00R\x13workerErrorReported\x12s\n" +
 	"\x1bworker_registration_updated\x18\x02 \x01(\v21.cdp.serviceworker.WorkerRegistrationUpdatedEventH\x00R\x19workerRegistrationUpdated\x12d\n" +

@@ -3,6 +3,7 @@ package input
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 
 	"github.com/accretional/chromerpc/internal/cdpclient"
@@ -17,6 +18,16 @@ type Server struct {
 func New(client *cdpclient.Client) *Server {
 	return &Server{client: client}
 }
+
+// send routes a CDP command through the specified session, falling back
+// to the client's default session if sessionID is empty.
+func (s *Server) send(ctx context.Context, sessionID string, method string, params interface{}) (json.RawMessage, error) {
+	if sessionID != "" {
+		return s.client.SendWithSession(ctx, method, params, sessionID)
+	}
+	return s.client.Send(ctx, method, params)
+}
+
 
 func (s *Server) DispatchKeyEvent(ctx context.Context, req *pb.DispatchKeyEventRequest) (*pb.DispatchKeyEventResponse, error) {
 	params := map[string]interface{}{
@@ -64,7 +75,7 @@ func (s *Server) DispatchKeyEvent(ctx context.Context, req *pb.DispatchKeyEventR
 	if req.Location != 0 {
 		params["location"] = req.Location
 	}
-	if _, err := s.client.Send(ctx, "Input.dispatchKeyEvent", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Input.dispatchKeyEvent", params); err != nil {
 		return nil, fmt.Errorf("Input.dispatchKeyEvent: %w", err)
 	}
 	return &pb.DispatchKeyEventResponse{}, nil
@@ -115,7 +126,7 @@ func (s *Server) DispatchMouseEvent(ctx context.Context, req *pb.DispatchMouseEv
 	if req.PointerType != "" {
 		params["pointerType"] = req.PointerType
 	}
-	if _, err := s.client.Send(ctx, "Input.dispatchMouseEvent", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Input.dispatchMouseEvent", params); err != nil {
 		return nil, fmt.Errorf("Input.dispatchMouseEvent: %w", err)
 	}
 	return &pb.DispatchMouseEventResponse{}, nil
@@ -155,7 +166,7 @@ func (s *Server) DispatchTouchEvent(ctx context.Context, req *pb.DispatchTouchEv
 	if req.Timestamp != 0 {
 		params["timestamp"] = req.Timestamp
 	}
-	if _, err := s.client.Send(ctx, "Input.dispatchTouchEvent", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Input.dispatchTouchEvent", params); err != nil {
 		return nil, fmt.Errorf("Input.dispatchTouchEvent: %w", err)
 	}
 	return &pb.DispatchTouchEventResponse{}, nil
@@ -163,7 +174,7 @@ func (s *Server) DispatchTouchEvent(ctx context.Context, req *pb.DispatchTouchEv
 
 func (s *Server) InsertText(ctx context.Context, req *pb.InsertTextRequest) (*pb.InsertTextResponse, error) {
 	params := map[string]interface{}{"text": req.Text}
-	if _, err := s.client.Send(ctx, "Input.insertText", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Input.insertText", params); err != nil {
 		return nil, fmt.Errorf("Input.insertText: %w", err)
 	}
 	return &pb.InsertTextResponse{}, nil
@@ -171,7 +182,7 @@ func (s *Server) InsertText(ctx context.Context, req *pb.InsertTextRequest) (*pb
 
 func (s *Server) SetIgnoreInputEvents(ctx context.Context, req *pb.SetIgnoreInputEventsRequest) (*pb.SetIgnoreInputEventsResponse, error) {
 	params := map[string]interface{}{"ignore": req.Ignore}
-	if _, err := s.client.Send(ctx, "Input.setIgnoreInputEvents", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Input.setIgnoreInputEvents", params); err != nil {
 		return nil, fmt.Errorf("Input.setIgnoreInputEvents: %w", err)
 	}
 	return &pb.SetIgnoreInputEventsResponse{}, nil
@@ -207,7 +218,7 @@ func (s *Server) DispatchDragEvent(ctx context.Context, req *pb.DispatchDragEven
 	if req.Modifiers != 0 {
 		params["modifiers"] = req.Modifiers
 	}
-	if _, err := s.client.Send(ctx, "Input.dispatchDragEvent", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Input.dispatchDragEvent", params); err != nil {
 		return nil, fmt.Errorf("Input.dispatchDragEvent: %w", err)
 	}
 	return &pb.DispatchDragEventResponse{}, nil
@@ -225,7 +236,7 @@ func (s *Server) SynthesizePinchGesture(ctx context.Context, req *pb.SynthesizeP
 	if req.GestureSourceType != "" {
 		params["gestureSourceType"] = req.GestureSourceType
 	}
-	if _, err := s.client.Send(ctx, "Input.synthesizePinchGesture", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Input.synthesizePinchGesture", params); err != nil {
 		return nil, fmt.Errorf("Input.synthesizePinchGesture: %w", err)
 	}
 	return &pb.SynthesizePinchGestureResponse{}, nil
@@ -266,7 +277,7 @@ func (s *Server) SynthesizeScrollGesture(ctx context.Context, req *pb.Synthesize
 	if req.InteractionMarkerName != "" {
 		params["interactionMarkerName"] = req.InteractionMarkerName
 	}
-	if _, err := s.client.Send(ctx, "Input.synthesizeScrollGesture", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Input.synthesizeScrollGesture", params); err != nil {
 		return nil, fmt.Errorf("Input.synthesizeScrollGesture: %w", err)
 	}
 	return &pb.SynthesizeScrollGestureResponse{}, nil
@@ -286,14 +297,14 @@ func (s *Server) SynthesizeTapGesture(ctx context.Context, req *pb.SynthesizeTap
 	if req.GestureSourceType != "" {
 		params["gestureSourceType"] = req.GestureSourceType
 	}
-	if _, err := s.client.Send(ctx, "Input.synthesizeTapGesture", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Input.synthesizeTapGesture", params); err != nil {
 		return nil, fmt.Errorf("Input.synthesizeTapGesture: %w", err)
 	}
 	return &pb.SynthesizeTapGestureResponse{}, nil
 }
 
 func (s *Server) CancelDragging(ctx context.Context, req *pb.CancelDraggingRequest) (*pb.CancelDraggingResponse, error) {
-	if _, err := s.client.Send(ctx, "Input.cancelDragging", nil); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Input.cancelDragging", nil); err != nil {
 		return nil, fmt.Errorf("Input.cancelDragging: %w", err)
 	}
 	return &pb.CancelDraggingResponse{}, nil
@@ -311,7 +322,7 @@ func (s *Server) ImeSetComposition(ctx context.Context, req *pb.ImeSetCompositio
 	if req.ReplacementEnd != 0 {
 		params["replacementEnd"] = req.ReplacementEnd
 	}
-	if _, err := s.client.Send(ctx, "Input.imeSetComposition", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Input.imeSetComposition", params); err != nil {
 		return nil, fmt.Errorf("Input.imeSetComposition: %w", err)
 	}
 	return &pb.ImeSetCompositionResponse{}, nil

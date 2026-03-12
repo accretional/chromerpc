@@ -434,10 +434,13 @@ message SearchMatch {
 message EnableRequest {
   // Whether to also enable the FileChooserOpened event (experimental).
   bool enable_file_chooser_opened_event = 1;
+  string session_id = 99;
 }
 message EnableResponse {}
 
-message DisableRequest {}
+message DisableRequest {
+  string session_id = 99;
+}
 message DisableResponse {}
 
 message NavigateRequest {
@@ -446,6 +449,7 @@ message NavigateRequest {
   TransitionType transition_type = 3;
   string frame_id = 4;
   ReferrerPolicy referrer_policy = 5; // experimental
+  string session_id = 99;
 }
 message NavigateResponse {
   string frame_id = 1;
@@ -457,13 +461,18 @@ message ReloadRequest {
   bool ignore_cache = 1;
   string script_to_evaluate_on_load = 2;
   string loader_id = 3; // experimental
+  string session_id = 99;
 }
 message ReloadResponse {}
 
-message StopLoadingRequest {}
+message StopLoadingRequest {
+  string session_id = 99;
+}
 message StopLoadingResponse {}
 
-message GetNavigationHistoryRequest {}
+message GetNavigationHistoryRequest {
+  string session_id = 99;
+}
 message GetNavigationHistoryResponse {
   int32 current_index = 1;
   repeated NavigationEntry entries = 2;
@@ -471,10 +480,13 @@ message GetNavigationHistoryResponse {
 
 message NavigateToHistoryEntryRequest {
   int32 entry_id = 1;
+  string session_id = 99;
 }
 message NavigateToHistoryEntryResponse {}
 
-message ResetNavigationHistoryRequest {}
+message ResetNavigationHistoryRequest {
+  string session_id = 99;
+}
 message ResetNavigationHistoryResponse {}
 
 message CaptureScreenshotRequest {
@@ -489,6 +501,7 @@ message CaptureScreenshotRequest {
   bool capture_beyond_viewport = 5;
   // Optimize image encoding for speed, not for resulting size (experimental).
   bool optimize_for_speed = 6;
+  string session_id = 99;
 }
 message CaptureScreenshotResponse {
   // Base64-encoded image data.
@@ -497,6 +510,7 @@ message CaptureScreenshotResponse {
 
 message CaptureSnapshotRequest {
   CaptureSnapshotFormat format = 1;
+  string session_id = 99;
 }
 message CaptureSnapshotResponse {
   // Serialized page data.
@@ -534,6 +548,7 @@ message PrintToPDFRequest {
   bool generate_tagged_pdf = 16;
   // Whether to embed the document outline into the PDF (experimental).
   bool generate_document_outline = 17;
+  string session_id = 99;
 }
 message PrintToPDFResponse {
   // Base64-encoded pdf data. Empty if transfer_mode was ReturnAsStream.
@@ -542,12 +557,16 @@ message PrintToPDFResponse {
   string stream = 2;
 }
 
-message GetFrameTreeRequest {}
+message GetFrameTreeRequest {
+  string session_id = 99;
+}
 message GetFrameTreeResponse {
   FrameTree frame_tree = 1;
 }
 
-message GetLayoutMetricsRequest {}
+message GetLayoutMetricsRequest {
+  string session_id = 99;
+}
 message GetLayoutMetricsResponse {
   LayoutViewport css_layout_viewport = 1;
   VisualViewport css_visual_viewport = 2;
@@ -566,13 +585,18 @@ message Rect {
 message SetDocumentContentRequest {
   string frame_id = 1;
   string html = 2;
+  string session_id = 99;
 }
 message SetDocumentContentResponse {}
 
-message BringToFrontRequest {}
+message BringToFrontRequest {
+  string session_id = 99;
+}
 message BringToFrontResponse {}
 
-message CloseRequest {}
+message CloseRequest {
+  string session_id = 99;
+}
 message CloseResponse {}
 
 message AddScriptToEvaluateOnNewDocumentRequest {
@@ -583,6 +607,7 @@ message AddScriptToEvaluateOnNewDocumentRequest {
   bool include_command_line_api = 3;
   // If true, the script will be injected into all frames immediately (experimental).
   bool run_immediately = 4;
+  string session_id = 99;
 }
 message AddScriptToEvaluateOnNewDocumentResponse {
   string identifier = 1;
@@ -590,40 +615,48 @@ message AddScriptToEvaluateOnNewDocumentResponse {
 
 message RemoveScriptToEvaluateOnNewDocumentRequest {
   string identifier = 1;
+  string session_id = 99;
 }
 message RemoveScriptToEvaluateOnNewDocumentResponse {}
 
 message SetAdBlockingEnabledRequest {
   bool enabled = 1;
+  string session_id = 99;
 }
 message SetAdBlockingEnabledResponse {}
 
 message SetBypassCSPRequest {
   bool enabled = 1;
+  string session_id = 99;
 }
 message SetBypassCSPResponse {}
 
 message SetLifecycleEventsEnabledRequest {
   bool enabled = 1;
+  string session_id = 99;
 }
 message SetLifecycleEventsEnabledResponse {}
 
 message HandleJavaScriptDialogRequest {
   bool accept = 1;
   string prompt_text = 2;
+  string session_id = 99;
 }
 message HandleJavaScriptDialogResponse {}
 
 message GetResourceContentRequest {
   string frame_id = 1;
   string url = 2;
+  string session_id = 99;
 }
 message GetResourceContentResponse {
   string content = 1;
   bool base64_encoded = 2;
 }
 
-message GetResourceTreeRequest {}
+message GetResourceTreeRequest {
+  string session_id = 99;
+}
 message GetResourceTreeResponse {
   FrameResourceTree frame_tree = 1;
 }
@@ -634,6 +667,7 @@ message SearchInResourceRequest {
   string query = 3;
   bool case_sensitive = 4;
   bool is_regex = 5;
+  string session_id = 99;
 }
 message SearchInResourceResponse {
   repeated SearchMatch result = 1;
@@ -643,6 +677,7 @@ message CreateIsolatedWorldRequest {
   string frame_id = 1;
   string world_name = 2;
   bool grant_universal_access = 3;
+  string session_id = 99;
 }
 message CreateIsolatedWorldResponse {
   int32 execution_context_id = 1;
@@ -654,57 +689,73 @@ message StartScreencastRequest {
   int32 max_width = 3;
   int32 max_height = 4;
   int32 every_nth_frame = 5;
+  string session_id = 99;
 }
 message StartScreencastResponse {}
 
-message StopScreencastRequest {}
+message StopScreencastRequest {
+  string session_id = 99;
+}
 message StopScreencastResponse {}
 
 message ScreencastFrameAckRequest {
   int32 session_id = 1;
+  string target_session_id = 99;
 }
 message ScreencastFrameAckResponse {}
 
 message SetFontFamiliesRequest {
   FontFamilies font_families = 1;
   repeated ScriptFontFamilies for_scripts = 2;
+  string session_id = 99;
 }
 message SetFontFamiliesResponse {}
 
 message SetFontSizesRequest {
   FontSizes font_sizes = 1;
+  string session_id = 99;
 }
 message SetFontSizesResponse {}
 
 message SetInterceptFileChooserDialogRequest {
   bool enabled = 1;
+  string session_id = 99;
 }
 message SetInterceptFileChooserDialogResponse {}
 
-message CrashRequest {}
+message CrashRequest {
+  string session_id = 99;
+}
 message CrashResponse {}
 
 message GenerateTestReportRequest {
   string message = 1;
   string group = 2;
+  string session_id = 99;
 }
 message GenerateTestReportResponse {}
 
-message WaitForDebuggerRequest {}
+message WaitForDebuggerRequest {
+  string session_id = 99;
+}
 message WaitForDebuggerResponse {}
 
 message SetWebLifecycleStateRequest {
   WebLifecycleState state = 1;
+  string session_id = 99;
 }
 message SetWebLifecycleStateResponse {}
 
-message GetInstallabilityErrorsRequest {}
+message GetInstallabilityErrorsRequest {
+  string session_id = 99;
+}
 message GetInstallabilityErrorsResponse {
   repeated InstallabilityError installability_errors = 1;
 }
 
 message GetAppManifestRequest {
   string manifest_id = 1;
+  string session_id = 99;
 }
 message GetAppManifestResponse {
   string url = 1;
@@ -712,7 +763,9 @@ message GetAppManifestResponse {
   string data = 3;
 }
 
-message GetAppIdRequest {}
+message GetAppIdRequest {
+  string session_id = 99;
+}
 message GetAppIdResponse {
   string app_id = 1;
   string recommended_id = 2;
@@ -720,6 +773,7 @@ message GetAppIdResponse {
 
 message GetPermissionsPolicyStateRequest {
   string frame_id = 1;
+  string session_id = 99;
 }
 message GetPermissionsPolicyStateResponse {
   repeated PermissionsPolicyFeatureState states = 1;
@@ -727,6 +781,7 @@ message GetPermissionsPolicyStateResponse {
 
 message GetOriginTrialsRequest {
   string frame_id = 1;
+  string session_id = 99;
 }
 message GetOriginTrialsResponse {
   repeated OriginTrial origin_trials = 1;
@@ -734,6 +789,7 @@ message GetOriginTrialsResponse {
 
 message ProduceCompilationCacheRequest {
   repeated CompilationCacheParams scripts = 1;
+  string session_id = 99;
 }
 message ProduceCompilationCacheResponse {}
 
@@ -741,14 +797,18 @@ message AddCompilationCacheRequest {
   string url = 1;
   // Base64-encoded data.
   bytes data = 2;
+  string session_id = 99;
 }
 message AddCompilationCacheResponse {}
 
-message ClearCompilationCacheRequest {}
+message ClearCompilationCacheRequest {
+  string session_id = 99;
+}
 message ClearCompilationCacheResponse {}
 
 message SetPrerenderingAllowedRequest {
   bool is_allowed = 1;
+  string session_id = 99;
 }
 message SetPrerenderingAllowedResponse {}
 
@@ -858,6 +918,7 @@ message FrameRequestedNavigationEvent {
   string reason = 2;
   string url = 3;
   string disposition = 4;
+  string session_id = 99;
 }
 
 message NavigatedWithinDocumentEvent {

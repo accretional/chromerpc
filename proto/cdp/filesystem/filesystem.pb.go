@@ -84,6 +84,7 @@ func (x *BucketFileSystemLocator) GetBucketName() string {
 type GetDirectoryRequest struct {
 	state                   protoimpl.MessageState   `protogen:"open.v1"`
 	BucketFileSystemLocator *BucketFileSystemLocator `protobuf:"bytes,1,opt,name=bucket_file_system_locator,json=bucketFileSystemLocator,proto3" json:"bucket_file_system_locator,omitempty"`
+	SessionId               string                   `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields           protoimpl.UnknownFields
 	sizeCache               protoimpl.SizeCache
 }
@@ -123,6 +124,13 @@ func (x *GetDirectoryRequest) GetBucketFileSystemLocator() *BucketFileSystemLoca
 		return x.BucketFileSystemLocator
 	}
 	return nil
+}
+
+func (x *GetDirectoryRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type GetDirectoryResponse struct {
@@ -180,9 +188,11 @@ const file_proto_cdp_filesystem_filesystem_proto_rawDesc = "" +
 	"\x0fpath_components\x18\x02 \x03(\tR\x0epathComponents\x12$\n" +
 	"\vbucket_name\x18\x03 \x01(\tH\x00R\n" +
 	"bucketName\x88\x01\x01B\x0e\n" +
-	"\f_bucket_name\"{\n" +
+	"\f_bucket_name\"\x9a\x01\n" +
 	"\x13GetDirectoryRequest\x12d\n" +
-	"\x1abucket_file_system_locator\x18\x01 \x01(\v2'.cdp.filesystem.BucketFileSystemLocatorR\x17bucketFileSystemLocator\"=\n" +
+	"\x1abucket_file_system_locator\x18\x01 \x01(\v2'.cdp.filesystem.BucketFileSystemLocatorR\x17bucketFileSystemLocator\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"=\n" +
 	"\x14GetDirectoryResponse\x12%\n" +
 	"\x0edirectory_json\x18\x01 \x01(\fR\rdirectoryJson2n\n" +
 	"\x11FileSystemService\x12Y\n" +

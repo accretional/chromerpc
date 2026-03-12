@@ -3,6 +3,7 @@ package bluetoothemulation
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 
 	"github.com/accretional/chromerpc/internal/cdpclient"
@@ -17,6 +18,16 @@ type Server struct {
 func New(client *cdpclient.Client) *Server {
 	return &Server{client: client}
 }
+
+// send routes a CDP command through the specified session, falling back
+// to the client's default session if sessionID is empty.
+func (s *Server) send(ctx context.Context, sessionID string, method string, params interface{}) (json.RawMessage, error) {
+	if sessionID != "" {
+		return s.client.SendWithSession(ctx, method, params, sessionID)
+	}
+	return s.client.Send(ctx, method, params)
+}
+
 
 // buildManufacturerDataParams converts a slice of ManufacturerData protos to CDP params.
 func buildManufacturerDataParams(data []*pb.ManufacturerData) []map[string]interface{} {
@@ -64,14 +75,14 @@ func (s *Server) Enable(ctx context.Context, req *pb.EnableRequest) (*pb.EnableR
 	params := map[string]interface{}{
 		"state": req.State,
 	}
-	if _, err := s.client.Send(ctx, "BluetoothEmulation.enable", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "BluetoothEmulation.enable", params); err != nil {
 		return nil, fmt.Errorf("BluetoothEmulation.enable: %w", err)
 	}
 	return &pb.EnableResponse{}, nil
 }
 
 func (s *Server) Disable(ctx context.Context, req *pb.DisableRequest) (*pb.DisableResponse, error) {
-	if _, err := s.client.Send(ctx, "BluetoothEmulation.disable", nil); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "BluetoothEmulation.disable", nil); err != nil {
 		return nil, fmt.Errorf("BluetoothEmulation.disable: %w", err)
 	}
 	return &pb.DisableResponse{}, nil
@@ -88,7 +99,7 @@ func (s *Server) SimulatePreconnectedPeripheral(ctx context.Context, req *pb.Sim
 	if len(req.KnownServiceUuids) > 0 {
 		params["knownServiceUUIDs"] = req.KnownServiceUuids
 	}
-	if _, err := s.client.Send(ctx, "BluetoothEmulation.simulatePreconnectedPeripheral", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "BluetoothEmulation.simulatePreconnectedPeripheral", params); err != nil {
 		return nil, fmt.Errorf("BluetoothEmulation.simulatePreconnectedPeripheral: %w", err)
 	}
 	return &pb.SimulatePreconnectedPeripheralResponse{}, nil
@@ -98,7 +109,7 @@ func (s *Server) SimulateAdvertisement(ctx context.Context, req *pb.SimulateAdve
 	params := map[string]interface{}{
 		"entry": buildScanEntryParams(req.Entry),
 	}
-	if _, err := s.client.Send(ctx, "BluetoothEmulation.simulateAdvertisement", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "BluetoothEmulation.simulateAdvertisement", params); err != nil {
 		return nil, fmt.Errorf("BluetoothEmulation.simulateAdvertisement: %w", err)
 	}
 	return &pb.SimulateAdvertisementResponse{}, nil

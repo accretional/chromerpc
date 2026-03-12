@@ -19,15 +19,25 @@ func New(client *cdpclient.Client) *Server {
 	return &Server{client: client}
 }
 
+// send routes a CDP command through the specified session, falling back
+// to the client's default session if sessionID is empty.
+func (s *Server) send(ctx context.Context, sessionID string, method string, params interface{}) (json.RawMessage, error) {
+	if sessionID != "" {
+		return s.client.SendWithSession(ctx, method, params, sessionID)
+	}
+	return s.client.Send(ctx, method, params)
+}
+
+
 func (s *Server) Enable(ctx context.Context, req *pb.EnableRequest) (*pb.EnableResponse, error) {
-	if _, err := s.client.Send(ctx, "IndexedDB.enable", nil); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "IndexedDB.enable", nil); err != nil {
 		return nil, fmt.Errorf("IndexedDB.enable: %w", err)
 	}
 	return &pb.EnableResponse{}, nil
 }
 
 func (s *Server) Disable(ctx context.Context, req *pb.DisableRequest) (*pb.DisableResponse, error) {
-	if _, err := s.client.Send(ctx, "IndexedDB.disable", nil); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "IndexedDB.disable", nil); err != nil {
 		return nil, fmt.Errorf("IndexedDB.disable: %w", err)
 	}
 	return &pb.DisableResponse{}, nil
@@ -36,7 +46,7 @@ func (s *Server) Disable(ctx context.Context, req *pb.DisableRequest) (*pb.Disab
 func (s *Server) RequestDatabaseNames(ctx context.Context, req *pb.RequestDatabaseNamesRequest) (*pb.RequestDatabaseNamesResponse, error) {
 	params := map[string]interface{}{}
 	addOriginParams(params, req.SecurityOrigin, req.StorageKey, req.StorageBucket)
-	result, err := s.client.Send(ctx, "IndexedDB.requestDatabaseNames", params)
+	result, err := s.send(ctx, req.SessionId, "IndexedDB.requestDatabaseNames", params)
 	if err != nil {
 		return nil, fmt.Errorf("IndexedDB.requestDatabaseNames: %w", err)
 	}
@@ -54,7 +64,7 @@ func (s *Server) RequestDatabase(ctx context.Context, req *pb.RequestDatabaseReq
 		"databaseName": req.DatabaseName,
 	}
 	addOriginParams(params, req.SecurityOrigin, req.StorageKey, req.StorageBucket)
-	result, err := s.client.Send(ctx, "IndexedDB.requestDatabase", params)
+	result, err := s.send(ctx, req.SessionId, "IndexedDB.requestDatabase", params)
 	if err != nil {
 		return nil, fmt.Errorf("IndexedDB.requestDatabase: %w", err)
 	}
@@ -81,7 +91,7 @@ func (s *Server) RequestData(ctx context.Context, req *pb.RequestDataRequest) (*
 	if req.KeyRange != nil {
 		params["keyRange"] = keyRangeToMap(req.KeyRange)
 	}
-	result, err := s.client.Send(ctx, "IndexedDB.requestData", params)
+	result, err := s.send(ctx, req.SessionId, "IndexedDB.requestData", params)
 	if err != nil {
 		return nil, fmt.Errorf("IndexedDB.requestData: %w", err)
 	}
@@ -112,7 +122,7 @@ func (s *Server) GetMetadata(ctx context.Context, req *pb.GetMetadataRequest) (*
 		"objectStoreName": req.ObjectStoreName,
 	}
 	addOriginParams(params, req.SecurityOrigin, req.StorageKey, req.StorageBucket)
-	result, err := s.client.Send(ctx, "IndexedDB.getMetadata", params)
+	result, err := s.send(ctx, req.SessionId, "IndexedDB.getMetadata", params)
 	if err != nil {
 		return nil, fmt.Errorf("IndexedDB.getMetadata: %w", err)
 	}
@@ -134,7 +144,7 @@ func (s *Server) DeleteDatabase(ctx context.Context, req *pb.DeleteDatabaseReque
 		"databaseName": req.DatabaseName,
 	}
 	addOriginParams(params, req.SecurityOrigin, req.StorageKey, req.StorageBucket)
-	if _, err := s.client.Send(ctx, "IndexedDB.deleteDatabase", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "IndexedDB.deleteDatabase", params); err != nil {
 		return nil, fmt.Errorf("IndexedDB.deleteDatabase: %w", err)
 	}
 	return &pb.DeleteDatabaseResponse{}, nil
@@ -146,7 +156,7 @@ func (s *Server) ClearObjectStore(ctx context.Context, req *pb.ClearObjectStoreR
 		"objectStoreName": req.ObjectStoreName,
 	}
 	addOriginParams(params, req.SecurityOrigin, req.StorageKey, req.StorageBucket)
-	if _, err := s.client.Send(ctx, "IndexedDB.clearObjectStore", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "IndexedDB.clearObjectStore", params); err != nil {
 		return nil, fmt.Errorf("IndexedDB.clearObjectStore: %w", err)
 	}
 	return &pb.ClearObjectStoreResponse{}, nil
@@ -161,7 +171,7 @@ func (s *Server) DeleteObjectStoreEntries(ctx context.Context, req *pb.DeleteObj
 	if req.KeyRange != nil {
 		params["keyRange"] = keyRangeToMap(req.KeyRange)
 	}
-	if _, err := s.client.Send(ctx, "IndexedDB.deleteObjectStoreEntries", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "IndexedDB.deleteObjectStoreEntries", params); err != nil {
 		return nil, fmt.Errorf("IndexedDB.deleteObjectStoreEntries: %w", err)
 	}
 	return &pb.DeleteObjectStoreEntriesResponse{}, nil

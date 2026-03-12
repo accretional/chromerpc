@@ -19,6 +19,16 @@ func New(client *cdpclient.Client) *Server {
 	return &Server{client: client}
 }
 
+// send routes a CDP command through the specified session, falling back
+// to the client's default session if sessionID is empty.
+func (s *Server) send(ctx context.Context, sessionID string, method string, params interface{}) (json.RawMessage, error) {
+	if sessionID != "" {
+		return s.client.SendWithSession(ctx, method, params, sessionID)
+	}
+	return s.client.Send(ctx, method, params)
+}
+
+
 func (s *Server) Enable(ctx context.Context, req *pb.EnableRequest) (*pb.EnableResponse, error) {
 	var params map[string]interface{}
 	if req.PresentationUrl != nil {
@@ -26,14 +36,14 @@ func (s *Server) Enable(ctx context.Context, req *pb.EnableRequest) (*pb.EnableR
 			"presentationUrl": *req.PresentationUrl,
 		}
 	}
-	if _, err := s.client.Send(ctx, "Cast.enable", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Cast.enable", params); err != nil {
 		return nil, fmt.Errorf("Cast.enable: %w", err)
 	}
 	return &pb.EnableResponse{}, nil
 }
 
 func (s *Server) Disable(ctx context.Context, req *pb.DisableRequest) (*pb.DisableResponse, error) {
-	if _, err := s.client.Send(ctx, "Cast.disable", nil); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Cast.disable", nil); err != nil {
 		return nil, fmt.Errorf("Cast.disable: %w", err)
 	}
 	return &pb.DisableResponse{}, nil
@@ -43,7 +53,7 @@ func (s *Server) SetSinkToUse(ctx context.Context, req *pb.SetSinkToUseRequest) 
 	params := map[string]interface{}{
 		"sinkName": req.SinkName,
 	}
-	if _, err := s.client.Send(ctx, "Cast.setSinkToUse", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Cast.setSinkToUse", params); err != nil {
 		return nil, fmt.Errorf("Cast.setSinkToUse: %w", err)
 	}
 	return &pb.SetSinkToUseResponse{}, nil
@@ -53,7 +63,7 @@ func (s *Server) StartDesktopMirroring(ctx context.Context, req *pb.StartDesktop
 	params := map[string]interface{}{
 		"sinkName": req.SinkName,
 	}
-	if _, err := s.client.Send(ctx, "Cast.startDesktopMirroring", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Cast.startDesktopMirroring", params); err != nil {
 		return nil, fmt.Errorf("Cast.startDesktopMirroring: %w", err)
 	}
 	return &pb.StartDesktopMirroringResponse{}, nil
@@ -63,7 +73,7 @@ func (s *Server) StartTabMirroring(ctx context.Context, req *pb.StartTabMirrorin
 	params := map[string]interface{}{
 		"sinkName": req.SinkName,
 	}
-	if _, err := s.client.Send(ctx, "Cast.startTabMirroring", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Cast.startTabMirroring", params); err != nil {
 		return nil, fmt.Errorf("Cast.startTabMirroring: %w", err)
 	}
 	return &pb.StartTabMirroringResponse{}, nil
@@ -73,7 +83,7 @@ func (s *Server) StopCasting(ctx context.Context, req *pb.StopCastingRequest) (*
 	params := map[string]interface{}{
 		"sinkName": req.SinkName,
 	}
-	if _, err := s.client.Send(ctx, "Cast.stopCasting", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Cast.stopCasting", params); err != nil {
 		return nil, fmt.Errorf("Cast.stopCasting: %w", err)
 	}
 	return &pb.StopCastingResponse{}, nil

@@ -59,9 +59,11 @@ message RequestCacheNamesRequest {
   optional string security_origin = 1;
   optional string storage_key = 2;
   optional string storage_bucket = 3;
+  string session_id = 99;
 }
 message RequestCacheNamesResponse {
   repeated Cache caches = 1;
+  string session_id = 99;
 }
 
 message RequestEntriesRequest {
@@ -69,28 +71,34 @@ message RequestEntriesRequest {
   optional int32 skip_count = 2;
   optional int32 page_size = 3;
   optional string path_filter = 4;
+  string session_id = 99;
 }
 message RequestEntriesResponse {
   repeated DataEntry cache_data_entries = 1;
   double return_count = 2;
+  string session_id = 99;
 }
 
 message RequestCachedResponseRequest {
   string cache_id = 1;
   string request_url = 2;
   repeated Header request_headers = 3;
+  string session_id = 99;
 }
 message RequestCachedResponseResponse {
   CachedResponse body = 1;
+  string session_id = 99;
 }
 
 message DeleteCacheRequest {
   string cache_id = 1;
+  string session_id = 99;
 }
 message DeleteCacheResponse {}
 
 message DeleteEntryRequest {
   string cache_id = 1;
   string request = 2;
+  string session_id = 99;
 }
 message DeleteEntryResponse {}

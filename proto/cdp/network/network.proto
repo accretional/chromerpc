@@ -80,6 +80,7 @@ message Request {
   string referrer_policy = 9;
   bool is_link_preload = 10;
   bool is_same_site = 11;
+  string session_id = 99;
 }
 
 // HTTP response data.
@@ -178,6 +179,7 @@ message RequestPattern {
   string url_pattern = 1;
   string resource_type = 2;
   string interception_stage = 3; // "Request" or "HeadersReceived"
+  string session_id = 99;
 }
 
 // Network resource for LoadNetworkResource.
@@ -199,24 +201,30 @@ message EnableRequest {
   int32 max_resource_buffer_size = 2;
   // Longest post body size (in bytes) that would be included in requestWillBeSent.
   int32 max_post_data_size = 3;
+  string session_id = 99;
 }
 message EnableResponse {}
 
-message DisableRequest {}
+message DisableRequest {
+  string session_id = 99;
+}
 message DisableResponse {}
 
 message SetCacheDisabledRequest {
   bool cache_disabled = 1;
+  string session_id = 99;
 }
 message SetCacheDisabledResponse {}
 
 message SetExtraHTTPHeadersRequest {
   map<string, string> headers = 1;
+  string session_id = 99;
 }
 message SetExtraHTTPHeadersResponse {}
 
 message GetResponseBodyRequest {
   string request_id = 1;
+  string session_id = 99;
 }
 message GetResponseBodyResponse {
   string body = 1;
@@ -225,6 +233,7 @@ message GetResponseBodyResponse {
 
 message GetCookiesRequest {
   repeated string urls = 1;
+  string session_id = 99;
 }
 message GetCookiesResponse {
   repeated Cookie cookies = 1;
@@ -243,6 +252,7 @@ message SetCookieRequest {
   string priority = 10;
   string source_scheme = 11;
   int32 source_port = 12;
+  string session_id = 99;
 }
 message SetCookieResponse {
   bool success = 1;
@@ -253,13 +263,18 @@ message DeleteCookiesRequest {
   string url = 2;
   string domain = 3;
   string path = 4;
+  string session_id = 99;
 }
 message DeleteCookiesResponse {}
 
-message ClearBrowserCookiesRequest {}
+message ClearBrowserCookiesRequest {
+  string session_id = 99;
+}
 message ClearBrowserCookiesResponse {}
 
-message ClearBrowserCacheRequest {}
+message ClearBrowserCacheRequest {
+  string session_id = 99;
+}
 message ClearBrowserCacheResponse {}
 
 message EmulateNetworkConditionsRequest {
@@ -268,6 +283,7 @@ message EmulateNetworkConditionsRequest {
   double download_throughput = 3; // Maximal aggregated download throughput (bytes/sec). -1 disables.
   double upload_throughput = 4;   // Maximal aggregated upload throughput (bytes/sec). -1 disables.
   string connection_type = 5;     // none, cellular2g, cellular3g, cellular4g, bluetooth, ethernet, wifi, wimax, other
+  string session_id = 99;
 }
 message EmulateNetworkConditionsResponse {}
 
@@ -275,11 +291,13 @@ message SetUserAgentOverrideRequest {
   string user_agent = 1;
   string accept_language = 2;
   string platform = 3;
+  string session_id = 99;
 }
 message SetUserAgentOverrideResponse {}
 
 message GetCertificateRequest {
   string origin = 1;
+  string session_id = 99;
 }
 message GetCertificateResponse {
   repeated string table_names = 1;
@@ -287,14 +305,18 @@ message GetCertificateResponse {
 
 message SetRequestInterceptionRequest {
   repeated RequestPattern patterns = 1;
+  string session_id = 99;
 }
-message SetRequestInterceptionResponse {}
+message SetRequestInterceptionResponse {
+  string session_id = 99;
+}
 
 message SearchInResponseBodyRequest {
   string request_id = 1;
   string query = 2;
   bool case_sensitive = 3;
   bool is_regex = 4;
+  string session_id = 99;
 }
 message SearchInResponseBodyResponse {
   repeated SearchMatch result = 1;
@@ -307,11 +329,13 @@ message SearchMatch {
 
 message SetBlockedURLsRequest {
   repeated string urls = 1;
+  string session_id = 99;
 }
 message SetBlockedURLsResponse {}
 
 message GetSecurityIsolationStatusRequest {
   string frame_id = 1;
+  string session_id = 99;
 }
 message GetSecurityIsolationStatusResponse {
   // Status is complex — simplified to JSON for now.
@@ -322,6 +346,7 @@ message LoadNetworkResourceRequest {
   string frame_id = 1;
   string url = 2;
   LoadNetworkResourceOptions options = 3;
+  string session_id = 99;
 }
 message LoadNetworkResourceOptions {
   bool disable_cache = 1;
@@ -360,6 +385,7 @@ message RequestWillBeSentEvent {
   string type = 9; // ResourceType
   string frame_id = 10;
   bool has_user_gesture = 11;
+  string session_id = 99;
 }
 
 message ResponseReceivedEvent {
@@ -396,4 +422,5 @@ message LoadingFailedEvent {
 
 message RequestServedFromCacheEvent {
   string request_id = 1;
+  string session_id = 99;
 }

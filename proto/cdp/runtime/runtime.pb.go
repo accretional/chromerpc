@@ -889,6 +889,7 @@ func (x *SerializationOptions) GetAdditionalParameters() string {
 
 type EnableRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -921,6 +922,13 @@ func (x *EnableRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use EnableRequest.ProtoReflect.Descriptor instead.
 func (*EnableRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_runtime_runtime_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *EnableRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type EnableResponse struct {
@@ -961,6 +969,7 @@ func (*EnableResponse) Descriptor() ([]byte, []int) {
 
 type DisableRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -993,6 +1002,13 @@ func (x *DisableRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use DisableRequest.ProtoReflect.Descriptor instead.
 func (*DisableRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_runtime_runtime_proto_rawDescGZIP(), []int{13}
+}
+
+func (x *DisableRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type DisableResponse struct {
@@ -1065,6 +1081,7 @@ type EvaluateRequest struct {
 	UniqueContextId string `protobuf:"bytes,15,opt,name=unique_context_id,json=uniqueContextId,proto3" json:"unique_context_id,omitempty"`
 	// Specifies resultant serialization.
 	SerializationOptions *SerializationOptions `protobuf:"bytes,16,opt,name=serialization_options,json=serializationOptions,proto3" json:"serialization_options,omitempty"`
+	SessionId            string                `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields        protoimpl.UnknownFields
 	sizeCache            protoimpl.SizeCache
 }
@@ -1211,6 +1228,13 @@ func (x *EvaluateRequest) GetSerializationOptions() *SerializationOptions {
 	return nil
 }
 
+func (x *EvaluateRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type EvaluateResponse struct {
 	state            protoimpl.MessageState `protogen:"open.v1"`
 	Result           *RemoteObject          `protobuf:"bytes,1,opt,name=result,proto3" json:"result,omitempty"`
@@ -1291,6 +1315,7 @@ type CallFunctionOnRequest struct {
 	UniqueContextId string `protobuf:"bytes,12,opt,name=unique_context_id,json=uniqueContextId,proto3" json:"unique_context_id,omitempty"`
 	// Specifies resultant serialization.
 	SerializationOptions *SerializationOptions `protobuf:"bytes,13,opt,name=serialization_options,json=serializationOptions,proto3" json:"serialization_options,omitempty"`
+	SessionId            string                `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields        protoimpl.UnknownFields
 	sizeCache            protoimpl.SizeCache
 }
@@ -1416,6 +1441,13 @@ func (x *CallFunctionOnRequest) GetSerializationOptions() *SerializationOptions 
 	return nil
 }
 
+func (x *CallFunctionOnRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type CallFunctionOnResponse struct {
 	state            protoimpl.MessageState `protogen:"open.v1"`
 	Result           *RemoteObject          `protobuf:"bytes,1,opt,name=result,proto3" json:"result,omitempty"`
@@ -1479,7 +1511,8 @@ type GetPropertiesRequest struct {
 	// Whether preview should be generated for property values.
 	GeneratePreview bool `protobuf:"varint,4,opt,name=generate_preview,json=generatePreview,proto3" json:"generate_preview,omitempty"`
 	// If true, returns non-indexed properties only.
-	NonIndexedPropertiesOnly bool `protobuf:"varint,5,opt,name=non_indexed_properties_only,json=nonIndexedPropertiesOnly,proto3" json:"non_indexed_properties_only,omitempty"`
+	NonIndexedPropertiesOnly bool   `protobuf:"varint,5,opt,name=non_indexed_properties_only,json=nonIndexedPropertiesOnly,proto3" json:"non_indexed_properties_only,omitempty"`
+	SessionId                string `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields            protoimpl.UnknownFields
 	sizeCache                protoimpl.SizeCache
 }
@@ -1547,6 +1580,13 @@ func (x *GetPropertiesRequest) GetNonIndexedPropertiesOnly() bool {
 		return x.NonIndexedPropertiesOnly
 	}
 	return false
+}
+
+func (x *GetPropertiesRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type GetPropertiesResponse struct {
@@ -1622,6 +1662,7 @@ type AwaitPromiseRequest struct {
 	PromiseObjectId string                 `protobuf:"bytes,1,opt,name=promise_object_id,json=promiseObjectId,proto3" json:"promise_object_id,omitempty"`
 	ReturnByValue   bool                   `protobuf:"varint,2,opt,name=return_by_value,json=returnByValue,proto3" json:"return_by_value,omitempty"`
 	GeneratePreview bool                   `protobuf:"varint,3,opt,name=generate_preview,json=generatePreview,proto3" json:"generate_preview,omitempty"`
+	SessionId       string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
 }
@@ -1675,6 +1716,13 @@ func (x *AwaitPromiseRequest) GetGeneratePreview() bool {
 		return x.GeneratePreview
 	}
 	return false
+}
+
+func (x *AwaitPromiseRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type AwaitPromiseResponse struct {
@@ -1732,6 +1780,7 @@ func (x *AwaitPromiseResponse) GetExceptionDetails() *ExceptionDetails {
 type ReleaseObjectRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	ObjectId      string                 `protobuf:"bytes,1,opt,name=object_id,json=objectId,proto3" json:"object_id,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1769,6 +1818,13 @@ func (*ReleaseObjectRequest) Descriptor() ([]byte, []int) {
 func (x *ReleaseObjectRequest) GetObjectId() string {
 	if x != nil {
 		return x.ObjectId
+	}
+	return ""
+}
+
+func (x *ReleaseObjectRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -1812,6 +1868,7 @@ func (*ReleaseObjectResponse) Descriptor() ([]byte, []int) {
 type ReleaseObjectGroupRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	ObjectGroup   string                 `protobuf:"bytes,1,opt,name=object_group,json=objectGroup,proto3" json:"object_group,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1849,6 +1906,13 @@ func (*ReleaseObjectGroupRequest) Descriptor() ([]byte, []int) {
 func (x *ReleaseObjectGroupRequest) GetObjectGroup() string {
 	if x != nil {
 		return x.ObjectGroup
+	}
+	return ""
+}
+
+func (x *ReleaseObjectGroupRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -1895,6 +1959,7 @@ type CompileScriptRequest struct {
 	SourceUrl          string                 `protobuf:"bytes,2,opt,name=source_url,json=sourceUrl,proto3" json:"source_url,omitempty"`
 	PersistScript      bool                   `protobuf:"varint,3,opt,name=persist_script,json=persistScript,proto3" json:"persist_script,omitempty"`
 	ExecutionContextId int32                  `protobuf:"varint,4,opt,name=execution_context_id,json=executionContextId,proto3" json:"execution_context_id,omitempty"`
+	SessionId          string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields      protoimpl.UnknownFields
 	sizeCache          protoimpl.SizeCache
 }
@@ -1955,6 +2020,13 @@ func (x *CompileScriptRequest) GetExecutionContextId() int32 {
 		return x.ExecutionContextId
 	}
 	return 0
+}
+
+func (x *CompileScriptRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type CompileScriptResponse struct {
@@ -2019,6 +2091,7 @@ type RunScriptRequest struct {
 	ReturnByValue         bool                   `protobuf:"varint,6,opt,name=return_by_value,json=returnByValue,proto3" json:"return_by_value,omitempty"`
 	GeneratePreview       bool                   `protobuf:"varint,7,opt,name=generate_preview,json=generatePreview,proto3" json:"generate_preview,omitempty"`
 	AwaitPromise          bool                   `protobuf:"varint,8,opt,name=await_promise,json=awaitPromise,proto3" json:"await_promise,omitempty"`
+	SessionId             string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields         protoimpl.UnknownFields
 	sizeCache             protoimpl.SizeCache
 }
@@ -2109,6 +2182,13 @@ func (x *RunScriptRequest) GetAwaitPromise() bool {
 	return false
 }
 
+func (x *RunScriptRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type RunScriptResponse struct {
 	state            protoimpl.MessageState `protogen:"open.v1"`
 	Result           *RemoteObject          `protobuf:"bytes,1,opt,name=result,proto3" json:"result,omitempty"`
@@ -2163,6 +2243,7 @@ func (x *RunScriptResponse) GetExceptionDetails() *ExceptionDetails {
 
 type RunIfWaitingForDebuggerRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2195,6 +2276,13 @@ func (x *RunIfWaitingForDebuggerRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use RunIfWaitingForDebuggerRequest.ProtoReflect.Descriptor instead.
 func (*RunIfWaitingForDebuggerRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_runtime_runtime_proto_rawDescGZIP(), []int{31}
+}
+
+func (x *RunIfWaitingForDebuggerRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type RunIfWaitingForDebuggerResponse struct {
@@ -2235,6 +2323,7 @@ func (*RunIfWaitingForDebuggerResponse) Descriptor() ([]byte, []int) {
 
 type DiscardConsoleEntriesRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2267,6 +2356,13 @@ func (x *DiscardConsoleEntriesRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use DiscardConsoleEntriesRequest.ProtoReflect.Descriptor instead.
 func (*DiscardConsoleEntriesRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_runtime_runtime_proto_rawDescGZIP(), []int{33}
+}
+
+func (x *DiscardConsoleEntriesRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type DiscardConsoleEntriesResponse struct {
@@ -2310,6 +2406,7 @@ type AddBindingRequest struct {
 	Name                 string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 	ExecutionContextId   int32                  `protobuf:"varint,2,opt,name=execution_context_id,json=executionContextId,proto3" json:"execution_context_id,omitempty"`
 	ExecutionContextName string                 `protobuf:"bytes,3,opt,name=execution_context_name,json=executionContextName,proto3" json:"execution_context_name,omitempty"`
+	SessionId            string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields        protoimpl.UnknownFields
 	sizeCache            protoimpl.SizeCache
 }
@@ -2365,6 +2462,13 @@ func (x *AddBindingRequest) GetExecutionContextName() string {
 	return ""
 }
 
+func (x *AddBindingRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type AddBindingResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -2404,6 +2508,7 @@ func (*AddBindingResponse) Descriptor() ([]byte, []int) {
 type RemoveBindingRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2441,6 +2546,13 @@ func (*RemoveBindingRequest) Descriptor() ([]byte, []int) {
 func (x *RemoveBindingRequest) GetName() string {
 	if x != nil {
 		return x.Name
+	}
+	return ""
+}
+
+func (x *RemoveBindingRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -2484,6 +2596,7 @@ func (*RemoveBindingResponse) Descriptor() ([]byte, []int) {
 type GlobalLexicalScopeNamesRequest struct {
 	state              protoimpl.MessageState `protogen:"open.v1"`
 	ExecutionContextId int32                  `protobuf:"varint,1,opt,name=execution_context_id,json=executionContextId,proto3" json:"execution_context_id,omitempty"`
+	SessionId          string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields      protoimpl.UnknownFields
 	sizeCache          protoimpl.SizeCache
 }
@@ -2523,6 +2636,13 @@ func (x *GlobalLexicalScopeNamesRequest) GetExecutionContextId() int32 {
 		return x.ExecutionContextId
 	}
 	return 0
+}
+
+func (x *GlobalLexicalScopeNamesRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type GlobalLexicalScopeNamesResponse struct {
@@ -3236,11 +3356,15 @@ const file_proto_cdp_runtime_runtime_proto_rawDesc = "" +
 	"\x14SerializationOptions\x12$\n" +
 	"\rserialization\x18\x01 \x01(\tR\rserialization\x12\x1b\n" +
 	"\tmax_depth\x18\x02 \x01(\x05R\bmaxDepth\x123\n" +
-	"\x15additional_parameters\x18\x03 \x01(\tR\x14additionalParameters\"\x0f\n" +
-	"\rEnableRequest\"\x10\n" +
-	"\x0eEnableResponse\"\x10\n" +
-	"\x0eDisableRequest\"\x11\n" +
-	"\x0fDisableResponse\"\xb9\x05\n" +
+	"\x15additional_parameters\x18\x03 \x01(\tR\x14additionalParameters\".\n" +
+	"\rEnableRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x10\n" +
+	"\x0eEnableResponse\"/\n" +
+	"\x0eDisableRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x11\n" +
+	"\x0fDisableResponse\"\xd8\x05\n" +
 	"\x0fEvaluateRequest\x12\x1e\n" +
 	"\n" +
 	"expression\x18\x01 \x01(\tR\n" +
@@ -3261,10 +3385,12 @@ const file_proto_cdp_runtime_runtime_proto_rawDesc = "" +
 	"\trepl_mode\x18\r \x01(\bR\breplMode\x12E\n" +
 	" allow_unsafe_eval_blocked_by_csp\x18\x0e \x01(\bR\x1ballowUnsafeEvalBlockedByCsp\x12*\n" +
 	"\x11unique_context_id\x18\x0f \x01(\tR\x0funiqueContextId\x12V\n" +
-	"\x15serialization_options\x18\x10 \x01(\v2!.cdp.runtime.SerializationOptionsR\x14serializationOptions\"\x91\x01\n" +
+	"\x15serialization_options\x18\x10 \x01(\v2!.cdp.runtime.SerializationOptionsR\x14serializationOptions\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x91\x01\n" +
 	"\x10EvaluateResponse\x121\n" +
 	"\x06result\x18\x01 \x01(\v2\x19.cdp.runtime.RemoteObjectR\x06result\x12J\n" +
-	"\x11exception_details\x18\x02 \x01(\v2\x1d.cdp.runtime.ExceptionDetailsR\x10exceptionDetails\"\xdd\x04\n" +
+	"\x11exception_details\x18\x02 \x01(\v2\x1d.cdp.runtime.ExceptionDetailsR\x10exceptionDetails\"\xfc\x04\n" +
 	"\x15CallFunctionOnRequest\x121\n" +
 	"\x14function_declaration\x18\x01 \x01(\tR\x13functionDeclaration\x12\x1b\n" +
 	"\tobject_id\x18\x02 \x01(\tR\bobjectId\x127\n" +
@@ -3279,34 +3405,44 @@ const file_proto_cdp_runtime_runtime_proto_rawDesc = "" +
 	" \x01(\tR\vobjectGroup\x12/\n" +
 	"\x14throw_on_side_effect\x18\v \x01(\bR\x11throwOnSideEffect\x12*\n" +
 	"\x11unique_context_id\x18\f \x01(\tR\x0funiqueContextId\x12V\n" +
-	"\x15serialization_options\x18\r \x01(\v2!.cdp.runtime.SerializationOptionsR\x14serializationOptions\"\x97\x01\n" +
+	"\x15serialization_options\x18\r \x01(\v2!.cdp.runtime.SerializationOptionsR\x14serializationOptions\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x97\x01\n" +
 	"\x16CallFunctionOnResponse\x121\n" +
 	"\x06result\x18\x01 \x01(\v2\x19.cdp.runtime.RemoteObjectR\x06result\x12J\n" +
-	"\x11exception_details\x18\x02 \x01(\v2\x1d.cdp.runtime.ExceptionDetailsR\x10exceptionDetails\"\xfe\x01\n" +
+	"\x11exception_details\x18\x02 \x01(\v2\x1d.cdp.runtime.ExceptionDetailsR\x10exceptionDetails\"\x9d\x02\n" +
 	"\x14GetPropertiesRequest\x12\x1b\n" +
 	"\tobject_id\x18\x01 \x01(\tR\bobjectId\x12%\n" +
 	"\x0eown_properties\x18\x02 \x01(\bR\rownProperties\x128\n" +
 	"\x18accessor_properties_only\x18\x03 \x01(\bR\x16accessorPropertiesOnly\x12)\n" +
 	"\x10generate_preview\x18\x04 \x01(\bR\x0fgeneratePreview\x12=\n" +
-	"\x1bnon_indexed_properties_only\x18\x05 \x01(\bR\x18nonIndexedPropertiesOnly\"\xcd\x02\n" +
+	"\x1bnon_indexed_properties_only\x18\x05 \x01(\bR\x18nonIndexedPropertiesOnly\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\xcd\x02\n" +
 	"\x15GetPropertiesResponse\x127\n" +
 	"\x06result\x18\x01 \x03(\v2\x1f.cdp.runtime.PropertyDescriptorR\x06result\x12X\n" +
 	"\x13internal_properties\x18\x02 \x03(\v2'.cdp.runtime.InternalPropertyDescriptorR\x12internalProperties\x12U\n" +
 	"\x12private_properties\x18\x03 \x03(\v2&.cdp.runtime.PrivatePropertyDescriptorR\x11privateProperties\x12J\n" +
-	"\x11exception_details\x18\x04 \x01(\v2\x1d.cdp.runtime.ExceptionDetailsR\x10exceptionDetails\"\x94\x01\n" +
+	"\x11exception_details\x18\x04 \x01(\v2\x1d.cdp.runtime.ExceptionDetailsR\x10exceptionDetails\"\xb3\x01\n" +
 	"\x13AwaitPromiseRequest\x12*\n" +
 	"\x11promise_object_id\x18\x01 \x01(\tR\x0fpromiseObjectId\x12&\n" +
 	"\x0freturn_by_value\x18\x02 \x01(\bR\rreturnByValue\x12)\n" +
-	"\x10generate_preview\x18\x03 \x01(\bR\x0fgeneratePreview\"\x95\x01\n" +
+	"\x10generate_preview\x18\x03 \x01(\bR\x0fgeneratePreview\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x95\x01\n" +
 	"\x14AwaitPromiseResponse\x121\n" +
 	"\x06result\x18\x01 \x01(\v2\x19.cdp.runtime.RemoteObjectR\x06result\x12J\n" +
-	"\x11exception_details\x18\x02 \x01(\v2\x1d.cdp.runtime.ExceptionDetailsR\x10exceptionDetails\"3\n" +
+	"\x11exception_details\x18\x02 \x01(\v2\x1d.cdp.runtime.ExceptionDetailsR\x10exceptionDetails\"R\n" +
 	"\x14ReleaseObjectRequest\x12\x1b\n" +
-	"\tobject_id\x18\x01 \x01(\tR\bobjectId\"\x17\n" +
-	"\x15ReleaseObjectResponse\">\n" +
+	"\tobject_id\x18\x01 \x01(\tR\bobjectId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x17\n" +
+	"\x15ReleaseObjectResponse\"]\n" +
 	"\x19ReleaseObjectGroupRequest\x12!\n" +
-	"\fobject_group\x18\x01 \x01(\tR\vobjectGroup\"\x1c\n" +
-	"\x1aReleaseObjectGroupResponse\"\xae\x01\n" +
+	"\fobject_group\x18\x01 \x01(\tR\vobjectGroup\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x1c\n" +
+	"\x1aReleaseObjectGroupResponse\"\xcd\x01\n" +
 	"\x14CompileScriptRequest\x12\x1e\n" +
 	"\n" +
 	"expression\x18\x01 \x01(\tR\n" +
@@ -3314,10 +3450,12 @@ const file_proto_cdp_runtime_runtime_proto_rawDesc = "" +
 	"\n" +
 	"source_url\x18\x02 \x01(\tR\tsourceUrl\x12%\n" +
 	"\x0epersist_script\x18\x03 \x01(\bR\rpersistScript\x120\n" +
-	"\x14execution_context_id\x18\x04 \x01(\x05R\x12executionContextId\"\x80\x01\n" +
+	"\x14execution_context_id\x18\x04 \x01(\x05R\x12executionContextId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x80\x01\n" +
 	"\x15CompileScriptResponse\x12\x1b\n" +
 	"\tscript_id\x18\x01 \x01(\tR\bscriptId\x12J\n" +
-	"\x11exception_details\x18\x02 \x01(\v2\x1d.cdp.runtime.ExceptionDetailsR\x10exceptionDetails\"\xcd\x02\n" +
+	"\x11exception_details\x18\x02 \x01(\v2\x1d.cdp.runtime.ExceptionDetailsR\x10exceptionDetails\"\xec\x02\n" +
 	"\x10RunScriptRequest\x12\x1b\n" +
 	"\tscript_id\x18\x01 \x01(\tR\bscriptId\x120\n" +
 	"\x14execution_context_id\x18\x02 \x01(\x05R\x12executionContextId\x12!\n" +
@@ -3326,24 +3464,36 @@ const file_proto_cdp_runtime_runtime_proto_rawDesc = "" +
 	"\x18include_command_line_api\x18\x05 \x01(\bR\x15includeCommandLineApi\x12&\n" +
 	"\x0freturn_by_value\x18\x06 \x01(\bR\rreturnByValue\x12)\n" +
 	"\x10generate_preview\x18\a \x01(\bR\x0fgeneratePreview\x12#\n" +
-	"\rawait_promise\x18\b \x01(\bR\fawaitPromise\"\x92\x01\n" +
+	"\rawait_promise\x18\b \x01(\bR\fawaitPromise\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x92\x01\n" +
 	"\x11RunScriptResponse\x121\n" +
 	"\x06result\x18\x01 \x01(\v2\x19.cdp.runtime.RemoteObjectR\x06result\x12J\n" +
-	"\x11exception_details\x18\x02 \x01(\v2\x1d.cdp.runtime.ExceptionDetailsR\x10exceptionDetails\" \n" +
-	"\x1eRunIfWaitingForDebuggerRequest\"!\n" +
-	"\x1fRunIfWaitingForDebuggerResponse\"\x1e\n" +
-	"\x1cDiscardConsoleEntriesRequest\"\x1f\n" +
-	"\x1dDiscardConsoleEntriesResponse\"\x8f\x01\n" +
+	"\x11exception_details\x18\x02 \x01(\v2\x1d.cdp.runtime.ExceptionDetailsR\x10exceptionDetails\"?\n" +
+	"\x1eRunIfWaitingForDebuggerRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"!\n" +
+	"\x1fRunIfWaitingForDebuggerResponse\"=\n" +
+	"\x1cDiscardConsoleEntriesRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x1f\n" +
+	"\x1dDiscardConsoleEntriesResponse\"\xae\x01\n" +
 	"\x11AddBindingRequest\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x120\n" +
 	"\x14execution_context_id\x18\x02 \x01(\x05R\x12executionContextId\x124\n" +
-	"\x16execution_context_name\x18\x03 \x01(\tR\x14executionContextName\"\x14\n" +
-	"\x12AddBindingResponse\"*\n" +
+	"\x16execution_context_name\x18\x03 \x01(\tR\x14executionContextName\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x14\n" +
+	"\x12AddBindingResponse\"I\n" +
 	"\x14RemoveBindingRequest\x12\x12\n" +
-	"\x04name\x18\x01 \x01(\tR\x04name\"\x17\n" +
-	"\x15RemoveBindingResponse\"R\n" +
+	"\x04name\x18\x01 \x01(\tR\x04name\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x17\n" +
+	"\x15RemoveBindingResponse\"q\n" +
 	"\x1eGlobalLexicalScopeNamesRequest\x120\n" +
-	"\x14execution_context_id\x18\x01 \x01(\x05R\x12executionContextId\"7\n" +
+	"\x14execution_context_id\x18\x01 \x01(\x05R\x12executionContextId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"7\n" +
 	"\x1fGlobalLexicalScopeNamesResponse\x12\x14\n" +
 	"\x05names\x18\x01 \x03(\tR\x05names\">\n" +
 	"\x1dSubscribeRuntimeEventsRequest\x12\x1d\n" +

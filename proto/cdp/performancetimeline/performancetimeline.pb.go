@@ -24,6 +24,7 @@ const (
 type EnableRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	EventTypes    []string               `protobuf:"bytes,1,rep,name=event_types,json=eventTypes,proto3" json:"event_types,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -63,6 +64,13 @@ func (x *EnableRequest) GetEventTypes() []string {
 		return x.EventTypes
 	}
 	return nil
+}
+
+func (x *EnableRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type EnableResponse struct {
@@ -547,10 +555,12 @@ var File_proto_cdp_performancetimeline_performancetimeline_proto protoreflect.Fi
 
 const file_proto_cdp_performancetimeline_performancetimeline_proto_rawDesc = "" +
 	"\n" +
-	"7proto/cdp/performancetimeline/performancetimeline.proto\x12\x17cdp.performancetimeline\"0\n" +
+	"7proto/cdp/performancetimeline/performancetimeline.proto\x12\x17cdp.performancetimeline\"O\n" +
 	"\rEnableRequest\x12\x1f\n" +
 	"\vevent_types\x18\x01 \x03(\tR\n" +
-	"eventTypes\"\x10\n" +
+	"eventTypes\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x10\n" +
 	"\x0eEnableResponse\"J\n" +
 	")SubscribePerformanceTimelineEventsRequest\x12\x1d\n" +
 	"\n" +

@@ -19,8 +19,18 @@ func New(client *cdpclient.Client) *Server {
 	return &Server{client: client}
 }
 
+// send routes a CDP command through the specified session, falling back
+// to the client's default session if sessionID is empty.
+func (s *Server) send(ctx context.Context, sessionID string, method string, params interface{}) (json.RawMessage, error) {
+	if sessionID != "" {
+		return s.client.SendWithSession(ctx, method, params, sessionID)
+	}
+	return s.client.Send(ctx, method, params)
+}
+
+
 func (s *Server) GetDOMCounters(ctx context.Context, req *pb.GetDOMCountersRequest) (*pb.GetDOMCountersResponse, error) {
-	result, err := s.client.Send(ctx, "Memory.getDOMCounters", nil)
+	result, err := s.send(ctx, req.SessionId, "Memory.getDOMCounters", nil)
 	if err != nil {
 		return nil, fmt.Errorf("Memory.getDOMCounters: %w", err)
 	}
@@ -40,14 +50,14 @@ func (s *Server) GetDOMCounters(ctx context.Context, req *pb.GetDOMCountersReque
 }
 
 func (s *Server) PrepareForLeakDetection(ctx context.Context, req *pb.PrepareForLeakDetectionRequest) (*pb.PrepareForLeakDetectionResponse, error) {
-	if _, err := s.client.Send(ctx, "Memory.prepareForLeakDetection", nil); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Memory.prepareForLeakDetection", nil); err != nil {
 		return nil, fmt.Errorf("Memory.prepareForLeakDetection: %w", err)
 	}
 	return &pb.PrepareForLeakDetectionResponse{}, nil
 }
 
 func (s *Server) ForciblyPurgeJavaScriptMemory(ctx context.Context, req *pb.ForciblyPurgeJavaScriptMemoryRequest) (*pb.ForciblyPurgeJavaScriptMemoryResponse, error) {
-	if _, err := s.client.Send(ctx, "Memory.forciblyPurgeJavaScriptMemory", nil); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Memory.forciblyPurgeJavaScriptMemory", nil); err != nil {
 		return nil, fmt.Errorf("Memory.forciblyPurgeJavaScriptMemory: %w", err)
 	}
 	return &pb.ForciblyPurgeJavaScriptMemoryResponse{}, nil
@@ -57,7 +67,7 @@ func (s *Server) SetPressureNotificationsSuppressed(ctx context.Context, req *pb
 	params := map[string]interface{}{
 		"suppressed": req.Suppressed,
 	}
-	if _, err := s.client.Send(ctx, "Memory.setPressureNotificationsSuppressed", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Memory.setPressureNotificationsSuppressed", params); err != nil {
 		return nil, fmt.Errorf("Memory.setPressureNotificationsSuppressed: %w", err)
 	}
 	return &pb.SetPressureNotificationsSuppressedResponse{}, nil
@@ -67,7 +77,7 @@ func (s *Server) SimulatePressureNotification(ctx context.Context, req *pb.Simul
 	params := map[string]interface{}{
 		"level": req.Level,
 	}
-	if _, err := s.client.Send(ctx, "Memory.simulatePressureNotification", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Memory.simulatePressureNotification", params); err != nil {
 		return nil, fmt.Errorf("Memory.simulatePressureNotification: %w", err)
 	}
 	return &pb.SimulatePressureNotificationResponse{}, nil
@@ -81,14 +91,14 @@ func (s *Server) StartSampling(ctx context.Context, req *pb.StartSamplingRequest
 	if req.SuppressRandomness != nil {
 		params["suppressRandomness"] = *req.SuppressRandomness
 	}
-	if _, err := s.client.Send(ctx, "Memory.startSampling", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Memory.startSampling", params); err != nil {
 		return nil, fmt.Errorf("Memory.startSampling: %w", err)
 	}
 	return &pb.StartSamplingResponse{}, nil
 }
 
 func (s *Server) StopSampling(ctx context.Context, req *pb.StopSamplingRequest) (*pb.StopSamplingResponse, error) {
-	if _, err := s.client.Send(ctx, "Memory.stopSampling", nil); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Memory.stopSampling", nil); err != nil {
 		return nil, fmt.Errorf("Memory.stopSampling: %w", err)
 	}
 	return &pb.StopSamplingResponse{}, nil
@@ -119,7 +129,7 @@ func unmarshalSamplingProfile(result json.RawMessage) (*pb.SamplingProfile, erro
 }
 
 func (s *Server) GetAllTimeSamplingProfile(ctx context.Context, req *pb.GetAllTimeSamplingProfileRequest) (*pb.GetAllTimeSamplingProfileResponse, error) {
-	result, err := s.client.Send(ctx, "Memory.getAllTimeSamplingProfile", nil)
+	result, err := s.send(ctx, req.SessionId, "Memory.getAllTimeSamplingProfile", nil)
 	if err != nil {
 		return nil, fmt.Errorf("Memory.getAllTimeSamplingProfile: %w", err)
 	}
@@ -131,7 +141,7 @@ func (s *Server) GetAllTimeSamplingProfile(ctx context.Context, req *pb.GetAllTi
 }
 
 func (s *Server) GetSamplingProfile(ctx context.Context, req *pb.GetSamplingProfileRequest) (*pb.GetSamplingProfileResponse, error) {
-	result, err := s.client.Send(ctx, "Memory.getSamplingProfile", nil)
+	result, err := s.send(ctx, req.SessionId, "Memory.getSamplingProfile", nil)
 	if err != nil {
 		return nil, fmt.Errorf("Memory.getSamplingProfile: %w", err)
 	}
@@ -143,7 +153,7 @@ func (s *Server) GetSamplingProfile(ctx context.Context, req *pb.GetSamplingProf
 }
 
 func (s *Server) GetBrowserSamplingProfile(ctx context.Context, req *pb.GetBrowserSamplingProfileRequest) (*pb.GetBrowserSamplingProfileResponse, error) {
-	result, err := s.client.Send(ctx, "Memory.getBrowserSamplingProfile", nil)
+	result, err := s.send(ctx, req.SessionId, "Memory.getBrowserSamplingProfile", nil)
 	if err != nil {
 		return nil, fmt.Errorf("Memory.getBrowserSamplingProfile: %w", err)
 	}

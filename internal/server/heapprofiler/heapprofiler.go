@@ -19,15 +19,25 @@ func New(client *cdpclient.Client) *Server {
 	return &Server{client: client}
 }
 
+// send routes a CDP command through the specified session, falling back
+// to the client's default session if sessionID is empty.
+func (s *Server) send(ctx context.Context, sessionID string, method string, params interface{}) (json.RawMessage, error) {
+	if sessionID != "" {
+		return s.client.SendWithSession(ctx, method, params, sessionID)
+	}
+	return s.client.Send(ctx, method, params)
+}
+
+
 func (s *Server) Enable(ctx context.Context, req *pb.EnableRequest) (*pb.EnableResponse, error) {
-	if _, err := s.client.Send(ctx, "HeapProfiler.enable", nil); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "HeapProfiler.enable", nil); err != nil {
 		return nil, fmt.Errorf("HeapProfiler.enable: %w", err)
 	}
 	return &pb.EnableResponse{}, nil
 }
 
 func (s *Server) Disable(ctx context.Context, req *pb.DisableRequest) (*pb.DisableResponse, error) {
-	if _, err := s.client.Send(ctx, "HeapProfiler.disable", nil); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "HeapProfiler.disable", nil); err != nil {
 		return nil, fmt.Errorf("HeapProfiler.disable: %w", err)
 	}
 	return &pb.DisableResponse{}, nil
@@ -37,7 +47,7 @@ func (s *Server) StartTrackingHeapObjects(ctx context.Context, req *pb.StartTrac
 	params := map[string]interface{}{
 		"trackAllocations": req.TrackAllocations,
 	}
-	if _, err := s.client.Send(ctx, "HeapProfiler.startTrackingHeapObjects", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "HeapProfiler.startTrackingHeapObjects", params); err != nil {
 		return nil, fmt.Errorf("HeapProfiler.startTrackingHeapObjects: %w", err)
 	}
 	return &pb.StartTrackingHeapObjectsResponse{}, nil
@@ -50,7 +60,7 @@ func (s *Server) StopTrackingHeapObjects(ctx context.Context, req *pb.StopTracki
 		"captureNumericValue":       req.CaptureNumericValue,
 		"exposeInternals":           req.ExposeInternals,
 	}
-	if _, err := s.client.Send(ctx, "HeapProfiler.stopTrackingHeapObjects", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "HeapProfiler.stopTrackingHeapObjects", params); err != nil {
 		return nil, fmt.Errorf("HeapProfiler.stopTrackingHeapObjects: %w", err)
 	}
 	return &pb.StopTrackingHeapObjectsResponse{}, nil
@@ -63,14 +73,14 @@ func (s *Server) TakeHeapSnapshot(ctx context.Context, req *pb.TakeHeapSnapshotR
 		"captureNumericValue":       req.CaptureNumericValue,
 		"exposeInternals":           req.ExposeInternals,
 	}
-	if _, err := s.client.Send(ctx, "HeapProfiler.takeHeapSnapshot", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "HeapProfiler.takeHeapSnapshot", params); err != nil {
 		return nil, fmt.Errorf("HeapProfiler.takeHeapSnapshot: %w", err)
 	}
 	return &pb.TakeHeapSnapshotResponse{}, nil
 }
 
 func (s *Server) CollectGarbage(ctx context.Context, req *pb.CollectGarbageRequest) (*pb.CollectGarbageResponse, error) {
-	if _, err := s.client.Send(ctx, "HeapProfiler.collectGarbage", nil); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "HeapProfiler.collectGarbage", nil); err != nil {
 		return nil, fmt.Errorf("HeapProfiler.collectGarbage: %w", err)
 	}
 	return &pb.CollectGarbageResponse{}, nil
@@ -83,7 +93,7 @@ func (s *Server) GetObjectByHeapObjectId(ctx context.Context, req *pb.GetObjectB
 	if req.ObjectGroup != "" {
 		params["objectGroup"] = req.ObjectGroup
 	}
-	result, err := s.client.Send(ctx, "HeapProfiler.getObjectByHeapObjectId", params)
+	result, err := s.send(ctx, req.SessionId, "HeapProfiler.getObjectByHeapObjectId", params)
 	if err != nil {
 		return nil, fmt.Errorf("HeapProfiler.getObjectByHeapObjectId: %w", err)
 	}
@@ -100,7 +110,7 @@ func (s *Server) AddInspectedHeapObject(ctx context.Context, req *pb.AddInspecte
 	params := map[string]interface{}{
 		"heapObjectId": req.HeapObjectId,
 	}
-	if _, err := s.client.Send(ctx, "HeapProfiler.addInspectedHeapObject", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "HeapProfiler.addInspectedHeapObject", params); err != nil {
 		return nil, fmt.Errorf("HeapProfiler.addInspectedHeapObject: %w", err)
 	}
 	return &pb.AddInspectedHeapObjectResponse{}, nil
@@ -110,7 +120,7 @@ func (s *Server) GetHeapObjectId(ctx context.Context, req *pb.GetHeapObjectIdReq
 	params := map[string]interface{}{
 		"objectId": req.ObjectId,
 	}
-	result, err := s.client.Send(ctx, "HeapProfiler.getHeapObjectId", params)
+	result, err := s.send(ctx, req.SessionId, "HeapProfiler.getHeapObjectId", params)
 	if err != nil {
 		return nil, fmt.Errorf("HeapProfiler.getHeapObjectId: %w", err)
 	}
@@ -138,14 +148,14 @@ func (s *Server) StartSampling(ctx context.Context, req *pb.StartSamplingRequest
 	if len(params) > 0 {
 		p = params
 	}
-	if _, err := s.client.Send(ctx, "HeapProfiler.startSampling", p); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "HeapProfiler.startSampling", p); err != nil {
 		return nil, fmt.Errorf("HeapProfiler.startSampling: %w", err)
 	}
 	return &pb.StartSamplingResponse{}, nil
 }
 
 func (s *Server) StopSampling(ctx context.Context, req *pb.StopSamplingRequest) (*pb.StopSamplingResponse, error) {
-	result, err := s.client.Send(ctx, "HeapProfiler.stopSampling", nil)
+	result, err := s.send(ctx, req.SessionId, "HeapProfiler.stopSampling", nil)
 	if err != nil {
 		return nil, fmt.Errorf("HeapProfiler.stopSampling: %w", err)
 	}

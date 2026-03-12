@@ -22,8 +22,18 @@ func New(client *cdpclient.Client) *Server {
 	return &Server{client: client}
 }
 
+// send routes a CDP command through the specified session, falling back
+// to the client's default session if sessionID is empty.
+func (s *Server) send(ctx context.Context, sessionID string, method string, params interface{}) (json.RawMessage, error) {
+	if sessionID != "" {
+		return s.client.SendWithSession(ctx, method, params, sessionID)
+	}
+	return s.client.Send(ctx, method, params)
+}
+
+
 func (s *Server) Enable(ctx context.Context, req *pb.EnableRequest) (*pb.EnableResponse, error) {
-	result, err := s.client.Send(ctx, "Debugger.enable", nil)
+	result, err := s.send(ctx, req.SessionId, "Debugger.enable", nil)
 	if err != nil {
 		return nil, fmt.Errorf("Debugger.enable: %w", err)
 	}
@@ -37,7 +47,7 @@ func (s *Server) Enable(ctx context.Context, req *pb.EnableRequest) (*pb.EnableR
 }
 
 func (s *Server) Disable(ctx context.Context, req *pb.DisableRequest) (*pb.DisableResponse, error) {
-	if _, err := s.client.Send(ctx, "Debugger.disable", nil); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Debugger.disable", nil); err != nil {
 		return nil, fmt.Errorf("Debugger.disable: %w", err)
 	}
 	return &pb.DisableResponse{}, nil
@@ -63,7 +73,7 @@ func (s *Server) SetBreakpointByUrl(ctx context.Context, req *pb.SetBreakpointBy
 		params["condition"] = req.Condition
 	}
 
-	result, err := s.client.Send(ctx, "Debugger.setBreakpointByUrl", params)
+	result, err := s.send(ctx, req.SessionId, "Debugger.setBreakpointByUrl", params)
 	if err != nil {
 		return nil, fmt.Errorf("Debugger.setBreakpointByUrl: %w", err)
 	}
@@ -95,7 +105,7 @@ func (s *Server) SetBreakpoint(ctx context.Context, req *pb.SetBreakpointRequest
 		params["condition"] = req.Condition
 	}
 
-	result, err := s.client.Send(ctx, "Debugger.setBreakpoint", params)
+	result, err := s.send(ctx, req.SessionId, "Debugger.setBreakpoint", params)
 	if err != nil {
 		return nil, fmt.Errorf("Debugger.setBreakpoint: %w", err)
 	}
@@ -118,7 +128,7 @@ func (s *Server) RemoveBreakpoint(ctx context.Context, req *pb.RemoveBreakpointR
 	params := map[string]interface{}{
 		"breakpointId": req.BreakpointId,
 	}
-	if _, err := s.client.Send(ctx, "Debugger.removeBreakpoint", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Debugger.removeBreakpoint", params); err != nil {
 		return nil, fmt.Errorf("Debugger.removeBreakpoint: %w", err)
 	}
 	return &pb.RemoveBreakpointResponse{}, nil
@@ -136,7 +146,7 @@ func (s *Server) GetPossibleBreakpoints(ctx context.Context, req *pb.GetPossible
 		params["restrictToFunction"] = true
 	}
 
-	result, err := s.client.Send(ctx, "Debugger.getPossibleBreakpoints", params)
+	result, err := s.send(ctx, req.SessionId, "Debugger.getPossibleBreakpoints", params)
 	if err != nil {
 		return nil, fmt.Errorf("Debugger.getPossibleBreakpoints: %w", err)
 	}
@@ -160,7 +170,7 @@ func (s *Server) GetScriptSource(ctx context.Context, req *pb.GetScriptSourceReq
 		"scriptId": req.ScriptId,
 	}
 
-	result, err := s.client.Send(ctx, "Debugger.getScriptSource", params)
+	result, err := s.send(ctx, req.SessionId, "Debugger.getScriptSource", params)
 	if err != nil {
 		return nil, fmt.Errorf("Debugger.getScriptSource: %w", err)
 	}
@@ -187,7 +197,7 @@ func (s *Server) SetScriptSource(ctx context.Context, req *pb.SetScriptSourceReq
 		params["dryRun"] = true
 	}
 
-	result, err := s.client.Send(ctx, "Debugger.setScriptSource", params)
+	result, err := s.send(ctx, req.SessionId, "Debugger.setScriptSource", params)
 	if err != nil {
 		return nil, fmt.Errorf("Debugger.setScriptSource: %w", err)
 	}
@@ -228,7 +238,7 @@ func (s *Server) SearchInContent(ctx context.Context, req *pb.SearchInContentReq
 		params["isRegex"] = true
 	}
 
-	result, err := s.client.Send(ctx, "Debugger.searchInContent", params)
+	result, err := s.send(ctx, req.SessionId, "Debugger.searchInContent", params)
 	if err != nil {
 		return nil, fmt.Errorf("Debugger.searchInContent: %w", err)
 	}
@@ -248,7 +258,7 @@ func (s *Server) SearchInContent(ctx context.Context, req *pb.SearchInContentReq
 }
 
 func (s *Server) Pause(ctx context.Context, req *pb.PauseRequest) (*pb.PauseResponse, error) {
-	if _, err := s.client.Send(ctx, "Debugger.pause", nil); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Debugger.pause", nil); err != nil {
 		return nil, fmt.Errorf("Debugger.pause: %w", err)
 	}
 	return &pb.PauseResponse{}, nil
@@ -262,9 +272,9 @@ func (s *Server) Resume(ctx context.Context, req *pb.ResumeRequest) (*pb.ResumeR
 
 	var err error
 	if len(params) > 0 {
-		_, err = s.client.Send(ctx, "Debugger.resume", params)
+		_, err = s.send(ctx, req.SessionId, "Debugger.resume", params)
 	} else {
-		_, err = s.client.Send(ctx, "Debugger.resume", nil)
+		_, err = s.send(ctx, req.SessionId, "Debugger.resume", nil)
 	}
 	if err != nil {
 		return nil, fmt.Errorf("Debugger.resume: %w", err)
@@ -284,9 +294,9 @@ func (s *Server) StepOver(ctx context.Context, req *pb.StepOverRequest) (*pb.Ste
 
 	var err error
 	if len(params) > 0 {
-		_, err = s.client.Send(ctx, "Debugger.stepOver", params)
+		_, err = s.send(ctx, req.SessionId, "Debugger.stepOver", params)
 	} else {
-		_, err = s.client.Send(ctx, "Debugger.stepOver", nil)
+		_, err = s.send(ctx, req.SessionId, "Debugger.stepOver", nil)
 	}
 	if err != nil {
 		return nil, fmt.Errorf("Debugger.stepOver: %w", err)
@@ -309,9 +319,9 @@ func (s *Server) StepInto(ctx context.Context, req *pb.StepIntoRequest) (*pb.Ste
 
 	var err error
 	if len(params) > 0 {
-		_, err = s.client.Send(ctx, "Debugger.stepInto", params)
+		_, err = s.send(ctx, req.SessionId, "Debugger.stepInto", params)
 	} else {
-		_, err = s.client.Send(ctx, "Debugger.stepInto", nil)
+		_, err = s.send(ctx, req.SessionId, "Debugger.stepInto", nil)
 	}
 	if err != nil {
 		return nil, fmt.Errorf("Debugger.stepInto: %w", err)
@@ -320,7 +330,7 @@ func (s *Server) StepInto(ctx context.Context, req *pb.StepIntoRequest) (*pb.Ste
 }
 
 func (s *Server) StepOut(ctx context.Context, req *pb.StepOutRequest) (*pb.StepOutResponse, error) {
-	if _, err := s.client.Send(ctx, "Debugger.stepOut", nil); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Debugger.stepOut", nil); err != nil {
 		return nil, fmt.Errorf("Debugger.stepOut: %w", err)
 	}
 	return &pb.StepOutResponse{}, nil
@@ -330,7 +340,7 @@ func (s *Server) SetPauseOnExceptions(ctx context.Context, req *pb.SetPauseOnExc
 	params := map[string]interface{}{
 		"state": req.State,
 	}
-	if _, err := s.client.Send(ctx, "Debugger.setPauseOnExceptions", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Debugger.setPauseOnExceptions", params); err != nil {
 		return nil, fmt.Errorf("Debugger.setPauseOnExceptions: %w", err)
 	}
 	return &pb.SetPauseOnExceptionsResponse{}, nil
@@ -357,7 +367,7 @@ func (s *Server) EvaluateOnCallFrame(ctx context.Context, req *pb.EvaluateOnCall
 		params["timeout"] = req.Timeout
 	}
 
-	result, err := s.client.Send(ctx, "Debugger.evaluateOnCallFrame", params)
+	result, err := s.send(ctx, req.SessionId, "Debugger.evaluateOnCallFrame", params)
 	if err != nil {
 		return nil, fmt.Errorf("Debugger.evaluateOnCallFrame: %w", err)
 	}
@@ -384,7 +394,7 @@ func (s *Server) SetBlackboxPatterns(ctx context.Context, req *pb.SetBlackboxPat
 	params := map[string]interface{}{
 		"patterns": req.Patterns,
 	}
-	if _, err := s.client.Send(ctx, "Debugger.setBlackboxPatterns", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Debugger.setBlackboxPatterns", params); err != nil {
 		return nil, fmt.Errorf("Debugger.setBlackboxPatterns: %w", err)
 	}
 	return &pb.SetBlackboxPatternsResponse{}, nil
@@ -394,7 +404,7 @@ func (s *Server) SetAsyncCallStackDepth(ctx context.Context, req *pb.SetAsyncCal
 	params := map[string]interface{}{
 		"maxDepth": req.MaxDepth,
 	}
-	if _, err := s.client.Send(ctx, "Debugger.setAsyncCallStackDepth", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Debugger.setAsyncCallStackDepth", params); err != nil {
 		return nil, fmt.Errorf("Debugger.setAsyncCallStackDepth: %w", err)
 	}
 	return &pb.SetAsyncCallStackDepthResponse{}, nil
@@ -404,7 +414,7 @@ func (s *Server) SetBreakpointsActive(ctx context.Context, req *pb.SetBreakpoint
 	params := map[string]interface{}{
 		"active": req.Active,
 	}
-	if _, err := s.client.Send(ctx, "Debugger.setBreakpointsActive", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Debugger.setBreakpointsActive", params); err != nil {
 		return nil, fmt.Errorf("Debugger.setBreakpointsActive: %w", err)
 	}
 	return &pb.SetBreakpointsActiveResponse{}, nil

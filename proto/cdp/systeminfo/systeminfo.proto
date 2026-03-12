@@ -27,7 +27,9 @@ message ProcessInfo {
 
 // ==================== Requests / Responses ====================
 
-message GetInfoRequest {}
+message GetInfoRequest {
+  string session_id = 99;
+}
 message GetInfoResponse {
   string gpu = 1; // JSON string of GPUInfo
   string model_name = 2;
@@ -37,12 +39,15 @@ message GetInfoResponse {
 
 message GetFeatureStateRequest {
   string feature_state = 1;
+  string session_id = 99;
 }
 message GetFeatureStateResponse {
   bool feature_enabled = 1;
 }
 
-message GetProcessInfoRequest {}
+message GetProcessInfoRequest {
+  string session_id = 99;
+}
 message GetProcessInfoResponse {
   repeated ProcessInfo process_info = 1;
 }

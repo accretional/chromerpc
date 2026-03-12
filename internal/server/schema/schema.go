@@ -19,8 +19,18 @@ func New(client *cdpclient.Client) *Server {
 	return &Server{client: client}
 }
 
+// send routes a CDP command through the specified session, falling back
+// to the client's default session if sessionID is empty.
+func (s *Server) send(ctx context.Context, sessionID string, method string, params interface{}) (json.RawMessage, error) {
+	if sessionID != "" {
+		return s.client.SendWithSession(ctx, method, params, sessionID)
+	}
+	return s.client.Send(ctx, method, params)
+}
+
+
 func (s *Server) GetDomains(ctx context.Context, req *pb.GetDomainsRequest) (*pb.GetDomainsResponse, error) {
-	result, err := s.client.Send(ctx, "Schema.getDomains", nil)
+	result, err := s.send(ctx, req.SessionId, "Schema.getDomains", nil)
 	if err != nil {
 		return nil, fmt.Errorf("Schema.getDomains: %w", err)
 	}

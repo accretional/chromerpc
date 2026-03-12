@@ -26,6 +26,7 @@ type RequestPattern struct {
 	UrlPattern    string                 `protobuf:"bytes,1,opt,name=url_pattern,json=urlPattern,proto3" json:"url_pattern,omitempty"`
 	ResourceType  string                 `protobuf:"bytes,2,opt,name=resource_type,json=resourceType,proto3" json:"resource_type,omitempty"`
 	RequestStage  string                 `protobuf:"bytes,3,opt,name=request_stage,json=requestStage,proto3" json:"request_stage,omitempty"` // "Request", "Response"
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -77,6 +78,13 @@ func (x *RequestPattern) GetResourceType() string {
 func (x *RequestPattern) GetRequestStage() string {
 	if x != nil {
 		return x.RequestStage
+	}
+	return ""
+}
+
+func (x *RequestPattern) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -137,6 +145,7 @@ type EnableRequest struct {
 	state              protoimpl.MessageState `protogen:"open.v1"`
 	Patterns           []*RequestPattern      `protobuf:"bytes,1,rep,name=patterns,proto3" json:"patterns,omitempty"`
 	HandleAuthRequests bool                   `protobuf:"varint,2,opt,name=handle_auth_requests,json=handleAuthRequests,proto3" json:"handle_auth_requests,omitempty"`
+	SessionId          string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields      protoimpl.UnknownFields
 	sizeCache          protoimpl.SizeCache
 }
@@ -185,6 +194,13 @@ func (x *EnableRequest) GetHandleAuthRequests() bool {
 	return false
 }
 
+func (x *EnableRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type EnableResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -223,6 +239,7 @@ func (*EnableResponse) Descriptor() ([]byte, []int) {
 
 type DisableRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -255,6 +272,13 @@ func (x *DisableRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use DisableRequest.ProtoReflect.Descriptor instead.
 func (*DisableRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_fetch_fetch_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *DisableRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type DisableResponse struct {
@@ -301,6 +325,7 @@ type ContinueRequestRequest struct {
 	PostData          string                 `protobuf:"bytes,4,opt,name=post_data,json=postData,proto3" json:"post_data,omitempty"`
 	Headers           []*HeaderEntry         `protobuf:"bytes,5,rep,name=headers,proto3" json:"headers,omitempty"`
 	InterceptResponse bool                   `protobuf:"varint,6,opt,name=intercept_response,json=interceptResponse,proto3" json:"intercept_response,omitempty"`
+	SessionId         string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields     protoimpl.UnknownFields
 	sizeCache         protoimpl.SizeCache
 }
@@ -377,8 +402,16 @@ func (x *ContinueRequestRequest) GetInterceptResponse() bool {
 	return false
 }
 
+func (x *ContinueRequestRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type ContinueRequestResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -413,6 +446,13 @@ func (*ContinueRequestResponse) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_fetch_fetch_proto_rawDescGZIP(), []int{7}
 }
 
+func (x *ContinueRequestResponse) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type FulfillRequestRequest struct {
 	state                 protoimpl.MessageState `protogen:"open.v1"`
 	RequestId             string                 `protobuf:"bytes,1,opt,name=request_id,json=requestId,proto3" json:"request_id,omitempty"`
@@ -421,6 +461,7 @@ type FulfillRequestRequest struct {
 	Body                  []byte                 `protobuf:"bytes,4,opt,name=body,proto3" json:"body,omitempty"`
 	ResponsePhrase        string                 `protobuf:"bytes,5,opt,name=response_phrase,json=responsePhrase,proto3" json:"response_phrase,omitempty"`
 	BinaryResponseHeaders string                 `protobuf:"bytes,6,opt,name=binary_response_headers,json=binaryResponseHeaders,proto3" json:"binary_response_headers,omitempty"`
+	SessionId             string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields         protoimpl.UnknownFields
 	sizeCache             protoimpl.SizeCache
 }
@@ -497,8 +538,16 @@ func (x *FulfillRequestRequest) GetBinaryResponseHeaders() string {
 	return ""
 }
 
+func (x *FulfillRequestRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type FulfillRequestResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -533,10 +582,18 @@ func (*FulfillRequestResponse) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_fetch_fetch_proto_rawDescGZIP(), []int{9}
 }
 
+func (x *FulfillRequestResponse) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type FailRequestRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	RequestId     string                 `protobuf:"bytes,1,opt,name=request_id,json=requestId,proto3" json:"request_id,omitempty"`
 	Reason        string                 `protobuf:"bytes,2,opt,name=reason,proto3" json:"reason,omitempty"` // Network.ErrorReason
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -585,8 +642,16 @@ func (x *FailRequestRequest) GetReason() string {
 	return ""
 }
 
+func (x *FailRequestRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type FailRequestResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -621,10 +686,18 @@ func (*FailRequestResponse) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_fetch_fetch_proto_rawDescGZIP(), []int{11}
 }
 
+func (x *FailRequestResponse) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type ContinueWithAuthRequest struct {
 	state                 protoimpl.MessageState `protogen:"open.v1"`
 	RequestId             string                 `protobuf:"bytes,1,opt,name=request_id,json=requestId,proto3" json:"request_id,omitempty"`
 	AuthChallengeResponse *AuthChallengeResponse `protobuf:"bytes,2,opt,name=auth_challenge_response,json=authChallengeResponse,proto3" json:"auth_challenge_response,omitempty"`
+	SessionId             string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields         protoimpl.UnknownFields
 	sizeCache             protoimpl.SizeCache
 }
@@ -671,6 +744,13 @@ func (x *ContinueWithAuthRequest) GetAuthChallengeResponse() *AuthChallengeRespo
 		return x.AuthChallengeResponse
 	}
 	return nil
+}
+
+func (x *ContinueWithAuthRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type ContinueWithAuthResponse struct {
@@ -772,6 +852,7 @@ func (x *AuthChallengeResponse) GetPassword() string {
 type GetResponseBodyRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	RequestId     string                 `protobuf:"bytes,1,opt,name=request_id,json=requestId,proto3" json:"request_id,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -809,6 +890,13 @@ func (*GetResponseBodyRequest) Descriptor() ([]byte, []int) {
 func (x *GetResponseBodyRequest) GetRequestId() string {
 	if x != nil {
 		return x.RequestId
+	}
+	return ""
+}
+
+func (x *GetResponseBodyRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -868,6 +956,7 @@ func (x *GetResponseBodyResponse) GetBase64Encoded() bool {
 type TakeResponseBodyAsStreamRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	RequestId     string                 `protobuf:"bytes,1,opt,name=request_id,json=requestId,proto3" json:"request_id,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -905,6 +994,13 @@ func (*TakeResponseBodyAsStreamRequest) Descriptor() ([]byte, []int) {
 func (x *TakeResponseBodyAsStreamRequest) GetRequestId() string {
 	if x != nil {
 		return x.RequestId
+	}
+	return ""
+}
+
+func (x *TakeResponseBodyAsStreamRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -960,6 +1056,7 @@ type ContinueResponseRequest struct {
 	ResponsePhrase        string                 `protobuf:"bytes,3,opt,name=response_phrase,json=responsePhrase,proto3" json:"response_phrase,omitempty"`
 	ResponseHeaders       []*HeaderEntry         `protobuf:"bytes,4,rep,name=response_headers,json=responseHeaders,proto3" json:"response_headers,omitempty"`
 	BinaryResponseHeaders string                 `protobuf:"bytes,5,opt,name=binary_response_headers,json=binaryResponseHeaders,proto3" json:"binary_response_headers,omitempty"`
+	SessionId             string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields         protoimpl.UnknownFields
 	sizeCache             protoimpl.SizeCache
 }
@@ -1029,6 +1126,13 @@ func (x *ContinueResponseRequest) GetBinaryResponseHeaders() string {
 	return ""
 }
 
+func (x *ContinueResponseRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type ContinueResponseResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -1067,6 +1171,7 @@ func (*ContinueResponseResponse) Descriptor() ([]byte, []int) {
 
 type SubscribeEventsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1099,6 +1204,13 @@ func (x *SubscribeEventsRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use SubscribeEventsRequest.ProtoReflect.Descriptor instead.
 func (*SubscribeEventsRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_fetch_fetch_proto_rawDescGZIP(), []int{21}
+}
+
+func (x *SubscribeEventsRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type FetchEvent struct {
@@ -1195,6 +1307,7 @@ type RequestPausedEvent struct {
 	ResponseHeaders     []*HeaderEntry         `protobuf:"bytes,8,rep,name=response_headers,json=responseHeaders,proto3" json:"response_headers,omitempty"`
 	NetworkId           string                 `protobuf:"bytes,9,opt,name=network_id,json=networkId,proto3" json:"network_id,omitempty"`
 	RedirectedRequestId string                 `protobuf:"bytes,10,opt,name=redirected_request_id,json=redirectedRequestId,proto3" json:"redirected_request_id,omitempty"`
+	SessionId           string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields       protoimpl.UnknownFields
 	sizeCache           protoimpl.SizeCache
 }
@@ -1299,12 +1412,20 @@ func (x *RequestPausedEvent) GetRedirectedRequestId() string {
 	return ""
 }
 
+func (x *RequestPausedEvent) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type RequestInfo struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Url           string                 `protobuf:"bytes,1,opt,name=url,proto3" json:"url,omitempty"`
 	Method        string                 `protobuf:"bytes,2,opt,name=method,proto3" json:"method,omitempty"`
 	PostData      string                 `protobuf:"bytes,3,opt,name=post_data,json=postData,proto3" json:"post_data,omitempty"`
 	Headers       map[string]string      `protobuf:"bytes,4,rep,name=headers,proto3" json:"headers,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1365,6 +1486,13 @@ func (x *RequestInfo) GetHeaders() map[string]string {
 		return x.Headers
 	}
 	return nil
+}
+
+func (x *RequestInfo) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type AuthChallenge struct {
@@ -1515,21 +1643,27 @@ var File_proto_cdp_fetch_fetch_proto protoreflect.FileDescriptor
 
 const file_proto_cdp_fetch_fetch_proto_rawDesc = "" +
 	"\n" +
-	"\x1bproto/cdp/fetch/fetch.proto\x12\tcdp.fetch\"{\n" +
+	"\x1bproto/cdp/fetch/fetch.proto\x12\tcdp.fetch\"\x9a\x01\n" +
 	"\x0eRequestPattern\x12\x1f\n" +
 	"\vurl_pattern\x18\x01 \x01(\tR\n" +
 	"urlPattern\x12#\n" +
 	"\rresource_type\x18\x02 \x01(\tR\fresourceType\x12#\n" +
-	"\rrequest_stage\x18\x03 \x01(\tR\frequestStage\"7\n" +
+	"\rrequest_stage\x18\x03 \x01(\tR\frequestStage\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"7\n" +
 	"\vHeaderEntry\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value\"x\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value\"\x97\x01\n" +
 	"\rEnableRequest\x125\n" +
 	"\bpatterns\x18\x01 \x03(\v2\x19.cdp.fetch.RequestPatternR\bpatterns\x120\n" +
-	"\x14handle_auth_requests\x18\x02 \x01(\bR\x12handleAuthRequests\"\x10\n" +
-	"\x0eEnableResponse\"\x10\n" +
-	"\x0eDisableRequest\"\x11\n" +
-	"\x0fDisableResponse\"\xdf\x01\n" +
+	"\x14handle_auth_requests\x18\x02 \x01(\bR\x12handleAuthRequests\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x10\n" +
+	"\x0eEnableResponse\"/\n" +
+	"\x0eDisableRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x11\n" +
+	"\x0fDisableResponse\"\xfe\x01\n" +
 	"\x16ContinueRequestRequest\x12\x1d\n" +
 	"\n" +
 	"request_id\x18\x01 \x01(\tR\trequestId\x12\x10\n" +
@@ -1537,8 +1671,12 @@ const file_proto_cdp_fetch_fetch_proto_rawDesc = "" +
 	"\x06method\x18\x03 \x01(\tR\x06method\x12\x1b\n" +
 	"\tpost_data\x18\x04 \x01(\tR\bpostData\x120\n" +
 	"\aheaders\x18\x05 \x03(\v2\x16.cdp.fetch.HeaderEntryR\aheaders\x12-\n" +
-	"\x12intercept_response\x18\x06 \x01(\bR\x11interceptResponse\"\x19\n" +
-	"\x17ContinueRequestResponse\"\x93\x02\n" +
+	"\x12intercept_response\x18\x06 \x01(\bR\x11interceptResponse\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"8\n" +
+	"\x17ContinueRequestResponse\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\xb2\x02\n" +
 	"\x15FulfillRequestRequest\x12\x1d\n" +
 	"\n" +
 	"request_id\x18\x01 \x01(\tR\trequestId\x12#\n" +
@@ -1546,47 +1684,65 @@ const file_proto_cdp_fetch_fetch_proto_rawDesc = "" +
 	"\x10response_headers\x18\x03 \x03(\v2\x16.cdp.fetch.HeaderEntryR\x0fresponseHeaders\x12\x12\n" +
 	"\x04body\x18\x04 \x01(\fR\x04body\x12'\n" +
 	"\x0fresponse_phrase\x18\x05 \x01(\tR\x0eresponsePhrase\x126\n" +
-	"\x17binary_response_headers\x18\x06 \x01(\tR\x15binaryResponseHeaders\"\x18\n" +
-	"\x16FulfillRequestResponse\"K\n" +
+	"\x17binary_response_headers\x18\x06 \x01(\tR\x15binaryResponseHeaders\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"7\n" +
+	"\x16FulfillRequestResponse\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"j\n" +
 	"\x12FailRequestRequest\x12\x1d\n" +
 	"\n" +
 	"request_id\x18\x01 \x01(\tR\trequestId\x12\x16\n" +
-	"\x06reason\x18\x02 \x01(\tR\x06reason\"\x15\n" +
-	"\x13FailRequestResponse\"\x92\x01\n" +
+	"\x06reason\x18\x02 \x01(\tR\x06reason\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"4\n" +
+	"\x13FailRequestResponse\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\xb1\x01\n" +
 	"\x17ContinueWithAuthRequest\x12\x1d\n" +
 	"\n" +
 	"request_id\x18\x01 \x01(\tR\trequestId\x12X\n" +
-	"\x17auth_challenge_response\x18\x02 \x01(\v2 .cdp.fetch.AuthChallengeResponseR\x15authChallengeResponse\"\x1a\n" +
+	"\x17auth_challenge_response\x18\x02 \x01(\v2 .cdp.fetch.AuthChallengeResponseR\x15authChallengeResponse\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x1a\n" +
 	"\x18ContinueWithAuthResponse\"k\n" +
 	"\x15AuthChallengeResponse\x12\x1a\n" +
 	"\bresponse\x18\x01 \x01(\tR\bresponse\x12\x1a\n" +
 	"\busername\x18\x02 \x01(\tR\busername\x12\x1a\n" +
-	"\bpassword\x18\x03 \x01(\tR\bpassword\"7\n" +
+	"\bpassword\x18\x03 \x01(\tR\bpassword\"V\n" +
 	"\x16GetResponseBodyRequest\x12\x1d\n" +
 	"\n" +
-	"request_id\x18\x01 \x01(\tR\trequestId\"T\n" +
+	"request_id\x18\x01 \x01(\tR\trequestId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"T\n" +
 	"\x17GetResponseBodyResponse\x12\x12\n" +
 	"\x04body\x18\x01 \x01(\tR\x04body\x12%\n" +
-	"\x0ebase64_encoded\x18\x02 \x01(\bR\rbase64Encoded\"@\n" +
+	"\x0ebase64_encoded\x18\x02 \x01(\bR\rbase64Encoded\"_\n" +
 	"\x1fTakeResponseBodyAsStreamRequest\x12\x1d\n" +
 	"\n" +
-	"request_id\x18\x01 \x01(\tR\trequestId\":\n" +
+	"request_id\x18\x01 \x01(\tR\trequestId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\":\n" +
 	" TakeResponseBodyAsStreamResponse\x12\x16\n" +
-	"\x06stream\x18\x01 \x01(\tR\x06stream\"\x81\x02\n" +
+	"\x06stream\x18\x01 \x01(\tR\x06stream\"\xa0\x02\n" +
 	"\x17ContinueResponseRequest\x12\x1d\n" +
 	"\n" +
 	"request_id\x18\x01 \x01(\tR\trequestId\x12#\n" +
 	"\rresponse_code\x18\x02 \x01(\x05R\fresponseCode\x12'\n" +
 	"\x0fresponse_phrase\x18\x03 \x01(\tR\x0eresponsePhrase\x12A\n" +
 	"\x10response_headers\x18\x04 \x03(\v2\x16.cdp.fetch.HeaderEntryR\x0fresponseHeaders\x126\n" +
-	"\x17binary_response_headers\x18\x05 \x01(\tR\x15binaryResponseHeaders\"\x1a\n" +
-	"\x18ContinueResponseResponse\"\x18\n" +
-	"\x16SubscribeEventsRequest\"\xa2\x01\n" +
+	"\x17binary_response_headers\x18\x05 \x01(\tR\x15binaryResponseHeaders\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x1a\n" +
+	"\x18ContinueResponseResponse\"7\n" +
+	"\x16SubscribeEventsRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\xa2\x01\n" +
 	"\n" +
 	"FetchEvent\x12F\n" +
 	"\x0erequest_paused\x18\x01 \x01(\v2\x1d.cdp.fetch.RequestPausedEventH\x00R\rrequestPaused\x12C\n" +
 	"\rauth_required\x18\x02 \x01(\v2\x1c.cdp.fetch.AuthRequiredEventH\x00R\fauthRequiredB\a\n" +
-	"\x05event\"\xd3\x03\n" +
+	"\x05event\"\xf2\x03\n" +
 	"\x12RequestPausedEvent\x12\x1d\n" +
 	"\n" +
 	"request_id\x18\x01 \x01(\tR\trequestId\x120\n" +
@@ -1600,12 +1756,16 @@ const file_proto_cdp_fetch_fetch_proto_rawDesc = "" +
 	"\n" +
 	"network_id\x18\t \x01(\tR\tnetworkId\x122\n" +
 	"\x15redirected_request_id\x18\n" +
-	" \x01(\tR\x13redirectedRequestId\"\xcf\x01\n" +
+	" \x01(\tR\x13redirectedRequestId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\xee\x01\n" +
 	"\vRequestInfo\x12\x10\n" +
 	"\x03url\x18\x01 \x01(\tR\x03url\x12\x16\n" +
 	"\x06method\x18\x02 \x01(\tR\x06method\x12\x1b\n" +
 	"\tpost_data\x18\x03 \x01(\tR\bpostData\x12=\n" +
-	"\aheaders\x18\x04 \x03(\v2#.cdp.fetch.RequestInfo.HeadersEntryR\aheaders\x1a:\n" +
+	"\aheaders\x18\x04 \x03(\v2#.cdp.fetch.RequestInfo.HeadersEntryR\aheaders\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\x1a:\n" +
 	"\fHeadersEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
 	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"m\n" +

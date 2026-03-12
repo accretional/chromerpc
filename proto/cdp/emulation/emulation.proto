@@ -120,10 +120,13 @@ message SetDeviceMetricsOverrideRequest {
   int32 position_x = 8;
   int32 position_y = 9;
   bool dont_set_visible_size = 10;
+  string session_id = 99;
 }
 message SetDeviceMetricsOverrideResponse {}
 
-message ClearDeviceMetricsOverrideRequest {}
+message ClearDeviceMetricsOverrideRequest {
+  string session_id = 99;
+}
 message ClearDeviceMetricsOverrideResponse {}
 
 message SetUserAgentOverrideRequest {
@@ -131,6 +134,7 @@ message SetUserAgentOverrideRequest {
   string accept_language = 2;
   string platform = 3;
   UserAgentMetadata user_agent_metadata = 4;
+  string session_id = 99;
 }
 message SetUserAgentOverrideResponse {}
 
@@ -138,15 +142,19 @@ message SetGeolocationOverrideRequest {
   double latitude = 1;
   double longitude = 2;
   double accuracy = 3;
+  string session_id = 99;
 }
 message SetGeolocationOverrideResponse {}
 
-message ClearGeolocationOverrideRequest {}
+message ClearGeolocationOverrideRequest {
+  string session_id = 99;
+}
 message ClearGeolocationOverrideResponse {}
 
 message SetTouchEmulationEnabledRequest {
   bool enabled = 1;
   int32 max_touch_points = 2;
+  string session_id = 99;
 }
 message SetTouchEmulationEnabledResponse {}
 
@@ -155,64 +163,78 @@ message SetEmulatedMediaRequest {
   string media = 1;
   // Media features to emulate.
   repeated MediaFeature features = 2;
+  string session_id = 99;
 }
 message SetEmulatedMediaResponse {}
 
 message SetTimezoneOverrideRequest {
   string timezone_id = 1;
+  string session_id = 99;
 }
 message SetTimezoneOverrideResponse {}
 
 message SetLocaleOverrideRequest {
   string locale = 1;
+  string session_id = 99;
 }
 message SetLocaleOverrideResponse {}
 
 message SetScrollbarsHiddenRequest {
   bool hidden = 1;
+  string session_id = 99;
 }
 message SetScrollbarsHiddenResponse {}
 
 message SetDocumentCookieDisabledRequest {
   bool disabled = 1;
+  string session_id = 99;
 }
 message SetDocumentCookieDisabledResponse {}
 
 message SetEmulatedVisionDeficiencyRequest {
   // Vision deficiency to emulate.
   string type = 1; // "none","achromatopsia","blurredVision","deuteranopia","protanopia","tritanopia"
+  string session_id = 99;
 }
 message SetEmulatedVisionDeficiencyResponse {}
 
 message SetDisabledImageTypesRequest {
   repeated string image_types = 1; // "avif","webp"
+  string session_id = 99;
 }
 message SetDisabledImageTypesResponse {}
 
 message SetAutomationOverrideRequest {
   bool enabled = 1;
+  string session_id = 99;
 }
 message SetAutomationOverrideResponse {}
 
 message SetCPUThrottlingRateRequest {
   double rate = 1; // Throttling rate as a slowdown factor (1=no throttle, 2=2x slowdown).
+  string session_id = 99;
 }
 message SetCPUThrottlingRateResponse {}
 
 message SetDefaultBackgroundColorOverrideRequest {
   RGBA color = 1; // If not specified, clears the override.
+  string session_id = 99;
 }
 message SetDefaultBackgroundColorOverrideResponse {}
 
-message ResetPageScaleFactorRequest {}
+message ResetPageScaleFactorRequest {
+  string session_id = 99;
+}
 message ResetPageScaleFactorResponse {}
 
 message SetPageScaleFactorRequest {
   double page_scale_factor = 1;
+  string session_id = 99;
 }
 message SetPageScaleFactorResponse {}
 
 message SetHardwareConcurrencyOverrideRequest {
   int32 hardware_concurrency = 1;
+  string session_id = 99;
 }
 message SetHardwareConcurrencyOverrideResponse {}

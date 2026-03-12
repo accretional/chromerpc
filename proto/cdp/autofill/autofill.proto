@@ -44,10 +44,14 @@ message Address {
 
 // ==================== Requests / Responses ====================
 
-message EnableRequest {}
+message EnableRequest {
+  string session_id = 99;
+}
 message EnableResponse {}
 
-message DisableRequest {}
+message DisableRequest {
+  string session_id = 99;
+}
 message DisableResponse {}
 
 message TriggerRequest {
@@ -57,11 +61,13 @@ message TriggerRequest {
   string frame_id = 2;
   // The credit card to fill.
   CreditCard card = 3;
+  string session_id = 99;
 }
 message TriggerResponse {}
 
 message SetAddressesRequest {
   repeated Address addresses = 1;
+  string session_id = 99;
 }
 message SetAddressesResponse {}
 

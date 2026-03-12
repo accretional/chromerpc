@@ -32,20 +32,27 @@ message Metric {
 message EnableRequest {
   // Time domain to use for collecting and reporting duration metrics.
   string time_domain = 1; // "timeTicks","threadTicks"
+  string session_id = 99;
 }
 message EnableResponse {}
 
-message DisableRequest {}
+message DisableRequest {
+  string session_id = 99;
+}
 message DisableResponse {}
 
-message GetMetricsRequest {}
+message GetMetricsRequest {
+  string session_id = 99;
+}
 message GetMetricsResponse {
   repeated Metric metrics = 1;
 }
 
 // ==================== Events ====================
 
-message SubscribeEventsRequest {}
+message SubscribeEventsRequest {
+  string session_id = 99;
+}
 
 message PerformanceEvent {
   oneof event {

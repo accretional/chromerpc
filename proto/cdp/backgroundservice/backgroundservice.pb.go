@@ -85,6 +85,7 @@ func (ServiceName) EnumDescriptor() ([]byte, []int) {
 type StartObservingRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Service       ServiceName            `protobuf:"varint,1,opt,name=service,proto3,enum=cdp.backgroundservice.ServiceName" json:"service,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -126,6 +127,13 @@ func (x *StartObservingRequest) GetService() ServiceName {
 	return ServiceName_SERVICE_NAME_UNSPECIFIED
 }
 
+func (x *StartObservingRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type StartObservingResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -165,6 +173,7 @@ func (*StartObservingResponse) Descriptor() ([]byte, []int) {
 type StopObservingRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Service       ServiceName            `protobuf:"varint,1,opt,name=service,proto3,enum=cdp.backgroundservice.ServiceName" json:"service,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -204,6 +213,13 @@ func (x *StopObservingRequest) GetService() ServiceName {
 		return x.Service
 	}
 	return ServiceName_SERVICE_NAME_UNSPECIFIED
+}
+
+func (x *StopObservingRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type StopObservingResponse struct {
@@ -246,6 +262,7 @@ type SetRecordingRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	ShouldRecord  bool                   `protobuf:"varint,1,opt,name=should_record,json=shouldRecord,proto3" json:"should_record,omitempty"`
 	Service       ServiceName            `protobuf:"varint,2,opt,name=service,proto3,enum=cdp.backgroundservice.ServiceName" json:"service,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -294,6 +311,13 @@ func (x *SetRecordingRequest) GetService() ServiceName {
 	return ServiceName_SERVICE_NAME_UNSPECIFIED
 }
 
+func (x *SetRecordingRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type SetRecordingResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -333,6 +357,7 @@ func (*SetRecordingResponse) Descriptor() ([]byte, []int) {
 type ClearEventsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Service       ServiceName            `protobuf:"varint,1,opt,name=service,proto3,enum=cdp.backgroundservice.ServiceName" json:"service,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -372,6 +397,13 @@ func (x *ClearEventsRequest) GetService() ServiceName {
 		return x.Service
 	}
 	return ServiceName_SERVICE_NAME_UNSPECIFIED
+}
+
+func (x *ClearEventsRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type ClearEventsResponse struct {
@@ -788,19 +820,27 @@ var File_proto_cdp_backgroundservice_backgroundservice_proto protoreflect.FileDe
 
 const file_proto_cdp_backgroundservice_backgroundservice_proto_rawDesc = "" +
 	"\n" +
-	"3proto/cdp/backgroundservice/backgroundservice.proto\x12\x15cdp.backgroundservice\"U\n" +
+	"3proto/cdp/backgroundservice/backgroundservice.proto\x12\x15cdp.backgroundservice\"t\n" +
 	"\x15StartObservingRequest\x12<\n" +
-	"\aservice\x18\x01 \x01(\x0e2\".cdp.backgroundservice.ServiceNameR\aservice\"\x18\n" +
-	"\x16StartObservingResponse\"T\n" +
+	"\aservice\x18\x01 \x01(\x0e2\".cdp.backgroundservice.ServiceNameR\aservice\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x18\n" +
+	"\x16StartObservingResponse\"s\n" +
 	"\x14StopObservingRequest\x12<\n" +
-	"\aservice\x18\x01 \x01(\x0e2\".cdp.backgroundservice.ServiceNameR\aservice\"\x17\n" +
-	"\x15StopObservingResponse\"x\n" +
+	"\aservice\x18\x01 \x01(\x0e2\".cdp.backgroundservice.ServiceNameR\aservice\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x17\n" +
+	"\x15StopObservingResponse\"\x97\x01\n" +
 	"\x13SetRecordingRequest\x12#\n" +
 	"\rshould_record\x18\x01 \x01(\bR\fshouldRecord\x12<\n" +
-	"\aservice\x18\x02 \x01(\x0e2\".cdp.backgroundservice.ServiceNameR\aservice\"\x16\n" +
-	"\x14SetRecordingResponse\"R\n" +
+	"\aservice\x18\x02 \x01(\x0e2\".cdp.backgroundservice.ServiceNameR\aservice\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x16\n" +
+	"\x14SetRecordingResponse\"q\n" +
 	"\x12ClearEventsRequest\x12<\n" +
-	"\aservice\x18\x01 \x01(\x0e2\".cdp.backgroundservice.ServiceNameR\aservice\"\x15\n" +
+	"\aservice\x18\x01 \x01(\x0e2\".cdp.backgroundservice.ServiceNameR\aservice\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x15\n" +
 	"\x13ClearEventsResponse\"H\n" +
 	"'SubscribeBackgroundServiceEventsRequest\x12\x1d\n" +
 	"\n" +

@@ -19,6 +19,16 @@ func New(client *cdpclient.Client) *Server {
 	return &Server{client: client}
 }
 
+// send routes a CDP command through the specified session, falling back
+// to the client's default session if sessionID is empty.
+func (s *Server) send(ctx context.Context, sessionID string, method string, params interface{}) (json.RawMessage, error) {
+	if sessionID != "" {
+		return s.client.SendWithSession(ctx, method, params, sessionID)
+	}
+	return s.client.Send(ctx, method, params)
+}
+
+
 func (s *Server) GetDirectory(ctx context.Context, req *pb.GetDirectoryRequest) (*pb.GetDirectoryResponse, error) {
 	locator := map[string]interface{}{
 		"storageKey":     req.BucketFileSystemLocator.GetStorageKey(),
@@ -30,7 +40,7 @@ func (s *Server) GetDirectory(ctx context.Context, req *pb.GetDirectoryRequest) 
 	params := map[string]interface{}{
 		"bucketFileSystemLocator": locator,
 	}
-	result, err := s.client.Send(ctx, "FileSystem.getDirectory", params)
+	result, err := s.send(ctx, req.SessionId, "FileSystem.getDirectory", params)
 	if err != nil {
 		return nil, fmt.Errorf("FileSystem.getDirectory: %w", err)
 	}

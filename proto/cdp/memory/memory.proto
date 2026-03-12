@@ -52,49 +52,66 @@ message SamplingProfile {
 
 // ==================== Requests / Responses ====================
 
-message GetDOMCountersRequest {}
+message GetDOMCountersRequest {
+  string session_id = 99;
+}
 message GetDOMCountersResponse {
   int32 documents = 1;
   int32 nodes = 2;
   int32 js_event_listeners = 3;
 }
 
-message PrepareForLeakDetectionRequest {}
+message PrepareForLeakDetectionRequest {
+  string session_id = 99;
+}
 message PrepareForLeakDetectionResponse {}
 
-message ForciblyPurgeJavaScriptMemoryRequest {}
+message ForciblyPurgeJavaScriptMemoryRequest {
+  string session_id = 99;
+}
 message ForciblyPurgeJavaScriptMemoryResponse {}
 
 message SetPressureNotificationsSuppressedRequest {
   bool suppressed = 1;
+  string session_id = 99;
 }
 message SetPressureNotificationsSuppressedResponse {}
 
 message SimulatePressureNotificationRequest {
   string level = 1;
+  string session_id = 99;
 }
 message SimulatePressureNotificationResponse {}
 
 message StartSamplingRequest {
   optional int32 sampling_interval = 1;
   optional bool suppress_randomness = 2;
+  string session_id = 99;
 }
 message StartSamplingResponse {}
 
-message StopSamplingRequest {}
+message StopSamplingRequest {
+  string session_id = 99;
+}
 message StopSamplingResponse {}
 
-message GetAllTimeSamplingProfileRequest {}
+message GetAllTimeSamplingProfileRequest {
+  string session_id = 99;
+}
 message GetAllTimeSamplingProfileResponse {
   SamplingProfile profile = 1;
 }
 
-message GetSamplingProfileRequest {}
+message GetSamplingProfileRequest {
+  string session_id = 99;
+}
 message GetSamplingProfileResponse {
   SamplingProfile profile = 1;
 }
 
-message GetBrowserSamplingProfileRequest {}
+message GetBrowserSamplingProfileRequest {
+  string session_id = 99;
+}
 message GetBrowserSamplingProfileResponse {
   SamplingProfile profile = 1;
 }

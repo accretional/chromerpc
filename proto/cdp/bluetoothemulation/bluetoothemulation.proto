@@ -44,10 +44,13 @@ message ScanEntry {
 
 message EnableRequest {
   string state = 1;
+  string session_id = 99;
 }
 message EnableResponse {}
 
-message DisableRequest {}
+message DisableRequest {
+  string session_id = 99;
+}
 message DisableResponse {}
 
 message SimulatePreconnectedPeripheralRequest {
@@ -55,10 +58,12 @@ message SimulatePreconnectedPeripheralRequest {
   string name = 2;
   repeated ManufacturerData manufacturer_data = 3;
   repeated string known_service_uuids = 4;
+  string session_id = 99;
 }
 message SimulatePreconnectedPeripheralResponse {}
 
 message SimulateAdvertisementRequest {
   ScanEntry entry = 1;
+  string session_id = 99;
 }
 message SimulateAdvertisementResponse {}

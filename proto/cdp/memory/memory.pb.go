@@ -127,6 +127,7 @@ func (x *SamplingProfile) GetSamples() []*SamplingProfileNode {
 
 type GetDOMCountersRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -159,6 +160,13 @@ func (x *GetDOMCountersRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use GetDOMCountersRequest.ProtoReflect.Descriptor instead.
 func (*GetDOMCountersRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_memory_memory_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *GetDOMCountersRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type GetDOMCountersResponse struct {
@@ -223,6 +231,7 @@ func (x *GetDOMCountersResponse) GetJsEventListeners() int32 {
 
 type PrepareForLeakDetectionRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -255,6 +264,13 @@ func (x *PrepareForLeakDetectionRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use PrepareForLeakDetectionRequest.ProtoReflect.Descriptor instead.
 func (*PrepareForLeakDetectionRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_memory_memory_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *PrepareForLeakDetectionRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type PrepareForLeakDetectionResponse struct {
@@ -295,6 +311,7 @@ func (*PrepareForLeakDetectionResponse) Descriptor() ([]byte, []int) {
 
 type ForciblyPurgeJavaScriptMemoryRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -327,6 +344,13 @@ func (x *ForciblyPurgeJavaScriptMemoryRequest) ProtoReflect() protoreflect.Messa
 // Deprecated: Use ForciblyPurgeJavaScriptMemoryRequest.ProtoReflect.Descriptor instead.
 func (*ForciblyPurgeJavaScriptMemoryRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_memory_memory_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *ForciblyPurgeJavaScriptMemoryRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type ForciblyPurgeJavaScriptMemoryResponse struct {
@@ -368,6 +392,7 @@ func (*ForciblyPurgeJavaScriptMemoryResponse) Descriptor() ([]byte, []int) {
 type SetPressureNotificationsSuppressedRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Suppressed    bool                   `protobuf:"varint,1,opt,name=suppressed,proto3" json:"suppressed,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -409,6 +434,13 @@ func (x *SetPressureNotificationsSuppressedRequest) GetSuppressed() bool {
 	return false
 }
 
+func (x *SetPressureNotificationsSuppressedRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type SetPressureNotificationsSuppressedResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -448,6 +480,7 @@ func (*SetPressureNotificationsSuppressedResponse) Descriptor() ([]byte, []int) 
 type SimulatePressureNotificationRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Level         string                 `protobuf:"bytes,1,opt,name=level,proto3" json:"level,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -485,6 +518,13 @@ func (*SimulatePressureNotificationRequest) Descriptor() ([]byte, []int) {
 func (x *SimulatePressureNotificationRequest) GetLevel() string {
 	if x != nil {
 		return x.Level
+	}
+	return ""
+}
+
+func (x *SimulatePressureNotificationRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -529,6 +569,7 @@ type StartSamplingRequest struct {
 	state              protoimpl.MessageState `protogen:"open.v1"`
 	SamplingInterval   *int32                 `protobuf:"varint,1,opt,name=sampling_interval,json=samplingInterval,proto3,oneof" json:"sampling_interval,omitempty"`
 	SuppressRandomness *bool                  `protobuf:"varint,2,opt,name=suppress_randomness,json=suppressRandomness,proto3,oneof" json:"suppress_randomness,omitempty"`
+	SessionId          string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields      protoimpl.UnknownFields
 	sizeCache          protoimpl.SizeCache
 }
@@ -577,6 +618,13 @@ func (x *StartSamplingRequest) GetSuppressRandomness() bool {
 	return false
 }
 
+func (x *StartSamplingRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type StartSamplingResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -615,6 +663,7 @@ func (*StartSamplingResponse) Descriptor() ([]byte, []int) {
 
 type StopSamplingRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -647,6 +696,13 @@ func (x *StopSamplingRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use StopSamplingRequest.ProtoReflect.Descriptor instead.
 func (*StopSamplingRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_memory_memory_proto_rawDescGZIP(), []int{14}
+}
+
+func (x *StopSamplingRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type StopSamplingResponse struct {
@@ -687,6 +743,7 @@ func (*StopSamplingResponse) Descriptor() ([]byte, []int) {
 
 type GetAllTimeSamplingProfileRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -719,6 +776,13 @@ func (x *GetAllTimeSamplingProfileRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use GetAllTimeSamplingProfileRequest.ProtoReflect.Descriptor instead.
 func (*GetAllTimeSamplingProfileRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_memory_memory_proto_rawDescGZIP(), []int{16}
+}
+
+func (x *GetAllTimeSamplingProfileRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type GetAllTimeSamplingProfileResponse struct {
@@ -767,6 +831,7 @@ func (x *GetAllTimeSamplingProfileResponse) GetProfile() *SamplingProfile {
 
 type GetSamplingProfileRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -799,6 +864,13 @@ func (x *GetSamplingProfileRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use GetSamplingProfileRequest.ProtoReflect.Descriptor instead.
 func (*GetSamplingProfileRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_memory_memory_proto_rawDescGZIP(), []int{18}
+}
+
+func (x *GetSamplingProfileRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type GetSamplingProfileResponse struct {
@@ -847,6 +919,7 @@ func (x *GetSamplingProfileResponse) GetProfile() *SamplingProfile {
 
 type GetBrowserSamplingProfileRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -879,6 +952,13 @@ func (x *GetBrowserSamplingProfileRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use GetBrowserSamplingProfileRequest.ProtoReflect.Descriptor instead.
 func (*GetBrowserSamplingProfileRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_memory_memory_proto_rawDescGZIP(), []int{20}
+}
+
+func (x *GetBrowserSamplingProfileRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type GetBrowserSamplingProfileResponse struct {
@@ -936,39 +1016,59 @@ const file_proto_cdp_memory_memory_proto_rawDesc = "" +
 	"\x05total\x18\x02 \x01(\x01R\x05total\x12\x14\n" +
 	"\x05stack\x18\x03 \x03(\tR\x05stack\"L\n" +
 	"\x0fSamplingProfile\x129\n" +
-	"\asamples\x18\x01 \x03(\v2\x1f.cdp.memory.SamplingProfileNodeR\asamples\"\x17\n" +
-	"\x15GetDOMCountersRequest\"z\n" +
+	"\asamples\x18\x01 \x03(\v2\x1f.cdp.memory.SamplingProfileNodeR\asamples\"6\n" +
+	"\x15GetDOMCountersRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"z\n" +
 	"\x16GetDOMCountersResponse\x12\x1c\n" +
 	"\tdocuments\x18\x01 \x01(\x05R\tdocuments\x12\x14\n" +
 	"\x05nodes\x18\x02 \x01(\x05R\x05nodes\x12,\n" +
-	"\x12js_event_listeners\x18\x03 \x01(\x05R\x10jsEventListeners\" \n" +
-	"\x1ePrepareForLeakDetectionRequest\"!\n" +
-	"\x1fPrepareForLeakDetectionResponse\"&\n" +
-	"$ForciblyPurgeJavaScriptMemoryRequest\"'\n" +
-	"%ForciblyPurgeJavaScriptMemoryResponse\"K\n" +
+	"\x12js_event_listeners\x18\x03 \x01(\x05R\x10jsEventListeners\"?\n" +
+	"\x1ePrepareForLeakDetectionRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"!\n" +
+	"\x1fPrepareForLeakDetectionResponse\"E\n" +
+	"$ForciblyPurgeJavaScriptMemoryRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"'\n" +
+	"%ForciblyPurgeJavaScriptMemoryResponse\"j\n" +
 	")SetPressureNotificationsSuppressedRequest\x12\x1e\n" +
 	"\n" +
 	"suppressed\x18\x01 \x01(\bR\n" +
-	"suppressed\",\n" +
-	"*SetPressureNotificationsSuppressedResponse\";\n" +
+	"suppressed\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\",\n" +
+	"*SetPressureNotificationsSuppressedResponse\"Z\n" +
 	"#SimulatePressureNotificationRequest\x12\x14\n" +
-	"\x05level\x18\x01 \x01(\tR\x05level\"&\n" +
-	"$SimulatePressureNotificationResponse\"\xac\x01\n" +
+	"\x05level\x18\x01 \x01(\tR\x05level\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"&\n" +
+	"$SimulatePressureNotificationResponse\"\xcb\x01\n" +
 	"\x14StartSamplingRequest\x120\n" +
 	"\x11sampling_interval\x18\x01 \x01(\x05H\x00R\x10samplingInterval\x88\x01\x01\x124\n" +
-	"\x13suppress_randomness\x18\x02 \x01(\bH\x01R\x12suppressRandomness\x88\x01\x01B\x14\n" +
+	"\x13suppress_randomness\x18\x02 \x01(\bH\x01R\x12suppressRandomness\x88\x01\x01\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionIdB\x14\n" +
 	"\x12_sampling_intervalB\x16\n" +
 	"\x14_suppress_randomness\"\x17\n" +
-	"\x15StartSamplingResponse\"\x15\n" +
-	"\x13StopSamplingRequest\"\x16\n" +
-	"\x14StopSamplingResponse\"\"\n" +
-	" GetAllTimeSamplingProfileRequest\"Z\n" +
+	"\x15StartSamplingResponse\"4\n" +
+	"\x13StopSamplingRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x16\n" +
+	"\x14StopSamplingResponse\"A\n" +
+	" GetAllTimeSamplingProfileRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"Z\n" +
 	"!GetAllTimeSamplingProfileResponse\x125\n" +
-	"\aprofile\x18\x01 \x01(\v2\x1b.cdp.memory.SamplingProfileR\aprofile\"\x1b\n" +
-	"\x19GetSamplingProfileRequest\"S\n" +
+	"\aprofile\x18\x01 \x01(\v2\x1b.cdp.memory.SamplingProfileR\aprofile\":\n" +
+	"\x19GetSamplingProfileRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"S\n" +
 	"\x1aGetSamplingProfileResponse\x125\n" +
-	"\aprofile\x18\x01 \x01(\v2\x1b.cdp.memory.SamplingProfileR\aprofile\"\"\n" +
-	" GetBrowserSamplingProfileRequest\"Z\n" +
+	"\aprofile\x18\x01 \x01(\v2\x1b.cdp.memory.SamplingProfileR\aprofile\"A\n" +
+	" GetBrowserSamplingProfileRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"Z\n" +
 	"!GetBrowserSamplingProfileResponse\x125\n" +
 	"\aprofile\x18\x01 \x01(\v2\x1b.cdp.memory.SamplingProfileR\aprofile2\xff\b\n" +
 	"\rMemoryService\x12W\n" +

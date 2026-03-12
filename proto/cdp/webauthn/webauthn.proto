@@ -104,14 +104,18 @@ message Credential {
 
 message EnableRequest {
   bool enable_ui = 1;
+  string session_id = 99;
 }
 message EnableResponse {}
 
-message DisableRequest {}
+message DisableRequest {
+  string session_id = 99;
+}
 message DisableResponse {}
 
 message AddVirtualAuthenticatorRequest {
   VirtualAuthenticatorOptions options = 1;
+  string session_id = 99;
 }
 message AddVirtualAuthenticatorResponse {
   string authenticator_id = 1;
@@ -119,18 +123,21 @@ message AddVirtualAuthenticatorResponse {
 
 message RemoveVirtualAuthenticatorRequest {
   string authenticator_id = 1;
+  string session_id = 99;
 }
 message RemoveVirtualAuthenticatorResponse {}
 
 message AddCredentialRequest {
   string authenticator_id = 1;
   Credential credential = 2;
+  string session_id = 99;
 }
 message AddCredentialResponse {}
 
 message GetCredentialRequest {
   string authenticator_id = 1;
   string credential_id = 2;
+  string session_id = 99;
 }
 message GetCredentialResponse {
   Credential credential = 1;
@@ -138,6 +145,7 @@ message GetCredentialResponse {
 
 message GetCredentialsRequest {
   string authenticator_id = 1;
+  string session_id = 99;
 }
 message GetCredentialsResponse {
   repeated Credential credentials = 1;
@@ -146,23 +154,27 @@ message GetCredentialsResponse {
 message RemoveCredentialRequest {
   string authenticator_id = 1;
   string credential_id = 2;
+  string session_id = 99;
 }
 message RemoveCredentialResponse {}
 
 message ClearCredentialsRequest {
   string authenticator_id = 1;
+  string session_id = 99;
 }
 message ClearCredentialsResponse {}
 
 message SetUserVerifiedRequest {
   string authenticator_id = 1;
   bool is_user_verified = 2;
+  string session_id = 99;
 }
 message SetUserVerifiedResponse {}
 
 message SetAutomaticPresenceSimulationRequest {
   string authenticator_id = 1;
   bool enabled = 2;
+  string session_id = 99;
 }
 message SetAutomaticPresenceSimulationResponse {}
 
@@ -171,6 +183,7 @@ message SetResponseOverrideBitsRequest {
   bool is_bogus_signature = 2;
   bool is_bad_uv = 3;
   bool is_bad_up = 4;
+  string session_id = 99;
 }
 message SetResponseOverrideBitsResponse {}
 

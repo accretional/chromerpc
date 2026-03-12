@@ -45,14 +45,19 @@ message Item {
 
 // ==================== Requests / Responses ====================
 
-message EnableRequest {}
+message EnableRequest {
+  string session_id = 99;
+}
 message EnableResponse {}
 
-message DisableRequest {}
+message DisableRequest {
+  string session_id = 99;
+}
 message DisableResponse {}
 
 message GetDOMStorageItemsRequest {
   StorageId storage_id = 1;
+  string session_id = 99;
 }
 message GetDOMStorageItemsResponse {
   repeated Item entries = 1;
@@ -62,23 +67,28 @@ message SetDOMStorageItemRequest {
   StorageId storage_id = 1;
   string key = 2;
   string value = 3;
+  string session_id = 99;
 }
 message SetDOMStorageItemResponse {}
 
 message RemoveDOMStorageItemRequest {
   StorageId storage_id = 1;
   string key = 2;
+  string session_id = 99;
 }
 message RemoveDOMStorageItemResponse {}
 
 message ClearRequest {
   StorageId storage_id = 1;
+  string session_id = 99;
 }
 message ClearResponse {}
 
 // ==================== Events ====================
 
-message SubscribeEventsRequest {}
+message SubscribeEventsRequest {
+  string session_id = 99;
+}
 
 message DOMStorageEvent {
   oneof event {

@@ -24,6 +24,7 @@ const (
 type LoadUnpackedRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Path          string                 `protobuf:"bytes,1,opt,name=path,proto3" json:"path,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -61,6 +62,13 @@ func (*LoadUnpackedRequest) Descriptor() ([]byte, []int) {
 func (x *LoadUnpackedRequest) GetPath() string {
 	if x != nil {
 		return x.Path
+	}
+	return ""
+}
+
+func (x *LoadUnpackedRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -114,6 +122,7 @@ type GetStorageItemsRequest struct {
 	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	StorageArea   string                 `protobuf:"bytes,2,opt,name=storage_area,json=storageArea,proto3" json:"storage_area,omitempty"` // session, local, sync, managed
 	Keys          []string               `protobuf:"bytes,3,rep,name=keys,proto3" json:"keys,omitempty"`                                  // optional: if empty, returns all items
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -169,6 +178,13 @@ func (x *GetStorageItemsRequest) GetKeys() []string {
 	return nil
 }
 
+func (x *GetStorageItemsRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type GetStorageItemsResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Data          []byte                 `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"` // JSON-encoded object
@@ -218,6 +234,7 @@ type RemoveStorageItemsRequest struct {
 	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	StorageArea   string                 `protobuf:"bytes,2,opt,name=storage_area,json=storageArea,proto3" json:"storage_area,omitempty"`
 	Keys          []string               `protobuf:"bytes,3,rep,name=keys,proto3" json:"keys,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -273,6 +290,13 @@ func (x *RemoveStorageItemsRequest) GetKeys() []string {
 	return nil
 }
 
+func (x *RemoveStorageItemsRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type RemoveStorageItemsResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -313,6 +337,7 @@ type ClearStorageItemsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	StorageArea   string                 `protobuf:"bytes,2,opt,name=storage_area,json=storageArea,proto3" json:"storage_area,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -361,6 +386,13 @@ func (x *ClearStorageItemsRequest) GetStorageArea() string {
 	return ""
 }
 
+func (x *ClearStorageItemsRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type ClearStorageItemsResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -402,6 +434,7 @@ type SetStorageItemsRequest struct {
 	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	StorageArea   string                 `protobuf:"bytes,2,opt,name=storage_area,json=storageArea,proto3" json:"storage_area,omitempty"`
 	Values        string                 `protobuf:"bytes,3,opt,name=values,proto3" json:"values,omitempty"` // JSON-encoded object
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -457,6 +490,13 @@ func (x *SetStorageItemsRequest) GetValues() string {
 	return ""
 }
 
+func (x *SetStorageItemsRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type SetStorageItemsResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -497,30 +537,40 @@ var File_proto_cdp_extensions_extensions_proto protoreflect.FileDescriptor
 
 const file_proto_cdp_extensions_extensions_proto_rawDesc = "" +
 	"\n" +
-	"%proto/cdp/extensions/extensions.proto\x12\x0ecdp.extensions\")\n" +
+	"%proto/cdp/extensions/extensions.proto\x12\x0ecdp.extensions\"H\n" +
 	"\x13LoadUnpackedRequest\x12\x12\n" +
-	"\x04path\x18\x01 \x01(\tR\x04path\"&\n" +
+	"\x04path\x18\x01 \x01(\tR\x04path\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"&\n" +
 	"\x14LoadUnpackedResponse\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\"_\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\"~\n" +
 	"\x16GetStorageItemsRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12!\n" +
 	"\fstorage_area\x18\x02 \x01(\tR\vstorageArea\x12\x12\n" +
-	"\x04keys\x18\x03 \x03(\tR\x04keys\"-\n" +
+	"\x04keys\x18\x03 \x03(\tR\x04keys\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"-\n" +
 	"\x17GetStorageItemsResponse\x12\x12\n" +
-	"\x04data\x18\x01 \x01(\fR\x04data\"b\n" +
+	"\x04data\x18\x01 \x01(\fR\x04data\"\x81\x01\n" +
 	"\x19RemoveStorageItemsRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12!\n" +
 	"\fstorage_area\x18\x02 \x01(\tR\vstorageArea\x12\x12\n" +
-	"\x04keys\x18\x03 \x03(\tR\x04keys\"\x1c\n" +
-	"\x1aRemoveStorageItemsResponse\"M\n" +
+	"\x04keys\x18\x03 \x03(\tR\x04keys\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x1c\n" +
+	"\x1aRemoveStorageItemsResponse\"l\n" +
 	"\x18ClearStorageItemsRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12!\n" +
-	"\fstorage_area\x18\x02 \x01(\tR\vstorageArea\"\x1b\n" +
-	"\x19ClearStorageItemsResponse\"c\n" +
+	"\fstorage_area\x18\x02 \x01(\tR\vstorageArea\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x1b\n" +
+	"\x19ClearStorageItemsResponse\"\x82\x01\n" +
 	"\x16SetStorageItemsRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12!\n" +
 	"\fstorage_area\x18\x02 \x01(\tR\vstorageArea\x12\x16\n" +
-	"\x06values\x18\x03 \x01(\tR\x06values\"\x19\n" +
+	"\x06values\x18\x03 \x01(\tR\x06values\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x19\n" +
 	"\x17SetStorageItemsResponse2\x8d\x04\n" +
 	"\x11ExtensionsService\x12Y\n" +
 	"\fLoadUnpacked\x12#.cdp.extensions.LoadUnpackedRequest\x1a$.cdp.extensions.LoadUnpackedResponse\x12b\n" +

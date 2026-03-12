@@ -279,6 +279,7 @@ func (x *SamplingHeapProfile) GetSamples() []*SamplingHeapProfileSample {
 
 type EnableRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -311,6 +312,13 @@ func (x *EnableRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use EnableRequest.ProtoReflect.Descriptor instead.
 func (*EnableRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_heapprofiler_heapprofiler_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *EnableRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type EnableResponse struct {
@@ -351,6 +359,7 @@ func (*EnableResponse) Descriptor() ([]byte, []int) {
 
 type DisableRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -383,6 +392,13 @@ func (x *DisableRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use DisableRequest.ProtoReflect.Descriptor instead.
 func (*DisableRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_heapprofiler_heapprofiler_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *DisableRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type DisableResponse struct {
@@ -424,6 +440,7 @@ func (*DisableResponse) Descriptor() ([]byte, []int) {
 type StartTrackingHeapObjectsRequest struct {
 	state            protoimpl.MessageState `protogen:"open.v1"`
 	TrackAllocations bool                   `protobuf:"varint,1,opt,name=track_allocations,json=trackAllocations,proto3" json:"track_allocations,omitempty"`
+	SessionId        string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields    protoimpl.UnknownFields
 	sizeCache        protoimpl.SizeCache
 }
@@ -463,6 +480,13 @@ func (x *StartTrackingHeapObjectsRequest) GetTrackAllocations() bool {
 		return x.TrackAllocations
 	}
 	return false
+}
+
+func (x *StartTrackingHeapObjectsRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type StartTrackingHeapObjectsResponse struct {
@@ -507,6 +531,7 @@ type StopTrackingHeapObjectsRequest struct {
 	TreatGlobalObjectsAsRoots bool                   `protobuf:"varint,2,opt,name=treat_global_objects_as_roots,json=treatGlobalObjectsAsRoots,proto3" json:"treat_global_objects_as_roots,omitempty"`
 	CaptureNumericValue       bool                   `protobuf:"varint,3,opt,name=capture_numeric_value,json=captureNumericValue,proto3" json:"capture_numeric_value,omitempty"`
 	ExposeInternals           bool                   `protobuf:"varint,4,opt,name=expose_internals,json=exposeInternals,proto3" json:"expose_internals,omitempty"`
+	SessionId                 string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields             protoimpl.UnknownFields
 	sizeCache                 protoimpl.SizeCache
 }
@@ -569,6 +594,13 @@ func (x *StopTrackingHeapObjectsRequest) GetExposeInternals() bool {
 	return false
 }
 
+func (x *StopTrackingHeapObjectsRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type StopTrackingHeapObjectsResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -611,6 +643,7 @@ type TakeHeapSnapshotRequest struct {
 	TreatGlobalObjectsAsRoots bool                   `protobuf:"varint,2,opt,name=treat_global_objects_as_roots,json=treatGlobalObjectsAsRoots,proto3" json:"treat_global_objects_as_roots,omitempty"`
 	CaptureNumericValue       bool                   `protobuf:"varint,3,opt,name=capture_numeric_value,json=captureNumericValue,proto3" json:"capture_numeric_value,omitempty"`
 	ExposeInternals           bool                   `protobuf:"varint,4,opt,name=expose_internals,json=exposeInternals,proto3" json:"expose_internals,omitempty"`
+	SessionId                 string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields             protoimpl.UnknownFields
 	sizeCache                 protoimpl.SizeCache
 }
@@ -673,6 +706,13 @@ func (x *TakeHeapSnapshotRequest) GetExposeInternals() bool {
 	return false
 }
 
+func (x *TakeHeapSnapshotRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type TakeHeapSnapshotResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -711,6 +751,7 @@ func (*TakeHeapSnapshotResponse) Descriptor() ([]byte, []int) {
 
 type CollectGarbageRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -743,6 +784,13 @@ func (x *CollectGarbageRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use CollectGarbageRequest.ProtoReflect.Descriptor instead.
 func (*CollectGarbageRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_heapprofiler_heapprofiler_proto_rawDescGZIP(), []int{14}
+}
+
+func (x *CollectGarbageRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type CollectGarbageResponse struct {
@@ -785,6 +833,7 @@ type GetObjectByHeapObjectIdRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	ObjectId      string                 `protobuf:"bytes,1,opt,name=object_id,json=objectId,proto3" json:"object_id,omitempty"`
 	ObjectGroup   string                 `protobuf:"bytes,2,opt,name=object_group,json=objectGroup,proto3" json:"object_group,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -829,6 +878,13 @@ func (x *GetObjectByHeapObjectIdRequest) GetObjectId() string {
 func (x *GetObjectByHeapObjectIdRequest) GetObjectGroup() string {
 	if x != nil {
 		return x.ObjectGroup
+	}
+	return ""
+}
+
+func (x *GetObjectByHeapObjectIdRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -880,6 +936,7 @@ func (x *GetObjectByHeapObjectIdResponse) GetResult() string {
 type AddInspectedHeapObjectRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	HeapObjectId  string                 `protobuf:"bytes,1,opt,name=heap_object_id,json=heapObjectId,proto3" json:"heap_object_id,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -917,6 +974,13 @@ func (*AddInspectedHeapObjectRequest) Descriptor() ([]byte, []int) {
 func (x *AddInspectedHeapObjectRequest) GetHeapObjectId() string {
 	if x != nil {
 		return x.HeapObjectId
+	}
+	return ""
+}
+
+func (x *AddInspectedHeapObjectRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -960,6 +1024,7 @@ func (*AddInspectedHeapObjectResponse) Descriptor() ([]byte, []int) {
 type GetHeapObjectIdRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	ObjectId      string                 `protobuf:"bytes,1,opt,name=object_id,json=objectId,proto3" json:"object_id,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -997,6 +1062,13 @@ func (*GetHeapObjectIdRequest) Descriptor() ([]byte, []int) {
 func (x *GetHeapObjectIdRequest) GetObjectId() string {
 	if x != nil {
 		return x.ObjectId
+	}
+	return ""
+}
+
+func (x *GetHeapObjectIdRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -1050,6 +1122,7 @@ type StartSamplingRequest struct {
 	SamplingInterval                 float64                `protobuf:"fixed64,1,opt,name=sampling_interval,json=samplingInterval,proto3" json:"sampling_interval,omitempty"`
 	IncludeObjectsCollectedByMajorGc bool                   `protobuf:"varint,2,opt,name=include_objects_collected_by_major_gc,json=includeObjectsCollectedByMajorGc,proto3" json:"include_objects_collected_by_major_gc,omitempty"`
 	IncludeObjectsCollectedByMinorGc bool                   `protobuf:"varint,3,opt,name=include_objects_collected_by_minor_gc,json=includeObjectsCollectedByMinorGc,proto3" json:"include_objects_collected_by_minor_gc,omitempty"`
+	SessionId                        string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields                    protoimpl.UnknownFields
 	sizeCache                        protoimpl.SizeCache
 }
@@ -1105,6 +1178,13 @@ func (x *StartSamplingRequest) GetIncludeObjectsCollectedByMinorGc() bool {
 	return false
 }
 
+func (x *StartSamplingRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type StartSamplingResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -1143,6 +1223,7 @@ func (*StartSamplingResponse) Descriptor() ([]byte, []int) {
 
 type StopSamplingRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1175,6 +1256,13 @@ func (x *StopSamplingRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use StopSamplingRequest.ProtoReflect.Descriptor instead.
 func (*StopSamplingRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_heapprofiler_heapprofiler_proto_rawDescGZIP(), []int{24}
+}
+
+func (x *StopSamplingRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type StopSamplingResponse struct {
@@ -1223,6 +1311,7 @@ func (x *StopSamplingResponse) GetProfile() *SamplingHeapProfile {
 
 type SubscribeEventsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1255,6 +1344,13 @@ func (x *SubscribeEventsRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use SubscribeEventsRequest.ProtoReflect.Descriptor instead.
 func (*SubscribeEventsRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_heapprofiler_heapprofiler_proto_rawDescGZIP(), []int{26}
+}
+
+func (x *SubscribeEventsRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type HeapProfilerEvent struct {
@@ -1595,49 +1691,73 @@ const file_proto_cdp_heapprofiler_heapprofiler_proto_rawDesc = "" +
 	"\aordinal\x18\x03 \x01(\x01R\aordinal\"\x9b\x01\n" +
 	"\x13SamplingHeapProfile\x12=\n" +
 	"\x04head\x18\x01 \x01(\v2).cdp.heapprofiler.SamplingHeapProfileNodeR\x04head\x12E\n" +
-	"\asamples\x18\x02 \x03(\v2+.cdp.heapprofiler.SamplingHeapProfileSampleR\asamples\"\x0f\n" +
-	"\rEnableRequest\"\x10\n" +
-	"\x0eEnableResponse\"\x10\n" +
-	"\x0eDisableRequest\"\x11\n" +
-	"\x0fDisableResponse\"N\n" +
+	"\asamples\x18\x02 \x03(\v2+.cdp.heapprofiler.SamplingHeapProfileSampleR\asamples\".\n" +
+	"\rEnableRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x10\n" +
+	"\x0eEnableResponse\"/\n" +
+	"\x0eDisableRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x11\n" +
+	"\x0fDisableResponse\"m\n" +
 	"\x1fStartTrackingHeapObjectsRequest\x12+\n" +
-	"\x11track_allocations\x18\x01 \x01(\bR\x10trackAllocations\"\"\n" +
-	" StartTrackingHeapObjectsResponse\"\xea\x01\n" +
+	"\x11track_allocations\x18\x01 \x01(\bR\x10trackAllocations\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\"\n" +
+	" StartTrackingHeapObjectsResponse\"\x89\x02\n" +
 	"\x1eStopTrackingHeapObjectsRequest\x12'\n" +
 	"\x0freport_progress\x18\x01 \x01(\bR\x0ereportProgress\x12@\n" +
 	"\x1dtreat_global_objects_as_roots\x18\x02 \x01(\bR\x19treatGlobalObjectsAsRoots\x122\n" +
 	"\x15capture_numeric_value\x18\x03 \x01(\bR\x13captureNumericValue\x12)\n" +
-	"\x10expose_internals\x18\x04 \x01(\bR\x0fexposeInternals\"!\n" +
-	"\x1fStopTrackingHeapObjectsResponse\"\xe3\x01\n" +
+	"\x10expose_internals\x18\x04 \x01(\bR\x0fexposeInternals\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"!\n" +
+	"\x1fStopTrackingHeapObjectsResponse\"\x82\x02\n" +
 	"\x17TakeHeapSnapshotRequest\x12'\n" +
 	"\x0freport_progress\x18\x01 \x01(\bR\x0ereportProgress\x12@\n" +
 	"\x1dtreat_global_objects_as_roots\x18\x02 \x01(\bR\x19treatGlobalObjectsAsRoots\x122\n" +
 	"\x15capture_numeric_value\x18\x03 \x01(\bR\x13captureNumericValue\x12)\n" +
-	"\x10expose_internals\x18\x04 \x01(\bR\x0fexposeInternals\"\x1a\n" +
-	"\x18TakeHeapSnapshotResponse\"\x17\n" +
-	"\x15CollectGarbageRequest\"\x18\n" +
-	"\x16CollectGarbageResponse\"`\n" +
+	"\x10expose_internals\x18\x04 \x01(\bR\x0fexposeInternals\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x1a\n" +
+	"\x18TakeHeapSnapshotResponse\"6\n" +
+	"\x15CollectGarbageRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x18\n" +
+	"\x16CollectGarbageResponse\"\x7f\n" +
 	"\x1eGetObjectByHeapObjectIdRequest\x12\x1b\n" +
 	"\tobject_id\x18\x01 \x01(\tR\bobjectId\x12!\n" +
-	"\fobject_group\x18\x02 \x01(\tR\vobjectGroup\"9\n" +
+	"\fobject_group\x18\x02 \x01(\tR\vobjectGroup\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"9\n" +
 	"\x1fGetObjectByHeapObjectIdResponse\x12\x16\n" +
-	"\x06result\x18\x01 \x01(\tR\x06result\"E\n" +
+	"\x06result\x18\x01 \x01(\tR\x06result\"d\n" +
 	"\x1dAddInspectedHeapObjectRequest\x12$\n" +
-	"\x0eheap_object_id\x18\x01 \x01(\tR\fheapObjectId\" \n" +
-	"\x1eAddInspectedHeapObjectResponse\"5\n" +
+	"\x0eheap_object_id\x18\x01 \x01(\tR\fheapObjectId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\" \n" +
+	"\x1eAddInspectedHeapObjectResponse\"T\n" +
 	"\x16GetHeapObjectIdRequest\x12\x1b\n" +
-	"\tobject_id\x18\x01 \x01(\tR\bobjectId\"P\n" +
+	"\tobject_id\x18\x01 \x01(\tR\bobjectId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"P\n" +
 	"\x17GetHeapObjectIdResponse\x125\n" +
-	"\x17heap_snapshot_object_id\x18\x01 \x01(\tR\x14heapSnapshotObjectId\"\xe5\x01\n" +
+	"\x17heap_snapshot_object_id\x18\x01 \x01(\tR\x14heapSnapshotObjectId\"\x84\x02\n" +
 	"\x14StartSamplingRequest\x12+\n" +
 	"\x11sampling_interval\x18\x01 \x01(\x01R\x10samplingInterval\x12O\n" +
 	"%include_objects_collected_by_major_gc\x18\x02 \x01(\bR includeObjectsCollectedByMajorGc\x12O\n" +
-	"%include_objects_collected_by_minor_gc\x18\x03 \x01(\bR includeObjectsCollectedByMinorGc\"\x17\n" +
-	"\x15StartSamplingResponse\"\x15\n" +
-	"\x13StopSamplingRequest\"W\n" +
+	"%include_objects_collected_by_minor_gc\x18\x03 \x01(\bR includeObjectsCollectedByMinorGc\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x17\n" +
+	"\x15StartSamplingResponse\"4\n" +
+	"\x13StopSamplingRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"W\n" +
 	"\x14StopSamplingResponse\x12?\n" +
-	"\aprofile\x18\x01 \x01(\v2%.cdp.heapprofiler.SamplingHeapProfileR\aprofile\"\x18\n" +
-	"\x16SubscribeEventsRequest\"\xaa\x03\n" +
+	"\aprofile\x18\x01 \x01(\v2%.cdp.heapprofiler.SamplingHeapProfileR\aprofile\"7\n" +
+	"\x16SubscribeEventsRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\xaa\x03\n" +
 	"\x11HeapProfilerEvent\x12d\n" +
 	"\x17add_heap_snapshot_chunk\x18\x01 \x01(\v2+.cdp.heapprofiler.AddHeapSnapshotChunkEventH\x00R\x14addHeapSnapshotChunk\x12v\n" +
 	"\x1dreport_heap_snapshot_progress\x18\x02 \x01(\v21.cdp.heapprofiler.ReportHeapSnapshotProgressEventH\x00R\x1areportHeapSnapshotProgress\x12X\n" +

@@ -520,6 +520,7 @@ func (x *ShapeOutsideInfo) GetMarginShape() string {
 type EnableRequest struct {
 	state             protoimpl.MessageState `protogen:"open.v1"`
 	IncludeWhitespace string                 `protobuf:"bytes,1,opt,name=include_whitespace,json=includeWhitespace,proto3" json:"include_whitespace,omitempty"` // "none", "all"
+	SessionId         string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields     protoimpl.UnknownFields
 	sizeCache         protoimpl.SizeCache
 }
@@ -557,6 +558,13 @@ func (*EnableRequest) Descriptor() ([]byte, []int) {
 func (x *EnableRequest) GetIncludeWhitespace() string {
 	if x != nil {
 		return x.IncludeWhitespace
+	}
+	return ""
+}
+
+func (x *EnableRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -599,6 +607,7 @@ func (*EnableResponse) Descriptor() ([]byte, []int) {
 
 type DisableRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -631,6 +640,13 @@ func (x *DisableRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use DisableRequest.ProtoReflect.Descriptor instead.
 func (*DisableRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_dom_dom_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *DisableRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type DisableResponse struct {
@@ -674,7 +690,8 @@ type GetDocumentRequest struct {
 	// Maximum depth of children to return (default 1, -1 for entire subtree).
 	Depth int32 `protobuf:"varint,1,opt,name=depth,proto3" json:"depth,omitempty"`
 	// Whether to traverse frames and shadow DOM.
-	Pierce        bool `protobuf:"varint,2,opt,name=pierce,proto3" json:"pierce,omitempty"`
+	Pierce        bool   `protobuf:"varint,2,opt,name=pierce,proto3" json:"pierce,omitempty"`
+	SessionId     string `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -721,6 +738,13 @@ func (x *GetDocumentRequest) GetPierce() bool {
 		return x.Pierce
 	}
 	return false
+}
+
+func (x *GetDocumentRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type GetDocumentResponse struct {
@@ -771,6 +795,7 @@ type QuerySelectorRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	NodeId        int32                  `protobuf:"varint,1,opt,name=node_id,json=nodeId,proto3" json:"node_id,omitempty"`
 	Selector      string                 `protobuf:"bytes,2,opt,name=selector,proto3" json:"selector,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -815,6 +840,13 @@ func (x *QuerySelectorRequest) GetNodeId() int32 {
 func (x *QuerySelectorRequest) GetSelector() string {
 	if x != nil {
 		return x.Selector
+	}
+	return ""
+}
+
+func (x *QuerySelectorRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -867,6 +899,7 @@ type QuerySelectorAllRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	NodeId        int32                  `protobuf:"varint,1,opt,name=node_id,json=nodeId,proto3" json:"node_id,omitempty"`
 	Selector      string                 `protobuf:"bytes,2,opt,name=selector,proto3" json:"selector,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -911,6 +944,13 @@ func (x *QuerySelectorAllRequest) GetNodeId() int32 {
 func (x *QuerySelectorAllRequest) GetSelector() string {
 	if x != nil {
 		return x.Selector
+	}
+	return ""
+}
+
+func (x *QuerySelectorAllRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -964,6 +1004,7 @@ type GetOuterHTMLRequest struct {
 	NodeId        int32                  `protobuf:"varint,1,opt,name=node_id,json=nodeId,proto3" json:"node_id,omitempty"`
 	BackendNodeId int32                  `protobuf:"varint,2,opt,name=backend_node_id,json=backendNodeId,proto3" json:"backend_node_id,omitempty"`
 	ObjectId      string                 `protobuf:"bytes,3,opt,name=object_id,json=objectId,proto3" json:"object_id,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1019,6 +1060,13 @@ func (x *GetOuterHTMLRequest) GetObjectId() string {
 	return ""
 }
 
+func (x *GetOuterHTMLRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type GetOuterHTMLResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	OuterHtml     string                 `protobuf:"bytes,1,opt,name=outer_html,json=outerHtml,proto3" json:"outer_html,omitempty"`
@@ -1067,6 +1115,7 @@ type SetOuterHTMLRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	NodeId        int32                  `protobuf:"varint,1,opt,name=node_id,json=nodeId,proto3" json:"node_id,omitempty"`
 	OuterHtml     string                 `protobuf:"bytes,2,opt,name=outer_html,json=outerHtml,proto3" json:"outer_html,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1115,6 +1164,13 @@ func (x *SetOuterHTMLRequest) GetOuterHtml() string {
 	return ""
 }
 
+func (x *SetOuterHTMLRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type SetOuterHTMLResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -1154,6 +1210,7 @@ func (*SetOuterHTMLResponse) Descriptor() ([]byte, []int) {
 type GetAttributesRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	NodeId        int32                  `protobuf:"varint,1,opt,name=node_id,json=nodeId,proto3" json:"node_id,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1193,6 +1250,13 @@ func (x *GetAttributesRequest) GetNodeId() int32 {
 		return x.NodeId
 	}
 	return 0
+}
+
+func (x *GetAttributesRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type GetAttributesResponse struct {
@@ -1245,6 +1309,7 @@ type SetAttributeValueRequest struct {
 	NodeId        int32                  `protobuf:"varint,1,opt,name=node_id,json=nodeId,proto3" json:"node_id,omitempty"`
 	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
 	Value         string                 `protobuf:"bytes,3,opt,name=value,proto3" json:"value,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1300,6 +1365,13 @@ func (x *SetAttributeValueRequest) GetValue() string {
 	return ""
 }
 
+func (x *SetAttributeValueRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type SetAttributeValueResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -1341,6 +1413,7 @@ type SetAttributesAsTextRequest struct {
 	NodeId        int32                  `protobuf:"varint,1,opt,name=node_id,json=nodeId,proto3" json:"node_id,omitempty"`
 	Text          string                 `protobuf:"bytes,2,opt,name=text,proto3" json:"text,omitempty"`
 	Name          string                 `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1396,6 +1469,13 @@ func (x *SetAttributesAsTextRequest) GetName() string {
 	return ""
 }
 
+func (x *SetAttributesAsTextRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type SetAttributesAsTextResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -1436,6 +1516,7 @@ type RemoveAttributeRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	NodeId        int32                  `protobuf:"varint,1,opt,name=node_id,json=nodeId,proto3" json:"node_id,omitempty"`
 	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1484,6 +1565,13 @@ func (x *RemoveAttributeRequest) GetName() string {
 	return ""
 }
 
+func (x *RemoveAttributeRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type RemoveAttributeResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -1523,6 +1611,7 @@ func (*RemoveAttributeResponse) Descriptor() ([]byte, []int) {
 type RemoveNodeRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	NodeId        int32                  `protobuf:"varint,1,opt,name=node_id,json=nodeId,proto3" json:"node_id,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1562,6 +1651,13 @@ func (x *RemoveNodeRequest) GetNodeId() int32 {
 		return x.NodeId
 	}
 	return 0
+}
+
+func (x *RemoveNodeRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type RemoveNodeResponse struct {
@@ -1604,6 +1700,7 @@ type SetNodeNameRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	NodeId        int32                  `protobuf:"varint,1,opt,name=node_id,json=nodeId,proto3" json:"node_id,omitempty"`
 	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1648,6 +1745,13 @@ func (x *SetNodeNameRequest) GetNodeId() int32 {
 func (x *SetNodeNameRequest) GetName() string {
 	if x != nil {
 		return x.Name
+	}
+	return ""
+}
+
+func (x *SetNodeNameRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -1700,6 +1804,7 @@ type SetNodeValueRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	NodeId        int32                  `protobuf:"varint,1,opt,name=node_id,json=nodeId,proto3" json:"node_id,omitempty"`
 	Value         string                 `protobuf:"bytes,2,opt,name=value,proto3" json:"value,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1748,6 +1853,13 @@ func (x *SetNodeValueRequest) GetValue() string {
 	return ""
 }
 
+func (x *SetNodeValueRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type SetNodeValueResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -1789,6 +1901,7 @@ type MoveToRequest struct {
 	NodeId             int32                  `protobuf:"varint,1,opt,name=node_id,json=nodeId,proto3" json:"node_id,omitempty"`
 	TargetNodeId       int32                  `protobuf:"varint,2,opt,name=target_node_id,json=targetNodeId,proto3" json:"target_node_id,omitempty"`
 	InsertBeforeNodeId int32                  `protobuf:"varint,3,opt,name=insert_before_node_id,json=insertBeforeNodeId,proto3" json:"insert_before_node_id,omitempty"`
+	SessionId          string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields      protoimpl.UnknownFields
 	sizeCache          protoimpl.SizeCache
 }
@@ -1844,6 +1957,13 @@ func (x *MoveToRequest) GetInsertBeforeNodeId() int32 {
 	return 0
 }
 
+func (x *MoveToRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type MoveToResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	NodeId        int32                  `protobuf:"varint,1,opt,name=node_id,json=nodeId,proto3" json:"node_id,omitempty"` // New id of the moved node.
@@ -1893,6 +2013,7 @@ type RequestChildNodesRequest struct {
 	NodeId        int32                  `protobuf:"varint,1,opt,name=node_id,json=nodeId,proto3" json:"node_id,omitempty"`
 	Depth         int32                  `protobuf:"varint,2,opt,name=depth,proto3" json:"depth,omitempty"`
 	Pierce        bool                   `protobuf:"varint,3,opt,name=pierce,proto3" json:"pierce,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1948,8 +2069,16 @@ func (x *RequestChildNodesRequest) GetPierce() bool {
 	return false
 }
 
+func (x *RequestChildNodesRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type RequestChildNodesResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1984,9 +2113,17 @@ func (*RequestChildNodesResponse) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_dom_dom_proto_rawDescGZIP(), []int{35}
 }
 
+func (x *RequestChildNodesResponse) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type RequestNodeRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	ObjectId      string                 `protobuf:"bytes,1,opt,name=object_id,json=objectId,proto3" json:"object_id,omitempty"` // Runtime.RemoteObjectId
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2028,9 +2165,17 @@ func (x *RequestNodeRequest) GetObjectId() string {
 	return ""
 }
 
+func (x *RequestNodeRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type RequestNodeResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	NodeId        int32                  `protobuf:"varint,1,opt,name=node_id,json=nodeId,proto3" json:"node_id,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2072,12 +2217,20 @@ func (x *RequestNodeResponse) GetNodeId() int32 {
 	return 0
 }
 
+func (x *RequestNodeResponse) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type ResolveNodeRequest struct {
 	state              protoimpl.MessageState `protogen:"open.v1"`
 	NodeId             int32                  `protobuf:"varint,1,opt,name=node_id,json=nodeId,proto3" json:"node_id,omitempty"`
 	BackendNodeId      int32                  `protobuf:"varint,2,opt,name=backend_node_id,json=backendNodeId,proto3" json:"backend_node_id,omitempty"`
 	ObjectGroup        string                 `protobuf:"bytes,3,opt,name=object_group,json=objectGroup,proto3" json:"object_group,omitempty"`
 	ExecutionContextId int32                  `protobuf:"varint,4,opt,name=execution_context_id,json=executionContextId,proto3" json:"execution_context_id,omitempty"`
+	SessionId          string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields      protoimpl.UnknownFields
 	sizeCache          protoimpl.SizeCache
 }
@@ -2140,6 +2293,13 @@ func (x *ResolveNodeRequest) GetExecutionContextId() int32 {
 	return 0
 }
 
+func (x *ResolveNodeRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type ResolveNodeResponse struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Simplified — the full RemoteObject is in the Runtime domain.
@@ -2192,6 +2352,7 @@ type DescribeNodeRequest struct {
 	ObjectId      string                 `protobuf:"bytes,3,opt,name=object_id,json=objectId,proto3" json:"object_id,omitempty"`
 	Depth         int32                  `protobuf:"varint,4,opt,name=depth,proto3" json:"depth,omitempty"`
 	Pierce        bool                   `protobuf:"varint,5,opt,name=pierce,proto3" json:"pierce,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2261,6 +2422,13 @@ func (x *DescribeNodeRequest) GetPierce() bool {
 	return false
 }
 
+func (x *DescribeNodeRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type DescribeNodeResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Node          *Node                  `protobuf:"bytes,1,opt,name=node,proto3" json:"node,omitempty"`
@@ -2310,6 +2478,7 @@ type GetBoxModelRequest struct {
 	NodeId        int32                  `protobuf:"varint,1,opt,name=node_id,json=nodeId,proto3" json:"node_id,omitempty"`
 	BackendNodeId int32                  `protobuf:"varint,2,opt,name=backend_node_id,json=backendNodeId,proto3" json:"backend_node_id,omitempty"`
 	ObjectId      string                 `protobuf:"bytes,3,opt,name=object_id,json=objectId,proto3" json:"object_id,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2365,6 +2534,13 @@ func (x *GetBoxModelRequest) GetObjectId() string {
 	return ""
 }
 
+func (x *GetBoxModelRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type GetBoxModelResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Model         *BoxModel              `protobuf:"bytes,1,opt,name=model,proto3" json:"model,omitempty"`
@@ -2415,6 +2591,7 @@ type GetNodeForLocationRequest struct {
 	Y                         int32                  `protobuf:"varint,2,opt,name=y,proto3" json:"y,omitempty"`
 	IncludeUserAgentShadowDom bool                   `protobuf:"varint,3,opt,name=include_user_agent_shadow_dom,json=includeUserAgentShadowDom,proto3" json:"include_user_agent_shadow_dom,omitempty"`
 	IgnorePointerEventsNone   bool                   `protobuf:"varint,4,opt,name=ignore_pointer_events_none,json=ignorePointerEventsNone,proto3" json:"ignore_pointer_events_none,omitempty"`
+	SessionId                 string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields             protoimpl.UnknownFields
 	sizeCache                 protoimpl.SizeCache
 }
@@ -2475,6 +2652,13 @@ func (x *GetNodeForLocationRequest) GetIgnorePointerEventsNone() bool {
 		return x.IgnorePointerEventsNone
 	}
 	return false
+}
+
+func (x *GetNodeForLocationRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type GetNodeForLocationResponse struct {
@@ -2544,6 +2728,7 @@ type GetContainerForNodeRequest struct {
 	PhysicalAxes       string                 `protobuf:"bytes,3,opt,name=physical_axes,json=physicalAxes,proto3" json:"physical_axes,omitempty"`
 	LogicalAxes        string                 `protobuf:"bytes,4,opt,name=logical_axes,json=logicalAxes,proto3" json:"logical_axes,omitempty"`
 	QueriesScrollState bool                   `protobuf:"varint,5,opt,name=queries_scroll_state,json=queriesScrollState,proto3" json:"queries_scroll_state,omitempty"`
+	SessionId          string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields      protoimpl.UnknownFields
 	sizeCache          protoimpl.SizeCache
 }
@@ -2613,6 +2798,13 @@ func (x *GetContainerForNodeRequest) GetQueriesScrollState() bool {
 	return false
 }
 
+func (x *GetContainerForNodeRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type GetContainerForNodeResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	NodeId        int32                  `protobuf:"varint,1,opt,name=node_id,json=nodeId,proto3" json:"node_id,omitempty"`
@@ -2659,6 +2851,7 @@ func (x *GetContainerForNodeResponse) GetNodeId() int32 {
 
 type HighlightNodeRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2691,6 +2884,13 @@ func (x *HighlightNodeRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use HighlightNodeRequest.ProtoReflect.Descriptor instead.
 func (*HighlightNodeRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_dom_dom_proto_rawDescGZIP(), []int{48}
+}
+
+func (x *HighlightNodeRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type HighlightNodeResponse struct {
@@ -2731,6 +2931,7 @@ func (*HighlightNodeResponse) Descriptor() ([]byte, []int) {
 
 type HideHighlightRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2763,6 +2964,13 @@ func (x *HideHighlightRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use HideHighlightRequest.ProtoReflect.Descriptor instead.
 func (*HideHighlightRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_dom_dom_proto_rawDescGZIP(), []int{50}
+}
+
+func (x *HideHighlightRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type HideHighlightResponse struct {
@@ -2803,6 +3011,7 @@ func (*HideHighlightResponse) Descriptor() ([]byte, []int) {
 
 type MarkUndoableStateRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2835,6 +3044,13 @@ func (x *MarkUndoableStateRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use MarkUndoableStateRequest.ProtoReflect.Descriptor instead.
 func (*MarkUndoableStateRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_dom_dom_proto_rawDescGZIP(), []int{52}
+}
+
+func (x *MarkUndoableStateRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type MarkUndoableStateResponse struct {
@@ -2878,6 +3094,7 @@ type FocusRequest struct {
 	NodeId        int32                  `protobuf:"varint,1,opt,name=node_id,json=nodeId,proto3" json:"node_id,omitempty"`
 	BackendNodeId int32                  `protobuf:"varint,2,opt,name=backend_node_id,json=backendNodeId,proto3" json:"backend_node_id,omitempty"`
 	ObjectId      string                 `protobuf:"bytes,3,opt,name=object_id,json=objectId,proto3" json:"object_id,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2933,6 +3150,13 @@ func (x *FocusRequest) GetObjectId() string {
 	return ""
 }
 
+func (x *FocusRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type FocusResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -2972,6 +3196,7 @@ func (*FocusResponse) Descriptor() ([]byte, []int) {
 type GetFileInfoRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	ObjectId      string                 `protobuf:"bytes,1,opt,name=object_id,json=objectId,proto3" json:"object_id,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -3009,6 +3234,13 @@ func (*GetFileInfoRequest) Descriptor() ([]byte, []int) {
 func (x *GetFileInfoRequest) GetObjectId() string {
 	if x != nil {
 		return x.ObjectId
+	}
+	return ""
+}
+
+func (x *GetFileInfoRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -3062,6 +3294,7 @@ type CopyToRequest struct {
 	NodeId             int32                  `protobuf:"varint,1,opt,name=node_id,json=nodeId,proto3" json:"node_id,omitempty"`
 	TargetNodeId       int32                  `protobuf:"varint,2,opt,name=target_node_id,json=targetNodeId,proto3" json:"target_node_id,omitempty"`
 	InsertBeforeNodeId int32                  `protobuf:"varint,3,opt,name=insert_before_node_id,json=insertBeforeNodeId,proto3" json:"insert_before_node_id,omitempty"`
+	SessionId          string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields      protoimpl.UnknownFields
 	sizeCache          protoimpl.SizeCache
 }
@@ -3115,6 +3348,13 @@ func (x *CopyToRequest) GetInsertBeforeNodeId() int32 {
 		return x.InsertBeforeNodeId
 	}
 	return 0
+}
+
+func (x *CopyToRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type CopyToResponse struct {
@@ -3789,144 +4029,204 @@ const file_proto_cdp_dom_dom_proto_rawDesc = "" +
 	"\x10ShapeOutsideInfo\x12\x16\n" +
 	"\x06bounds\x18\x01 \x03(\x01R\x06bounds\x12\x14\n" +
 	"\x05shape\x18\x02 \x01(\tR\x05shape\x12!\n" +
-	"\fmargin_shape\x18\x03 \x01(\tR\vmarginShape\">\n" +
+	"\fmargin_shape\x18\x03 \x01(\tR\vmarginShape\"]\n" +
 	"\rEnableRequest\x12-\n" +
-	"\x12include_whitespace\x18\x01 \x01(\tR\x11includeWhitespace\"\x10\n" +
-	"\x0eEnableResponse\"\x10\n" +
-	"\x0eDisableRequest\"\x11\n" +
-	"\x0fDisableResponse\"B\n" +
+	"\x12include_whitespace\x18\x01 \x01(\tR\x11includeWhitespace\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x10\n" +
+	"\x0eEnableResponse\"/\n" +
+	"\x0eDisableRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x11\n" +
+	"\x0fDisableResponse\"a\n" +
 	"\x12GetDocumentRequest\x12\x14\n" +
 	"\x05depth\x18\x01 \x01(\x05R\x05depth\x12\x16\n" +
-	"\x06pierce\x18\x02 \x01(\bR\x06pierce\"8\n" +
+	"\x06pierce\x18\x02 \x01(\bR\x06pierce\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"8\n" +
 	"\x13GetDocumentResponse\x12!\n" +
-	"\x04root\x18\x01 \x01(\v2\r.cdp.dom.NodeR\x04root\"K\n" +
+	"\x04root\x18\x01 \x01(\v2\r.cdp.dom.NodeR\x04root\"j\n" +
 	"\x14QuerySelectorRequest\x12\x17\n" +
 	"\anode_id\x18\x01 \x01(\x05R\x06nodeId\x12\x1a\n" +
-	"\bselector\x18\x02 \x01(\tR\bselector\"0\n" +
+	"\bselector\x18\x02 \x01(\tR\bselector\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"0\n" +
 	"\x15QuerySelectorResponse\x12\x17\n" +
-	"\anode_id\x18\x01 \x01(\x05R\x06nodeId\"N\n" +
+	"\anode_id\x18\x01 \x01(\x05R\x06nodeId\"m\n" +
 	"\x17QuerySelectorAllRequest\x12\x17\n" +
 	"\anode_id\x18\x01 \x01(\x05R\x06nodeId\x12\x1a\n" +
-	"\bselector\x18\x02 \x01(\tR\bselector\"5\n" +
+	"\bselector\x18\x02 \x01(\tR\bselector\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"5\n" +
 	"\x18QuerySelectorAllResponse\x12\x19\n" +
-	"\bnode_ids\x18\x01 \x03(\x05R\anodeIds\"s\n" +
+	"\bnode_ids\x18\x01 \x03(\x05R\anodeIds\"\x92\x01\n" +
 	"\x13GetOuterHTMLRequest\x12\x17\n" +
 	"\anode_id\x18\x01 \x01(\x05R\x06nodeId\x12&\n" +
 	"\x0fbackend_node_id\x18\x02 \x01(\x05R\rbackendNodeId\x12\x1b\n" +
-	"\tobject_id\x18\x03 \x01(\tR\bobjectId\"5\n" +
+	"\tobject_id\x18\x03 \x01(\tR\bobjectId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"5\n" +
 	"\x14GetOuterHTMLResponse\x12\x1d\n" +
 	"\n" +
-	"outer_html\x18\x01 \x01(\tR\touterHtml\"M\n" +
+	"outer_html\x18\x01 \x01(\tR\touterHtml\"l\n" +
 	"\x13SetOuterHTMLRequest\x12\x17\n" +
 	"\anode_id\x18\x01 \x01(\x05R\x06nodeId\x12\x1d\n" +
 	"\n" +
-	"outer_html\x18\x02 \x01(\tR\touterHtml\"\x16\n" +
-	"\x14SetOuterHTMLResponse\"/\n" +
+	"outer_html\x18\x02 \x01(\tR\touterHtml\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x16\n" +
+	"\x14SetOuterHTMLResponse\"N\n" +
 	"\x14GetAttributesRequest\x12\x17\n" +
-	"\anode_id\x18\x01 \x01(\x05R\x06nodeId\"7\n" +
+	"\anode_id\x18\x01 \x01(\x05R\x06nodeId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"7\n" +
 	"\x15GetAttributesResponse\x12\x1e\n" +
 	"\n" +
 	"attributes\x18\x01 \x03(\tR\n" +
-	"attributes\"]\n" +
+	"attributes\"|\n" +
 	"\x18SetAttributeValueRequest\x12\x17\n" +
 	"\anode_id\x18\x01 \x01(\x05R\x06nodeId\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x14\n" +
-	"\x05value\x18\x03 \x01(\tR\x05value\"\x1b\n" +
-	"\x19SetAttributeValueResponse\"]\n" +
+	"\x05value\x18\x03 \x01(\tR\x05value\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x1b\n" +
+	"\x19SetAttributeValueResponse\"|\n" +
 	"\x1aSetAttributesAsTextRequest\x12\x17\n" +
 	"\anode_id\x18\x01 \x01(\x05R\x06nodeId\x12\x12\n" +
 	"\x04text\x18\x02 \x01(\tR\x04text\x12\x12\n" +
-	"\x04name\x18\x03 \x01(\tR\x04name\"\x1d\n" +
-	"\x1bSetAttributesAsTextResponse\"E\n" +
+	"\x04name\x18\x03 \x01(\tR\x04name\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x1d\n" +
+	"\x1bSetAttributesAsTextResponse\"d\n" +
 	"\x16RemoveAttributeRequest\x12\x17\n" +
 	"\anode_id\x18\x01 \x01(\x05R\x06nodeId\x12\x12\n" +
-	"\x04name\x18\x02 \x01(\tR\x04name\"\x19\n" +
-	"\x17RemoveAttributeResponse\",\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x19\n" +
+	"\x17RemoveAttributeResponse\"K\n" +
 	"\x11RemoveNodeRequest\x12\x17\n" +
-	"\anode_id\x18\x01 \x01(\x05R\x06nodeId\"\x14\n" +
-	"\x12RemoveNodeResponse\"A\n" +
+	"\anode_id\x18\x01 \x01(\x05R\x06nodeId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x14\n" +
+	"\x12RemoveNodeResponse\"`\n" +
 	"\x12SetNodeNameRequest\x12\x17\n" +
 	"\anode_id\x18\x01 \x01(\x05R\x06nodeId\x12\x12\n" +
-	"\x04name\x18\x02 \x01(\tR\x04name\".\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\".\n" +
 	"\x13SetNodeNameResponse\x12\x17\n" +
-	"\anode_id\x18\x01 \x01(\x05R\x06nodeId\"D\n" +
+	"\anode_id\x18\x01 \x01(\x05R\x06nodeId\"c\n" +
 	"\x13SetNodeValueRequest\x12\x17\n" +
 	"\anode_id\x18\x01 \x01(\x05R\x06nodeId\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value\"\x16\n" +
-	"\x14SetNodeValueResponse\"\x81\x01\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x16\n" +
+	"\x14SetNodeValueResponse\"\xa0\x01\n" +
 	"\rMoveToRequest\x12\x17\n" +
 	"\anode_id\x18\x01 \x01(\x05R\x06nodeId\x12$\n" +
 	"\x0etarget_node_id\x18\x02 \x01(\x05R\ftargetNodeId\x121\n" +
-	"\x15insert_before_node_id\x18\x03 \x01(\x05R\x12insertBeforeNodeId\")\n" +
+	"\x15insert_before_node_id\x18\x03 \x01(\x05R\x12insertBeforeNodeId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\")\n" +
 	"\x0eMoveToResponse\x12\x17\n" +
-	"\anode_id\x18\x01 \x01(\x05R\x06nodeId\"a\n" +
+	"\anode_id\x18\x01 \x01(\x05R\x06nodeId\"\x80\x01\n" +
 	"\x18RequestChildNodesRequest\x12\x17\n" +
 	"\anode_id\x18\x01 \x01(\x05R\x06nodeId\x12\x14\n" +
 	"\x05depth\x18\x02 \x01(\x05R\x05depth\x12\x16\n" +
-	"\x06pierce\x18\x03 \x01(\bR\x06pierce\"\x1b\n" +
-	"\x19RequestChildNodesResponse\"1\n" +
+	"\x06pierce\x18\x03 \x01(\bR\x06pierce\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\":\n" +
+	"\x19RequestChildNodesResponse\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"P\n" +
 	"\x12RequestNodeRequest\x12\x1b\n" +
-	"\tobject_id\x18\x01 \x01(\tR\bobjectId\".\n" +
+	"\tobject_id\x18\x01 \x01(\tR\bobjectId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"M\n" +
 	"\x13RequestNodeResponse\x12\x17\n" +
-	"\anode_id\x18\x01 \x01(\x05R\x06nodeId\"\xaa\x01\n" +
+	"\anode_id\x18\x01 \x01(\x05R\x06nodeId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\xc9\x01\n" +
 	"\x12ResolveNodeRequest\x12\x17\n" +
 	"\anode_id\x18\x01 \x01(\x05R\x06nodeId\x12&\n" +
 	"\x0fbackend_node_id\x18\x02 \x01(\x05R\rbackendNodeId\x12!\n" +
 	"\fobject_group\x18\x03 \x01(\tR\vobjectGroup\x120\n" +
-	"\x14execution_context_id\x18\x04 \x01(\x05R\x12executionContextId\"6\n" +
+	"\x14execution_context_id\x18\x04 \x01(\x05R\x12executionContextId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"6\n" +
 	"\x13ResolveNodeResponse\x12\x1f\n" +
 	"\vobject_json\x18\x01 \x01(\tR\n" +
-	"objectJson\"\xa1\x01\n" +
+	"objectJson\"\xc0\x01\n" +
 	"\x13DescribeNodeRequest\x12\x17\n" +
 	"\anode_id\x18\x01 \x01(\x05R\x06nodeId\x12&\n" +
 	"\x0fbackend_node_id\x18\x02 \x01(\x05R\rbackendNodeId\x12\x1b\n" +
 	"\tobject_id\x18\x03 \x01(\tR\bobjectId\x12\x14\n" +
 	"\x05depth\x18\x04 \x01(\x05R\x05depth\x12\x16\n" +
-	"\x06pierce\x18\x05 \x01(\bR\x06pierce\"9\n" +
+	"\x06pierce\x18\x05 \x01(\bR\x06pierce\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"9\n" +
 	"\x14DescribeNodeResponse\x12!\n" +
-	"\x04node\x18\x01 \x01(\v2\r.cdp.dom.NodeR\x04node\"r\n" +
+	"\x04node\x18\x01 \x01(\v2\r.cdp.dom.NodeR\x04node\"\x91\x01\n" +
 	"\x12GetBoxModelRequest\x12\x17\n" +
 	"\anode_id\x18\x01 \x01(\x05R\x06nodeId\x12&\n" +
 	"\x0fbackend_node_id\x18\x02 \x01(\x05R\rbackendNodeId\x12\x1b\n" +
-	"\tobject_id\x18\x03 \x01(\tR\bobjectId\">\n" +
+	"\tobject_id\x18\x03 \x01(\tR\bobjectId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\">\n" +
 	"\x13GetBoxModelResponse\x12'\n" +
-	"\x05model\x18\x01 \x01(\v2\x11.cdp.dom.BoxModelR\x05model\"\xb6\x01\n" +
+	"\x05model\x18\x01 \x01(\v2\x11.cdp.dom.BoxModelR\x05model\"\xd5\x01\n" +
 	"\x19GetNodeForLocationRequest\x12\f\n" +
 	"\x01x\x18\x01 \x01(\x05R\x01x\x12\f\n" +
 	"\x01y\x18\x02 \x01(\x05R\x01y\x12@\n" +
 	"\x1dinclude_user_agent_shadow_dom\x18\x03 \x01(\bR\x19includeUserAgentShadowDom\x12;\n" +
-	"\x1aignore_pointer_events_none\x18\x04 \x01(\bR\x17ignorePointerEventsNone\"x\n" +
+	"\x1aignore_pointer_events_none\x18\x04 \x01(\bR\x17ignorePointerEventsNone\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"x\n" +
 	"\x1aGetNodeForLocationResponse\x12&\n" +
 	"\x0fbackend_node_id\x18\x01 \x01(\x05R\rbackendNodeId\x12\x19\n" +
 	"\bframe_id\x18\x02 \x01(\tR\aframeId\x12\x17\n" +
-	"\anode_id\x18\x03 \x01(\x05R\x06nodeId\"\xd6\x01\n" +
+	"\anode_id\x18\x03 \x01(\x05R\x06nodeId\"\xf5\x01\n" +
 	"\x1aGetContainerForNodeRequest\x12\x17\n" +
 	"\anode_id\x18\x01 \x01(\x05R\x06nodeId\x12%\n" +
 	"\x0econtainer_name\x18\x02 \x01(\tR\rcontainerName\x12#\n" +
 	"\rphysical_axes\x18\x03 \x01(\tR\fphysicalAxes\x12!\n" +
 	"\flogical_axes\x18\x04 \x01(\tR\vlogicalAxes\x120\n" +
-	"\x14queries_scroll_state\x18\x05 \x01(\bR\x12queriesScrollState\"6\n" +
+	"\x14queries_scroll_state\x18\x05 \x01(\bR\x12queriesScrollState\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"6\n" +
 	"\x1bGetContainerForNodeResponse\x12\x17\n" +
-	"\anode_id\x18\x01 \x01(\x05R\x06nodeId\"\x16\n" +
-	"\x14HighlightNodeRequest\"\x17\n" +
-	"\x15HighlightNodeResponse\"\x16\n" +
-	"\x14HideHighlightRequest\"\x17\n" +
-	"\x15HideHighlightResponse\"\x1a\n" +
-	"\x18MarkUndoableStateRequest\"\x1b\n" +
-	"\x19MarkUndoableStateResponse\"l\n" +
+	"\anode_id\x18\x01 \x01(\x05R\x06nodeId\"5\n" +
+	"\x14HighlightNodeRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x17\n" +
+	"\x15HighlightNodeResponse\"5\n" +
+	"\x14HideHighlightRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x17\n" +
+	"\x15HideHighlightResponse\"9\n" +
+	"\x18MarkUndoableStateRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x1b\n" +
+	"\x19MarkUndoableStateResponse\"\x8b\x01\n" +
 	"\fFocusRequest\x12\x17\n" +
 	"\anode_id\x18\x01 \x01(\x05R\x06nodeId\x12&\n" +
 	"\x0fbackend_node_id\x18\x02 \x01(\x05R\rbackendNodeId\x12\x1b\n" +
-	"\tobject_id\x18\x03 \x01(\tR\bobjectId\"\x0f\n" +
-	"\rFocusResponse\"1\n" +
+	"\tobject_id\x18\x03 \x01(\tR\bobjectId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x0f\n" +
+	"\rFocusResponse\"P\n" +
 	"\x12GetFileInfoRequest\x12\x1b\n" +
-	"\tobject_id\x18\x01 \x01(\tR\bobjectId\")\n" +
+	"\tobject_id\x18\x01 \x01(\tR\bobjectId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\")\n" +
 	"\x13GetFileInfoResponse\x12\x12\n" +
-	"\x04path\x18\x01 \x01(\tR\x04path\"\x81\x01\n" +
+	"\x04path\x18\x01 \x01(\tR\x04path\"\xa0\x01\n" +
 	"\rCopyToRequest\x12\x17\n" +
 	"\anode_id\x18\x01 \x01(\x05R\x06nodeId\x12$\n" +
 	"\x0etarget_node_id\x18\x02 \x01(\x05R\ftargetNodeId\x121\n" +
-	"\x15insert_before_node_id\x18\x03 \x01(\x05R\x12insertBeforeNodeId\")\n" +
+	"\x15insert_before_node_id\x18\x03 \x01(\x05R\x12insertBeforeNodeId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\")\n" +
 	"\x0eCopyToResponse\x12\x17\n" +
 	"\anode_id\x18\x01 \x01(\x05R\x06nodeId\":\n" +
 	"\x19SubscribeDOMEventsRequest\x12\x1d\n" +

@@ -19,15 +19,25 @@ func New(client *cdpclient.Client) *Server {
 	return &Server{client: client}
 }
 
+// send routes a CDP command through the specified session, falling back
+// to the client's default session if sessionID is empty.
+func (s *Server) send(ctx context.Context, sessionID string, method string, params interface{}) (json.RawMessage, error) {
+	if sessionID != "" {
+		return s.client.SendWithSession(ctx, method, params, sessionID)
+	}
+	return s.client.Send(ctx, method, params)
+}
+
+
 func (s *Server) Enable(ctx context.Context, req *pb.EnableRequest) (*pb.EnableResponse, error) {
-	if _, err := s.client.Send(ctx, "Database.enable", nil); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Database.enable", nil); err != nil {
 		return nil, fmt.Errorf("Database.enable: %w", err)
 	}
 	return &pb.EnableResponse{}, nil
 }
 
 func (s *Server) Disable(ctx context.Context, req *pb.DisableRequest) (*pb.DisableResponse, error) {
-	if _, err := s.client.Send(ctx, "Database.disable", nil); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Database.disable", nil); err != nil {
 		return nil, fmt.Errorf("Database.disable: %w", err)
 	}
 	return &pb.DisableResponse{}, nil
@@ -37,7 +47,7 @@ func (s *Server) GetDatabaseTableNames(ctx context.Context, req *pb.GetDatabaseT
 	params := map[string]interface{}{
 		"databaseId": req.DatabaseId,
 	}
-	result, err := s.client.Send(ctx, "Database.getDatabaseTableNames", params)
+	result, err := s.send(ctx, req.SessionId, "Database.getDatabaseTableNames", params)
 	if err != nil {
 		return nil, fmt.Errorf("Database.getDatabaseTableNames: %w", err)
 	}
@@ -55,7 +65,7 @@ func (s *Server) ExecuteSQL(ctx context.Context, req *pb.ExecuteSQLRequest) (*pb
 		"databaseId": req.DatabaseId,
 		"query":      req.Query,
 	}
-	result, err := s.client.Send(ctx, "Database.executeSQL", params)
+	result, err := s.send(ctx, req.SessionId, "Database.executeSQL", params)
 	if err != nil {
 		return nil, fmt.Errorf("Database.executeSQL: %w", err)
 	}

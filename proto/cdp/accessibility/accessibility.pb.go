@@ -444,6 +444,7 @@ func (x *AXProperty) GetValue() *AXValue {
 
 type EnableRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -476,6 +477,13 @@ func (x *EnableRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use EnableRequest.ProtoReflect.Descriptor instead.
 func (*EnableRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_accessibility_accessibility_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *EnableRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type EnableResponse struct {
@@ -516,6 +524,7 @@ func (*EnableResponse) Descriptor() ([]byte, []int) {
 
 type DisableRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -548,6 +557,13 @@ func (x *DisableRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use DisableRequest.ProtoReflect.Descriptor instead.
 func (*DisableRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_accessibility_accessibility_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *DisableRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type DisableResponse struct {
@@ -593,6 +609,7 @@ type GetPartialAXTreeRequest struct {
 	ObjectId       string                 `protobuf:"bytes,3,opt,name=object_id,json=objectId,proto3" json:"object_id,omitempty"`
 	FetchRelatives bool                   `protobuf:"varint,4,opt,name=fetch_relatives,json=fetchRelatives,proto3" json:"fetch_relatives,omitempty"`
 	Depth          int32                  `protobuf:"varint,5,opt,name=depth,proto3" json:"depth,omitempty"`
+	SessionId      string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
@@ -662,6 +679,13 @@ func (x *GetPartialAXTreeRequest) GetDepth() int32 {
 	return 0
 }
 
+func (x *GetPartialAXTreeRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type GetPartialAXTreeResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Nodes         []*AXNode              `protobuf:"bytes,1,rep,name=nodes,proto3" json:"nodes,omitempty"`
@@ -710,6 +734,7 @@ type GetFullAXTreeRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Depth         int32                  `protobuf:"varint,1,opt,name=depth,proto3" json:"depth,omitempty"`
 	FrameId       string                 `protobuf:"bytes,2,opt,name=frame_id,json=frameId,proto3" json:"frame_id,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -754,6 +779,13 @@ func (x *GetFullAXTreeRequest) GetDepth() int32 {
 func (x *GetFullAXTreeRequest) GetFrameId() string {
 	if x != nil {
 		return x.FrameId
+	}
+	return ""
+}
+
+func (x *GetFullAXTreeRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -805,6 +837,7 @@ func (x *GetFullAXTreeResponse) GetNodes() []*AXNode {
 type GetRootAXNodeRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	FrameId       string                 `protobuf:"bytes,1,opt,name=frame_id,json=frameId,proto3" json:"frame_id,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -842,6 +875,13 @@ func (*GetRootAXNodeRequest) Descriptor() ([]byte, []int) {
 func (x *GetRootAXNodeRequest) GetFrameId() string {
 	if x != nil {
 		return x.FrameId
+	}
+	return ""
+}
+
+func (x *GetRootAXNodeRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -895,6 +935,7 @@ type GetAXNodeAndAncestorsRequest struct {
 	NodeId        int32                  `protobuf:"varint,1,opt,name=node_id,json=nodeId,proto3" json:"node_id,omitempty"`
 	BackendNodeId int32                  `protobuf:"varint,2,opt,name=backend_node_id,json=backendNodeId,proto3" json:"backend_node_id,omitempty"`
 	ObjectId      string                 `protobuf:"bytes,3,opt,name=object_id,json=objectId,proto3" json:"object_id,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -950,6 +991,13 @@ func (x *GetAXNodeAndAncestorsRequest) GetObjectId() string {
 	return ""
 }
 
+func (x *GetAXNodeAndAncestorsRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type GetAXNodeAndAncestorsResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Nodes         []*AXNode              `protobuf:"bytes,1,rep,name=nodes,proto3" json:"nodes,omitempty"`
@@ -998,6 +1046,7 @@ type GetChildAXNodesRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	FrameId       string                 `protobuf:"bytes,2,opt,name=frame_id,json=frameId,proto3" json:"frame_id,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1042,6 +1091,13 @@ func (x *GetChildAXNodesRequest) GetId() string {
 func (x *GetChildAXNodesRequest) GetFrameId() string {
 	if x != nil {
 		return x.FrameId
+	}
+	return ""
+}
+
+func (x *GetChildAXNodesRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -1097,6 +1153,7 @@ type QueryAXTreeRequest struct {
 	ObjectId       string                 `protobuf:"bytes,3,opt,name=object_id,json=objectId,proto3" json:"object_id,omitempty"`
 	AccessibleName string                 `protobuf:"bytes,4,opt,name=accessible_name,json=accessibleName,proto3" json:"accessible_name,omitempty"`
 	Role           string                 `protobuf:"bytes,5,opt,name=role,proto3" json:"role,omitempty"`
+	SessionId      string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
@@ -1166,6 +1223,13 @@ func (x *QueryAXTreeRequest) GetRole() string {
 	return ""
 }
 
+func (x *QueryAXTreeRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type QueryAXTreeResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Nodes         []*AXNode              `protobuf:"bytes,1,rep,name=nodes,proto3" json:"nodes,omitempty"`
@@ -1212,6 +1276,7 @@ func (x *QueryAXTreeResponse) GetNodes() []*AXNode {
 
 type SubscribeEventsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1244,6 +1309,13 @@ func (x *SubscribeEventsRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use SubscribeEventsRequest.ProtoReflect.Descriptor instead.
 func (*SubscribeEventsRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_accessibility_accessibility_proto_rawDescGZIP(), []int{21}
+}
+
+func (x *SubscribeEventsRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type AccessibilityEvent struct {
@@ -1461,48 +1533,66 @@ const file_proto_cdp_accessibility_accessibility_proto_rawDesc = "" +
 	"\n" +
 	"AXProperty\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x120\n" +
-	"\x05value\x18\x02 \x01(\v2\x1a.cdp.accessibility.AXValueR\x05value\"\x0f\n" +
-	"\rEnableRequest\"\x10\n" +
-	"\x0eEnableResponse\"\x10\n" +
-	"\x0eDisableRequest\"\x11\n" +
-	"\x0fDisableResponse\"\xb6\x01\n" +
+	"\x05value\x18\x02 \x01(\v2\x1a.cdp.accessibility.AXValueR\x05value\".\n" +
+	"\rEnableRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x10\n" +
+	"\x0eEnableResponse\"/\n" +
+	"\x0eDisableRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x11\n" +
+	"\x0fDisableResponse\"\xd5\x01\n" +
 	"\x17GetPartialAXTreeRequest\x12\x17\n" +
 	"\anode_id\x18\x01 \x01(\x05R\x06nodeId\x12&\n" +
 	"\x0fbackend_node_id\x18\x02 \x01(\x05R\rbackendNodeId\x12\x1b\n" +
 	"\tobject_id\x18\x03 \x01(\tR\bobjectId\x12'\n" +
 	"\x0ffetch_relatives\x18\x04 \x01(\bR\x0efetchRelatives\x12\x14\n" +
-	"\x05depth\x18\x05 \x01(\x05R\x05depth\"K\n" +
+	"\x05depth\x18\x05 \x01(\x05R\x05depth\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"K\n" +
 	"\x18GetPartialAXTreeResponse\x12/\n" +
-	"\x05nodes\x18\x01 \x03(\v2\x19.cdp.accessibility.AXNodeR\x05nodes\"G\n" +
+	"\x05nodes\x18\x01 \x03(\v2\x19.cdp.accessibility.AXNodeR\x05nodes\"f\n" +
 	"\x14GetFullAXTreeRequest\x12\x14\n" +
 	"\x05depth\x18\x01 \x01(\x05R\x05depth\x12\x19\n" +
-	"\bframe_id\x18\x02 \x01(\tR\aframeId\"H\n" +
+	"\bframe_id\x18\x02 \x01(\tR\aframeId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"H\n" +
 	"\x15GetFullAXTreeResponse\x12/\n" +
-	"\x05nodes\x18\x01 \x03(\v2\x19.cdp.accessibility.AXNodeR\x05nodes\"1\n" +
+	"\x05nodes\x18\x01 \x03(\v2\x19.cdp.accessibility.AXNodeR\x05nodes\"P\n" +
 	"\x14GetRootAXNodeRequest\x12\x19\n" +
-	"\bframe_id\x18\x01 \x01(\tR\aframeId\"F\n" +
+	"\bframe_id\x18\x01 \x01(\tR\aframeId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"F\n" +
 	"\x15GetRootAXNodeResponse\x12-\n" +
-	"\x04node\x18\x01 \x01(\v2\x19.cdp.accessibility.AXNodeR\x04node\"|\n" +
+	"\x04node\x18\x01 \x01(\v2\x19.cdp.accessibility.AXNodeR\x04node\"\x9b\x01\n" +
 	"\x1cGetAXNodeAndAncestorsRequest\x12\x17\n" +
 	"\anode_id\x18\x01 \x01(\x05R\x06nodeId\x12&\n" +
 	"\x0fbackend_node_id\x18\x02 \x01(\x05R\rbackendNodeId\x12\x1b\n" +
-	"\tobject_id\x18\x03 \x01(\tR\bobjectId\"P\n" +
+	"\tobject_id\x18\x03 \x01(\tR\bobjectId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"P\n" +
 	"\x1dGetAXNodeAndAncestorsResponse\x12/\n" +
-	"\x05nodes\x18\x01 \x03(\v2\x19.cdp.accessibility.AXNodeR\x05nodes\"C\n" +
+	"\x05nodes\x18\x01 \x03(\v2\x19.cdp.accessibility.AXNodeR\x05nodes\"b\n" +
 	"\x16GetChildAXNodesRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x19\n" +
-	"\bframe_id\x18\x02 \x01(\tR\aframeId\"J\n" +
+	"\bframe_id\x18\x02 \x01(\tR\aframeId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"J\n" +
 	"\x17GetChildAXNodesResponse\x12/\n" +
-	"\x05nodes\x18\x01 \x03(\v2\x19.cdp.accessibility.AXNodeR\x05nodes\"\xaf\x01\n" +
+	"\x05nodes\x18\x01 \x03(\v2\x19.cdp.accessibility.AXNodeR\x05nodes\"\xce\x01\n" +
 	"\x12QueryAXTreeRequest\x12\x17\n" +
 	"\anode_id\x18\x01 \x01(\x05R\x06nodeId\x12&\n" +
 	"\x0fbackend_node_id\x18\x02 \x01(\x05R\rbackendNodeId\x12\x1b\n" +
 	"\tobject_id\x18\x03 \x01(\tR\bobjectId\x12'\n" +
 	"\x0faccessible_name\x18\x04 \x01(\tR\x0eaccessibleName\x12\x12\n" +
-	"\x04role\x18\x05 \x01(\tR\x04role\"F\n" +
+	"\x04role\x18\x05 \x01(\tR\x04role\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"F\n" +
 	"\x13QueryAXTreeResponse\x12/\n" +
-	"\x05nodes\x18\x01 \x03(\v2\x19.cdp.accessibility.AXNodeR\x05nodes\"\x18\n" +
-	"\x16SubscribeEventsRequest\"\xb7\x01\n" +
+	"\x05nodes\x18\x01 \x03(\v2\x19.cdp.accessibility.AXNodeR\x05nodes\"7\n" +
+	"\x16SubscribeEventsRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\xb7\x01\n" +
 	"\x12AccessibilityEvent\x12K\n" +
 	"\rload_complete\x18\x01 \x01(\v2$.cdp.accessibility.LoadCompleteEventH\x00R\floadComplete\x12K\n" +
 	"\rnodes_updated\x18\x02 \x01(\v2$.cdp.accessibility.NodesUpdatedEventH\x00R\fnodesUpdatedB\a\n" +

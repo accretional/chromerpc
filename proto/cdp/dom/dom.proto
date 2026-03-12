@@ -164,10 +164,13 @@ message ShapeOutsideInfo {
 
 message EnableRequest {
   string include_whitespace = 1; // "none", "all"
+  string session_id = 99;
 }
 message EnableResponse {}
 
-message DisableRequest {}
+message DisableRequest {
+  string session_id = 99;
+}
 message DisableResponse {}
 
 message GetDocumentRequest {
@@ -175,6 +178,7 @@ message GetDocumentRequest {
   int32 depth = 1;
   // Whether to traverse frames and shadow DOM.
   bool pierce = 2;
+  string session_id = 99;
 }
 message GetDocumentResponse {
   Node root = 1;
@@ -183,6 +187,7 @@ message GetDocumentResponse {
 message QuerySelectorRequest {
   int32 node_id = 1;
   string selector = 2;
+  string session_id = 99;
 }
 message QuerySelectorResponse {
   int32 node_id = 1;
@@ -191,6 +196,7 @@ message QuerySelectorResponse {
 message QuerySelectorAllRequest {
   int32 node_id = 1;
   string selector = 2;
+  string session_id = 99;
 }
 message QuerySelectorAllResponse {
   repeated int32 node_ids = 1;
@@ -200,6 +206,7 @@ message GetOuterHTMLRequest {
   int32 node_id = 1;
   int32 backend_node_id = 2;
   string object_id = 3;
+  string session_id = 99;
 }
 message GetOuterHTMLResponse {
   string outer_html = 1;
@@ -208,11 +215,13 @@ message GetOuterHTMLResponse {
 message SetOuterHTMLRequest {
   int32 node_id = 1;
   string outer_html = 2;
+  string session_id = 99;
 }
 message SetOuterHTMLResponse {}
 
 message GetAttributesRequest {
   int32 node_id = 1;
+  string session_id = 99;
 }
 message GetAttributesResponse {
   // Interleaved array: [name1, value1, name2, value2, ...].
@@ -223,6 +232,7 @@ message SetAttributeValueRequest {
   int32 node_id = 1;
   string name = 2;
   string value = 3;
+  string session_id = 99;
 }
 message SetAttributeValueResponse {}
 
@@ -230,23 +240,27 @@ message SetAttributesAsTextRequest {
   int32 node_id = 1;
   string text = 2;
   string name = 3;
+  string session_id = 99;
 }
 message SetAttributesAsTextResponse {}
 
 message RemoveAttributeRequest {
   int32 node_id = 1;
   string name = 2;
+  string session_id = 99;
 }
 message RemoveAttributeResponse {}
 
 message RemoveNodeRequest {
   int32 node_id = 1;
+  string session_id = 99;
 }
 message RemoveNodeResponse {}
 
 message SetNodeNameRequest {
   int32 node_id = 1;
   string name = 2;
+  string session_id = 99;
 }
 message SetNodeNameResponse {
   int32 node_id = 1; // New node's id.
@@ -255,6 +269,7 @@ message SetNodeNameResponse {
 message SetNodeValueRequest {
   int32 node_id = 1;
   string value = 2;
+  string session_id = 99;
 }
 message SetNodeValueResponse {}
 
@@ -262,6 +277,7 @@ message MoveToRequest {
   int32 node_id = 1;
   int32 target_node_id = 2;
   int32 insert_before_node_id = 3;
+  string session_id = 99;
 }
 message MoveToResponse {
   int32 node_id = 1; // New id of the moved node.
@@ -271,14 +287,19 @@ message RequestChildNodesRequest {
   int32 node_id = 1;
   int32 depth = 2;
   bool pierce = 3;
+  string session_id = 99;
 }
-message RequestChildNodesResponse {}
+message RequestChildNodesResponse {
+  string session_id = 99;
+}
 
 message RequestNodeRequest {
   string object_id = 1; // Runtime.RemoteObjectId
+  string session_id = 99;
 }
 message RequestNodeResponse {
   int32 node_id = 1;
+  string session_id = 99;
 }
 
 message ResolveNodeRequest {
@@ -286,6 +307,7 @@ message ResolveNodeRequest {
   int32 backend_node_id = 2;
   string object_group = 3;
   int32 execution_context_id = 4;
+  string session_id = 99;
 }
 message ResolveNodeResponse {
   // Simplified — the full RemoteObject is in the Runtime domain.
@@ -298,6 +320,7 @@ message DescribeNodeRequest {
   string object_id = 3;
   int32 depth = 4;
   bool pierce = 5;
+  string session_id = 99;
 }
 message DescribeNodeResponse {
   Node node = 1;
@@ -307,6 +330,7 @@ message GetBoxModelRequest {
   int32 node_id = 1;
   int32 backend_node_id = 2;
   string object_id = 3;
+  string session_id = 99;
 }
 message GetBoxModelResponse {
   BoxModel model = 1;
@@ -317,6 +341,7 @@ message GetNodeForLocationRequest {
   int32 y = 2;
   bool include_user_agent_shadow_dom = 3;
   bool ignore_pointer_events_none = 4;
+  string session_id = 99;
 }
 message GetNodeForLocationResponse {
   int32 backend_node_id = 1;
@@ -330,29 +355,38 @@ message GetContainerForNodeRequest {
   string physical_axes = 3;
   string logical_axes = 4;
   bool queries_scroll_state = 5;
+  string session_id = 99;
 }
 message GetContainerForNodeResponse {
   int32 node_id = 1;
 }
 
-message HighlightNodeRequest {}
+message HighlightNodeRequest {
+  string session_id = 99;
+}
 message HighlightNodeResponse {}
 
-message HideHighlightRequest {}
+message HideHighlightRequest {
+  string session_id = 99;
+}
 message HideHighlightResponse {}
 
-message MarkUndoableStateRequest {}
+message MarkUndoableStateRequest {
+  string session_id = 99;
+}
 message MarkUndoableStateResponse {}
 
 message FocusRequest {
   int32 node_id = 1;
   int32 backend_node_id = 2;
   string object_id = 3;
+  string session_id = 99;
 }
 message FocusResponse {}
 
 message GetFileInfoRequest {
   string object_id = 1;
+  string session_id = 99;
 }
 message GetFileInfoResponse {
   string path = 1;
@@ -362,6 +396,7 @@ message CopyToRequest {
   int32 node_id = 1;
   int32 target_node_id = 2;
   int32 insert_before_node_id = 3;
+  string session_id = 99;
 }
 message CopyToResponse {
   int32 node_id = 1;

@@ -3,6 +3,7 @@ package emulation
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 
 	"github.com/accretional/chromerpc/internal/cdpclient"
@@ -17,6 +18,16 @@ type Server struct {
 func New(client *cdpclient.Client) *Server {
 	return &Server{client: client}
 }
+
+// send routes a CDP command through the specified session, falling back
+// to the client's default session if sessionID is empty.
+func (s *Server) send(ctx context.Context, sessionID string, method string, params interface{}) (json.RawMessage, error) {
+	if sessionID != "" {
+		return s.client.SendWithSession(ctx, method, params, sessionID)
+	}
+	return s.client.Send(ctx, method, params)
+}
+
 
 func (s *Server) SetDeviceMetricsOverride(ctx context.Context, req *pb.SetDeviceMetricsOverrideRequest) (*pb.SetDeviceMetricsOverrideResponse, error) {
 	params := map[string]interface{}{
@@ -46,14 +57,14 @@ func (s *Server) SetDeviceMetricsOverride(ctx context.Context, req *pb.SetDevice
 	if req.DontSetVisibleSize {
 		params["dontSetVisibleSize"] = true
 	}
-	if _, err := s.client.Send(ctx, "Emulation.setDeviceMetricsOverride", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Emulation.setDeviceMetricsOverride", params); err != nil {
 		return nil, fmt.Errorf("Emulation.setDeviceMetricsOverride: %w", err)
 	}
 	return &pb.SetDeviceMetricsOverrideResponse{}, nil
 }
 
 func (s *Server) ClearDeviceMetricsOverride(ctx context.Context, req *pb.ClearDeviceMetricsOverrideRequest) (*pb.ClearDeviceMetricsOverrideResponse, error) {
-	if _, err := s.client.Send(ctx, "Emulation.clearDeviceMetricsOverride", nil); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Emulation.clearDeviceMetricsOverride", nil); err != nil {
 		return nil, fmt.Errorf("Emulation.clearDeviceMetricsOverride: %w", err)
 	}
 	return &pb.ClearDeviceMetricsOverrideResponse{}, nil
@@ -98,7 +109,7 @@ func (s *Server) SetUserAgentOverride(ctx context.Context, req *pb.SetUserAgentO
 		}
 		params["userAgentMetadata"] = meta
 	}
-	if _, err := s.client.Send(ctx, "Emulation.setUserAgentOverride", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Emulation.setUserAgentOverride", params); err != nil {
 		return nil, fmt.Errorf("Emulation.setUserAgentOverride: %w", err)
 	}
 	return &pb.SetUserAgentOverrideResponse{}, nil
@@ -115,14 +126,14 @@ func (s *Server) SetGeolocationOverride(ctx context.Context, req *pb.SetGeolocat
 	if req.Accuracy != 0 {
 		params["accuracy"] = req.Accuracy
 	}
-	if _, err := s.client.Send(ctx, "Emulation.setGeolocationOverride", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Emulation.setGeolocationOverride", params); err != nil {
 		return nil, fmt.Errorf("Emulation.setGeolocationOverride: %w", err)
 	}
 	return &pb.SetGeolocationOverrideResponse{}, nil
 }
 
 func (s *Server) ClearGeolocationOverride(ctx context.Context, req *pb.ClearGeolocationOverrideRequest) (*pb.ClearGeolocationOverrideResponse, error) {
-	if _, err := s.client.Send(ctx, "Emulation.clearGeolocationOverride", nil); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Emulation.clearGeolocationOverride", nil); err != nil {
 		return nil, fmt.Errorf("Emulation.clearGeolocationOverride: %w", err)
 	}
 	return &pb.ClearGeolocationOverrideResponse{}, nil
@@ -133,7 +144,7 @@ func (s *Server) SetTouchEmulationEnabled(ctx context.Context, req *pb.SetTouchE
 	if req.MaxTouchPoints > 0 {
 		params["maxTouchPoints"] = req.MaxTouchPoints
 	}
-	if _, err := s.client.Send(ctx, "Emulation.setTouchEmulationEnabled", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Emulation.setTouchEmulationEnabled", params); err != nil {
 		return nil, fmt.Errorf("Emulation.setTouchEmulationEnabled: %w", err)
 	}
 	return &pb.SetTouchEmulationEnabledResponse{}, nil
@@ -151,7 +162,7 @@ func (s *Server) SetEmulatedMedia(ctx context.Context, req *pb.SetEmulatedMediaR
 		}
 		params["features"] = features
 	}
-	if _, err := s.client.Send(ctx, "Emulation.setEmulatedMedia", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Emulation.setEmulatedMedia", params); err != nil {
 		return nil, fmt.Errorf("Emulation.setEmulatedMedia: %w", err)
 	}
 	return &pb.SetEmulatedMediaResponse{}, nil
@@ -159,7 +170,7 @@ func (s *Server) SetEmulatedMedia(ctx context.Context, req *pb.SetEmulatedMediaR
 
 func (s *Server) SetTimezoneOverride(ctx context.Context, req *pb.SetTimezoneOverrideRequest) (*pb.SetTimezoneOverrideResponse, error) {
 	params := map[string]interface{}{"timezoneId": req.TimezoneId}
-	if _, err := s.client.Send(ctx, "Emulation.setTimezoneOverride", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Emulation.setTimezoneOverride", params); err != nil {
 		return nil, fmt.Errorf("Emulation.setTimezoneOverride: %w", err)
 	}
 	return &pb.SetTimezoneOverrideResponse{}, nil
@@ -167,7 +178,7 @@ func (s *Server) SetTimezoneOverride(ctx context.Context, req *pb.SetTimezoneOve
 
 func (s *Server) SetLocaleOverride(ctx context.Context, req *pb.SetLocaleOverrideRequest) (*pb.SetLocaleOverrideResponse, error) {
 	params := map[string]interface{}{"locale": req.Locale}
-	if _, err := s.client.Send(ctx, "Emulation.setLocaleOverride", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Emulation.setLocaleOverride", params); err != nil {
 		return nil, fmt.Errorf("Emulation.setLocaleOverride: %w", err)
 	}
 	return &pb.SetLocaleOverrideResponse{}, nil
@@ -175,7 +186,7 @@ func (s *Server) SetLocaleOverride(ctx context.Context, req *pb.SetLocaleOverrid
 
 func (s *Server) SetScrollbarsHidden(ctx context.Context, req *pb.SetScrollbarsHiddenRequest) (*pb.SetScrollbarsHiddenResponse, error) {
 	params := map[string]interface{}{"hidden": req.Hidden}
-	if _, err := s.client.Send(ctx, "Emulation.setScrollbarsHidden", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Emulation.setScrollbarsHidden", params); err != nil {
 		return nil, fmt.Errorf("Emulation.setScrollbarsHidden: %w", err)
 	}
 	return &pb.SetScrollbarsHiddenResponse{}, nil
@@ -183,7 +194,7 @@ func (s *Server) SetScrollbarsHidden(ctx context.Context, req *pb.SetScrollbarsH
 
 func (s *Server) SetDocumentCookieDisabled(ctx context.Context, req *pb.SetDocumentCookieDisabledRequest) (*pb.SetDocumentCookieDisabledResponse, error) {
 	params := map[string]interface{}{"disabled": req.Disabled}
-	if _, err := s.client.Send(ctx, "Emulation.setDocumentCookieDisabled", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Emulation.setDocumentCookieDisabled", params); err != nil {
 		return nil, fmt.Errorf("Emulation.setDocumentCookieDisabled: %w", err)
 	}
 	return &pb.SetDocumentCookieDisabledResponse{}, nil
@@ -191,7 +202,7 @@ func (s *Server) SetDocumentCookieDisabled(ctx context.Context, req *pb.SetDocum
 
 func (s *Server) SetEmulatedVisionDeficiency(ctx context.Context, req *pb.SetEmulatedVisionDeficiencyRequest) (*pb.SetEmulatedVisionDeficiencyResponse, error) {
 	params := map[string]interface{}{"type": req.Type}
-	if _, err := s.client.Send(ctx, "Emulation.setEmulatedVisionDeficiency", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Emulation.setEmulatedVisionDeficiency", params); err != nil {
 		return nil, fmt.Errorf("Emulation.setEmulatedVisionDeficiency: %w", err)
 	}
 	return &pb.SetEmulatedVisionDeficiencyResponse{}, nil
@@ -199,7 +210,7 @@ func (s *Server) SetEmulatedVisionDeficiency(ctx context.Context, req *pb.SetEmu
 
 func (s *Server) SetDisabledImageTypes(ctx context.Context, req *pb.SetDisabledImageTypesRequest) (*pb.SetDisabledImageTypesResponse, error) {
 	params := map[string]interface{}{"imageTypes": req.ImageTypes}
-	if _, err := s.client.Send(ctx, "Emulation.setDisabledImageTypes", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Emulation.setDisabledImageTypes", params); err != nil {
 		return nil, fmt.Errorf("Emulation.setDisabledImageTypes: %w", err)
 	}
 	return &pb.SetDisabledImageTypesResponse{}, nil
@@ -207,7 +218,7 @@ func (s *Server) SetDisabledImageTypes(ctx context.Context, req *pb.SetDisabledI
 
 func (s *Server) SetAutomationOverride(ctx context.Context, req *pb.SetAutomationOverrideRequest) (*pb.SetAutomationOverrideResponse, error) {
 	params := map[string]interface{}{"enabled": req.Enabled}
-	if _, err := s.client.Send(ctx, "Emulation.setAutomationOverride", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Emulation.setAutomationOverride", params); err != nil {
 		return nil, fmt.Errorf("Emulation.setAutomationOverride: %w", err)
 	}
 	return &pb.SetAutomationOverrideResponse{}, nil
@@ -215,7 +226,7 @@ func (s *Server) SetAutomationOverride(ctx context.Context, req *pb.SetAutomatio
 
 func (s *Server) SetCPUThrottlingRate(ctx context.Context, req *pb.SetCPUThrottlingRateRequest) (*pb.SetCPUThrottlingRateResponse, error) {
 	params := map[string]interface{}{"rate": req.Rate}
-	if _, err := s.client.Send(ctx, "Emulation.setCPUThrottlingRate", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Emulation.setCPUThrottlingRate", params); err != nil {
 		return nil, fmt.Errorf("Emulation.setCPUThrottlingRate: %w", err)
 	}
 	return &pb.SetCPUThrottlingRateResponse{}, nil
@@ -231,14 +242,14 @@ func (s *Server) SetDefaultBackgroundColorOverride(ctx context.Context, req *pb.
 			"a": req.Color.A,
 		}
 	}
-	if _, err := s.client.Send(ctx, "Emulation.setDefaultBackgroundColorOverride", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Emulation.setDefaultBackgroundColorOverride", params); err != nil {
 		return nil, fmt.Errorf("Emulation.setDefaultBackgroundColorOverride: %w", err)
 	}
 	return &pb.SetDefaultBackgroundColorOverrideResponse{}, nil
 }
 
 func (s *Server) ResetPageScaleFactor(ctx context.Context, req *pb.ResetPageScaleFactorRequest) (*pb.ResetPageScaleFactorResponse, error) {
-	if _, err := s.client.Send(ctx, "Emulation.resetPageScaleFactor", nil); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Emulation.resetPageScaleFactor", nil); err != nil {
 		return nil, fmt.Errorf("Emulation.resetPageScaleFactor: %w", err)
 	}
 	return &pb.ResetPageScaleFactorResponse{}, nil
@@ -246,7 +257,7 @@ func (s *Server) ResetPageScaleFactor(ctx context.Context, req *pb.ResetPageScal
 
 func (s *Server) SetPageScaleFactor(ctx context.Context, req *pb.SetPageScaleFactorRequest) (*pb.SetPageScaleFactorResponse, error) {
 	params := map[string]interface{}{"pageScaleFactor": req.PageScaleFactor}
-	if _, err := s.client.Send(ctx, "Emulation.setPageScaleFactor", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Emulation.setPageScaleFactor", params); err != nil {
 		return nil, fmt.Errorf("Emulation.setPageScaleFactor: %w", err)
 	}
 	return &pb.SetPageScaleFactorResponse{}, nil
@@ -254,7 +265,7 @@ func (s *Server) SetPageScaleFactor(ctx context.Context, req *pb.SetPageScaleFac
 
 func (s *Server) SetHardwareConcurrencyOverride(ctx context.Context, req *pb.SetHardwareConcurrencyOverrideRequest) (*pb.SetHardwareConcurrencyOverrideResponse, error) {
 	params := map[string]interface{}{"hardwareConcurrency": req.HardwareConcurrency}
-	if _, err := s.client.Send(ctx, "Emulation.setHardwareConcurrencyOverride", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Emulation.setHardwareConcurrencyOverride", params); err != nil {
 		return nil, fmt.Errorf("Emulation.setHardwareConcurrencyOverride: %w", err)
 	}
 	return &pb.SetHardwareConcurrencyOverrideResponse{}, nil

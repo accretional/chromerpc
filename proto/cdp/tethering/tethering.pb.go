@@ -24,6 +24,7 @@ const (
 type BindRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Port          int32                  `protobuf:"varint,1,opt,name=port,proto3" json:"port,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -65,6 +66,13 @@ func (x *BindRequest) GetPort() int32 {
 	return 0
 }
 
+func (x *BindRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type BindResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -104,6 +112,7 @@ func (*BindResponse) Descriptor() ([]byte, []int) {
 type UnbindRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Port          int32                  `protobuf:"varint,1,opt,name=port,proto3" json:"port,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -143,6 +152,13 @@ func (x *UnbindRequest) GetPort() int32 {
 		return x.Port
 	}
 	return 0
+}
+
+func (x *UnbindRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type UnbindResponse struct {
@@ -185,12 +201,16 @@ var File_proto_cdp_tethering_tethering_proto protoreflect.FileDescriptor
 
 const file_proto_cdp_tethering_tethering_proto_rawDesc = "" +
 	"\n" +
-	"#proto/cdp/tethering/tethering.proto\x12\rcdp.tethering\"!\n" +
+	"#proto/cdp/tethering/tethering.proto\x12\rcdp.tethering\"@\n" +
 	"\vBindRequest\x12\x12\n" +
-	"\x04port\x18\x01 \x01(\x05R\x04port\"\x0e\n" +
-	"\fBindResponse\"#\n" +
+	"\x04port\x18\x01 \x01(\x05R\x04port\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x0e\n" +
+	"\fBindResponse\"B\n" +
 	"\rUnbindRequest\x12\x12\n" +
-	"\x04port\x18\x01 \x01(\x05R\x04port\"\x10\n" +
+	"\x04port\x18\x01 \x01(\x05R\x04port\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x10\n" +
 	"\x0eUnbindResponse2\x9a\x01\n" +
 	"\x10TetheringService\x12?\n" +
 	"\x04Bind\x12\x1a.cdp.tethering.BindRequest\x1a\x1b.cdp.tethering.BindResponse\x12E\n" +

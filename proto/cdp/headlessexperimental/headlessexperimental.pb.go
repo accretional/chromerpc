@@ -86,6 +86,7 @@ func (x *ScreenshotParams) GetOptimizeForSpeed() bool {
 
 type EnableRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -118,6 +119,13 @@ func (x *EnableRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use EnableRequest.ProtoReflect.Descriptor instead.
 func (*EnableRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_headlessexperimental_headlessexperimental_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *EnableRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type EnableResponse struct {
@@ -158,6 +166,7 @@ func (*EnableResponse) Descriptor() ([]byte, []int) {
 
 type DisableRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -190,6 +199,13 @@ func (x *DisableRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use DisableRequest.ProtoReflect.Descriptor instead.
 func (*DisableRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_headlessexperimental_headlessexperimental_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *DisableRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type DisableResponse struct {
@@ -238,6 +254,7 @@ type BeginFrameRequest struct {
 	NoDisplayUpdates bool `protobuf:"varint,3,opt,name=no_display_updates,json=noDisplayUpdates,proto3" json:"no_display_updates,omitempty"`
 	// Screenshot parameters. If specified, a screenshot of the frame will be captured.
 	Screenshot    *ScreenshotParams `protobuf:"bytes,4,opt,name=screenshot,proto3" json:"screenshot,omitempty"`
+	SessionId     string            `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -298,6 +315,13 @@ func (x *BeginFrameRequest) GetScreenshot() *ScreenshotParams {
 		return x.Screenshot
 	}
 	return nil
+}
+
+func (x *BeginFrameRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type BeginFrameResponse struct {
@@ -516,18 +540,24 @@ const file_proto_cdp_headlessexperimental_headlessexperimental_proto_rawDesc = "
 	"\x10ScreenshotParams\x12\x16\n" +
 	"\x06format\x18\x01 \x01(\tR\x06format\x12\x18\n" +
 	"\aquality\x18\x02 \x01(\x05R\aquality\x12,\n" +
-	"\x12optimize_for_speed\x18\x03 \x01(\bR\x10optimizeForSpeed\"\x0f\n" +
-	"\rEnableRequest\"\x10\n" +
-	"\x0eEnableResponse\"\x10\n" +
-	"\x0eDisableRequest\"\x11\n" +
-	"\x0fDisableResponse\"\xff\x01\n" +
+	"\x12optimize_for_speed\x18\x03 \x01(\bR\x10optimizeForSpeed\".\n" +
+	"\rEnableRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x10\n" +
+	"\x0eEnableResponse\"/\n" +
+	"\x0eDisableRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x11\n" +
+	"\x0fDisableResponse\"\x9e\x02\n" +
 	"\x11BeginFrameRequest\x12-\n" +
 	"\x10frame_time_ticks\x18\x01 \x01(\x01H\x00R\x0eframeTimeTicks\x88\x01\x01\x12\x1f\n" +
 	"\binterval\x18\x02 \x01(\x01H\x01R\binterval\x88\x01\x01\x12,\n" +
 	"\x12no_display_updates\x18\x03 \x01(\bR\x10noDisplayUpdates\x12J\n" +
 	"\n" +
 	"screenshot\x18\x04 \x01(\v2*.cdp.headlessexperimental.ScreenshotParamsR\n" +
-	"screenshotB\x13\n" +
+	"screenshot\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionIdB\x13\n" +
 	"\x11_frame_time_ticksB\v\n" +
 	"\t_interval\"\\\n" +
 	"\x12BeginFrameResponse\x12\x1d\n" +

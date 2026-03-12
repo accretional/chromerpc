@@ -57,20 +57,27 @@ message VisibleSecurityState {
 
 // ==================== Requests / Responses ====================
 
-message EnableRequest {}
+message EnableRequest {
+  string session_id = 99;
+}
 message EnableResponse {}
 
-message DisableRequest {}
+message DisableRequest {
+  string session_id = 99;
+}
 message DisableResponse {}
 
 message SetIgnoreCertificateErrorsRequest {
   bool ignore = 1;
+  string session_id = 99;
 }
 message SetIgnoreCertificateErrorsResponse {}
 
 // ==================== Events ====================
 
-message SubscribeEventsRequest {}
+message SubscribeEventsRequest {
+  string session_id = 99;
+}
 
 message SecurityEvent {
   oneof event {

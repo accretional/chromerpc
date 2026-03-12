@@ -10,9 +10,13 @@ service PreloadService {
   rpc SubscribeEvents(SubscribePreloadEventsRequest) returns (stream PreloadEvent);
 }
 
-message EnableRequest {}
+message EnableRequest {
+  string session_id = 99;
+}
 message EnableResponse {}
-message DisableRequest {}
+message DisableRequest {
+  string session_id = 99;
+}
 message DisableResponse {}
 
 message SubscribePreloadEventsRequest {

@@ -373,11 +373,12 @@ type SetDeviceMetricsOverrideRequest struct {
 	Mobile            bool                   `protobuf:"varint,4,opt,name=mobile,proto3" json:"mobile,omitempty"`
 	ScreenOrientation *ScreenOrientation     `protobuf:"bytes,5,opt,name=screen_orientation,json=screenOrientation,proto3" json:"screen_orientation,omitempty"`
 	// Experimental fields.
-	ScreenWidth        int32 `protobuf:"varint,6,opt,name=screen_width,json=screenWidth,proto3" json:"screen_width,omitempty"`
-	ScreenHeight       int32 `protobuf:"varint,7,opt,name=screen_height,json=screenHeight,proto3" json:"screen_height,omitempty"`
-	PositionX          int32 `protobuf:"varint,8,opt,name=position_x,json=positionX,proto3" json:"position_x,omitempty"`
-	PositionY          int32 `protobuf:"varint,9,opt,name=position_y,json=positionY,proto3" json:"position_y,omitempty"`
-	DontSetVisibleSize bool  `protobuf:"varint,10,opt,name=dont_set_visible_size,json=dontSetVisibleSize,proto3" json:"dont_set_visible_size,omitempty"`
+	ScreenWidth        int32  `protobuf:"varint,6,opt,name=screen_width,json=screenWidth,proto3" json:"screen_width,omitempty"`
+	ScreenHeight       int32  `protobuf:"varint,7,opt,name=screen_height,json=screenHeight,proto3" json:"screen_height,omitempty"`
+	PositionX          int32  `protobuf:"varint,8,opt,name=position_x,json=positionX,proto3" json:"position_x,omitempty"`
+	PositionY          int32  `protobuf:"varint,9,opt,name=position_y,json=positionY,proto3" json:"position_y,omitempty"`
+	DontSetVisibleSize bool   `protobuf:"varint,10,opt,name=dont_set_visible_size,json=dontSetVisibleSize,proto3" json:"dont_set_visible_size,omitempty"`
+	SessionId          string `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields      protoimpl.UnknownFields
 	sizeCache          protoimpl.SizeCache
 }
@@ -482,6 +483,13 @@ func (x *SetDeviceMetricsOverrideRequest) GetDontSetVisibleSize() bool {
 	return false
 }
 
+func (x *SetDeviceMetricsOverrideRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type SetDeviceMetricsOverrideResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -520,6 +528,7 @@ func (*SetDeviceMetricsOverrideResponse) Descriptor() ([]byte, []int) {
 
 type ClearDeviceMetricsOverrideRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -552,6 +561,13 @@ func (x *ClearDeviceMetricsOverrideRequest) ProtoReflect() protoreflect.Message 
 // Deprecated: Use ClearDeviceMetricsOverrideRequest.ProtoReflect.Descriptor instead.
 func (*ClearDeviceMetricsOverrideRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_emulation_emulation_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *ClearDeviceMetricsOverrideRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type ClearDeviceMetricsOverrideResponse struct {
@@ -596,6 +612,7 @@ type SetUserAgentOverrideRequest struct {
 	AcceptLanguage    string                 `protobuf:"bytes,2,opt,name=accept_language,json=acceptLanguage,proto3" json:"accept_language,omitempty"`
 	Platform          string                 `protobuf:"bytes,3,opt,name=platform,proto3" json:"platform,omitempty"`
 	UserAgentMetadata *UserAgentMetadata     `protobuf:"bytes,4,opt,name=user_agent_metadata,json=userAgentMetadata,proto3" json:"user_agent_metadata,omitempty"`
+	SessionId         string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields     protoimpl.UnknownFields
 	sizeCache         protoimpl.SizeCache
 }
@@ -658,6 +675,13 @@ func (x *SetUserAgentOverrideRequest) GetUserAgentMetadata() *UserAgentMetadata 
 	return nil
 }
 
+func (x *SetUserAgentOverrideRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type SetUserAgentOverrideResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -699,6 +723,7 @@ type SetGeolocationOverrideRequest struct {
 	Latitude      float64                `protobuf:"fixed64,1,opt,name=latitude,proto3" json:"latitude,omitempty"`
 	Longitude     float64                `protobuf:"fixed64,2,opt,name=longitude,proto3" json:"longitude,omitempty"`
 	Accuracy      float64                `protobuf:"fixed64,3,opt,name=accuracy,proto3" json:"accuracy,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -754,6 +779,13 @@ func (x *SetGeolocationOverrideRequest) GetAccuracy() float64 {
 	return 0
 }
 
+func (x *SetGeolocationOverrideRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type SetGeolocationOverrideResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -792,6 +824,7 @@ func (*SetGeolocationOverrideResponse) Descriptor() ([]byte, []int) {
 
 type ClearGeolocationOverrideRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -824,6 +857,13 @@ func (x *ClearGeolocationOverrideRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use ClearGeolocationOverrideRequest.ProtoReflect.Descriptor instead.
 func (*ClearGeolocationOverrideRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_emulation_emulation_proto_rawDescGZIP(), []int{13}
+}
+
+func (x *ClearGeolocationOverrideRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type ClearGeolocationOverrideResponse struct {
@@ -866,6 +906,7 @@ type SetTouchEmulationEnabledRequest struct {
 	state          protoimpl.MessageState `protogen:"open.v1"`
 	Enabled        bool                   `protobuf:"varint,1,opt,name=enabled,proto3" json:"enabled,omitempty"`
 	MaxTouchPoints int32                  `protobuf:"varint,2,opt,name=max_touch_points,json=maxTouchPoints,proto3" json:"max_touch_points,omitempty"`
+	SessionId      string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
@@ -914,6 +955,13 @@ func (x *SetTouchEmulationEnabledRequest) GetMaxTouchPoints() int32 {
 	return 0
 }
 
+func (x *SetTouchEmulationEnabledRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type SetTouchEmulationEnabledResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -956,6 +1004,7 @@ type SetEmulatedMediaRequest struct {
 	Media string `protobuf:"bytes,1,opt,name=media,proto3" json:"media,omitempty"`
 	// Media features to emulate.
 	Features      []*MediaFeature `protobuf:"bytes,2,rep,name=features,proto3" json:"features,omitempty"`
+	SessionId     string          `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1004,6 +1053,13 @@ func (x *SetEmulatedMediaRequest) GetFeatures() []*MediaFeature {
 	return nil
 }
 
+func (x *SetEmulatedMediaRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type SetEmulatedMediaResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -1043,6 +1099,7 @@ func (*SetEmulatedMediaResponse) Descriptor() ([]byte, []int) {
 type SetTimezoneOverrideRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	TimezoneId    string                 `protobuf:"bytes,1,opt,name=timezone_id,json=timezoneId,proto3" json:"timezone_id,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1080,6 +1137,13 @@ func (*SetTimezoneOverrideRequest) Descriptor() ([]byte, []int) {
 func (x *SetTimezoneOverrideRequest) GetTimezoneId() string {
 	if x != nil {
 		return x.TimezoneId
+	}
+	return ""
+}
+
+func (x *SetTimezoneOverrideRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -1123,6 +1187,7 @@ func (*SetTimezoneOverrideResponse) Descriptor() ([]byte, []int) {
 type SetLocaleOverrideRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Locale        string                 `protobuf:"bytes,1,opt,name=locale,proto3" json:"locale,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1160,6 +1225,13 @@ func (*SetLocaleOverrideRequest) Descriptor() ([]byte, []int) {
 func (x *SetLocaleOverrideRequest) GetLocale() string {
 	if x != nil {
 		return x.Locale
+	}
+	return ""
+}
+
+func (x *SetLocaleOverrideRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -1203,6 +1275,7 @@ func (*SetLocaleOverrideResponse) Descriptor() ([]byte, []int) {
 type SetScrollbarsHiddenRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Hidden        bool                   `protobuf:"varint,1,opt,name=hidden,proto3" json:"hidden,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1244,6 +1317,13 @@ func (x *SetScrollbarsHiddenRequest) GetHidden() bool {
 	return false
 }
 
+func (x *SetScrollbarsHiddenRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type SetScrollbarsHiddenResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -1283,6 +1363,7 @@ func (*SetScrollbarsHiddenResponse) Descriptor() ([]byte, []int) {
 type SetDocumentCookieDisabledRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Disabled      bool                   `protobuf:"varint,1,opt,name=disabled,proto3" json:"disabled,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1322,6 +1403,13 @@ func (x *SetDocumentCookieDisabledRequest) GetDisabled() bool {
 		return x.Disabled
 	}
 	return false
+}
+
+func (x *SetDocumentCookieDisabledRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type SetDocumentCookieDisabledResponse struct {
@@ -1364,6 +1452,7 @@ type SetEmulatedVisionDeficiencyRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Vision deficiency to emulate.
 	Type          string `protobuf:"bytes,1,opt,name=type,proto3" json:"type,omitempty"` // "none","achromatopsia","blurredVision","deuteranopia","protanopia","tritanopia"
+	SessionId     string `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1401,6 +1490,13 @@ func (*SetEmulatedVisionDeficiencyRequest) Descriptor() ([]byte, []int) {
 func (x *SetEmulatedVisionDeficiencyRequest) GetType() string {
 	if x != nil {
 		return x.Type
+	}
+	return ""
+}
+
+func (x *SetEmulatedVisionDeficiencyRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -1444,6 +1540,7 @@ func (*SetEmulatedVisionDeficiencyResponse) Descriptor() ([]byte, []int) {
 type SetDisabledImageTypesRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	ImageTypes    []string               `protobuf:"bytes,1,rep,name=image_types,json=imageTypes,proto3" json:"image_types,omitempty"` // "avif","webp"
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1485,6 +1582,13 @@ func (x *SetDisabledImageTypesRequest) GetImageTypes() []string {
 	return nil
 }
 
+func (x *SetDisabledImageTypesRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type SetDisabledImageTypesResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -1524,6 +1628,7 @@ func (*SetDisabledImageTypesResponse) Descriptor() ([]byte, []int) {
 type SetAutomationOverrideRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Enabled       bool                   `protobuf:"varint,1,opt,name=enabled,proto3" json:"enabled,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1565,6 +1670,13 @@ func (x *SetAutomationOverrideRequest) GetEnabled() bool {
 	return false
 }
 
+func (x *SetAutomationOverrideRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type SetAutomationOverrideResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -1604,6 +1716,7 @@ func (*SetAutomationOverrideResponse) Descriptor() ([]byte, []int) {
 type SetCPUThrottlingRateRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Rate          float64                `protobuf:"fixed64,1,opt,name=rate,proto3" json:"rate,omitempty"` // Throttling rate as a slowdown factor (1=no throttle, 2=2x slowdown).
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1645,6 +1758,13 @@ func (x *SetCPUThrottlingRateRequest) GetRate() float64 {
 	return 0
 }
 
+func (x *SetCPUThrottlingRateRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type SetCPUThrottlingRateResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -1684,6 +1804,7 @@ func (*SetCPUThrottlingRateResponse) Descriptor() ([]byte, []int) {
 type SetDefaultBackgroundColorOverrideRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Color         *RGBA                  `protobuf:"bytes,1,opt,name=color,proto3" json:"color,omitempty"` // If not specified, clears the override.
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1725,6 +1846,13 @@ func (x *SetDefaultBackgroundColorOverrideRequest) GetColor() *RGBA {
 	return nil
 }
 
+func (x *SetDefaultBackgroundColorOverrideRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type SetDefaultBackgroundColorOverrideResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -1763,6 +1891,7 @@ func (*SetDefaultBackgroundColorOverrideResponse) Descriptor() ([]byte, []int) {
 
 type ResetPageScaleFactorRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1795,6 +1924,13 @@ func (x *ResetPageScaleFactorRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use ResetPageScaleFactorRequest.ProtoReflect.Descriptor instead.
 func (*ResetPageScaleFactorRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_emulation_emulation_proto_rawDescGZIP(), []int{37}
+}
+
+func (x *ResetPageScaleFactorRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type ResetPageScaleFactorResponse struct {
@@ -1836,6 +1972,7 @@ func (*ResetPageScaleFactorResponse) Descriptor() ([]byte, []int) {
 type SetPageScaleFactorRequest struct {
 	state           protoimpl.MessageState `protogen:"open.v1"`
 	PageScaleFactor float64                `protobuf:"fixed64,1,opt,name=page_scale_factor,json=pageScaleFactor,proto3" json:"page_scale_factor,omitempty"`
+	SessionId       string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
 }
@@ -1877,6 +2014,13 @@ func (x *SetPageScaleFactorRequest) GetPageScaleFactor() float64 {
 	return 0
 }
 
+func (x *SetPageScaleFactorRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type SetPageScaleFactorResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -1916,6 +2060,7 @@ func (*SetPageScaleFactorResponse) Descriptor() ([]byte, []int) {
 type SetHardwareConcurrencyOverrideRequest struct {
 	state               protoimpl.MessageState `protogen:"open.v1"`
 	HardwareConcurrency int32                  `protobuf:"varint,1,opt,name=hardware_concurrency,json=hardwareConcurrency,proto3" json:"hardware_concurrency,omitempty"`
+	SessionId           string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields       protoimpl.UnknownFields
 	sizeCache           protoimpl.SizeCache
 }
@@ -1955,6 +2100,13 @@ func (x *SetHardwareConcurrencyOverrideRequest) GetHardwareConcurrency() int32 {
 		return x.HardwareConcurrency
 	}
 	return 0
+}
+
+func (x *SetHardwareConcurrencyOverrideRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type SetHardwareConcurrencyOverrideResponse struct {
@@ -2023,7 +2175,7 @@ const file_proto_cdp_emulation_emulation_proto_rawDesc = "" +
 	"\x01r\x18\x01 \x01(\x05R\x01r\x12\f\n" +
 	"\x01g\x18\x02 \x01(\x05R\x01g\x12\f\n" +
 	"\x01b\x18\x03 \x01(\x05R\x01b\x12\f\n" +
-	"\x01a\x18\x04 \x01(\x01R\x01a\"\xa1\x03\n" +
+	"\x01a\x18\x04 \x01(\x01R\x01a\"\xc0\x03\n" +
 	"\x1fSetDeviceMetricsOverrideRequest\x12\x14\n" +
 	"\x05width\x18\x01 \x01(\x05R\x05width\x12\x16\n" +
 	"\x06height\x18\x02 \x01(\x05R\x06height\x12.\n" +
@@ -2037,68 +2189,106 @@ const file_proto_cdp_emulation_emulation_proto_rawDesc = "" +
 	"\n" +
 	"position_y\x18\t \x01(\x05R\tpositionY\x121\n" +
 	"\x15dont_set_visible_size\x18\n" +
-	" \x01(\bR\x12dontSetVisibleSize\"\"\n" +
-	" SetDeviceMetricsOverrideResponse\"#\n" +
-	"!ClearDeviceMetricsOverrideRequest\"$\n" +
-	"\"ClearDeviceMetricsOverrideResponse\"\xd3\x01\n" +
+	" \x01(\bR\x12dontSetVisibleSize\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\"\n" +
+	" SetDeviceMetricsOverrideResponse\"B\n" +
+	"!ClearDeviceMetricsOverrideRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"$\n" +
+	"\"ClearDeviceMetricsOverrideResponse\"\xf2\x01\n" +
 	"\x1bSetUserAgentOverrideRequest\x12\x1d\n" +
 	"\n" +
 	"user_agent\x18\x01 \x01(\tR\tuserAgent\x12'\n" +
 	"\x0faccept_language\x18\x02 \x01(\tR\x0eacceptLanguage\x12\x1a\n" +
 	"\bplatform\x18\x03 \x01(\tR\bplatform\x12P\n" +
-	"\x13user_agent_metadata\x18\x04 \x01(\v2 .cdp.emulation.UserAgentMetadataR\x11userAgentMetadata\"\x1e\n" +
-	"\x1cSetUserAgentOverrideResponse\"u\n" +
+	"\x13user_agent_metadata\x18\x04 \x01(\v2 .cdp.emulation.UserAgentMetadataR\x11userAgentMetadata\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x1e\n" +
+	"\x1cSetUserAgentOverrideResponse\"\x94\x01\n" +
 	"\x1dSetGeolocationOverrideRequest\x12\x1a\n" +
 	"\blatitude\x18\x01 \x01(\x01R\blatitude\x12\x1c\n" +
 	"\tlongitude\x18\x02 \x01(\x01R\tlongitude\x12\x1a\n" +
-	"\baccuracy\x18\x03 \x01(\x01R\baccuracy\" \n" +
-	"\x1eSetGeolocationOverrideResponse\"!\n" +
-	"\x1fClearGeolocationOverrideRequest\"\"\n" +
-	" ClearGeolocationOverrideResponse\"e\n" +
+	"\baccuracy\x18\x03 \x01(\x01R\baccuracy\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\" \n" +
+	"\x1eSetGeolocationOverrideResponse\"@\n" +
+	"\x1fClearGeolocationOverrideRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\"\n" +
+	" ClearGeolocationOverrideResponse\"\x84\x01\n" +
 	"\x1fSetTouchEmulationEnabledRequest\x12\x18\n" +
 	"\aenabled\x18\x01 \x01(\bR\aenabled\x12(\n" +
-	"\x10max_touch_points\x18\x02 \x01(\x05R\x0emaxTouchPoints\"\"\n" +
-	" SetTouchEmulationEnabledResponse\"h\n" +
+	"\x10max_touch_points\x18\x02 \x01(\x05R\x0emaxTouchPoints\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\"\n" +
+	" SetTouchEmulationEnabledResponse\"\x87\x01\n" +
 	"\x17SetEmulatedMediaRequest\x12\x14\n" +
 	"\x05media\x18\x01 \x01(\tR\x05media\x127\n" +
-	"\bfeatures\x18\x02 \x03(\v2\x1b.cdp.emulation.MediaFeatureR\bfeatures\"\x1a\n" +
-	"\x18SetEmulatedMediaResponse\"=\n" +
+	"\bfeatures\x18\x02 \x03(\v2\x1b.cdp.emulation.MediaFeatureR\bfeatures\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x1a\n" +
+	"\x18SetEmulatedMediaResponse\"\\\n" +
 	"\x1aSetTimezoneOverrideRequest\x12\x1f\n" +
 	"\vtimezone_id\x18\x01 \x01(\tR\n" +
-	"timezoneId\"\x1d\n" +
-	"\x1bSetTimezoneOverrideResponse\"2\n" +
+	"timezoneId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x1d\n" +
+	"\x1bSetTimezoneOverrideResponse\"Q\n" +
 	"\x18SetLocaleOverrideRequest\x12\x16\n" +
-	"\x06locale\x18\x01 \x01(\tR\x06locale\"\x1b\n" +
-	"\x19SetLocaleOverrideResponse\"4\n" +
+	"\x06locale\x18\x01 \x01(\tR\x06locale\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x1b\n" +
+	"\x19SetLocaleOverrideResponse\"S\n" +
 	"\x1aSetScrollbarsHiddenRequest\x12\x16\n" +
-	"\x06hidden\x18\x01 \x01(\bR\x06hidden\"\x1d\n" +
-	"\x1bSetScrollbarsHiddenResponse\">\n" +
+	"\x06hidden\x18\x01 \x01(\bR\x06hidden\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x1d\n" +
+	"\x1bSetScrollbarsHiddenResponse\"]\n" +
 	" SetDocumentCookieDisabledRequest\x12\x1a\n" +
-	"\bdisabled\x18\x01 \x01(\bR\bdisabled\"#\n" +
-	"!SetDocumentCookieDisabledResponse\"8\n" +
+	"\bdisabled\x18\x01 \x01(\bR\bdisabled\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"#\n" +
+	"!SetDocumentCookieDisabledResponse\"W\n" +
 	"\"SetEmulatedVisionDeficiencyRequest\x12\x12\n" +
-	"\x04type\x18\x01 \x01(\tR\x04type\"%\n" +
-	"#SetEmulatedVisionDeficiencyResponse\"?\n" +
+	"\x04type\x18\x01 \x01(\tR\x04type\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"%\n" +
+	"#SetEmulatedVisionDeficiencyResponse\"^\n" +
 	"\x1cSetDisabledImageTypesRequest\x12\x1f\n" +
 	"\vimage_types\x18\x01 \x03(\tR\n" +
-	"imageTypes\"\x1f\n" +
-	"\x1dSetDisabledImageTypesResponse\"8\n" +
+	"imageTypes\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x1f\n" +
+	"\x1dSetDisabledImageTypesResponse\"W\n" +
 	"\x1cSetAutomationOverrideRequest\x12\x18\n" +
-	"\aenabled\x18\x01 \x01(\bR\aenabled\"\x1f\n" +
-	"\x1dSetAutomationOverrideResponse\"1\n" +
+	"\aenabled\x18\x01 \x01(\bR\aenabled\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x1f\n" +
+	"\x1dSetAutomationOverrideResponse\"P\n" +
 	"\x1bSetCPUThrottlingRateRequest\x12\x12\n" +
-	"\x04rate\x18\x01 \x01(\x01R\x04rate\"\x1e\n" +
-	"\x1cSetCPUThrottlingRateResponse\"U\n" +
+	"\x04rate\x18\x01 \x01(\x01R\x04rate\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x1e\n" +
+	"\x1cSetCPUThrottlingRateResponse\"t\n" +
 	"(SetDefaultBackgroundColorOverrideRequest\x12)\n" +
-	"\x05color\x18\x01 \x01(\v2\x13.cdp.emulation.RGBAR\x05color\"+\n" +
-	")SetDefaultBackgroundColorOverrideResponse\"\x1d\n" +
-	"\x1bResetPageScaleFactorRequest\"\x1e\n" +
-	"\x1cResetPageScaleFactorResponse\"G\n" +
+	"\x05color\x18\x01 \x01(\v2\x13.cdp.emulation.RGBAR\x05color\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"+\n" +
+	")SetDefaultBackgroundColorOverrideResponse\"<\n" +
+	"\x1bResetPageScaleFactorRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x1e\n" +
+	"\x1cResetPageScaleFactorResponse\"f\n" +
 	"\x19SetPageScaleFactorRequest\x12*\n" +
-	"\x11page_scale_factor\x18\x01 \x01(\x01R\x0fpageScaleFactor\"\x1c\n" +
-	"\x1aSetPageScaleFactorResponse\"Z\n" +
+	"\x11page_scale_factor\x18\x01 \x01(\x01R\x0fpageScaleFactor\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x1c\n" +
+	"\x1aSetPageScaleFactorResponse\"y\n" +
 	"%SetHardwareConcurrencyOverrideRequest\x121\n" +
-	"\x14hardware_concurrency\x18\x01 \x01(\x05R\x13hardwareConcurrency\"(\n" +
+	"\x14hardware_concurrency\x18\x01 \x01(\x05R\x13hardwareConcurrency\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"(\n" +
 	"&SetHardwareConcurrencyOverrideResponse2\x83\x12\n" +
 	"\x10EmulationService\x12{\n" +
 	"\x18SetDeviceMetricsOverride\x12..cdp.emulation.SetDeviceMetricsOverrideRequest\x1a/.cdp.emulation.SetDeviceMetricsOverrideResponse\x12\x81\x01\n" +

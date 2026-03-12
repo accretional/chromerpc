@@ -9,12 +9,15 @@ service DeviceOrientationService {
   rpc SetDeviceOrientationOverride(SetDeviceOrientationOverrideRequest) returns (SetDeviceOrientationOverrideResponse);
 }
 
-message ClearDeviceOrientationOverrideRequest {}
+message ClearDeviceOrientationOverrideRequest {
+  string session_id = 99;
+}
 message ClearDeviceOrientationOverrideResponse {}
 
 message SetDeviceOrientationOverrideRequest {
   double alpha = 1;
   double beta = 2;
   double gamma = 3;
+  string session_id = 99;
 }
 message SetDeviceOrientationOverrideResponse {}

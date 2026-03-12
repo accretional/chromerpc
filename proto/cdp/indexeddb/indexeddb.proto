@@ -78,19 +78,25 @@ message DataEntry {
 
 // ==================== Requests / Responses ====================
 
-message EnableRequest {}
+message EnableRequest {
+  string session_id = 99;
+}
 message EnableResponse {}
 
-message DisableRequest {}
+message DisableRequest {
+  string session_id = 99;
+}
 message DisableResponse {}
 
 message RequestDatabaseNamesRequest {
   string security_origin = 1;
   string storage_key = 2;
   string storage_bucket = 3;
+  string session_id = 99;
 }
 message RequestDatabaseNamesResponse {
   repeated string database_names = 1;
+  string session_id = 99;
 }
 
 message RequestDatabaseRequest {
@@ -98,9 +104,11 @@ message RequestDatabaseRequest {
   string storage_key = 2;
   string storage_bucket = 3;
   string database_name = 4;
+  string session_id = 99;
 }
 message RequestDatabaseResponse {
   DatabaseWithObjectStores database_with_object_stores = 1;
+  string session_id = 99;
 }
 
 message RequestDataRequest {
@@ -113,10 +121,12 @@ message RequestDataRequest {
   int32 skip_count = 7;
   int32 page_size = 8;
   KeyRange key_range = 9;
+  string session_id = 99;
 }
 message RequestDataResponse {
   repeated DataEntry object_store_data_entries = 1;
   bool has_more = 2;
+  string session_id = 99;
 }
 
 message GetMetadataRequest {
@@ -125,6 +135,7 @@ message GetMetadataRequest {
   string storage_bucket = 3;
   string database_name = 4;
   string object_store_name = 5;
+  string session_id = 99;
 }
 message GetMetadataResponse {
   double entries_count = 1;
@@ -136,6 +147,7 @@ message DeleteDatabaseRequest {
   string storage_key = 2;
   string storage_bucket = 3;
   string database_name = 4;
+  string session_id = 99;
 }
 message DeleteDatabaseResponse {}
 
@@ -145,6 +157,7 @@ message ClearObjectStoreRequest {
   string storage_bucket = 3;
   string database_name = 4;
   string object_store_name = 5;
+  string session_id = 99;
 }
 message ClearObjectStoreResponse {}
 
@@ -155,5 +168,6 @@ message DeleteObjectStoreEntriesRequest {
   string database_name = 4;
   string object_store_name = 5;
   KeyRange key_range = 6;
+  string session_id = 99;
 }
 message DeleteObjectStoreEntriesResponse {}

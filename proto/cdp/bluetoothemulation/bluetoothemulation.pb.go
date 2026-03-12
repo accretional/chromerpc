@@ -204,6 +204,7 @@ func (x *ScanEntry) GetScanRecord() *ScanRecord {
 type EnableRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	State         string                 `protobuf:"bytes,1,opt,name=state,proto3" json:"state,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -241,6 +242,13 @@ func (*EnableRequest) Descriptor() ([]byte, []int) {
 func (x *EnableRequest) GetState() string {
 	if x != nil {
 		return x.State
+	}
+	return ""
+}
+
+func (x *EnableRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -283,6 +291,7 @@ func (*EnableResponse) Descriptor() ([]byte, []int) {
 
 type DisableRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -315,6 +324,13 @@ func (x *DisableRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use DisableRequest.ProtoReflect.Descriptor instead.
 func (*DisableRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_bluetoothemulation_bluetoothemulation_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *DisableRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type DisableResponse struct {
@@ -359,6 +375,7 @@ type SimulatePreconnectedPeripheralRequest struct {
 	Name              string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
 	ManufacturerData  []*ManufacturerData    `protobuf:"bytes,3,rep,name=manufacturer_data,json=manufacturerData,proto3" json:"manufacturer_data,omitempty"`
 	KnownServiceUuids []string               `protobuf:"bytes,4,rep,name=known_service_uuids,json=knownServiceUuids,proto3" json:"known_service_uuids,omitempty"`
+	SessionId         string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields     protoimpl.UnknownFields
 	sizeCache         protoimpl.SizeCache
 }
@@ -421,6 +438,13 @@ func (x *SimulatePreconnectedPeripheralRequest) GetKnownServiceUuids() []string 
 	return nil
 }
 
+func (x *SimulatePreconnectedPeripheralRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type SimulatePreconnectedPeripheralResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -460,6 +484,7 @@ func (*SimulatePreconnectedPeripheralResponse) Descriptor() ([]byte, []int) {
 type SimulateAdvertisementRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Entry         *ScanEntry             `protobuf:"bytes,1,opt,name=entry,proto3" json:"entry,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -499,6 +524,13 @@ func (x *SimulateAdvertisementRequest) GetEntry() *ScanEntry {
 		return x.Entry
 	}
 	return nil
+}
+
+func (x *SimulateAdvertisementRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type SimulateAdvertisementResponse struct {
@@ -559,20 +591,28 @@ const file_proto_cdp_bluetoothemulation_bluetoothemulation_proto_rawDesc = "" +
 	"\x0edevice_address\x18\x01 \x01(\tR\rdeviceAddress\x12\x12\n" +
 	"\x04rssi\x18\x02 \x01(\x05R\x04rssi\x12C\n" +
 	"\vscan_record\x18\x03 \x01(\v2\".cdp.bluetoothemulation.ScanRecordR\n" +
-	"scanRecord\"%\n" +
+	"scanRecord\"D\n" +
 	"\rEnableRequest\x12\x14\n" +
-	"\x05state\x18\x01 \x01(\tR\x05state\"\x10\n" +
-	"\x0eEnableResponse\"\x10\n" +
-	"\x0eDisableRequest\"\x11\n" +
-	"\x0fDisableResponse\"\xdc\x01\n" +
+	"\x05state\x18\x01 \x01(\tR\x05state\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x10\n" +
+	"\x0eEnableResponse\"/\n" +
+	"\x0eDisableRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x11\n" +
+	"\x0fDisableResponse\"\xfb\x01\n" +
 	"%SimulatePreconnectedPeripheralRequest\x12\x18\n" +
 	"\aaddress\x18\x01 \x01(\tR\aaddress\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12U\n" +
 	"\x11manufacturer_data\x18\x03 \x03(\v2(.cdp.bluetoothemulation.ManufacturerDataR\x10manufacturerData\x12.\n" +
-	"\x13known_service_uuids\x18\x04 \x03(\tR\x11knownServiceUuids\"(\n" +
-	"&SimulatePreconnectedPeripheralResponse\"W\n" +
+	"\x13known_service_uuids\x18\x04 \x03(\tR\x11knownServiceUuids\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"(\n" +
+	"&SimulatePreconnectedPeripheralResponse\"v\n" +
 	"\x1cSimulateAdvertisementRequest\x127\n" +
-	"\x05entry\x18\x01 \x01(\v2!.cdp.bluetoothemulation.ScanEntryR\x05entry\"\x1f\n" +
+	"\x05entry\x18\x01 \x01(\v2!.cdp.bluetoothemulation.ScanEntryR\x05entry\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x1f\n" +
 	"\x1dSimulateAdvertisementResponse2\xf9\x03\n" +
 	"\x19BluetoothEmulationService\x12W\n" +
 	"\x06Enable\x12%.cdp.bluetoothemulation.EnableRequest\x1a&.cdp.bluetoothemulation.EnableResponse\x12Z\n" +

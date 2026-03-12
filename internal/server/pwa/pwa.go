@@ -19,11 +19,21 @@ func New(client *cdpclient.Client) *Server {
 	return &Server{client: client}
 }
 
+// send routes a CDP command through the specified session, falling back
+// to the client's default session if sessionID is empty.
+func (s *Server) send(ctx context.Context, sessionID string, method string, params interface{}) (json.RawMessage, error) {
+	if sessionID != "" {
+		return s.client.SendWithSession(ctx, method, params, sessionID)
+	}
+	return s.client.Send(ctx, method, params)
+}
+
+
 func (s *Server) GetOsAppState(ctx context.Context, req *pb.GetOsAppStateRequest) (*pb.GetOsAppStateResponse, error) {
 	params := map[string]interface{}{
 		"manifestId": req.ManifestId,
 	}
-	result, err := s.client.Send(ctx, "PWA.getOsAppState", params)
+	result, err := s.send(ctx, req.SessionId, "PWA.getOsAppState", params)
 	if err != nil {
 		return nil, fmt.Errorf("PWA.getOsAppState: %w", err)
 	}
@@ -49,7 +59,7 @@ func (s *Server) Install(ctx context.Context, req *pb.InstallRequest) (*pb.Insta
 	if req.InstallUrlOrBundleUrl != nil {
 		params["installUrlOrBundleUrl"] = *req.InstallUrlOrBundleUrl
 	}
-	if _, err := s.client.Send(ctx, "PWA.install", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "PWA.install", params); err != nil {
 		return nil, fmt.Errorf("PWA.install: %w", err)
 	}
 	return &pb.InstallResponse{}, nil
@@ -59,7 +69,7 @@ func (s *Server) Uninstall(ctx context.Context, req *pb.UninstallRequest) (*pb.U
 	params := map[string]interface{}{
 		"manifestId": req.ManifestId,
 	}
-	if _, err := s.client.Send(ctx, "PWA.uninstall", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "PWA.uninstall", params); err != nil {
 		return nil, fmt.Errorf("PWA.uninstall: %w", err)
 	}
 	return &pb.UninstallResponse{}, nil
@@ -72,7 +82,7 @@ func (s *Server) Launch(ctx context.Context, req *pb.LaunchRequest) (*pb.LaunchR
 	if req.Url != nil {
 		params["url"] = *req.Url
 	}
-	result, err := s.client.Send(ctx, "PWA.launch", params)
+	result, err := s.send(ctx, req.SessionId, "PWA.launch", params)
 	if err != nil {
 		return nil, fmt.Errorf("PWA.launch: %w", err)
 	}
@@ -92,7 +102,7 @@ func (s *Server) LaunchFilesInApp(ctx context.Context, req *pb.LaunchFilesInAppR
 		"manifestId": req.ManifestId,
 		"files":      req.Files,
 	}
-	result, err := s.client.Send(ctx, "PWA.launchFilesInApp", params)
+	result, err := s.send(ctx, req.SessionId, "PWA.launchFilesInApp", params)
 	if err != nil {
 		return nil, fmt.Errorf("PWA.launchFilesInApp: %w", err)
 	}
@@ -117,7 +127,7 @@ func (s *Server) ChangeAppUserSettings(ctx context.Context, req *pb.ChangeAppUse
 	if req.DisplayMode != nil {
 		params["displayMode"] = *req.DisplayMode
 	}
-	if _, err := s.client.Send(ctx, "PWA.changeAppUserSettings", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "PWA.changeAppUserSettings", params); err != nil {
 		return nil, fmt.Errorf("PWA.changeAppUserSettings: %w", err)
 	}
 	return &pb.ChangeAppUserSettingsResponse{}, nil

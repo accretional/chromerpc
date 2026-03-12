@@ -19,6 +19,16 @@ func New(client *cdpclient.Client) *Server {
 	return &Server{client: client}
 }
 
+// send routes a CDP command through the specified session, falling back
+// to the client's default session if sessionID is empty.
+func (s *Server) send(ctx context.Context, sessionID string, method string, params interface{}) (json.RawMessage, error) {
+	if sessionID != "" {
+		return s.client.SendWithSession(ctx, method, params, sessionID)
+	}
+	return s.client.Send(ctx, method, params)
+}
+
+
 func (s *Server) Read(ctx context.Context, req *pb.ReadRequest) (*pb.ReadResponse, error) {
 	params := map[string]interface{}{"handle": req.Handle}
 	if req.Offset != 0 {
@@ -27,7 +37,7 @@ func (s *Server) Read(ctx context.Context, req *pb.ReadRequest) (*pb.ReadRespons
 	if req.Size != 0 {
 		params["size"] = req.Size
 	}
-	result, err := s.client.Send(ctx, "IO.read", params)
+	result, err := s.send(ctx, req.SessionId, "IO.read", params)
 	if err != nil {
 		return nil, fmt.Errorf("IO.read: %w", err)
 	}
@@ -48,7 +58,7 @@ func (s *Server) Read(ctx context.Context, req *pb.ReadRequest) (*pb.ReadRespons
 
 func (s *Server) Close(ctx context.Context, req *pb.CloseRequest) (*pb.CloseResponse, error) {
 	params := map[string]interface{}{"handle": req.Handle}
-	if _, err := s.client.Send(ctx, "IO.close", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "IO.close", params); err != nil {
 		return nil, fmt.Errorf("IO.close: %w", err)
 	}
 	return &pb.CloseResponse{}, nil
@@ -56,7 +66,7 @@ func (s *Server) Close(ctx context.Context, req *pb.CloseRequest) (*pb.CloseResp
 
 func (s *Server) ResolveBlob(ctx context.Context, req *pb.ResolveBlobRequest) (*pb.ResolveBlobResponse, error) {
 	params := map[string]interface{}{"objectId": req.ObjectId}
-	result, err := s.client.Send(ctx, "IO.resolveBlob", params)
+	result, err := s.send(ctx, req.SessionId, "IO.resolveBlob", params)
 	if err != nil {
 		return nil, fmt.Errorf("IO.resolveBlob: %w", err)
 	}

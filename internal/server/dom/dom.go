@@ -22,6 +22,16 @@ func New(client *cdpclient.Client) *Server {
 	return &Server{client: client}
 }
 
+// send routes a CDP command through the specified session, falling back
+// to the client's default session if sessionID is empty.
+func (s *Server) send(ctx context.Context, sessionID string, method string, params interface{}) (json.RawMessage, error) {
+	if sessionID != "" {
+		return s.client.SendWithSession(ctx, method, params, sessionID)
+	}
+	return s.client.Send(ctx, method, params)
+}
+
+
 // cdpNode mirrors the CDP DOM.Node JSON structure.
 type cdpNode struct {
 	NodeID            int32      `json:"nodeId"`
@@ -115,9 +125,9 @@ func (s *Server) Enable(ctx context.Context, req *pb.EnableRequest) (*pb.EnableR
 	}
 	var err error
 	if len(params) > 0 {
-		_, err = s.client.Send(ctx, "DOM.enable", params)
+		_, err = s.send(ctx, req.SessionId, "DOM.enable", params)
 	} else {
-		_, err = s.client.Send(ctx, "DOM.enable", nil)
+		_, err = s.send(ctx, req.SessionId, "DOM.enable", nil)
 	}
 	if err != nil {
 		return nil, fmt.Errorf("DOM.enable: %w", err)
@@ -126,7 +136,7 @@ func (s *Server) Enable(ctx context.Context, req *pb.EnableRequest) (*pb.EnableR
 }
 
 func (s *Server) Disable(ctx context.Context, req *pb.DisableRequest) (*pb.DisableResponse, error) {
-	if _, err := s.client.Send(ctx, "DOM.disable", nil); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "DOM.disable", nil); err != nil {
 		return nil, fmt.Errorf("DOM.disable: %w", err)
 	}
 	return &pb.DisableResponse{}, nil
@@ -143,9 +153,9 @@ func (s *Server) GetDocument(ctx context.Context, req *pb.GetDocumentRequest) (*
 	var result json.RawMessage
 	var err error
 	if len(params) > 0 {
-		result, err = s.client.Send(ctx, "DOM.getDocument", params)
+		result, err = s.send(ctx, req.SessionId, "DOM.getDocument", params)
 	} else {
-		result, err = s.client.Send(ctx, "DOM.getDocument", nil)
+		result, err = s.send(ctx, req.SessionId, "DOM.getDocument", nil)
 	}
 	if err != nil {
 		return nil, fmt.Errorf("DOM.getDocument: %w", err)
@@ -164,7 +174,7 @@ func (s *Server) QuerySelector(ctx context.Context, req *pb.QuerySelectorRequest
 		"nodeId":   req.NodeId,
 		"selector": req.Selector,
 	}
-	result, err := s.client.Send(ctx, "DOM.querySelector", params)
+	result, err := s.send(ctx, req.SessionId, "DOM.querySelector", params)
 	if err != nil {
 		return nil, fmt.Errorf("DOM.querySelector: %w", err)
 	}
@@ -182,7 +192,7 @@ func (s *Server) QuerySelectorAll(ctx context.Context, req *pb.QuerySelectorAllR
 		"nodeId":   req.NodeId,
 		"selector": req.Selector,
 	}
-	result, err := s.client.Send(ctx, "DOM.querySelectorAll", params)
+	result, err := s.send(ctx, req.SessionId, "DOM.querySelectorAll", params)
 	if err != nil {
 		return nil, fmt.Errorf("DOM.querySelectorAll: %w", err)
 	}
@@ -206,7 +216,7 @@ func (s *Server) GetOuterHTML(ctx context.Context, req *pb.GetOuterHTMLRequest) 
 	if req.ObjectId != "" {
 		params["objectId"] = req.ObjectId
 	}
-	result, err := s.client.Send(ctx, "DOM.getOuterHTML", params)
+	result, err := s.send(ctx, req.SessionId, "DOM.getOuterHTML", params)
 	if err != nil {
 		return nil, fmt.Errorf("DOM.getOuterHTML: %w", err)
 	}
@@ -224,7 +234,7 @@ func (s *Server) SetOuterHTML(ctx context.Context, req *pb.SetOuterHTMLRequest) 
 		"nodeId":    req.NodeId,
 		"outerHTML": req.OuterHtml,
 	}
-	if _, err := s.client.Send(ctx, "DOM.setOuterHTML", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "DOM.setOuterHTML", params); err != nil {
 		return nil, fmt.Errorf("DOM.setOuterHTML: %w", err)
 	}
 	return &pb.SetOuterHTMLResponse{}, nil
@@ -234,7 +244,7 @@ func (s *Server) GetAttributes(ctx context.Context, req *pb.GetAttributesRequest
 	params := map[string]interface{}{
 		"nodeId": req.NodeId,
 	}
-	result, err := s.client.Send(ctx, "DOM.getAttributes", params)
+	result, err := s.send(ctx, req.SessionId, "DOM.getAttributes", params)
 	if err != nil {
 		return nil, fmt.Errorf("DOM.getAttributes: %w", err)
 	}
@@ -253,7 +263,7 @@ func (s *Server) SetAttributeValue(ctx context.Context, req *pb.SetAttributeValu
 		"name":   req.Name,
 		"value":  req.Value,
 	}
-	if _, err := s.client.Send(ctx, "DOM.setAttributeValue", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "DOM.setAttributeValue", params); err != nil {
 		return nil, fmt.Errorf("DOM.setAttributeValue: %w", err)
 	}
 	return &pb.SetAttributeValueResponse{}, nil
@@ -267,7 +277,7 @@ func (s *Server) SetAttributesAsText(ctx context.Context, req *pb.SetAttributesA
 	if req.Name != "" {
 		params["name"] = req.Name
 	}
-	if _, err := s.client.Send(ctx, "DOM.setAttributesAsText", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "DOM.setAttributesAsText", params); err != nil {
 		return nil, fmt.Errorf("DOM.setAttributesAsText: %w", err)
 	}
 	return &pb.SetAttributesAsTextResponse{}, nil
@@ -278,7 +288,7 @@ func (s *Server) RemoveAttribute(ctx context.Context, req *pb.RemoveAttributeReq
 		"nodeId": req.NodeId,
 		"name":   req.Name,
 	}
-	if _, err := s.client.Send(ctx, "DOM.removeAttribute", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "DOM.removeAttribute", params); err != nil {
 		return nil, fmt.Errorf("DOM.removeAttribute: %w", err)
 	}
 	return &pb.RemoveAttributeResponse{}, nil
@@ -288,7 +298,7 @@ func (s *Server) RemoveNode(ctx context.Context, req *pb.RemoveNodeRequest) (*pb
 	params := map[string]interface{}{
 		"nodeId": req.NodeId,
 	}
-	if _, err := s.client.Send(ctx, "DOM.removeNode", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "DOM.removeNode", params); err != nil {
 		return nil, fmt.Errorf("DOM.removeNode: %w", err)
 	}
 	return &pb.RemoveNodeResponse{}, nil
@@ -299,7 +309,7 @@ func (s *Server) SetNodeName(ctx context.Context, req *pb.SetNodeNameRequest) (*
 		"nodeId": req.NodeId,
 		"name":   req.Name,
 	}
-	result, err := s.client.Send(ctx, "DOM.setNodeName", params)
+	result, err := s.send(ctx, req.SessionId, "DOM.setNodeName", params)
 	if err != nil {
 		return nil, fmt.Errorf("DOM.setNodeName: %w", err)
 	}
@@ -317,7 +327,7 @@ func (s *Server) SetNodeValue(ctx context.Context, req *pb.SetNodeValueRequest) 
 		"nodeId": req.NodeId,
 		"value":  req.Value,
 	}
-	if _, err := s.client.Send(ctx, "DOM.setNodeValue", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "DOM.setNodeValue", params); err != nil {
 		return nil, fmt.Errorf("DOM.setNodeValue: %w", err)
 	}
 	return &pb.SetNodeValueResponse{}, nil
@@ -331,7 +341,7 @@ func (s *Server) MoveTo(ctx context.Context, req *pb.MoveToRequest) (*pb.MoveToR
 	if req.InsertBeforeNodeId != 0 {
 		params["insertBeforeNodeId"] = req.InsertBeforeNodeId
 	}
-	result, err := s.client.Send(ctx, "DOM.moveTo", params)
+	result, err := s.send(ctx, req.SessionId, "DOM.moveTo", params)
 	if err != nil {
 		return nil, fmt.Errorf("DOM.moveTo: %w", err)
 	}
@@ -354,7 +364,7 @@ func (s *Server) RequestChildNodes(ctx context.Context, req *pb.RequestChildNode
 	if req.Pierce {
 		params["pierce"] = true
 	}
-	if _, err := s.client.Send(ctx, "DOM.requestChildNodes", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "DOM.requestChildNodes", params); err != nil {
 		return nil, fmt.Errorf("DOM.requestChildNodes: %w", err)
 	}
 	return &pb.RequestChildNodesResponse{}, nil
@@ -364,7 +374,7 @@ func (s *Server) RequestNode(ctx context.Context, req *pb.RequestNodeRequest) (*
 	params := map[string]interface{}{
 		"objectId": req.ObjectId,
 	}
-	result, err := s.client.Send(ctx, "DOM.requestNode", params)
+	result, err := s.send(ctx, req.SessionId, "DOM.requestNode", params)
 	if err != nil {
 		return nil, fmt.Errorf("DOM.requestNode: %w", err)
 	}
@@ -391,7 +401,7 @@ func (s *Server) ResolveNode(ctx context.Context, req *pb.ResolveNodeRequest) (*
 	if req.ExecutionContextId != 0 {
 		params["executionContextId"] = req.ExecutionContextId
 	}
-	result, err := s.client.Send(ctx, "DOM.resolveNode", params)
+	result, err := s.send(ctx, req.SessionId, "DOM.resolveNode", params)
 	if err != nil {
 		return nil, fmt.Errorf("DOM.resolveNode: %w", err)
 	}
@@ -421,7 +431,7 @@ func (s *Server) DescribeNode(ctx context.Context, req *pb.DescribeNodeRequest) 
 	if req.Pierce {
 		params["pierce"] = true
 	}
-	result, err := s.client.Send(ctx, "DOM.describeNode", params)
+	result, err := s.send(ctx, req.SessionId, "DOM.describeNode", params)
 	if err != nil {
 		return nil, fmt.Errorf("DOM.describeNode: %w", err)
 	}
@@ -445,7 +455,7 @@ func (s *Server) GetBoxModel(ctx context.Context, req *pb.GetBoxModelRequest) (*
 	if req.ObjectId != "" {
 		params["objectId"] = req.ObjectId
 	}
-	result, err := s.client.Send(ctx, "DOM.getBoxModel", params)
+	result, err := s.send(ctx, req.SessionId, "DOM.getBoxModel", params)
 	if err != nil {
 		return nil, fmt.Errorf("DOM.getBoxModel: %w", err)
 	}
@@ -496,7 +506,7 @@ func (s *Server) GetNodeForLocation(ctx context.Context, req *pb.GetNodeForLocat
 	if req.IgnorePointerEventsNone {
 		params["ignorePointerEventsNone"] = true
 	}
-	result, err := s.client.Send(ctx, "DOM.getNodeForLocation", params)
+	result, err := s.send(ctx, req.SessionId, "DOM.getNodeForLocation", params)
 	if err != nil {
 		return nil, fmt.Errorf("DOM.getNodeForLocation: %w", err)
 	}
@@ -531,7 +541,7 @@ func (s *Server) GetContainerForNode(ctx context.Context, req *pb.GetContainerFo
 	if req.QueriesScrollState {
 		params["queriesScrollState"] = true
 	}
-	result, err := s.client.Send(ctx, "DOM.getContainerForNode", params)
+	result, err := s.send(ctx, req.SessionId, "DOM.getContainerForNode", params)
 	if err != nil {
 		return nil, fmt.Errorf("DOM.getContainerForNode: %w", err)
 	}
@@ -545,21 +555,21 @@ func (s *Server) GetContainerForNode(ctx context.Context, req *pb.GetContainerFo
 }
 
 func (s *Server) HighlightNode(ctx context.Context, req *pb.HighlightNodeRequest) (*pb.HighlightNodeResponse, error) {
-	if _, err := s.client.Send(ctx, "DOM.highlightNode", nil); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "DOM.highlightNode", nil); err != nil {
 		return nil, fmt.Errorf("DOM.highlightNode: %w", err)
 	}
 	return &pb.HighlightNodeResponse{}, nil
 }
 
 func (s *Server) HideHighlight(ctx context.Context, req *pb.HideHighlightRequest) (*pb.HideHighlightResponse, error) {
-	if _, err := s.client.Send(ctx, "DOM.hideHighlight", nil); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "DOM.hideHighlight", nil); err != nil {
 		return nil, fmt.Errorf("DOM.hideHighlight: %w", err)
 	}
 	return &pb.HideHighlightResponse{}, nil
 }
 
 func (s *Server) MarkUndoableState(ctx context.Context, req *pb.MarkUndoableStateRequest) (*pb.MarkUndoableStateResponse, error) {
-	if _, err := s.client.Send(ctx, "DOM.markUndoableState", nil); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "DOM.markUndoableState", nil); err != nil {
 		return nil, fmt.Errorf("DOM.markUndoableState: %w", err)
 	}
 	return &pb.MarkUndoableStateResponse{}, nil
@@ -578,9 +588,9 @@ func (s *Server) Focus(ctx context.Context, req *pb.FocusRequest) (*pb.FocusResp
 	}
 	var err error
 	if len(params) > 0 {
-		_, err = s.client.Send(ctx, "DOM.focus", params)
+		_, err = s.send(ctx, req.SessionId, "DOM.focus", params)
 	} else {
-		_, err = s.client.Send(ctx, "DOM.focus", nil)
+		_, err = s.send(ctx, req.SessionId, "DOM.focus", nil)
 	}
 	if err != nil {
 		return nil, fmt.Errorf("DOM.focus: %w", err)
@@ -592,7 +602,7 @@ func (s *Server) GetFileInfo(ctx context.Context, req *pb.GetFileInfoRequest) (*
 	params := map[string]interface{}{
 		"objectId": req.ObjectId,
 	}
-	result, err := s.client.Send(ctx, "DOM.getFileInfo", params)
+	result, err := s.send(ctx, req.SessionId, "DOM.getFileInfo", params)
 	if err != nil {
 		return nil, fmt.Errorf("DOM.getFileInfo: %w", err)
 	}
@@ -613,7 +623,7 @@ func (s *Server) CopyTo(ctx context.Context, req *pb.CopyToRequest) (*pb.CopyToR
 	if req.InsertBeforeNodeId != 0 {
 		params["insertBeforeNodeId"] = req.InsertBeforeNodeId
 	}
-	result, err := s.client.Send(ctx, "DOM.copyTo", params)
+	result, err := s.send(ctx, req.SessionId, "DOM.copyTo", params)
 	if err != nil {
 		return nil, fmt.Errorf("DOM.copyTo: %w", err)
 	}

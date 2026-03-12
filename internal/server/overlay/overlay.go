@@ -19,15 +19,25 @@ func New(client *cdpclient.Client) *Server {
 	return &Server{client: client}
 }
 
+// send routes a CDP command through the specified session, falling back
+// to the client's default session if sessionID is empty.
+func (s *Server) send(ctx context.Context, sessionID string, method string, params interface{}) (json.RawMessage, error) {
+	if sessionID != "" {
+		return s.client.SendWithSession(ctx, method, params, sessionID)
+	}
+	return s.client.Send(ctx, method, params)
+}
+
+
 func (s *Server) Enable(ctx context.Context, req *pb.EnableRequest) (*pb.EnableResponse, error) {
-	if _, err := s.client.Send(ctx, "Overlay.enable", nil); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Overlay.enable", nil); err != nil {
 		return nil, fmt.Errorf("Overlay.enable: %w", err)
 	}
 	return &pb.EnableResponse{}, nil
 }
 
 func (s *Server) Disable(ctx context.Context, req *pb.DisableRequest) (*pb.DisableResponse, error) {
-	if _, err := s.client.Send(ctx, "Overlay.disable", nil); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Overlay.disable", nil); err != nil {
 		return nil, fmt.Errorf("Overlay.disable: %w", err)
 	}
 	return &pb.DisableResponse{}, nil
@@ -50,7 +60,7 @@ func (s *Server) HighlightNode(ctx context.Context, req *pb.HighlightNodeRequest
 	if req.Selector != "" {
 		params["selector"] = req.Selector
 	}
-	if _, err := s.client.Send(ctx, "Overlay.highlightNode", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Overlay.highlightNode", params); err != nil {
 		return nil, fmt.Errorf("Overlay.highlightNode: %w", err)
 	}
 	return &pb.HighlightNodeResponse{}, nil
@@ -69,7 +79,7 @@ func (s *Server) HighlightRect(ctx context.Context, req *pb.HighlightRectRequest
 	if req.OutlineColor != nil {
 		params["outlineColor"] = rgbaToMap(req.OutlineColor)
 	}
-	if _, err := s.client.Send(ctx, "Overlay.highlightRect", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Overlay.highlightRect", params); err != nil {
 		return nil, fmt.Errorf("Overlay.highlightRect: %w", err)
 	}
 	return &pb.HighlightRectResponse{}, nil
@@ -85,14 +95,14 @@ func (s *Server) HighlightQuad(ctx context.Context, req *pb.HighlightQuadRequest
 	if req.OutlineColor != nil {
 		params["outlineColor"] = rgbaToMap(req.OutlineColor)
 	}
-	if _, err := s.client.Send(ctx, "Overlay.highlightQuad", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Overlay.highlightQuad", params); err != nil {
 		return nil, fmt.Errorf("Overlay.highlightQuad: %w", err)
 	}
 	return &pb.HighlightQuadResponse{}, nil
 }
 
 func (s *Server) HideHighlight(ctx context.Context, req *pb.HideHighlightRequest) (*pb.HideHighlightResponse, error) {
-	if _, err := s.client.Send(ctx, "Overlay.hideHighlight", nil); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Overlay.hideHighlight", nil); err != nil {
 		return nil, fmt.Errorf("Overlay.hideHighlight: %w", err)
 	}
 	return &pb.HideHighlightResponse{}, nil
@@ -105,7 +115,7 @@ func (s *Server) SetInspectMode(ctx context.Context, req *pb.SetInspectModeReque
 	if req.HighlightConfig != nil {
 		params["highlightConfig"] = highlightConfigToMap(req.HighlightConfig)
 	}
-	if _, err := s.client.Send(ctx, "Overlay.setInspectMode", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Overlay.setInspectMode", params); err != nil {
 		return nil, fmt.Errorf("Overlay.setInspectMode: %w", err)
 	}
 	return &pb.SetInspectModeResponse{}, nil
@@ -113,7 +123,7 @@ func (s *Server) SetInspectMode(ctx context.Context, req *pb.SetInspectModeReque
 
 func (s *Server) SetShowPaintRects(ctx context.Context, req *pb.SetShowPaintRectsRequest) (*pb.SetShowPaintRectsResponse, error) {
 	params := map[string]interface{}{"result": req.Result}
-	if _, err := s.client.Send(ctx, "Overlay.setShowPaintRects", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Overlay.setShowPaintRects", params); err != nil {
 		return nil, fmt.Errorf("Overlay.setShowPaintRects: %w", err)
 	}
 	return &pb.SetShowPaintRectsResponse{}, nil
@@ -121,7 +131,7 @@ func (s *Server) SetShowPaintRects(ctx context.Context, req *pb.SetShowPaintRect
 
 func (s *Server) SetShowLayoutShiftRegions(ctx context.Context, req *pb.SetShowLayoutShiftRegionsRequest) (*pb.SetShowLayoutShiftRegionsResponse, error) {
 	params := map[string]interface{}{"result": req.Result}
-	if _, err := s.client.Send(ctx, "Overlay.setShowLayoutShiftRegions", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Overlay.setShowLayoutShiftRegions", params); err != nil {
 		return nil, fmt.Errorf("Overlay.setShowLayoutShiftRegions: %w", err)
 	}
 	return &pb.SetShowLayoutShiftRegionsResponse{}, nil
@@ -129,7 +139,7 @@ func (s *Server) SetShowLayoutShiftRegions(ctx context.Context, req *pb.SetShowL
 
 func (s *Server) SetShowScrollBottleneckRects(ctx context.Context, req *pb.SetShowScrollBottleneckRectsRequest) (*pb.SetShowScrollBottleneckRectsResponse, error) {
 	params := map[string]interface{}{"show": req.Show}
-	if _, err := s.client.Send(ctx, "Overlay.setShowScrollBottleneckRects", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Overlay.setShowScrollBottleneckRects", params); err != nil {
 		return nil, fmt.Errorf("Overlay.setShowScrollBottleneckRects: %w", err)
 	}
 	return &pb.SetShowScrollBottleneckRectsResponse{}, nil
@@ -137,7 +147,7 @@ func (s *Server) SetShowScrollBottleneckRects(ctx context.Context, req *pb.SetSh
 
 func (s *Server) SetShowFPSCounter(ctx context.Context, req *pb.SetShowFPSCounterRequest) (*pb.SetShowFPSCounterResponse, error) {
 	params := map[string]interface{}{"show": req.Show}
-	if _, err := s.client.Send(ctx, "Overlay.setShowFPSCounter", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Overlay.setShowFPSCounter", params); err != nil {
 		return nil, fmt.Errorf("Overlay.setShowFPSCounter: %w", err)
 	}
 	return &pb.SetShowFPSCounterResponse{}, nil
@@ -145,7 +155,7 @@ func (s *Server) SetShowFPSCounter(ctx context.Context, req *pb.SetShowFPSCounte
 
 func (s *Server) SetShowDebugBorders(ctx context.Context, req *pb.SetShowDebugBordersRequest) (*pb.SetShowDebugBordersResponse, error) {
 	params := map[string]interface{}{"show": req.Show}
-	if _, err := s.client.Send(ctx, "Overlay.setShowDebugBorders", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Overlay.setShowDebugBorders", params); err != nil {
 		return nil, fmt.Errorf("Overlay.setShowDebugBorders: %w", err)
 	}
 	return &pb.SetShowDebugBordersResponse{}, nil
@@ -157,12 +167,12 @@ func (s *Server) SetPausedInDebuggerMessage(ctx context.Context, req *pb.SetPaus
 		params["message"] = req.Message
 	}
 	if len(params) > 0 {
-		_, err := s.client.Send(ctx, "Overlay.setPausedInDebuggerMessage", params)
+		_, err := s.send(ctx, req.SessionId, "Overlay.setPausedInDebuggerMessage", params)
 		if err != nil {
 			return nil, fmt.Errorf("Overlay.setPausedInDebuggerMessage: %w", err)
 		}
 	} else {
-		if _, err := s.client.Send(ctx, "Overlay.setPausedInDebuggerMessage", nil); err != nil {
+		if _, err := s.send(ctx, req.SessionId, "Overlay.setPausedInDebuggerMessage", nil); err != nil {
 			return nil, fmt.Errorf("Overlay.setPausedInDebuggerMessage: %w", err)
 		}
 	}

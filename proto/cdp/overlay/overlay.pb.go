@@ -239,6 +239,7 @@ func (x *RGBA) GetA() float64 {
 
 type EnableRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -271,6 +272,13 @@ func (x *EnableRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use EnableRequest.ProtoReflect.Descriptor instead.
 func (*EnableRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_overlay_overlay_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *EnableRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type EnableResponse struct {
@@ -311,6 +319,7 @@ func (*EnableResponse) Descriptor() ([]byte, []int) {
 
 type DisableRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -343,6 +352,13 @@ func (x *DisableRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use DisableRequest.ProtoReflect.Descriptor instead.
 func (*DisableRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_overlay_overlay_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *DisableRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type DisableResponse struct {
@@ -388,6 +404,7 @@ type HighlightNodeRequest struct {
 	BackendNodeId   int32                  `protobuf:"varint,3,opt,name=backend_node_id,json=backendNodeId,proto3" json:"backend_node_id,omitempty"`
 	ObjectId        string                 `protobuf:"bytes,4,opt,name=object_id,json=objectId,proto3" json:"object_id,omitempty"`
 	Selector        string                 `protobuf:"bytes,5,opt,name=selector,proto3" json:"selector,omitempty"`
+	SessionId       string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
 }
@@ -457,6 +474,13 @@ func (x *HighlightNodeRequest) GetSelector() string {
 	return ""
 }
 
+func (x *HighlightNodeRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type HighlightNodeResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -501,6 +525,7 @@ type HighlightRectRequest struct {
 	Height        int32                  `protobuf:"varint,4,opt,name=height,proto3" json:"height,omitempty"`
 	Color         *RGBA                  `protobuf:"bytes,5,opt,name=color,proto3" json:"color,omitempty"`
 	OutlineColor  *RGBA                  `protobuf:"bytes,6,opt,name=outline_color,json=outlineColor,proto3" json:"outline_color,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -577,6 +602,13 @@ func (x *HighlightRectRequest) GetOutlineColor() *RGBA {
 	return nil
 }
 
+func (x *HighlightRectRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type HighlightRectResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -618,6 +650,7 @@ type HighlightQuadRequest struct {
 	Quad          []float64              `protobuf:"fixed64,1,rep,packed,name=quad,proto3" json:"quad,omitempty"`
 	Color         *RGBA                  `protobuf:"bytes,2,opt,name=color,proto3" json:"color,omitempty"`
 	OutlineColor  *RGBA                  `protobuf:"bytes,3,opt,name=outline_color,json=outlineColor,proto3" json:"outline_color,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -673,6 +706,13 @@ func (x *HighlightQuadRequest) GetOutlineColor() *RGBA {
 	return nil
 }
 
+func (x *HighlightQuadRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type HighlightQuadResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -711,6 +751,7 @@ func (*HighlightQuadResponse) Descriptor() ([]byte, []int) {
 
 type HideHighlightRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -743,6 +784,13 @@ func (x *HideHighlightRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use HideHighlightRequest.ProtoReflect.Descriptor instead.
 func (*HideHighlightRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_overlay_overlay_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *HideHighlightRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type HideHighlightResponse struct {
@@ -785,6 +833,7 @@ type SetInspectModeRequest struct {
 	state           protoimpl.MessageState `protogen:"open.v1"`
 	Mode            string                 `protobuf:"bytes,1,opt,name=mode,proto3" json:"mode,omitempty"` // "searchForNode","searchForUAShadowDOM","captureAreaScreenshot","showDistances","none"
 	HighlightConfig *HighlightConfig       `protobuf:"bytes,2,opt,name=highlight_config,json=highlightConfig,proto3" json:"highlight_config,omitempty"`
+	SessionId       string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
 }
@@ -833,6 +882,13 @@ func (x *SetInspectModeRequest) GetHighlightConfig() *HighlightConfig {
 	return nil
 }
 
+func (x *SetInspectModeRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type SetInspectModeResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -872,6 +928,7 @@ func (*SetInspectModeResponse) Descriptor() ([]byte, []int) {
 type SetShowPaintRectsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Result        bool                   `protobuf:"varint,1,opt,name=result,proto3" json:"result,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -913,6 +970,13 @@ func (x *SetShowPaintRectsRequest) GetResult() bool {
 	return false
 }
 
+func (x *SetShowPaintRectsRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type SetShowPaintRectsResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -952,6 +1016,7 @@ func (*SetShowPaintRectsResponse) Descriptor() ([]byte, []int) {
 type SetShowLayoutShiftRegionsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Result        bool                   `protobuf:"varint,1,opt,name=result,proto3" json:"result,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -993,6 +1058,13 @@ func (x *SetShowLayoutShiftRegionsRequest) GetResult() bool {
 	return false
 }
 
+func (x *SetShowLayoutShiftRegionsRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type SetShowLayoutShiftRegionsResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -1032,6 +1104,7 @@ func (*SetShowLayoutShiftRegionsResponse) Descriptor() ([]byte, []int) {
 type SetShowScrollBottleneckRectsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Show          bool                   `protobuf:"varint,1,opt,name=show,proto3" json:"show,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1073,6 +1146,13 @@ func (x *SetShowScrollBottleneckRectsRequest) GetShow() bool {
 	return false
 }
 
+func (x *SetShowScrollBottleneckRectsRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type SetShowScrollBottleneckRectsResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -1112,6 +1192,7 @@ func (*SetShowScrollBottleneckRectsResponse) Descriptor() ([]byte, []int) {
 type SetShowFPSCounterRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Show          bool                   `protobuf:"varint,1,opt,name=show,proto3" json:"show,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1153,6 +1234,13 @@ func (x *SetShowFPSCounterRequest) GetShow() bool {
 	return false
 }
 
+func (x *SetShowFPSCounterRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type SetShowFPSCounterResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -1192,6 +1280,7 @@ func (*SetShowFPSCounterResponse) Descriptor() ([]byte, []int) {
 type SetShowDebugBordersRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Show          bool                   `protobuf:"varint,1,opt,name=show,proto3" json:"show,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1233,6 +1322,13 @@ func (x *SetShowDebugBordersRequest) GetShow() bool {
 	return false
 }
 
+func (x *SetShowDebugBordersRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type SetShowDebugBordersResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -1272,6 +1368,7 @@ func (*SetShowDebugBordersResponse) Descriptor() ([]byte, []int) {
 type SetPausedInDebuggerMessageRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Message       string                 `protobuf:"bytes,1,opt,name=message,proto3" json:"message,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1309,6 +1406,13 @@ func (*SetPausedInDebuggerMessageRequest) Descriptor() ([]byte, []int) {
 func (x *SetPausedInDebuggerMessageRequest) GetMessage() string {
 	if x != nil {
 		return x.Message
+	}
+	return ""
+}
+
+func (x *SetPausedInDebuggerMessageRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -1351,6 +1455,7 @@ func (*SetPausedInDebuggerMessageResponse) Descriptor() ([]byte, []int) {
 
 type SubscribeEventsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1383,6 +1488,13 @@ func (x *SubscribeEventsRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use SubscribeEventsRequest.ProtoReflect.Descriptor instead.
 func (*SubscribeEventsRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_overlay_overlay_proto_rawDescGZIP(), []int{28}
+}
+
+func (x *SubscribeEventsRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type OverlayEvent struct {
@@ -1486,6 +1598,7 @@ func (*OverlayEvent_ScreenshotRequested) isOverlayEvent_Event() {}
 type InspectNodeRequestedEvent struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	BackendNodeId int32                  `protobuf:"varint,1,opt,name=backend_node_id,json=backendNodeId,proto3" json:"backend_node_id,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1527,9 +1640,17 @@ func (x *InspectNodeRequestedEvent) GetBackendNodeId() int32 {
 	return 0
 }
 
+func (x *InspectNodeRequestedEvent) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type NodeHighlightRequestedEvent struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	NodeId        int32                  `protobuf:"varint,1,opt,name=node_id,json=nodeId,proto3" json:"node_id,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1571,6 +1692,13 @@ func (x *NodeHighlightRequestedEvent) GetNodeId() int32 {
 	return 0
 }
 
+func (x *NodeHighlightRequestedEvent) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type ScreenshotRequestedEvent struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Viewport for the screenshot.
@@ -1579,6 +1707,7 @@ type ScreenshotRequestedEvent struct {
 	Width         float64 `protobuf:"fixed64,3,opt,name=width,proto3" json:"width,omitempty"`
 	Height        float64 `protobuf:"fixed64,4,opt,name=height,proto3" json:"height,omitempty"`
 	Scale         float64 `protobuf:"fixed64,5,opt,name=scale,proto3" json:"scale,omitempty"`
+	SessionId     string  `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1648,6 +1777,13 @@ func (x *ScreenshotRequestedEvent) GetScale() float64 {
 	return 0
 }
 
+func (x *ScreenshotRequestedEvent) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 var File_proto_cdp_overlay_overlay_proto protoreflect.FileDescriptor
 
 const file_proto_cdp_overlay_overlay_proto_rawDesc = "" +
@@ -1676,71 +1812,105 @@ const file_proto_cdp_overlay_overlay_proto_rawDesc = "" +
 	"\x01r\x18\x01 \x01(\x05R\x01r\x12\f\n" +
 	"\x01g\x18\x02 \x01(\x05R\x01g\x12\f\n" +
 	"\x01b\x18\x03 \x01(\x05R\x01b\x12\f\n" +
-	"\x01a\x18\x04 \x01(\x01R\x01a\"\x0f\n" +
-	"\rEnableRequest\"\x10\n" +
-	"\x0eEnableResponse\"\x10\n" +
-	"\x0eDisableRequest\"\x11\n" +
-	"\x0fDisableResponse\"\xd9\x01\n" +
+	"\x01a\x18\x04 \x01(\x01R\x01a\".\n" +
+	"\rEnableRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x10\n" +
+	"\x0eEnableResponse\"/\n" +
+	"\x0eDisableRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x11\n" +
+	"\x0fDisableResponse\"\xf8\x01\n" +
 	"\x14HighlightNodeRequest\x12G\n" +
 	"\x10highlight_config\x18\x01 \x01(\v2\x1c.cdp.overlay.HighlightConfigR\x0fhighlightConfig\x12\x17\n" +
 	"\anode_id\x18\x02 \x01(\x05R\x06nodeId\x12&\n" +
 	"\x0fbackend_node_id\x18\x03 \x01(\x05R\rbackendNodeId\x12\x1b\n" +
 	"\tobject_id\x18\x04 \x01(\tR\bobjectId\x12\x1a\n" +
-	"\bselector\x18\x05 \x01(\tR\bselector\"\x17\n" +
-	"\x15HighlightNodeResponse\"\xc1\x01\n" +
+	"\bselector\x18\x05 \x01(\tR\bselector\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x17\n" +
+	"\x15HighlightNodeResponse\"\xe0\x01\n" +
 	"\x14HighlightRectRequest\x12\f\n" +
 	"\x01x\x18\x01 \x01(\x05R\x01x\x12\f\n" +
 	"\x01y\x18\x02 \x01(\x05R\x01y\x12\x14\n" +
 	"\x05width\x18\x03 \x01(\x05R\x05width\x12\x16\n" +
 	"\x06height\x18\x04 \x01(\x05R\x06height\x12'\n" +
 	"\x05color\x18\x05 \x01(\v2\x11.cdp.overlay.RGBAR\x05color\x126\n" +
-	"\routline_color\x18\x06 \x01(\v2\x11.cdp.overlay.RGBAR\foutlineColor\"\x17\n" +
-	"\x15HighlightRectResponse\"\x8b\x01\n" +
+	"\routline_color\x18\x06 \x01(\v2\x11.cdp.overlay.RGBAR\foutlineColor\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x17\n" +
+	"\x15HighlightRectResponse\"\xaa\x01\n" +
 	"\x14HighlightQuadRequest\x12\x12\n" +
 	"\x04quad\x18\x01 \x03(\x01R\x04quad\x12'\n" +
 	"\x05color\x18\x02 \x01(\v2\x11.cdp.overlay.RGBAR\x05color\x126\n" +
-	"\routline_color\x18\x03 \x01(\v2\x11.cdp.overlay.RGBAR\foutlineColor\"\x17\n" +
-	"\x15HighlightQuadResponse\"\x16\n" +
-	"\x14HideHighlightRequest\"\x17\n" +
-	"\x15HideHighlightResponse\"t\n" +
+	"\routline_color\x18\x03 \x01(\v2\x11.cdp.overlay.RGBAR\foutlineColor\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x17\n" +
+	"\x15HighlightQuadResponse\"5\n" +
+	"\x14HideHighlightRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x17\n" +
+	"\x15HideHighlightResponse\"\x93\x01\n" +
 	"\x15SetInspectModeRequest\x12\x12\n" +
 	"\x04mode\x18\x01 \x01(\tR\x04mode\x12G\n" +
-	"\x10highlight_config\x18\x02 \x01(\v2\x1c.cdp.overlay.HighlightConfigR\x0fhighlightConfig\"\x18\n" +
-	"\x16SetInspectModeResponse\"2\n" +
+	"\x10highlight_config\x18\x02 \x01(\v2\x1c.cdp.overlay.HighlightConfigR\x0fhighlightConfig\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x18\n" +
+	"\x16SetInspectModeResponse\"Q\n" +
 	"\x18SetShowPaintRectsRequest\x12\x16\n" +
-	"\x06result\x18\x01 \x01(\bR\x06result\"\x1b\n" +
-	"\x19SetShowPaintRectsResponse\":\n" +
+	"\x06result\x18\x01 \x01(\bR\x06result\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x1b\n" +
+	"\x19SetShowPaintRectsResponse\"Y\n" +
 	" SetShowLayoutShiftRegionsRequest\x12\x16\n" +
-	"\x06result\x18\x01 \x01(\bR\x06result\"#\n" +
-	"!SetShowLayoutShiftRegionsResponse\"9\n" +
+	"\x06result\x18\x01 \x01(\bR\x06result\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"#\n" +
+	"!SetShowLayoutShiftRegionsResponse\"X\n" +
 	"#SetShowScrollBottleneckRectsRequest\x12\x12\n" +
-	"\x04show\x18\x01 \x01(\bR\x04show\"&\n" +
-	"$SetShowScrollBottleneckRectsResponse\".\n" +
+	"\x04show\x18\x01 \x01(\bR\x04show\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"&\n" +
+	"$SetShowScrollBottleneckRectsResponse\"M\n" +
 	"\x18SetShowFPSCounterRequest\x12\x12\n" +
-	"\x04show\x18\x01 \x01(\bR\x04show\"\x1b\n" +
-	"\x19SetShowFPSCounterResponse\"0\n" +
+	"\x04show\x18\x01 \x01(\bR\x04show\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x1b\n" +
+	"\x19SetShowFPSCounterResponse\"O\n" +
 	"\x1aSetShowDebugBordersRequest\x12\x12\n" +
-	"\x04show\x18\x01 \x01(\bR\x04show\"\x1d\n" +
-	"\x1bSetShowDebugBordersResponse\"=\n" +
+	"\x04show\x18\x01 \x01(\bR\x04show\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x1d\n" +
+	"\x1bSetShowDebugBordersResponse\"\\\n" +
 	"!SetPausedInDebuggerMessageRequest\x12\x18\n" +
-	"\amessage\x18\x01 \x01(\tR\amessage\"$\n" +
-	"\"SetPausedInDebuggerMessageResponse\"\x18\n" +
-	"\x16SubscribeEventsRequest\"\xb9\x02\n" +
+	"\amessage\x18\x01 \x01(\tR\amessage\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"$\n" +
+	"\"SetPausedInDebuggerMessageResponse\"7\n" +
+	"\x16SubscribeEventsRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\xb9\x02\n" +
 	"\fOverlayEvent\x12^\n" +
 	"\x16inspect_node_requested\x18\x01 \x01(\v2&.cdp.overlay.InspectNodeRequestedEventH\x00R\x14inspectNodeRequested\x12d\n" +
 	"\x18node_highlight_requested\x18\x02 \x01(\v2(.cdp.overlay.NodeHighlightRequestedEventH\x00R\x16nodeHighlightRequested\x12Z\n" +
 	"\x14screenshot_requested\x18\x03 \x01(\v2%.cdp.overlay.ScreenshotRequestedEventH\x00R\x13screenshotRequestedB\a\n" +
-	"\x05event\"C\n" +
+	"\x05event\"b\n" +
 	"\x19InspectNodeRequestedEvent\x12&\n" +
-	"\x0fbackend_node_id\x18\x01 \x01(\x05R\rbackendNodeId\"6\n" +
+	"\x0fbackend_node_id\x18\x01 \x01(\x05R\rbackendNodeId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"U\n" +
 	"\x1bNodeHighlightRequestedEvent\x12\x17\n" +
-	"\anode_id\x18\x01 \x01(\x05R\x06nodeId\"z\n" +
+	"\anode_id\x18\x01 \x01(\x05R\x06nodeId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x99\x01\n" +
 	"\x18ScreenshotRequestedEvent\x12\f\n" +
 	"\x01x\x18\x01 \x01(\x01R\x01x\x12\f\n" +
 	"\x01y\x18\x02 \x01(\x01R\x01y\x12\x14\n" +
 	"\x05width\x18\x03 \x01(\x01R\x05width\x12\x16\n" +
 	"\x06height\x18\x04 \x01(\x01R\x06height\x12\x14\n" +
-	"\x05scale\x18\x05 \x01(\x01R\x05scale2\xdc\n" +
+	"\x05scale\x18\x05 \x01(\x01R\x05scale\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId2\xdc\n" +
 	"\n" +
 	"\x0eOverlayService\x12A\n" +
 	"\x06Enable\x12\x1a.cdp.overlay.EnableRequest\x1a\x1b.cdp.overlay.EnableResponse\x12D\n" +

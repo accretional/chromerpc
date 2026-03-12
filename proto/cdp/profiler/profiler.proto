@@ -90,21 +90,30 @@ message CoverageRange {
 
 // ==================== Requests / Responses ====================
 
-message EnableRequest {}
+message EnableRequest {
+  string session_id = 99;
+}
 message EnableResponse {}
 
-message DisableRequest {}
+message DisableRequest {
+  string session_id = 99;
+}
 message DisableResponse {}
 
 message SetSamplingIntervalRequest {
   int32 interval = 1;
+  string session_id = 99;
 }
 message SetSamplingIntervalResponse {}
 
-message StartRequest {}
+message StartRequest {
+  string session_id = 99;
+}
 message StartResponse {}
 
-message StopRequest {}
+message StopRequest {
+  string session_id = 99;
+}
 message StopResponse {
   Profile profile = 1;
 }
@@ -113,28 +122,37 @@ message StartPreciseCoverageRequest {
   bool call_count = 1;
   bool detailed = 2;
   bool allow_triggered_updates = 3;
+  string session_id = 99;
 }
 message StartPreciseCoverageResponse {
   double timestamp = 1;
 }
 
-message StopPreciseCoverageRequest {}
+message StopPreciseCoverageRequest {
+  string session_id = 99;
+}
 message StopPreciseCoverageResponse {}
 
-message TakePreciseCoverageRequest {}
+message TakePreciseCoverageRequest {
+  string session_id = 99;
+}
 message TakePreciseCoverageResponse {
   repeated ScriptCoverage result = 1;
   double timestamp = 2;
 }
 
-message GetBestEffortCoverageRequest {}
+message GetBestEffortCoverageRequest {
+  string session_id = 99;
+}
 message GetBestEffortCoverageResponse {
   repeated ScriptCoverage result = 1;
 }
 
 // ==================== Events ====================
 
-message SubscribeEventsRequest {}
+message SubscribeEventsRequest {
+  string session_id = 99;
+}
 
 message ProfilerEvent {
   oneof event {

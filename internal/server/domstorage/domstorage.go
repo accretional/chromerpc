@@ -19,15 +19,25 @@ func New(client *cdpclient.Client) *Server {
 	return &Server{client: client}
 }
 
+// send routes a CDP command through the specified session, falling back
+// to the client's default session if sessionID is empty.
+func (s *Server) send(ctx context.Context, sessionID string, method string, params interface{}) (json.RawMessage, error) {
+	if sessionID != "" {
+		return s.client.SendWithSession(ctx, method, params, sessionID)
+	}
+	return s.client.Send(ctx, method, params)
+}
+
+
 func (s *Server) Enable(ctx context.Context, req *pb.EnableRequest) (*pb.EnableResponse, error) {
-	if _, err := s.client.Send(ctx, "DOMStorage.enable", nil); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "DOMStorage.enable", nil); err != nil {
 		return nil, fmt.Errorf("DOMStorage.enable: %w", err)
 	}
 	return &pb.EnableResponse{}, nil
 }
 
 func (s *Server) Disable(ctx context.Context, req *pb.DisableRequest) (*pb.DisableResponse, error) {
-	if _, err := s.client.Send(ctx, "DOMStorage.disable", nil); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "DOMStorage.disable", nil); err != nil {
 		return nil, fmt.Errorf("DOMStorage.disable: %w", err)
 	}
 	return &pb.DisableResponse{}, nil
@@ -38,7 +48,7 @@ func (s *Server) GetDOMStorageItems(ctx context.Context, req *pb.GetDOMStorageIt
 	if req.StorageId != nil {
 		params["storageId"] = storageIdToMap(req.StorageId)
 	}
-	result, err := s.client.Send(ctx, "DOMStorage.getDOMStorageItems", params)
+	result, err := s.send(ctx, req.SessionId, "DOMStorage.getDOMStorageItems", params)
 	if err != nil {
 		return nil, fmt.Errorf("DOMStorage.getDOMStorageItems: %w", err)
 	}
@@ -70,7 +80,7 @@ func (s *Server) SetDOMStorageItem(ctx context.Context, req *pb.SetDOMStorageIte
 	if req.StorageId != nil {
 		params["storageId"] = storageIdToMap(req.StorageId)
 	}
-	if _, err := s.client.Send(ctx, "DOMStorage.setDOMStorageItem", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "DOMStorage.setDOMStorageItem", params); err != nil {
 		return nil, fmt.Errorf("DOMStorage.setDOMStorageItem: %w", err)
 	}
 	return &pb.SetDOMStorageItemResponse{}, nil
@@ -83,7 +93,7 @@ func (s *Server) RemoveDOMStorageItem(ctx context.Context, req *pb.RemoveDOMStor
 	if req.StorageId != nil {
 		params["storageId"] = storageIdToMap(req.StorageId)
 	}
-	if _, err := s.client.Send(ctx, "DOMStorage.removeDOMStorageItem", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "DOMStorage.removeDOMStorageItem", params); err != nil {
 		return nil, fmt.Errorf("DOMStorage.removeDOMStorageItem: %w", err)
 	}
 	return &pb.RemoveDOMStorageItemResponse{}, nil
@@ -94,7 +104,7 @@ func (s *Server) Clear(ctx context.Context, req *pb.ClearRequest) (*pb.ClearResp
 	if req.StorageId != nil {
 		params["storageId"] = storageIdToMap(req.StorageId)
 	}
-	if _, err := s.client.Send(ctx, "DOMStorage.clear", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "DOMStorage.clear", params); err != nil {
 		return nil, fmt.Errorf("DOMStorage.clear: %w", err)
 	}
 	return &pb.ClearResponse{}, nil

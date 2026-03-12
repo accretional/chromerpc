@@ -19,15 +19,25 @@ func New(client *cdpclient.Client) *Server {
 	return &Server{client: client}
 }
 
+// send routes a CDP command through the specified session, falling back
+// to the client's default session if sessionID is empty.
+func (s *Server) send(ctx context.Context, sessionID string, method string, params interface{}) (json.RawMessage, error) {
+	if sessionID != "" {
+		return s.client.SendWithSession(ctx, method, params, sessionID)
+	}
+	return s.client.Send(ctx, method, params)
+}
+
+
 func (s *Server) Enable(ctx context.Context, req *pb.EnableRequest) (*pb.EnableResponse, error) {
-	if _, err := s.client.Send(ctx, "Security.enable", nil); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Security.enable", nil); err != nil {
 		return nil, fmt.Errorf("Security.enable: %w", err)
 	}
 	return &pb.EnableResponse{}, nil
 }
 
 func (s *Server) Disable(ctx context.Context, req *pb.DisableRequest) (*pb.DisableResponse, error) {
-	if _, err := s.client.Send(ctx, "Security.disable", nil); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Security.disable", nil); err != nil {
 		return nil, fmt.Errorf("Security.disable: %w", err)
 	}
 	return &pb.DisableResponse{}, nil
@@ -35,7 +45,7 @@ func (s *Server) Disable(ctx context.Context, req *pb.DisableRequest) (*pb.Disab
 
 func (s *Server) SetIgnoreCertificateErrors(ctx context.Context, req *pb.SetIgnoreCertificateErrorsRequest) (*pb.SetIgnoreCertificateErrorsResponse, error) {
 	params := map[string]interface{}{"ignore": req.Ignore}
-	if _, err := s.client.Send(ctx, "Security.setIgnoreCertificateErrors", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Security.setIgnoreCertificateErrors", params); err != nil {
 		return nil, fmt.Errorf("Security.setIgnoreCertificateErrors: %w", err)
 	}
 	return &pb.SetIgnoreCertificateErrorsResponse{}, nil

@@ -76,14 +76,19 @@ message PictureTile {
 
 // ==================== Requests / Responses ====================
 
-message EnableRequest {}
+message EnableRequest {
+  string session_id = 99;
+}
 message EnableResponse {}
 
-message DisableRequest {}
+message DisableRequest {
+  string session_id = 99;
+}
 message DisableResponse {}
 
 message CompositingReasonsRequest {
   string layer_id = 1;
+  string session_id = 99;
 }
 message CompositingReasonsResponse {
   repeated string compositing_reasons = 1;
@@ -92,6 +97,7 @@ message CompositingReasonsResponse {
 
 message MakeSnapshotRequest {
   string layer_id = 1;
+  string session_id = 99;
 }
 message MakeSnapshotResponse {
   string snapshot_id = 1;
@@ -99,6 +105,7 @@ message MakeSnapshotResponse {
 
 message LoadSnapshotRequest {
   repeated PictureTile tiles = 1;
+  string session_id = 99;
 }
 message LoadSnapshotResponse {
   string snapshot_id = 1;
@@ -106,6 +113,7 @@ message LoadSnapshotResponse {
 
 message ReleaseSnapshotRequest {
   string snapshot_id = 1;
+  string session_id = 99;
 }
 message ReleaseSnapshotResponse {}
 
@@ -114,6 +122,7 @@ message ReplaySnapshotRequest {
   int32 from_step = 2;
   int32 to_step = 3;
   double scale = 4;
+  string session_id = 99;
 }
 message ReplaySnapshotResponse {
   string data_url = 1;
@@ -124,6 +133,7 @@ message ProfileSnapshotRequest {
   int32 min_repeat_count = 2;
   double min_duration = 3;
   Rect clip_rect = 4;
+  string session_id = 99;
 }
 message ProfileSnapshotResponse {
   string timings = 1; // JSON-encoded array of arrays of doubles
@@ -131,6 +141,7 @@ message ProfileSnapshotResponse {
 
 message SnapshotCommandLogRequest {
   string snapshot_id = 1;
+  string session_id = 99;
 }
 message SnapshotCommandLogResponse {
   string command_log = 1; // JSON-encoded array
@@ -138,7 +149,9 @@ message SnapshotCommandLogResponse {
 
 // ==================== Events ====================
 
-message SubscribeEventsRequest {}
+message SubscribeEventsRequest {
+  string session_id = 99;
+}
 
 message LayerTreeEvent {
   oneof event {

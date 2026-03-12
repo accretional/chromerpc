@@ -83,6 +83,7 @@ func (x *ProcessInfo) GetCpuTime() float64 {
 
 type GetInfoRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -115,6 +116,13 @@ func (x *GetInfoRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use GetInfoRequest.ProtoReflect.Descriptor instead.
 func (*GetInfoRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_systeminfo_systeminfo_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *GetInfoRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type GetInfoResponse struct {
@@ -188,6 +196,7 @@ func (x *GetInfoResponse) GetCommandLine() string {
 type GetFeatureStateRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	FeatureState  string                 `protobuf:"bytes,1,opt,name=feature_state,json=featureState,proto3" json:"feature_state,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -225,6 +234,13 @@ func (*GetFeatureStateRequest) Descriptor() ([]byte, []int) {
 func (x *GetFeatureStateRequest) GetFeatureState() string {
 	if x != nil {
 		return x.FeatureState
+	}
+	return ""
+}
+
+func (x *GetFeatureStateRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -275,6 +291,7 @@ func (x *GetFeatureStateResponse) GetFeatureEnabled() bool {
 
 type GetProcessInfoRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -307,6 +324,13 @@ func (x *GetProcessInfoRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use GetProcessInfoRequest.ProtoReflect.Descriptor instead.
 func (*GetProcessInfoRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_systeminfo_systeminfo_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *GetProcessInfoRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type GetProcessInfoResponse struct {
@@ -361,19 +385,25 @@ const file_proto_cdp_systeminfo_systeminfo_proto_rawDesc = "" +
 	"\vProcessInfo\x12\x12\n" +
 	"\x04type\x18\x01 \x01(\tR\x04type\x12\x0e\n" +
 	"\x02id\x18\x02 \x01(\x05R\x02id\x12\x19\n" +
-	"\bcpu_time\x18\x03 \x01(\x01R\acpuTime\"\x10\n" +
-	"\x0eGetInfoRequest\"\x8a\x01\n" +
+	"\bcpu_time\x18\x03 \x01(\x01R\acpuTime\"/\n" +
+	"\x0eGetInfoRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x8a\x01\n" +
 	"\x0fGetInfoResponse\x12\x10\n" +
 	"\x03gpu\x18\x01 \x01(\tR\x03gpu\x12\x1d\n" +
 	"\n" +
 	"model_name\x18\x02 \x01(\tR\tmodelName\x12#\n" +
 	"\rmodel_version\x18\x03 \x01(\tR\fmodelVersion\x12!\n" +
-	"\fcommand_line\x18\x04 \x01(\tR\vcommandLine\"=\n" +
+	"\fcommand_line\x18\x04 \x01(\tR\vcommandLine\"\\\n" +
 	"\x16GetFeatureStateRequest\x12#\n" +
-	"\rfeature_state\x18\x01 \x01(\tR\ffeatureState\"B\n" +
+	"\rfeature_state\x18\x01 \x01(\tR\ffeatureState\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"B\n" +
 	"\x17GetFeatureStateResponse\x12'\n" +
-	"\x0ffeature_enabled\x18\x01 \x01(\bR\x0efeatureEnabled\"\x17\n" +
-	"\x15GetProcessInfoRequest\"X\n" +
+	"\x0ffeature_enabled\x18\x01 \x01(\bR\x0efeatureEnabled\"6\n" +
+	"\x15GetProcessInfoRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"X\n" +
 	"\x16GetProcessInfoResponse\x12>\n" +
 	"\fprocess_info\x18\x01 \x03(\v2\x1b.cdp.systeminfo.ProcessInfoR\vprocessInfo2\xa4\x02\n" +
 	"\x11SystemInfoService\x12J\n" +

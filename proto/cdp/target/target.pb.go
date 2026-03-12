@@ -243,6 +243,7 @@ func (x *RemoteLocation) GetPort() int32 {
 type ActivateTargetRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	TargetId      string                 `protobuf:"bytes,1,opt,name=target_id,json=targetId,proto3" json:"target_id,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -280,6 +281,13 @@ func (*ActivateTargetRequest) Descriptor() ([]byte, []int) {
 func (x *ActivateTargetRequest) GetTargetId() string {
 	if x != nil {
 		return x.TargetId
+	}
+	return ""
+}
+
+func (x *ActivateTargetRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -326,7 +334,8 @@ type AttachToTargetRequest struct {
 	// Enables "flat" access to the session via specifying sessionId
 	// attribute in the commands. When enabled, sends protocol messages
 	// over the session.
-	Flatten       bool `protobuf:"varint,2,opt,name=flatten,proto3" json:"flatten,omitempty"`
+	Flatten       bool   `protobuf:"varint,2,opt,name=flatten,proto3" json:"flatten,omitempty"`
+	SessionId     string `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -373,6 +382,13 @@ func (x *AttachToTargetRequest) GetFlatten() bool {
 		return x.Flatten
 	}
 	return false
+}
+
+func (x *AttachToTargetRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type AttachToTargetResponse struct {
@@ -422,6 +438,7 @@ func (x *AttachToTargetResponse) GetSessionId() string {
 
 type AttachToBrowserTargetRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -454,6 +471,13 @@ func (x *AttachToBrowserTargetRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use AttachToBrowserTargetRequest.ProtoReflect.Descriptor instead.
 func (*AttachToBrowserTargetRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_target_target_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *AttachToBrowserTargetRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type AttachToBrowserTargetResponse struct {
@@ -503,6 +527,7 @@ func (x *AttachToBrowserTargetResponse) GetSessionId() string {
 type CloseTargetRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	TargetId      string                 `protobuf:"bytes,1,opt,name=target_id,json=targetId,proto3" json:"target_id,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -540,6 +565,13 @@ func (*CloseTargetRequest) Descriptor() ([]byte, []int) {
 func (x *CloseTargetRequest) GetTargetId() string {
 	if x != nil {
 		return x.TargetId
+	}
+	return ""
+}
+
+func (x *CloseTargetRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -598,6 +630,7 @@ type CreateBrowserContextRequest struct {
 	ProxyBypassList string `protobuf:"bytes,3,opt,name=proxy_bypass_list,json=proxyBypassList,proto3" json:"proxy_bypass_list,omitempty"`
 	// Origins allowed to skip TLS certificate checks (experimental).
 	OriginsWithUniversalNetworkAccess []string `protobuf:"bytes,4,rep,name=origins_with_universal_network_access,json=originsWithUniversalNetworkAccess,proto3" json:"origins_with_universal_network_access,omitempty"`
+	SessionId                         string   `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields                     protoimpl.UnknownFields
 	sizeCache                         protoimpl.SizeCache
 }
@@ -658,6 +691,13 @@ func (x *CreateBrowserContextRequest) GetOriginsWithUniversalNetworkAccess() []s
 		return x.OriginsWithUniversalNetworkAccess
 	}
 	return nil
+}
+
+func (x *CreateBrowserContextRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type CreateBrowserContextResponse struct {
@@ -721,7 +761,8 @@ type CreateTargetRequest struct {
 	// Whether to create the target in background (experimental).
 	Background bool `protobuf:"varint,7,opt,name=background,proto3" json:"background,omitempty"`
 	// Whether to create the target as a new tab (experimental).
-	ForTab        bool `protobuf:"varint,8,opt,name=for_tab,json=forTab,proto3" json:"for_tab,omitempty"`
+	ForTab        bool   `protobuf:"varint,8,opt,name=for_tab,json=forTab,proto3" json:"for_tab,omitempty"`
+	SessionId     string `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -810,6 +851,13 @@ func (x *CreateTargetRequest) GetForTab() bool {
 		return x.ForTab
 	}
 	return false
+}
+
+func (x *CreateTargetRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type CreateTargetResponse struct {
@@ -948,6 +996,7 @@ func (*DetachFromTargetResponse) Descriptor() ([]byte, []int) {
 type DisposeBrowserContextRequest struct {
 	state            protoimpl.MessageState `protogen:"open.v1"`
 	BrowserContextId string                 `protobuf:"bytes,1,opt,name=browser_context_id,json=browserContextId,proto3" json:"browser_context_id,omitempty"`
+	SessionId        string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields    protoimpl.UnknownFields
 	sizeCache        protoimpl.SizeCache
 }
@@ -985,6 +1034,13 @@ func (*DisposeBrowserContextRequest) Descriptor() ([]byte, []int) {
 func (x *DisposeBrowserContextRequest) GetBrowserContextId() string {
 	if x != nil {
 		return x.BrowserContextId
+	}
+	return ""
+}
+
+func (x *DisposeBrowserContextRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -1027,6 +1083,7 @@ func (*DisposeBrowserContextResponse) Descriptor() ([]byte, []int) {
 
 type GetBrowserContextsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1059,6 +1116,13 @@ func (x *GetBrowserContextsRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use GetBrowserContextsRequest.ProtoReflect.Descriptor instead.
 func (*GetBrowserContextsRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_target_target_proto_rawDescGZIP(), []int{19}
+}
+
+func (x *GetBrowserContextsRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type GetBrowserContextsResponse struct {
@@ -1108,6 +1172,7 @@ func (x *GetBrowserContextsResponse) GetBrowserContextIds() []string {
 type GetTargetsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Filter        []*FilterEntry         `protobuf:"bytes,1,rep,name=filter,proto3" json:"filter,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1147,6 +1212,13 @@ func (x *GetTargetsRequest) GetFilter() []*FilterEntry {
 		return x.Filter
 	}
 	return nil
+}
+
+func (x *GetTargetsRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type GetTargetsResponse struct {
@@ -1196,6 +1268,7 @@ func (x *GetTargetsResponse) GetTargetInfos() []*TargetInfo {
 type GetTargetInfoRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	TargetId      string                 `protobuf:"bytes,1,opt,name=target_id,json=targetId,proto3" json:"target_id,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1233,6 +1306,13 @@ func (*GetTargetInfoRequest) Descriptor() ([]byte, []int) {
 func (x *GetTargetInfoRequest) GetTargetId() string {
 	if x != nil {
 		return x.TargetId
+	}
+	return ""
+}
+
+func (x *GetTargetInfoRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -1287,6 +1367,7 @@ type SetAutoAttachRequest struct {
 	WaitForDebuggerOnStart bool                   `protobuf:"varint,2,opt,name=wait_for_debugger_on_start,json=waitForDebuggerOnStart,proto3" json:"wait_for_debugger_on_start,omitempty"`
 	Flatten                bool                   `protobuf:"varint,3,opt,name=flatten,proto3" json:"flatten,omitempty"`
 	Filter                 []*FilterEntry         `protobuf:"bytes,4,rep,name=filter,proto3" json:"filter,omitempty"`
+	SessionId              string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields          protoimpl.UnknownFields
 	sizeCache              protoimpl.SizeCache
 }
@@ -1349,6 +1430,13 @@ func (x *SetAutoAttachRequest) GetFilter() []*FilterEntry {
 	return nil
 }
 
+func (x *SetAutoAttachRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type SetAutoAttachResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -1389,6 +1477,7 @@ type SetDiscoverTargetsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Discover      bool                   `protobuf:"varint,1,opt,name=discover,proto3" json:"discover,omitempty"`
 	Filter        []*FilterEntry         `protobuf:"bytes,2,rep,name=filter,proto3" json:"filter,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1437,6 +1526,13 @@ func (x *SetDiscoverTargetsRequest) GetFilter() []*FilterEntry {
 	return nil
 }
 
+func (x *SetDiscoverTargetsRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type SetDiscoverTargetsResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -1477,6 +1573,7 @@ type SubscribeTargetEventsRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Optional filter to only receive events for certain target types.
 	Filter        []*FilterEntry `protobuf:"bytes,1,rep,name=filter,proto3" json:"filter,omitempty"`
+	SessionId     string         `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1516,6 +1613,13 @@ func (x *SubscribeTargetEventsRequest) GetFilter() []*FilterEntry {
 		return x.Filter
 	}
 	return nil
+}
+
+func (x *SubscribeTargetEventsRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type TargetEvent struct {
@@ -1992,31 +2096,41 @@ const file_proto_cdp_target_target_proto_rawDesc = "" +
 	"\x04type\x18\x02 \x01(\tR\x04type\"8\n" +
 	"\x0eRemoteLocation\x12\x12\n" +
 	"\x04host\x18\x01 \x01(\tR\x04host\x12\x12\n" +
-	"\x04port\x18\x02 \x01(\x05R\x04port\"4\n" +
+	"\x04port\x18\x02 \x01(\x05R\x04port\"S\n" +
 	"\x15ActivateTargetRequest\x12\x1b\n" +
-	"\ttarget_id\x18\x01 \x01(\tR\btargetId\"\x18\n" +
-	"\x16ActivateTargetResponse\"N\n" +
+	"\ttarget_id\x18\x01 \x01(\tR\btargetId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x18\n" +
+	"\x16ActivateTargetResponse\"m\n" +
 	"\x15AttachToTargetRequest\x12\x1b\n" +
 	"\ttarget_id\x18\x01 \x01(\tR\btargetId\x12\x18\n" +
-	"\aflatten\x18\x02 \x01(\bR\aflatten\"7\n" +
+	"\aflatten\x18\x02 \x01(\bR\aflatten\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"7\n" +
 	"\x16AttachToTargetResponse\x12\x1d\n" +
 	"\n" +
-	"session_id\x18\x01 \x01(\tR\tsessionId\"\x1e\n" +
-	"\x1cAttachToBrowserTargetRequest\">\n" +
+	"session_id\x18\x01 \x01(\tR\tsessionId\"=\n" +
+	"\x1cAttachToBrowserTargetRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\">\n" +
 	"\x1dAttachToBrowserTargetResponse\x12\x1d\n" +
 	"\n" +
-	"session_id\x18\x01 \x01(\tR\tsessionId\"1\n" +
+	"session_id\x18\x01 \x01(\tR\tsessionId\"P\n" +
 	"\x12CloseTargetRequest\x12\x1b\n" +
-	"\ttarget_id\x18\x01 \x01(\tR\btargetId\"/\n" +
+	"\ttarget_id\x18\x01 \x01(\tR\btargetId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"/\n" +
 	"\x13CloseTargetResponse\x12\x18\n" +
-	"\asuccess\x18\x01 \x01(\bR\asuccess\"\xea\x01\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\"\x89\x02\n" +
 	"\x1bCreateBrowserContextRequest\x12*\n" +
 	"\x11dispose_on_detach\x18\x01 \x01(\bR\x0fdisposeOnDetach\x12!\n" +
 	"\fproxy_server\x18\x02 \x01(\tR\vproxyServer\x12*\n" +
 	"\x11proxy_bypass_list\x18\x03 \x01(\tR\x0fproxyBypassList\x12P\n" +
-	"%origins_with_universal_network_access\x18\x04 \x03(\tR!originsWithUniversalNetworkAccess\"L\n" +
+	"%origins_with_universal_network_access\x18\x04 \x03(\tR!originsWithUniversalNetworkAccess\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"L\n" +
 	"\x1cCreateBrowserContextResponse\x12,\n" +
-	"\x12browser_context_id\x18\x01 \x01(\tR\x10browserContextId\"\x98\x02\n" +
+	"\x12browser_context_id\x18\x01 \x01(\tR\x10browserContextId\"\xb7\x02\n" +
 	"\x13CreateTargetRequest\x12\x10\n" +
 	"\x03url\x18\x01 \x01(\tR\x03url\x12\x14\n" +
 	"\x05width\x18\x02 \x01(\x05R\x05width\x12\x16\n" +
@@ -2028,42 +2142,58 @@ const file_proto_cdp_target_target_proto_rawDesc = "" +
 	"\n" +
 	"background\x18\a \x01(\bR\n" +
 	"background\x12\x17\n" +
-	"\afor_tab\x18\b \x01(\bR\x06forTab\"3\n" +
+	"\afor_tab\x18\b \x01(\bR\x06forTab\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"3\n" +
 	"\x14CreateTargetResponse\x12\x1b\n" +
 	"\ttarget_id\x18\x01 \x01(\tR\btargetId\"U\n" +
 	"\x17DetachFromTargetRequest\x12\x1d\n" +
 	"\n" +
 	"session_id\x18\x01 \x01(\tR\tsessionId\x12\x1b\n" +
 	"\ttarget_id\x18\x02 \x01(\tR\btargetId\"\x1a\n" +
-	"\x18DetachFromTargetResponse\"L\n" +
+	"\x18DetachFromTargetResponse\"k\n" +
 	"\x1cDisposeBrowserContextRequest\x12,\n" +
-	"\x12browser_context_id\x18\x01 \x01(\tR\x10browserContextId\"\x1f\n" +
-	"\x1dDisposeBrowserContextResponse\"\x1b\n" +
-	"\x19GetBrowserContextsRequest\"L\n" +
+	"\x12browser_context_id\x18\x01 \x01(\tR\x10browserContextId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x1f\n" +
+	"\x1dDisposeBrowserContextResponse\":\n" +
+	"\x19GetBrowserContextsRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"L\n" +
 	"\x1aGetBrowserContextsResponse\x12.\n" +
-	"\x13browser_context_ids\x18\x01 \x03(\tR\x11browserContextIds\"D\n" +
+	"\x13browser_context_ids\x18\x01 \x03(\tR\x11browserContextIds\"c\n" +
 	"\x11GetTargetsRequest\x12/\n" +
-	"\x06filter\x18\x01 \x03(\v2\x17.cdp.target.FilterEntryR\x06filter\"O\n" +
+	"\x06filter\x18\x01 \x03(\v2\x17.cdp.target.FilterEntryR\x06filter\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"O\n" +
 	"\x12GetTargetsResponse\x129\n" +
-	"\ftarget_infos\x18\x01 \x03(\v2\x16.cdp.target.TargetInfoR\vtargetInfos\"3\n" +
+	"\ftarget_infos\x18\x01 \x03(\v2\x16.cdp.target.TargetInfoR\vtargetInfos\"R\n" +
 	"\x14GetTargetInfoRequest\x12\x1b\n" +
-	"\ttarget_id\x18\x01 \x01(\tR\btargetId\"P\n" +
+	"\ttarget_id\x18\x01 \x01(\tR\btargetId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"P\n" +
 	"\x15GetTargetInfoResponse\x127\n" +
 	"\vtarget_info\x18\x01 \x01(\v2\x16.cdp.target.TargetInfoR\n" +
-	"targetInfo\"\xbe\x01\n" +
+	"targetInfo\"\xdd\x01\n" +
 	"\x14SetAutoAttachRequest\x12\x1f\n" +
 	"\vauto_attach\x18\x01 \x01(\bR\n" +
 	"autoAttach\x12:\n" +
 	"\x1await_for_debugger_on_start\x18\x02 \x01(\bR\x16waitForDebuggerOnStart\x12\x18\n" +
 	"\aflatten\x18\x03 \x01(\bR\aflatten\x12/\n" +
-	"\x06filter\x18\x04 \x03(\v2\x17.cdp.target.FilterEntryR\x06filter\"\x17\n" +
-	"\x15SetAutoAttachResponse\"h\n" +
+	"\x06filter\x18\x04 \x03(\v2\x17.cdp.target.FilterEntryR\x06filter\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x17\n" +
+	"\x15SetAutoAttachResponse\"\x87\x01\n" +
 	"\x19SetDiscoverTargetsRequest\x12\x1a\n" +
 	"\bdiscover\x18\x01 \x01(\bR\bdiscover\x12/\n" +
-	"\x06filter\x18\x02 \x03(\v2\x17.cdp.target.FilterEntryR\x06filter\"\x1c\n" +
-	"\x1aSetDiscoverTargetsResponse\"O\n" +
+	"\x06filter\x18\x02 \x03(\v2\x17.cdp.target.FilterEntryR\x06filter\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x1c\n" +
+	"\x1aSetDiscoverTargetsResponse\"n\n" +
 	"\x1cSubscribeTargetEventsRequest\x12/\n" +
-	"\x06filter\x18\x01 \x03(\v2\x17.cdp.target.FilterEntryR\x06filter\"\xf9\x03\n" +
+	"\x06filter\x18\x01 \x03(\v2\x17.cdp.target.FilterEntryR\x06filter\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\xf9\x03\n" +
 	"\vTargetEvent\x12G\n" +
 	"\x0etarget_created\x18\x01 \x01(\v2\x1e.cdp.target.TargetCreatedEventH\x00R\rtargetCreated\x12M\n" +
 	"\x10target_destroyed\x18\x02 \x01(\v2 .cdp.target.TargetDestroyedEventH\x00R\x0ftargetDestroyed\x12T\n" +

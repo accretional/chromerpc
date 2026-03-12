@@ -21,6 +21,16 @@ func New(client *cdpclient.Client) *Server {
 	return &Server{client: client}
 }
 
+// send routes a CDP command through the specified session, falling back
+// to the client's default session if sessionID is empty.
+func (s *Server) send(ctx context.Context, sessionID string, method string, params interface{}) (json.RawMessage, error) {
+	if sessionID != "" {
+		return s.client.SendWithSession(ctx, method, params, sessionID)
+	}
+	return s.client.Send(ctx, method, params)
+}
+
+
 func (s *Server) Enable(ctx context.Context, req *pb.EnableRequest) (*pb.EnableResponse, error) {
 	params := map[string]interface{}{}
 	if req.MaxTotalBufferSize > 0 {
@@ -34,9 +44,9 @@ func (s *Server) Enable(ctx context.Context, req *pb.EnableRequest) (*pb.EnableR
 	}
 	var err error
 	if len(params) > 0 {
-		_, err = s.client.Send(ctx, "Network.enable", params)
+		_, err = s.send(ctx, req.SessionId, "Network.enable", params)
 	} else {
-		_, err = s.client.Send(ctx, "Network.enable", nil)
+		_, err = s.send(ctx, req.SessionId, "Network.enable", nil)
 	}
 	if err != nil {
 		return nil, fmt.Errorf("Network.enable: %w", err)
@@ -45,7 +55,7 @@ func (s *Server) Enable(ctx context.Context, req *pb.EnableRequest) (*pb.EnableR
 }
 
 func (s *Server) Disable(ctx context.Context, req *pb.DisableRequest) (*pb.DisableResponse, error) {
-	if _, err := s.client.Send(ctx, "Network.disable", nil); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Network.disable", nil); err != nil {
 		return nil, fmt.Errorf("Network.disable: %w", err)
 	}
 	return &pb.DisableResponse{}, nil
@@ -55,7 +65,7 @@ func (s *Server) SetCacheDisabled(ctx context.Context, req *pb.SetCacheDisabledR
 	params := map[string]interface{}{
 		"cacheDisabled": req.CacheDisabled,
 	}
-	if _, err := s.client.Send(ctx, "Network.setCacheDisabled", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Network.setCacheDisabled", params); err != nil {
 		return nil, fmt.Errorf("Network.setCacheDisabled: %w", err)
 	}
 	return &pb.SetCacheDisabledResponse{}, nil
@@ -69,7 +79,7 @@ func (s *Server) SetExtraHTTPHeaders(ctx context.Context, req *pb.SetExtraHTTPHe
 	params := map[string]interface{}{
 		"headers": headers,
 	}
-	if _, err := s.client.Send(ctx, "Network.setExtraHTTPHeaders", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Network.setExtraHTTPHeaders", params); err != nil {
 		return nil, fmt.Errorf("Network.setExtraHTTPHeaders: %w", err)
 	}
 	return &pb.SetExtraHTTPHeadersResponse{}, nil
@@ -79,7 +89,7 @@ func (s *Server) GetResponseBody(ctx context.Context, req *pb.GetResponseBodyReq
 	params := map[string]interface{}{
 		"requestId": req.RequestId,
 	}
-	result, err := s.client.Send(ctx, "Network.getResponseBody", params)
+	result, err := s.send(ctx, req.SessionId, "Network.getResponseBody", params)
 	if err != nil {
 		return nil, fmt.Errorf("Network.getResponseBody: %w", err)
 	}
@@ -104,9 +114,9 @@ func (s *Server) GetCookies(ctx context.Context, req *pb.GetCookiesRequest) (*pb
 	var result json.RawMessage
 	var err error
 	if len(params) > 0 {
-		result, err = s.client.Send(ctx, "Network.getCookies", params)
+		result, err = s.send(ctx, req.SessionId, "Network.getCookies", params)
 	} else {
-		result, err = s.client.Send(ctx, "Network.getCookies", nil)
+		result, err = s.send(ctx, req.SessionId, "Network.getCookies", nil)
 	}
 	if err != nil {
 		return nil, fmt.Errorf("Network.getCookies: %w", err)
@@ -159,7 +169,7 @@ func (s *Server) SetCookie(ctx context.Context, req *pb.SetCookieRequest) (*pb.S
 	if req.SourcePort != 0 {
 		params["sourcePort"] = req.SourcePort
 	}
-	result, err := s.client.Send(ctx, "Network.setCookie", params)
+	result, err := s.send(ctx, req.SessionId, "Network.setCookie", params)
 	if err != nil {
 		return nil, fmt.Errorf("Network.setCookie: %w", err)
 	}
@@ -185,21 +195,21 @@ func (s *Server) DeleteCookies(ctx context.Context, req *pb.DeleteCookiesRequest
 	if req.Path != "" {
 		params["path"] = req.Path
 	}
-	if _, err := s.client.Send(ctx, "Network.deleteCookies", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Network.deleteCookies", params); err != nil {
 		return nil, fmt.Errorf("Network.deleteCookies: %w", err)
 	}
 	return &pb.DeleteCookiesResponse{}, nil
 }
 
 func (s *Server) ClearBrowserCookies(ctx context.Context, req *pb.ClearBrowserCookiesRequest) (*pb.ClearBrowserCookiesResponse, error) {
-	if _, err := s.client.Send(ctx, "Network.clearBrowserCookies", nil); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Network.clearBrowserCookies", nil); err != nil {
 		return nil, fmt.Errorf("Network.clearBrowserCookies: %w", err)
 	}
 	return &pb.ClearBrowserCookiesResponse{}, nil
 }
 
 func (s *Server) ClearBrowserCache(ctx context.Context, req *pb.ClearBrowserCacheRequest) (*pb.ClearBrowserCacheResponse, error) {
-	if _, err := s.client.Send(ctx, "Network.clearBrowserCache", nil); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Network.clearBrowserCache", nil); err != nil {
 		return nil, fmt.Errorf("Network.clearBrowserCache: %w", err)
 	}
 	return &pb.ClearBrowserCacheResponse{}, nil
@@ -215,7 +225,7 @@ func (s *Server) EmulateNetworkConditions(ctx context.Context, req *pb.EmulateNe
 	if req.ConnectionType != "" {
 		params["connectionType"] = req.ConnectionType
 	}
-	if _, err := s.client.Send(ctx, "Network.emulateNetworkConditions", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Network.emulateNetworkConditions", params); err != nil {
 		return nil, fmt.Errorf("Network.emulateNetworkConditions: %w", err)
 	}
 	return &pb.EmulateNetworkConditionsResponse{}, nil
@@ -231,7 +241,7 @@ func (s *Server) SetUserAgentOverride(ctx context.Context, req *pb.SetUserAgentO
 	if req.Platform != "" {
 		params["platform"] = req.Platform
 	}
-	if _, err := s.client.Send(ctx, "Network.setUserAgentOverride", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Network.setUserAgentOverride", params); err != nil {
 		return nil, fmt.Errorf("Network.setUserAgentOverride: %w", err)
 	}
 	return &pb.SetUserAgentOverrideResponse{}, nil
@@ -241,7 +251,7 @@ func (s *Server) GetCertificate(ctx context.Context, req *pb.GetCertificateReque
 	params := map[string]interface{}{
 		"origin": req.Origin,
 	}
-	result, err := s.client.Send(ctx, "Network.getCertificate", params)
+	result, err := s.send(ctx, req.SessionId, "Network.getCertificate", params)
 	if err != nil {
 		return nil, fmt.Errorf("Network.getCertificate: %w", err)
 	}
@@ -272,7 +282,7 @@ func (s *Server) SetRequestInterception(ctx context.Context, req *pb.SetRequestI
 	params := map[string]interface{}{
 		"patterns": patterns,
 	}
-	if _, err := s.client.Send(ctx, "Network.setRequestInterception", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Network.setRequestInterception", params); err != nil {
 		return nil, fmt.Errorf("Network.setRequestInterception: %w", err)
 	}
 	return &pb.SetRequestInterceptionResponse{}, nil
@@ -289,7 +299,7 @@ func (s *Server) SearchInResponseBody(ctx context.Context, req *pb.SearchInRespo
 	if req.IsRegex {
 		params["isRegex"] = true
 	}
-	result, err := s.client.Send(ctx, "Network.searchInResponseBody", params)
+	result, err := s.send(ctx, req.SessionId, "Network.searchInResponseBody", params)
 	if err != nil {
 		return nil, fmt.Errorf("Network.searchInResponseBody: %w", err)
 	}
@@ -316,7 +326,7 @@ func (s *Server) SetBlockedURLs(ctx context.Context, req *pb.SetBlockedURLsReque
 	params := map[string]interface{}{
 		"urls": req.Urls,
 	}
-	if _, err := s.client.Send(ctx, "Network.setBlockedURLs", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Network.setBlockedURLs", params); err != nil {
 		return nil, fmt.Errorf("Network.setBlockedURLs: %w", err)
 	}
 	return &pb.SetBlockedURLsResponse{}, nil
@@ -330,9 +340,9 @@ func (s *Server) GetSecurityIsolationStatus(ctx context.Context, req *pb.GetSecu
 	var result json.RawMessage
 	var err error
 	if len(params) > 0 {
-		result, err = s.client.Send(ctx, "Network.getSecurityIsolationStatus", params)
+		result, err = s.send(ctx, req.SessionId, "Network.getSecurityIsolationStatus", params)
 	} else {
-		result, err = s.client.Send(ctx, "Network.getSecurityIsolationStatus", nil)
+		result, err = s.send(ctx, req.SessionId, "Network.getSecurityIsolationStatus", nil)
 	}
 	if err != nil {
 		return nil, fmt.Errorf("Network.getSecurityIsolationStatus: %w", err)
@@ -355,7 +365,7 @@ func (s *Server) LoadNetworkResource(ctx context.Context, req *pb.LoadNetworkRes
 		}
 		params["options"] = opts
 	}
-	result, err := s.client.Send(ctx, "Network.loadNetworkResource", params)
+	result, err := s.send(ctx, req.SessionId, "Network.loadNetworkResource", params)
 	if err != nil {
 		return nil, fmt.Errorf("Network.loadNetworkResource: %w", err)
 	}

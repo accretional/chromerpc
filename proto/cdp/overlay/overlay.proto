@@ -78,10 +78,14 @@ message RGBA {
 
 // ==================== Requests / Responses ====================
 
-message EnableRequest {}
+message EnableRequest {
+  string session_id = 99;
+}
 message EnableResponse {}
 
-message DisableRequest {}
+message DisableRequest {
+  string session_id = 99;
+}
 message DisableResponse {}
 
 message HighlightNodeRequest {
@@ -90,6 +94,7 @@ message HighlightNodeRequest {
   int32 backend_node_id = 3;
   string object_id = 4;
   string selector = 5;
+  string session_id = 99;
 }
 message HighlightNodeResponse {}
 
@@ -100,6 +105,7 @@ message HighlightRectRequest {
   int32 height = 4;
   RGBA color = 5;
   RGBA outline_color = 6;
+  string session_id = 99;
 }
 message HighlightRectResponse {}
 
@@ -107,51 +113,63 @@ message HighlightQuadRequest {
   repeated double quad = 1;
   RGBA color = 2;
   RGBA outline_color = 3;
+  string session_id = 99;
 }
 message HighlightQuadResponse {}
 
-message HideHighlightRequest {}
+message HideHighlightRequest {
+  string session_id = 99;
+}
 message HideHighlightResponse {}
 
 message SetInspectModeRequest {
   string mode = 1; // "searchForNode","searchForUAShadowDOM","captureAreaScreenshot","showDistances","none"
   HighlightConfig highlight_config = 2;
+  string session_id = 99;
 }
 message SetInspectModeResponse {}
 
 message SetShowPaintRectsRequest {
   bool result = 1;
+  string session_id = 99;
 }
 message SetShowPaintRectsResponse {}
 
 message SetShowLayoutShiftRegionsRequest {
   bool result = 1;
+  string session_id = 99;
 }
 message SetShowLayoutShiftRegionsResponse {}
 
 message SetShowScrollBottleneckRectsRequest {
   bool show = 1;
+  string session_id = 99;
 }
 message SetShowScrollBottleneckRectsResponse {}
 
 message SetShowFPSCounterRequest {
   bool show = 1;
+  string session_id = 99;
 }
 message SetShowFPSCounterResponse {}
 
 message SetShowDebugBordersRequest {
   bool show = 1;
+  string session_id = 99;
 }
 message SetShowDebugBordersResponse {}
 
 message SetPausedInDebuggerMessageRequest {
   string message = 1;
+  string session_id = 99;
 }
 message SetPausedInDebuggerMessageResponse {}
 
 // ==================== Events ====================
 
-message SubscribeEventsRequest {}
+message SubscribeEventsRequest {
+  string session_id = 99;
+}
 
 message OverlayEvent {
   oneof event {
@@ -163,10 +181,12 @@ message OverlayEvent {
 
 message InspectNodeRequestedEvent {
   int32 backend_node_id = 1;
+  string session_id = 99;
 }
 
 message NodeHighlightRequestedEvent {
   int32 node_id = 1;
+  string session_id = 99;
 }
 
 message ScreenshotRequestedEvent {
@@ -176,4 +196,5 @@ message ScreenshotRequestedEvent {
   double width = 3;
   double height = 4;
   double scale = 5;
+  string session_id = 99;
 }

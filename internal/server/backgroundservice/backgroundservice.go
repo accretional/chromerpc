@@ -19,6 +19,16 @@ func New(client *cdpclient.Client) *Server {
 	return &Server{client: client}
 }
 
+// send routes a CDP command through the specified session, falling back
+// to the client's default session if sessionID is empty.
+func (s *Server) send(ctx context.Context, sessionID string, method string, params interface{}) (json.RawMessage, error) {
+	if sessionID != "" {
+		return s.client.SendWithSession(ctx, method, params, sessionID)
+	}
+	return s.client.Send(ctx, method, params)
+}
+
+
 // serviceNameToString converts the proto enum to the CDP string value.
 func serviceNameToString(s pb.ServiceName) string {
 	switch s {
@@ -43,7 +53,7 @@ func (s *Server) StartObserving(ctx context.Context, req *pb.StartObservingReque
 	params := map[string]interface{}{
 		"service": serviceNameToString(req.Service),
 	}
-	if _, err := s.client.Send(ctx, "BackgroundService.startObserving", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "BackgroundService.startObserving", params); err != nil {
 		return nil, fmt.Errorf("BackgroundService.startObserving: %w", err)
 	}
 	return &pb.StartObservingResponse{}, nil
@@ -53,7 +63,7 @@ func (s *Server) StopObserving(ctx context.Context, req *pb.StopObservingRequest
 	params := map[string]interface{}{
 		"service": serviceNameToString(req.Service),
 	}
-	if _, err := s.client.Send(ctx, "BackgroundService.stopObserving", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "BackgroundService.stopObserving", params); err != nil {
 		return nil, fmt.Errorf("BackgroundService.stopObserving: %w", err)
 	}
 	return &pb.StopObservingResponse{}, nil
@@ -64,7 +74,7 @@ func (s *Server) SetRecording(ctx context.Context, req *pb.SetRecordingRequest) 
 		"shouldRecord": req.ShouldRecord,
 		"service":      serviceNameToString(req.Service),
 	}
-	if _, err := s.client.Send(ctx, "BackgroundService.setRecording", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "BackgroundService.setRecording", params); err != nil {
 		return nil, fmt.Errorf("BackgroundService.setRecording: %w", err)
 	}
 	return &pb.SetRecordingResponse{}, nil
@@ -74,7 +84,7 @@ func (s *Server) ClearEvents(ctx context.Context, req *pb.ClearEventsRequest) (*
 	params := map[string]interface{}{
 		"service": serviceNameToString(req.Service),
 	}
-	if _, err := s.client.Send(ctx, "BackgroundService.clearEvents", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "BackgroundService.clearEvents", params); err != nil {
 		return nil, fmt.Errorf("BackgroundService.clearEvents: %w", err)
 	}
 	return &pb.ClearEventsResponse{}, nil

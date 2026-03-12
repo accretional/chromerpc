@@ -23,6 +23,7 @@ const (
 
 type EnableRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -55,6 +56,13 @@ func (x *EnableRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use EnableRequest.ProtoReflect.Descriptor instead.
 func (*EnableRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_audits_audits_proto_rawDescGZIP(), []int{0}
+}
+
+func (x *EnableRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type EnableResponse struct {
@@ -95,6 +103,7 @@ func (*EnableResponse) Descriptor() ([]byte, []int) {
 
 type DisableRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -127,6 +136,13 @@ func (x *DisableRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use DisableRequest.ProtoReflect.Descriptor instead.
 func (*DisableRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_audits_audits_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *DisableRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type DisableResponse struct {
@@ -174,7 +190,8 @@ type GetEncodedResponseRequest struct {
 	// The quality of the encoding (0-1). Defaults to 1.
 	Quality *float64 `protobuf:"fixed64,3,opt,name=quality,proto3,oneof" json:"quality,omitempty"`
 	// Whether to only return the size information (defaults to false).
-	SizeOnly      *bool `protobuf:"varint,4,opt,name=size_only,json=sizeOnly,proto3,oneof" json:"size_only,omitempty"`
+	SizeOnly      *bool  `protobuf:"varint,4,opt,name=size_only,json=sizeOnly,proto3,oneof" json:"size_only,omitempty"`
+	SessionId     string `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -235,6 +252,13 @@ func (x *GetEncodedResponseRequest) GetSizeOnly() bool {
 		return *x.SizeOnly
 	}
 	return false
+}
+
+func (x *GetEncodedResponseRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type GetEncodedResponseResponse struct {
@@ -303,7 +327,8 @@ func (x *GetEncodedResponseResponse) GetEncodedSize() int32 {
 type CheckContrastRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Whether to report WCAG AAA level issues. Default is false.
-	ReportAaa     *bool `protobuf:"varint,1,opt,name=report_aaa,json=reportAaa,proto3,oneof" json:"report_aaa,omitempty"`
+	ReportAaa     *bool  `protobuf:"varint,1,opt,name=report_aaa,json=reportAaa,proto3,oneof" json:"report_aaa,omitempty"`
+	SessionId     string `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -345,6 +370,13 @@ func (x *CheckContrastRequest) GetReportAaa() bool {
 	return false
 }
 
+func (x *CheckContrastRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type CheckContrastResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -383,6 +415,7 @@ func (*CheckContrastResponse) Descriptor() ([]byte, []int) {
 
 type CheckFormsIssuesRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -415,6 +448,13 @@ func (x *CheckFormsIssuesRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use CheckFormsIssuesRequest.ProtoReflect.Descriptor instead.
 func (*CheckFormsIssuesRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_audits_audits_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *CheckFormsIssuesRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type CheckFormsIssuesResponse struct {
@@ -464,6 +504,7 @@ func (x *CheckFormsIssuesResponse) GetFormIssues() []string {
 
 type SubscribeEventsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -496,6 +537,13 @@ func (x *SubscribeEventsRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use SubscribeEventsRequest.ProtoReflect.Descriptor instead.
 func (*SubscribeEventsRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_audits_audits_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *SubscribeEventsRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type AuditsEvent struct {
@@ -667,17 +715,23 @@ var File_proto_cdp_audits_audits_proto protoreflect.FileDescriptor
 const file_proto_cdp_audits_audits_proto_rawDesc = "" +
 	"\n" +
 	"\x1dproto/cdp/audits/audits.proto\x12\n" +
-	"cdp.audits\"\x0f\n" +
-	"\rEnableRequest\"\x10\n" +
-	"\x0eEnableResponse\"\x10\n" +
-	"\x0eDisableRequest\"\x11\n" +
-	"\x0fDisableResponse\"\xb1\x01\n" +
+	"cdp.audits\".\n" +
+	"\rEnableRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x10\n" +
+	"\x0eEnableResponse\"/\n" +
+	"\x0eDisableRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x11\n" +
+	"\x0fDisableResponse\"\xd0\x01\n" +
 	"\x19GetEncodedResponseRequest\x12\x1d\n" +
 	"\n" +
 	"request_id\x18\x01 \x01(\tR\trequestId\x12\x1a\n" +
 	"\bencoding\x18\x02 \x01(\tR\bencoding\x12\x1d\n" +
 	"\aquality\x18\x03 \x01(\x01H\x00R\aquality\x88\x01\x01\x12 \n" +
-	"\tsize_only\x18\x04 \x01(\bH\x01R\bsizeOnly\x88\x01\x01B\n" +
+	"\tsize_only\x18\x04 \x01(\bH\x01R\bsizeOnly\x88\x01\x01\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionIdB\n" +
 	"\n" +
 	"\b_qualityB\f\n" +
 	"\n" +
@@ -686,17 +740,23 @@ const file_proto_cdp_audits_audits_proto_rawDesc = "" +
 	"\x04body\x18\x01 \x01(\tH\x00R\x04body\x88\x01\x01\x12#\n" +
 	"\roriginal_size\x18\x02 \x01(\x05R\foriginalSize\x12!\n" +
 	"\fencoded_size\x18\x03 \x01(\x05R\vencodedSizeB\a\n" +
-	"\x05_body\"I\n" +
+	"\x05_body\"h\n" +
 	"\x14CheckContrastRequest\x12\"\n" +
 	"\n" +
-	"report_aaa\x18\x01 \x01(\bH\x00R\treportAaa\x88\x01\x01B\r\n" +
+	"report_aaa\x18\x01 \x01(\bH\x00R\treportAaa\x88\x01\x01\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionIdB\r\n" +
 	"\v_report_aaa\"\x17\n" +
-	"\x15CheckContrastResponse\"\x19\n" +
-	"\x17CheckFormsIssuesRequest\";\n" +
+	"\x15CheckContrastResponse\"8\n" +
+	"\x17CheckFormsIssuesRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\";\n" +
 	"\x18CheckFormsIssuesResponse\x12\x1f\n" +
 	"\vform_issues\x18\x01 \x03(\tR\n" +
-	"formIssues\"\x18\n" +
-	"\x16SubscribeEventsRequest\"V\n" +
+	"formIssues\"7\n" +
+	"\x16SubscribeEventsRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"V\n" +
 	"\vAuditsEvent\x12>\n" +
 	"\vissue_added\x18\x01 \x01(\v2\x1b.cdp.audits.IssueAddedEventH\x00R\n" +
 	"issueAddedB\a\n" +

@@ -136,6 +136,7 @@ func (x *Item) GetValue() string {
 
 type EnableRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -168,6 +169,13 @@ func (x *EnableRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use EnableRequest.ProtoReflect.Descriptor instead.
 func (*EnableRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_domstorage_domstorage_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *EnableRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type EnableResponse struct {
@@ -208,6 +216,7 @@ func (*EnableResponse) Descriptor() ([]byte, []int) {
 
 type DisableRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -240,6 +249,13 @@ func (x *DisableRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use DisableRequest.ProtoReflect.Descriptor instead.
 func (*DisableRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_domstorage_domstorage_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *DisableRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type DisableResponse struct {
@@ -281,6 +297,7 @@ func (*DisableResponse) Descriptor() ([]byte, []int) {
 type GetDOMStorageItemsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	StorageId     *StorageId             `protobuf:"bytes,1,opt,name=storage_id,json=storageId,proto3" json:"storage_id,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -320,6 +337,13 @@ func (x *GetDOMStorageItemsRequest) GetStorageId() *StorageId {
 		return x.StorageId
 	}
 	return nil
+}
+
+func (x *GetDOMStorageItemsRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type GetDOMStorageItemsResponse struct {
@@ -371,6 +395,7 @@ type SetDOMStorageItemRequest struct {
 	StorageId     *StorageId             `protobuf:"bytes,1,opt,name=storage_id,json=storageId,proto3" json:"storage_id,omitempty"`
 	Key           string                 `protobuf:"bytes,2,opt,name=key,proto3" json:"key,omitempty"`
 	Value         string                 `protobuf:"bytes,3,opt,name=value,proto3" json:"value,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -426,6 +451,13 @@ func (x *SetDOMStorageItemRequest) GetValue() string {
 	return ""
 }
 
+func (x *SetDOMStorageItemRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type SetDOMStorageItemResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -466,6 +498,7 @@ type RemoveDOMStorageItemRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	StorageId     *StorageId             `protobuf:"bytes,1,opt,name=storage_id,json=storageId,proto3" json:"storage_id,omitempty"`
 	Key           string                 `protobuf:"bytes,2,opt,name=key,proto3" json:"key,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -514,6 +547,13 @@ func (x *RemoveDOMStorageItemRequest) GetKey() string {
 	return ""
 }
 
+func (x *RemoveDOMStorageItemRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type RemoveDOMStorageItemResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -553,6 +593,7 @@ func (*RemoveDOMStorageItemResponse) Descriptor() ([]byte, []int) {
 type ClearRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	StorageId     *StorageId             `protobuf:"bytes,1,opt,name=storage_id,json=storageId,proto3" json:"storage_id,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -594,6 +635,13 @@ func (x *ClearRequest) GetStorageId() *StorageId {
 	return nil
 }
 
+func (x *ClearRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type ClearResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -632,6 +680,7 @@ func (*ClearResponse) Descriptor() ([]byte, []int) {
 
 type SubscribeEventsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -664,6 +713,13 @@ func (x *SubscribeEventsRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use SubscribeEventsRequest.ProtoReflect.Descriptor instead.
 func (*SubscribeEventsRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_domstorage_domstorage_proto_rawDescGZIP(), []int{14}
+}
+
+func (x *SubscribeEventsRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type DOMStorageEvent struct {
@@ -1016,32 +1072,46 @@ const file_proto_cdp_domstorage_domstorage_proto_rawDesc = "" +
 	"\x10is_local_storage\x18\x03 \x01(\bR\x0eisLocalStorage\".\n" +
 	"\x04Item\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value\"\x0f\n" +
-	"\rEnableRequest\"\x10\n" +
-	"\x0eEnableResponse\"\x10\n" +
-	"\x0eDisableRequest\"\x11\n" +
-	"\x0fDisableResponse\"U\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value\".\n" +
+	"\rEnableRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x10\n" +
+	"\x0eEnableResponse\"/\n" +
+	"\x0eDisableRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x11\n" +
+	"\x0fDisableResponse\"t\n" +
 	"\x19GetDOMStorageItemsRequest\x128\n" +
 	"\n" +
-	"storage_id\x18\x01 \x01(\v2\x19.cdp.domstorage.StorageIdR\tstorageId\"L\n" +
+	"storage_id\x18\x01 \x01(\v2\x19.cdp.domstorage.StorageIdR\tstorageId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"L\n" +
 	"\x1aGetDOMStorageItemsResponse\x12.\n" +
-	"\aentries\x18\x01 \x03(\v2\x14.cdp.domstorage.ItemR\aentries\"|\n" +
+	"\aentries\x18\x01 \x03(\v2\x14.cdp.domstorage.ItemR\aentries\"\x9b\x01\n" +
 	"\x18SetDOMStorageItemRequest\x128\n" +
 	"\n" +
 	"storage_id\x18\x01 \x01(\v2\x19.cdp.domstorage.StorageIdR\tstorageId\x12\x10\n" +
 	"\x03key\x18\x02 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x03 \x01(\tR\x05value\"\x1b\n" +
-	"\x19SetDOMStorageItemResponse\"i\n" +
+	"\x05value\x18\x03 \x01(\tR\x05value\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x1b\n" +
+	"\x19SetDOMStorageItemResponse\"\x88\x01\n" +
 	"\x1bRemoveDOMStorageItemRequest\x128\n" +
 	"\n" +
 	"storage_id\x18\x01 \x01(\v2\x19.cdp.domstorage.StorageIdR\tstorageId\x12\x10\n" +
-	"\x03key\x18\x02 \x01(\tR\x03key\"\x1e\n" +
-	"\x1cRemoveDOMStorageItemResponse\"H\n" +
+	"\x03key\x18\x02 \x01(\tR\x03key\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x1e\n" +
+	"\x1cRemoveDOMStorageItemResponse\"g\n" +
 	"\fClearRequest\x128\n" +
 	"\n" +
-	"storage_id\x18\x01 \x01(\v2\x19.cdp.domstorage.StorageIdR\tstorageId\"\x0f\n" +
-	"\rClearResponse\"\x18\n" +
-	"\x16SubscribeEventsRequest\"\xb3\x03\n" +
+	"storage_id\x18\x01 \x01(\v2\x19.cdp.domstorage.StorageIdR\tstorageId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x0f\n" +
+	"\rClearResponse\"7\n" +
+	"\x16SubscribeEventsRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\xb3\x03\n" +
 	"\x0fDOMStorageEvent\x12_\n" +
 	"\x16dom_storage_item_added\x18\x01 \x01(\v2(.cdp.domstorage.DOMStorageItemAddedEventH\x00R\x13domStorageItemAdded\x12e\n" +
 	"\x18dom_storage_item_removed\x18\x02 \x01(\v2*.cdp.domstorage.DOMStorageItemRemovedEventH\x00R\x15domStorageItemRemoved\x12e\n" +

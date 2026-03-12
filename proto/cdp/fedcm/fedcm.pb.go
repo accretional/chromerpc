@@ -24,6 +24,7 @@ const (
 type EnableRequest struct {
 	state                 protoimpl.MessageState `protogen:"open.v1"`
 	DisableRejectionDelay *bool                  `protobuf:"varint,1,opt,name=disable_rejection_delay,json=disableRejectionDelay,proto3,oneof" json:"disable_rejection_delay,omitempty"`
+	SessionId             string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields         protoimpl.UnknownFields
 	sizeCache             protoimpl.SizeCache
 }
@@ -65,6 +66,13 @@ func (x *EnableRequest) GetDisableRejectionDelay() bool {
 	return false
 }
 
+func (x *EnableRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type EnableResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -103,6 +111,7 @@ func (*EnableResponse) Descriptor() ([]byte, []int) {
 
 type DisableRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -135,6 +144,13 @@ func (x *DisableRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use DisableRequest.ProtoReflect.Descriptor instead.
 func (*DisableRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_fedcm_fedcm_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *DisableRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type DisableResponse struct {
@@ -177,6 +193,7 @@ type SelectAccountRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	DialogId      string                 `protobuf:"bytes,1,opt,name=dialog_id,json=dialogId,proto3" json:"dialog_id,omitempty"`
 	AccountIndex  int32                  `protobuf:"varint,2,opt,name=account_index,json=accountIndex,proto3" json:"account_index,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -225,6 +242,13 @@ func (x *SelectAccountRequest) GetAccountIndex() int32 {
 	return 0
 }
 
+func (x *SelectAccountRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type SelectAccountResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -265,6 +289,7 @@ type ClickDialogButtonRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	DialogId      string                 `protobuf:"bytes,1,opt,name=dialog_id,json=dialogId,proto3" json:"dialog_id,omitempty"`
 	DialogButton  string                 `protobuf:"bytes,2,opt,name=dialog_button,json=dialogButton,proto3" json:"dialog_button,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -313,6 +338,13 @@ func (x *ClickDialogButtonRequest) GetDialogButton() string {
 	return ""
 }
 
+func (x *ClickDialogButtonRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type ClickDialogButtonResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -354,6 +386,7 @@ type OpenUrlRequest struct {
 	DialogId       string                 `protobuf:"bytes,1,opt,name=dialog_id,json=dialogId,proto3" json:"dialog_id,omitempty"`
 	AccountIndex   int32                  `protobuf:"varint,2,opt,name=account_index,json=accountIndex,proto3" json:"account_index,omitempty"`
 	AccountUrlType string                 `protobuf:"bytes,3,opt,name=account_url_type,json=accountUrlType,proto3" json:"account_url_type,omitempty"`
+	SessionId      string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
@@ -409,6 +442,13 @@ func (x *OpenUrlRequest) GetAccountUrlType() string {
 	return ""
 }
 
+func (x *OpenUrlRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type OpenUrlResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -449,6 +489,7 @@ type DismissDialogRequest struct {
 	state           protoimpl.MessageState `protogen:"open.v1"`
 	DialogId        string                 `protobuf:"bytes,1,opt,name=dialog_id,json=dialogId,proto3" json:"dialog_id,omitempty"`
 	TriggerCooldown *bool                  `protobuf:"varint,2,opt,name=trigger_cooldown,json=triggerCooldown,proto3,oneof" json:"trigger_cooldown,omitempty"`
+	SessionId       string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
 }
@@ -497,6 +538,13 @@ func (x *DismissDialogRequest) GetTriggerCooldown() bool {
 	return false
 }
 
+func (x *DismissDialogRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type DismissDialogResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -535,6 +583,7 @@ func (*DismissDialogResponse) Descriptor() ([]byte, []int) {
 
 type ResetCooldownRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -567,6 +616,13 @@ func (x *ResetCooldownRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use ResetCooldownRequest.ProtoReflect.Descriptor instead.
 func (*ResetCooldownRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_fedcm_fedcm_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *ResetCooldownRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type ResetCooldownResponse struct {
@@ -971,32 +1027,46 @@ var File_proto_cdp_fedcm_fedcm_proto protoreflect.FileDescriptor
 
 const file_proto_cdp_fedcm_fedcm_proto_rawDesc = "" +
 	"\n" +
-	"\x1bproto/cdp/fedcm/fedcm.proto\x12\tcdp.fedcm\"h\n" +
+	"\x1bproto/cdp/fedcm/fedcm.proto\x12\tcdp.fedcm\"\x87\x01\n" +
 	"\rEnableRequest\x12;\n" +
-	"\x17disable_rejection_delay\x18\x01 \x01(\bH\x00R\x15disableRejectionDelay\x88\x01\x01B\x1a\n" +
+	"\x17disable_rejection_delay\x18\x01 \x01(\bH\x00R\x15disableRejectionDelay\x88\x01\x01\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionIdB\x1a\n" +
 	"\x18_disable_rejection_delay\"\x10\n" +
-	"\x0eEnableResponse\"\x10\n" +
-	"\x0eDisableRequest\"\x11\n" +
-	"\x0fDisableResponse\"X\n" +
+	"\x0eEnableResponse\"/\n" +
+	"\x0eDisableRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x11\n" +
+	"\x0fDisableResponse\"w\n" +
 	"\x14SelectAccountRequest\x12\x1b\n" +
 	"\tdialog_id\x18\x01 \x01(\tR\bdialogId\x12#\n" +
-	"\raccount_index\x18\x02 \x01(\x05R\faccountIndex\"\x17\n" +
-	"\x15SelectAccountResponse\"\\\n" +
+	"\raccount_index\x18\x02 \x01(\x05R\faccountIndex\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x17\n" +
+	"\x15SelectAccountResponse\"{\n" +
 	"\x18ClickDialogButtonRequest\x12\x1b\n" +
 	"\tdialog_id\x18\x01 \x01(\tR\bdialogId\x12#\n" +
-	"\rdialog_button\x18\x02 \x01(\tR\fdialogButton\"\x1b\n" +
-	"\x19ClickDialogButtonResponse\"|\n" +
+	"\rdialog_button\x18\x02 \x01(\tR\fdialogButton\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x1b\n" +
+	"\x19ClickDialogButtonResponse\"\x9b\x01\n" +
 	"\x0eOpenUrlRequest\x12\x1b\n" +
 	"\tdialog_id\x18\x01 \x01(\tR\bdialogId\x12#\n" +
 	"\raccount_index\x18\x02 \x01(\x05R\faccountIndex\x12(\n" +
-	"\x10account_url_type\x18\x03 \x01(\tR\x0eaccountUrlType\"\x11\n" +
-	"\x0fOpenUrlResponse\"x\n" +
+	"\x10account_url_type\x18\x03 \x01(\tR\x0eaccountUrlType\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x11\n" +
+	"\x0fOpenUrlResponse\"\x97\x01\n" +
 	"\x14DismissDialogRequest\x12\x1b\n" +
 	"\tdialog_id\x18\x01 \x01(\tR\bdialogId\x12.\n" +
-	"\x10trigger_cooldown\x18\x02 \x01(\bH\x00R\x0ftriggerCooldown\x88\x01\x01B\x13\n" +
+	"\x10trigger_cooldown\x18\x02 \x01(\bH\x00R\x0ftriggerCooldown\x88\x01\x01\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionIdB\x13\n" +
 	"\x11_trigger_cooldown\"\x17\n" +
-	"\x15DismissDialogResponse\"\x16\n" +
-	"\x14ResetCooldownRequest\"\x17\n" +
+	"\x15DismissDialogResponse\"5\n" +
+	"\x14ResetCooldownRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x17\n" +
 	"\x15ResetCooldownResponse\"<\n" +
 	"\x1bSubscribeFedCmEventsRequest\x12\x1d\n" +
 	"\n" +

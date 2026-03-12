@@ -62,26 +62,37 @@ message ViolationSetting {
 
 // ==================== Requests / Responses ====================
 
-message EnableRequest {}
+message EnableRequest {
+  string session_id = 99;
+}
 message EnableResponse {}
 
-message DisableRequest {}
+message DisableRequest {
+  string session_id = 99;
+}
 message DisableResponse {}
 
-message ClearRequest {}
+message ClearRequest {
+  string session_id = 99;
+}
 message ClearResponse {}
 
 message StartViolationsReportRequest {
   repeated ViolationSetting config = 1;
+  string session_id = 99;
 }
 message StartViolationsReportResponse {}
 
-message StopViolationsReportRequest {}
+message StopViolationsReportRequest {
+  string session_id = 99;
+}
 message StopViolationsReportResponse {}
 
 // ==================== Events ====================
 
-message SubscribeEventsRequest {}
+message SubscribeEventsRequest {
+  string session_id = 99;
+}
 
 message LogEvent {
   oneof event {

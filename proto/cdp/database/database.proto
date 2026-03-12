@@ -39,14 +39,19 @@ message SqlError {
 
 // ==================== Requests / Responses ====================
 
-message EnableRequest {}
+message EnableRequest {
+  string session_id = 99;
+}
 message EnableResponse {}
 
-message DisableRequest {}
+message DisableRequest {
+  string session_id = 99;
+}
 message DisableResponse {}
 
 message GetDatabaseTableNamesRequest {
   string database_id = 1;
+  string session_id = 99;
 }
 message GetDatabaseTableNamesResponse {
   repeated string table_names = 1;
@@ -55,6 +60,7 @@ message GetDatabaseTableNamesResponse {
 message ExecuteSQLRequest {
   string database_id = 1;
   string query = 2;
+  string session_id = 99;
 }
 message ExecuteSQLResponse {
   repeated string column_names = 1;

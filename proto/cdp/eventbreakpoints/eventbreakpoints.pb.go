@@ -24,6 +24,7 @@ const (
 type SetInstrumentationBreakpointRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	EventName     string                 `protobuf:"bytes,1,opt,name=event_name,json=eventName,proto3" json:"event_name,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -61,6 +62,13 @@ func (*SetInstrumentationBreakpointRequest) Descriptor() ([]byte, []int) {
 func (x *SetInstrumentationBreakpointRequest) GetEventName() string {
 	if x != nil {
 		return x.EventName
+	}
+	return ""
+}
+
+func (x *SetInstrumentationBreakpointRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -104,6 +112,7 @@ func (*SetInstrumentationBreakpointResponse) Descriptor() ([]byte, []int) {
 type RemoveInstrumentationBreakpointRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	EventName     string                 `protobuf:"bytes,1,opt,name=event_name,json=eventName,proto3" json:"event_name,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -141,6 +150,13 @@ func (*RemoveInstrumentationBreakpointRequest) Descriptor() ([]byte, []int) {
 func (x *RemoveInstrumentationBreakpointRequest) GetEventName() string {
 	if x != nil {
 		return x.EventName
+	}
+	return ""
+}
+
+func (x *RemoveInstrumentationBreakpointRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -183,6 +199,7 @@ func (*RemoveInstrumentationBreakpointResponse) Descriptor() ([]byte, []int) {
 
 type DisableRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -215,6 +232,13 @@ func (x *DisableRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use DisableRequest.ProtoReflect.Descriptor instead.
 func (*DisableRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_eventbreakpoints_eventbreakpoints_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *DisableRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type DisableResponse struct {
@@ -257,16 +281,22 @@ var File_proto_cdp_eventbreakpoints_eventbreakpoints_proto protoreflect.FileDesc
 
 const file_proto_cdp_eventbreakpoints_eventbreakpoints_proto_rawDesc = "" +
 	"\n" +
-	"1proto/cdp/eventbreakpoints/eventbreakpoints.proto\x12\x14cdp.eventbreakpoints\"D\n" +
+	"1proto/cdp/eventbreakpoints/eventbreakpoints.proto\x12\x14cdp.eventbreakpoints\"c\n" +
 	"#SetInstrumentationBreakpointRequest\x12\x1d\n" +
 	"\n" +
-	"event_name\x18\x01 \x01(\tR\teventName\"&\n" +
-	"$SetInstrumentationBreakpointResponse\"G\n" +
+	"event_name\x18\x01 \x01(\tR\teventName\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"&\n" +
+	"$SetInstrumentationBreakpointResponse\"f\n" +
 	"&RemoveInstrumentationBreakpointRequest\x12\x1d\n" +
 	"\n" +
-	"event_name\x18\x01 \x01(\tR\teventName\")\n" +
-	"'RemoveInstrumentationBreakpointResponse\"\x10\n" +
-	"\x0eDisableRequest\"\x11\n" +
+	"event_name\x18\x01 \x01(\tR\teventName\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\")\n" +
+	"'RemoveInstrumentationBreakpointResponse\"/\n" +
+	"\x0eDisableRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x11\n" +
 	"\x0fDisableResponse2\xaa\x03\n" +
 	"\x17EventBreakpointsService\x12\x95\x01\n" +
 	"\x1cSetInstrumentationBreakpoint\x129.cdp.eventbreakpoints.SetInstrumentationBreakpointRequest\x1a:.cdp.eventbreakpoints.SetInstrumentationBreakpointResponse\x12\x9e\x01\n" +

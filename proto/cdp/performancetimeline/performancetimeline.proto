@@ -9,6 +9,7 @@ service PerformanceTimelineService {
 
 message EnableRequest {
   repeated string event_types = 1;
+  string session_id = 99;
 }
 message EnableResponse {}
 

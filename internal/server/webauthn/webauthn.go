@@ -19,6 +19,16 @@ func New(client *cdpclient.Client) *Server {
 	return &Server{client: client}
 }
 
+// send routes a CDP command through the specified session, falling back
+// to the client's default session if sessionID is empty.
+func (s *Server) send(ctx context.Context, sessionID string, method string, params interface{}) (json.RawMessage, error) {
+	if sessionID != "" {
+		return s.client.SendWithSession(ctx, method, params, sessionID)
+	}
+	return s.client.Send(ctx, method, params)
+}
+
+
 // protocolToString converts the proto enum to the CDP string value.
 func protocolToString(p pb.AuthenticatorProtocol) string {
 	switch p {
@@ -165,14 +175,14 @@ func (s *Server) Enable(ctx context.Context, req *pb.EnableRequest) (*pb.EnableR
 			"enableUI": req.EnableUi,
 		}
 	}
-	if _, err := s.client.Send(ctx, "WebAuthn.enable", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "WebAuthn.enable", params); err != nil {
 		return nil, fmt.Errorf("WebAuthn.enable: %w", err)
 	}
 	return &pb.EnableResponse{}, nil
 }
 
 func (s *Server) Disable(ctx context.Context, req *pb.DisableRequest) (*pb.DisableResponse, error) {
-	if _, err := s.client.Send(ctx, "WebAuthn.disable", nil); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "WebAuthn.disable", nil); err != nil {
 		return nil, fmt.Errorf("WebAuthn.disable: %w", err)
 	}
 	return &pb.DisableResponse{}, nil
@@ -182,7 +192,7 @@ func (s *Server) AddVirtualAuthenticator(ctx context.Context, req *pb.AddVirtual
 	params := map[string]interface{}{
 		"options": buildOptionsParams(req.Options),
 	}
-	result, err := s.client.Send(ctx, "WebAuthn.addVirtualAuthenticator", params)
+	result, err := s.send(ctx, req.SessionId, "WebAuthn.addVirtualAuthenticator", params)
 	if err != nil {
 		return nil, fmt.Errorf("WebAuthn.addVirtualAuthenticator: %w", err)
 	}
@@ -199,7 +209,7 @@ func (s *Server) RemoveVirtualAuthenticator(ctx context.Context, req *pb.RemoveV
 	params := map[string]interface{}{
 		"authenticatorId": req.AuthenticatorId,
 	}
-	if _, err := s.client.Send(ctx, "WebAuthn.removeVirtualAuthenticator", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "WebAuthn.removeVirtualAuthenticator", params); err != nil {
 		return nil, fmt.Errorf("WebAuthn.removeVirtualAuthenticator: %w", err)
 	}
 	return &pb.RemoveVirtualAuthenticatorResponse{}, nil
@@ -210,7 +220,7 @@ func (s *Server) AddCredential(ctx context.Context, req *pb.AddCredentialRequest
 		"authenticatorId": req.AuthenticatorId,
 		"credential":      buildCredentialParams(req.Credential),
 	}
-	if _, err := s.client.Send(ctx, "WebAuthn.addCredential", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "WebAuthn.addCredential", params); err != nil {
 		return nil, fmt.Errorf("WebAuthn.addCredential: %w", err)
 	}
 	return &pb.AddCredentialResponse{}, nil
@@ -221,7 +231,7 @@ func (s *Server) GetCredential(ctx context.Context, req *pb.GetCredentialRequest
 		"authenticatorId": req.AuthenticatorId,
 		"credentialId":    req.CredentialId,
 	}
-	result, err := s.client.Send(ctx, "WebAuthn.getCredential", params)
+	result, err := s.send(ctx, req.SessionId, "WebAuthn.getCredential", params)
 	if err != nil {
 		return nil, fmt.Errorf("WebAuthn.getCredential: %w", err)
 	}
@@ -242,7 +252,7 @@ func (s *Server) GetCredentials(ctx context.Context, req *pb.GetCredentialsReque
 	params := map[string]interface{}{
 		"authenticatorId": req.AuthenticatorId,
 	}
-	result, err := s.client.Send(ctx, "WebAuthn.getCredentials", params)
+	result, err := s.send(ctx, req.SessionId, "WebAuthn.getCredentials", params)
 	if err != nil {
 		return nil, fmt.Errorf("WebAuthn.getCredentials: %w", err)
 	}
@@ -268,7 +278,7 @@ func (s *Server) RemoveCredential(ctx context.Context, req *pb.RemoveCredentialR
 		"authenticatorId": req.AuthenticatorId,
 		"credentialId":    req.CredentialId,
 	}
-	if _, err := s.client.Send(ctx, "WebAuthn.removeCredential", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "WebAuthn.removeCredential", params); err != nil {
 		return nil, fmt.Errorf("WebAuthn.removeCredential: %w", err)
 	}
 	return &pb.RemoveCredentialResponse{}, nil
@@ -278,7 +288,7 @@ func (s *Server) ClearCredentials(ctx context.Context, req *pb.ClearCredentialsR
 	params := map[string]interface{}{
 		"authenticatorId": req.AuthenticatorId,
 	}
-	if _, err := s.client.Send(ctx, "WebAuthn.clearCredentials", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "WebAuthn.clearCredentials", params); err != nil {
 		return nil, fmt.Errorf("WebAuthn.clearCredentials: %w", err)
 	}
 	return &pb.ClearCredentialsResponse{}, nil
@@ -289,7 +299,7 @@ func (s *Server) SetUserVerified(ctx context.Context, req *pb.SetUserVerifiedReq
 		"authenticatorId": req.AuthenticatorId,
 		"isUserVerified":  req.IsUserVerified,
 	}
-	if _, err := s.client.Send(ctx, "WebAuthn.setUserVerified", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "WebAuthn.setUserVerified", params); err != nil {
 		return nil, fmt.Errorf("WebAuthn.setUserVerified: %w", err)
 	}
 	return &pb.SetUserVerifiedResponse{}, nil
@@ -300,7 +310,7 @@ func (s *Server) SetAutomaticPresenceSimulation(ctx context.Context, req *pb.Set
 		"authenticatorId": req.AuthenticatorId,
 		"enabled":         req.Enabled,
 	}
-	if _, err := s.client.Send(ctx, "WebAuthn.setAutomaticPresenceSimulation", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "WebAuthn.setAutomaticPresenceSimulation", params); err != nil {
 		return nil, fmt.Errorf("WebAuthn.setAutomaticPresenceSimulation: %w", err)
 	}
 	return &pb.SetAutomaticPresenceSimulationResponse{}, nil
@@ -319,7 +329,7 @@ func (s *Server) SetResponseOverrideBits(ctx context.Context, req *pb.SetRespons
 	if req.IsBadUp {
 		params["isBadUP"] = true
 	}
-	if _, err := s.client.Send(ctx, "WebAuthn.setResponseOverrideBits", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "WebAuthn.setResponseOverrideBits", params); err != nil {
 		return nil, fmt.Errorf("WebAuthn.setResponseOverrideBits: %w", err)
 	}
 	return &pb.SetResponseOverrideBitsResponse{}, nil

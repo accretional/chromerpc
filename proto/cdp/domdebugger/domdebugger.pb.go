@@ -194,6 +194,7 @@ type GetEventListenersRequest struct {
 	ObjectId      string                 `protobuf:"bytes,1,opt,name=object_id,json=objectId,proto3" json:"object_id,omitempty"`
 	Depth         int32                  `protobuf:"varint,2,opt,name=depth,proto3" json:"depth,omitempty"`
 	Pierce        bool                   `protobuf:"varint,3,opt,name=pierce,proto3" json:"pierce,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -249,6 +250,13 @@ func (x *GetEventListenersRequest) GetPierce() bool {
 	return false
 }
 
+func (x *GetEventListenersRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type GetEventListenersResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Listeners     []*EventListener       `protobuf:"bytes,1,rep,name=listeners,proto3" json:"listeners,omitempty"`
@@ -297,6 +305,7 @@ type RemoveDOMBreakpointRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	NodeId        int32                  `protobuf:"varint,1,opt,name=node_id,json=nodeId,proto3" json:"node_id,omitempty"`
 	Type          DOMBreakpointType      `protobuf:"varint,2,opt,name=type,proto3,enum=cdp.domdebugger.DOMBreakpointType" json:"type,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -345,6 +354,13 @@ func (x *RemoveDOMBreakpointRequest) GetType() DOMBreakpointType {
 	return DOMBreakpointType_DOM_BREAKPOINT_TYPE_UNSPECIFIED
 }
 
+func (x *RemoveDOMBreakpointRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type RemoveDOMBreakpointResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -385,6 +401,7 @@ type RemoveEventListenerBreakpointRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	EventName     string                 `protobuf:"bytes,1,opt,name=event_name,json=eventName,proto3" json:"event_name,omitempty"`
 	TargetName    string                 `protobuf:"bytes,2,opt,name=target_name,json=targetName,proto3" json:"target_name,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -433,6 +450,13 @@ func (x *RemoveEventListenerBreakpointRequest) GetTargetName() string {
 	return ""
 }
 
+func (x *RemoveEventListenerBreakpointRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type RemoveEventListenerBreakpointResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -472,6 +496,7 @@ func (*RemoveEventListenerBreakpointResponse) Descriptor() ([]byte, []int) {
 type RemoveInstrumentationBreakpointRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	EventName     string                 `protobuf:"bytes,1,opt,name=event_name,json=eventName,proto3" json:"event_name,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -509,6 +534,13 @@ func (*RemoveInstrumentationBreakpointRequest) Descriptor() ([]byte, []int) {
 func (x *RemoveInstrumentationBreakpointRequest) GetEventName() string {
 	if x != nil {
 		return x.EventName
+	}
+	return ""
+}
+
+func (x *RemoveInstrumentationBreakpointRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -552,6 +584,7 @@ func (*RemoveInstrumentationBreakpointResponse) Descriptor() ([]byte, []int) {
 type RemoveXHRBreakpointRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Url           string                 `protobuf:"bytes,1,opt,name=url,proto3" json:"url,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -589,6 +622,13 @@ func (*RemoveXHRBreakpointRequest) Descriptor() ([]byte, []int) {
 func (x *RemoveXHRBreakpointRequest) GetUrl() string {
 	if x != nil {
 		return x.Url
+	}
+	return ""
+}
+
+func (x *RemoveXHRBreakpointRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -633,6 +673,7 @@ type SetDOMBreakpointRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	NodeId        int32                  `protobuf:"varint,1,opt,name=node_id,json=nodeId,proto3" json:"node_id,omitempty"`
 	Type          DOMBreakpointType      `protobuf:"varint,2,opt,name=type,proto3,enum=cdp.domdebugger.DOMBreakpointType" json:"type,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -681,6 +722,13 @@ func (x *SetDOMBreakpointRequest) GetType() DOMBreakpointType {
 	return DOMBreakpointType_DOM_BREAKPOINT_TYPE_UNSPECIFIED
 }
 
+func (x *SetDOMBreakpointRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type SetDOMBreakpointResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -721,6 +769,7 @@ type SetEventListenerBreakpointRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	EventName     string                 `protobuf:"bytes,1,opt,name=event_name,json=eventName,proto3" json:"event_name,omitempty"`
 	TargetName    string                 `protobuf:"bytes,2,opt,name=target_name,json=targetName,proto3" json:"target_name,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -769,6 +818,13 @@ func (x *SetEventListenerBreakpointRequest) GetTargetName() string {
 	return ""
 }
 
+func (x *SetEventListenerBreakpointRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type SetEventListenerBreakpointResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -808,6 +864,7 @@ func (*SetEventListenerBreakpointResponse) Descriptor() ([]byte, []int) {
 type SetInstrumentationBreakpointRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	EventName     string                 `protobuf:"bytes,1,opt,name=event_name,json=eventName,proto3" json:"event_name,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -845,6 +902,13 @@ func (*SetInstrumentationBreakpointRequest) Descriptor() ([]byte, []int) {
 func (x *SetInstrumentationBreakpointRequest) GetEventName() string {
 	if x != nil {
 		return x.EventName
+	}
+	return ""
+}
+
+func (x *SetInstrumentationBreakpointRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -888,6 +952,7 @@ func (*SetInstrumentationBreakpointResponse) Descriptor() ([]byte, []int) {
 type SetXHRBreakpointRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Url           string                 `protobuf:"bytes,1,opt,name=url,proto3" json:"url,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -925,6 +990,13 @@ func (*SetXHRBreakpointRequest) Descriptor() ([]byte, []int) {
 func (x *SetXHRBreakpointRequest) GetUrl() string {
 	if x != nil {
 		return x.Url
+	}
+	return ""
+}
+
+func (x *SetXHRBreakpointRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -983,46 +1055,64 @@ const file_proto_cdp_domdebugger_domdebugger_proto_rawDesc = "" +
 	"\ahandler\x18\b \x01(\tR\ahandler\x12)\n" +
 	"\x10original_handler\x18\t \x01(\tR\x0foriginalHandler\x12&\n" +
 	"\x0fbackend_node_id\x18\n" +
-	" \x01(\x05R\rbackendNodeId\"e\n" +
+	" \x01(\x05R\rbackendNodeId\"\x84\x01\n" +
 	"\x18GetEventListenersRequest\x12\x1b\n" +
 	"\tobject_id\x18\x01 \x01(\tR\bobjectId\x12\x14\n" +
 	"\x05depth\x18\x02 \x01(\x05R\x05depth\x12\x16\n" +
-	"\x06pierce\x18\x03 \x01(\bR\x06pierce\"Y\n" +
+	"\x06pierce\x18\x03 \x01(\bR\x06pierce\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"Y\n" +
 	"\x19GetEventListenersResponse\x12<\n" +
-	"\tlisteners\x18\x01 \x03(\v2\x1e.cdp.domdebugger.EventListenerR\tlisteners\"m\n" +
+	"\tlisteners\x18\x01 \x03(\v2\x1e.cdp.domdebugger.EventListenerR\tlisteners\"\x8c\x01\n" +
 	"\x1aRemoveDOMBreakpointRequest\x12\x17\n" +
 	"\anode_id\x18\x01 \x01(\x05R\x06nodeId\x126\n" +
-	"\x04type\x18\x02 \x01(\x0e2\".cdp.domdebugger.DOMBreakpointTypeR\x04type\"\x1d\n" +
-	"\x1bRemoveDOMBreakpointResponse\"f\n" +
+	"\x04type\x18\x02 \x01(\x0e2\".cdp.domdebugger.DOMBreakpointTypeR\x04type\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x1d\n" +
+	"\x1bRemoveDOMBreakpointResponse\"\x85\x01\n" +
 	"$RemoveEventListenerBreakpointRequest\x12\x1d\n" +
 	"\n" +
 	"event_name\x18\x01 \x01(\tR\teventName\x12\x1f\n" +
 	"\vtarget_name\x18\x02 \x01(\tR\n" +
-	"targetName\"'\n" +
-	"%RemoveEventListenerBreakpointResponse\"G\n" +
+	"targetName\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"'\n" +
+	"%RemoveEventListenerBreakpointResponse\"f\n" +
 	"&RemoveInstrumentationBreakpointRequest\x12\x1d\n" +
 	"\n" +
-	"event_name\x18\x01 \x01(\tR\teventName\")\n" +
-	"'RemoveInstrumentationBreakpointResponse\".\n" +
+	"event_name\x18\x01 \x01(\tR\teventName\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\")\n" +
+	"'RemoveInstrumentationBreakpointResponse\"M\n" +
 	"\x1aRemoveXHRBreakpointRequest\x12\x10\n" +
-	"\x03url\x18\x01 \x01(\tR\x03url\"\x1d\n" +
-	"\x1bRemoveXHRBreakpointResponse\"j\n" +
+	"\x03url\x18\x01 \x01(\tR\x03url\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x1d\n" +
+	"\x1bRemoveXHRBreakpointResponse\"\x89\x01\n" +
 	"\x17SetDOMBreakpointRequest\x12\x17\n" +
 	"\anode_id\x18\x01 \x01(\x05R\x06nodeId\x126\n" +
-	"\x04type\x18\x02 \x01(\x0e2\".cdp.domdebugger.DOMBreakpointTypeR\x04type\"\x1a\n" +
-	"\x18SetDOMBreakpointResponse\"c\n" +
+	"\x04type\x18\x02 \x01(\x0e2\".cdp.domdebugger.DOMBreakpointTypeR\x04type\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x1a\n" +
+	"\x18SetDOMBreakpointResponse\"\x82\x01\n" +
 	"!SetEventListenerBreakpointRequest\x12\x1d\n" +
 	"\n" +
 	"event_name\x18\x01 \x01(\tR\teventName\x12\x1f\n" +
 	"\vtarget_name\x18\x02 \x01(\tR\n" +
-	"targetName\"$\n" +
-	"\"SetEventListenerBreakpointResponse\"D\n" +
+	"targetName\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"$\n" +
+	"\"SetEventListenerBreakpointResponse\"c\n" +
 	"#SetInstrumentationBreakpointRequest\x12\x1d\n" +
 	"\n" +
-	"event_name\x18\x01 \x01(\tR\teventName\"&\n" +
-	"$SetInstrumentationBreakpointResponse\"+\n" +
+	"event_name\x18\x01 \x01(\tR\teventName\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"&\n" +
+	"$SetInstrumentationBreakpointResponse\"J\n" +
 	"\x17SetXHRBreakpointRequest\x12\x10\n" +
-	"\x03url\x18\x01 \x01(\tR\x03url\"\x1a\n" +
+	"\x03url\x18\x01 \x01(\tR\x03url\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x1a\n" +
 	"\x18SetXHRBreakpointResponse*\xb4\x01\n" +
 	"\x11DOMBreakpointType\x12#\n" +
 	"\x1fDOM_BREAKPOINT_TYPE_UNSPECIFIED\x10\x00\x12(\n" +

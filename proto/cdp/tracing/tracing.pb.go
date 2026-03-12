@@ -138,6 +138,7 @@ type StartRequest struct {
 	StreamFormat                 string                 `protobuf:"bytes,5,opt,name=stream_format,json=streamFormat,proto3" json:"stream_format,omitempty"`
 	StreamCompression            string                 `protobuf:"bytes,6,opt,name=stream_compression,json=streamCompression,proto3" json:"stream_compression,omitempty"`
 	TraceConfig                  *TraceConfig           `protobuf:"bytes,7,opt,name=trace_config,json=traceConfig,proto3" json:"trace_config,omitempty"`
+	SessionId                    string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields                protoimpl.UnknownFields
 	sizeCache                    protoimpl.SizeCache
 }
@@ -221,6 +222,13 @@ func (x *StartRequest) GetTraceConfig() *TraceConfig {
 	return nil
 }
 
+func (x *StartRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type StartResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -259,6 +267,7 @@ func (*StartResponse) Descriptor() ([]byte, []int) {
 
 type EndRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -291,6 +300,13 @@ func (x *EndRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use EndRequest.ProtoReflect.Descriptor instead.
 func (*EndRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_tracing_tracing_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *EndRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type EndResponse struct {
@@ -331,6 +347,7 @@ func (*EndResponse) Descriptor() ([]byte, []int) {
 
 type GetCategoriesRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -363,6 +380,13 @@ func (x *GetCategoriesRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use GetCategoriesRequest.ProtoReflect.Descriptor instead.
 func (*GetCategoriesRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_tracing_tracing_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *GetCategoriesRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type GetCategoriesResponse struct {
@@ -412,6 +436,7 @@ func (x *GetCategoriesResponse) GetCategories() []string {
 type RecordClockSyncMarkerRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	SyncId        string                 `protobuf:"bytes,1,opt,name=sync_id,json=syncId,proto3" json:"sync_id,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -449,6 +474,13 @@ func (*RecordClockSyncMarkerRequest) Descriptor() ([]byte, []int) {
 func (x *RecordClockSyncMarkerRequest) GetSyncId() string {
 	if x != nil {
 		return x.SyncId
+	}
+	return ""
+}
+
+func (x *RecordClockSyncMarkerRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -493,6 +525,7 @@ type RequestMemoryDumpRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Deterministic bool                   `protobuf:"varint,1,opt,name=deterministic,proto3" json:"deterministic,omitempty"`
 	LevelOfDetail string                 `protobuf:"bytes,2,opt,name=level_of_detail,json=levelOfDetail,proto3" json:"level_of_detail,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -541,10 +574,18 @@ func (x *RequestMemoryDumpRequest) GetLevelOfDetail() string {
 	return ""
 }
 
+func (x *RequestMemoryDumpRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type RequestMemoryDumpResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	DumpGuid      string                 `protobuf:"bytes,1,opt,name=dump_guid,json=dumpGuid,proto3" json:"dump_guid,omitempty"`
 	Success       bool                   `protobuf:"varint,2,opt,name=success,proto3" json:"success,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -593,8 +634,16 @@ func (x *RequestMemoryDumpResponse) GetSuccess() bool {
 	return false
 }
 
+func (x *RequestMemoryDumpResponse) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type SubscribeEventsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -627,6 +676,13 @@ func (x *SubscribeEventsRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use SubscribeEventsRequest.ProtoReflect.Descriptor instead.
 func (*SubscribeEventsRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_tracing_tracing_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *SubscribeEventsRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type TracingEvent struct {
@@ -914,7 +970,7 @@ const file_proto_cdp_tracing_tracing_proto_rawDesc = "" +
 	"\x13included_categories\x18\x06 \x03(\tR\x12includedCategories\x12/\n" +
 	"\x13excluded_categories\x18\a \x03(\tR\x12excludedCategories\x12)\n" +
 	"\x10synthetic_delays\x18\b \x03(\tR\x0fsyntheticDelays\x12,\n" +
-	"\x12memory_dump_config\x18\t \x01(\tR\x10memoryDumpConfig\"\xc5\x02\n" +
+	"\x12memory_dump_config\x18\t \x01(\tR\x10memoryDumpConfig\"\xe4\x02\n" +
 	"\fStartRequest\x12\x1e\n" +
 	"\n" +
 	"categories\x18\x01 \x01(\tR\n" +
@@ -924,26 +980,40 @@ const file_proto_cdp_tracing_tracing_proto_rawDesc = "" +
 	"\rtransfer_mode\x18\x04 \x01(\tR\ftransferMode\x12#\n" +
 	"\rstream_format\x18\x05 \x01(\tR\fstreamFormat\x12-\n" +
 	"\x12stream_compression\x18\x06 \x01(\tR\x11streamCompression\x12;\n" +
-	"\ftrace_config\x18\a \x01(\v2\x18.cdp.tracing.TraceConfigR\vtraceConfig\"\x0f\n" +
-	"\rStartResponse\"\f\n" +
+	"\ftrace_config\x18\a \x01(\v2\x18.cdp.tracing.TraceConfigR\vtraceConfig\x12\x1d\n" +
 	"\n" +
-	"EndRequest\"\r\n" +
-	"\vEndResponse\"\x16\n" +
-	"\x14GetCategoriesRequest\"7\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x0f\n" +
+	"\rStartResponse\"+\n" +
+	"\n" +
+	"EndRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\r\n" +
+	"\vEndResponse\"5\n" +
+	"\x14GetCategoriesRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"7\n" +
 	"\x15GetCategoriesResponse\x12\x1e\n" +
 	"\n" +
 	"categories\x18\x01 \x03(\tR\n" +
-	"categories\"7\n" +
+	"categories\"V\n" +
 	"\x1cRecordClockSyncMarkerRequest\x12\x17\n" +
-	"\async_id\x18\x01 \x01(\tR\x06syncId\"\x1f\n" +
-	"\x1dRecordClockSyncMarkerResponse\"h\n" +
+	"\async_id\x18\x01 \x01(\tR\x06syncId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x1f\n" +
+	"\x1dRecordClockSyncMarkerResponse\"\x87\x01\n" +
 	"\x18RequestMemoryDumpRequest\x12$\n" +
 	"\rdeterministic\x18\x01 \x01(\bR\rdeterministic\x12&\n" +
-	"\x0flevel_of_detail\x18\x02 \x01(\tR\rlevelOfDetail\"R\n" +
+	"\x0flevel_of_detail\x18\x02 \x01(\tR\rlevelOfDetail\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"q\n" +
 	"\x19RequestMemoryDumpResponse\x12\x1b\n" +
 	"\tdump_guid\x18\x01 \x01(\tR\bdumpGuid\x12\x18\n" +
-	"\asuccess\x18\x02 \x01(\bR\asuccess\"\x18\n" +
-	"\x16SubscribeEventsRequest\"\xf5\x01\n" +
+	"\asuccess\x18\x02 \x01(\bR\asuccess\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"7\n" +
+	"\x16SubscribeEventsRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\xf5\x01\n" +
 	"\fTracingEvent\x12B\n" +
 	"\fbuffer_usage\x18\x01 \x01(\v2\x1d.cdp.tracing.BufferUsageEventH\x00R\vbufferUsage\x12H\n" +
 	"\x0edata_collected\x18\x02 \x01(\v2\x1f.cdp.tracing.DataCollectedEventH\x00R\rdataCollected\x12N\n" +

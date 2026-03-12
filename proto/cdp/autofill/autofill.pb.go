@@ -195,6 +195,7 @@ func (x *Address) GetFields() []*AddressField {
 
 type EnableRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -227,6 +228,13 @@ func (x *EnableRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use EnableRequest.ProtoReflect.Descriptor instead.
 func (*EnableRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_autofill_autofill_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *EnableRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type EnableResponse struct {
@@ -267,6 +275,7 @@ func (*EnableResponse) Descriptor() ([]byte, []int) {
 
 type DisableRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -299,6 +308,13 @@ func (x *DisableRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use DisableRequest.ProtoReflect.Descriptor instead.
 func (*DisableRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_autofill_autofill_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *DisableRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type DisableResponse struct {
@@ -345,6 +361,7 @@ type TriggerRequest struct {
 	FrameId string `protobuf:"bytes,2,opt,name=frame_id,json=frameId,proto3" json:"frame_id,omitempty"`
 	// The credit card to fill.
 	Card          *CreditCard `protobuf:"bytes,3,opt,name=card,proto3" json:"card,omitempty"`
+	SessionId     string      `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -400,6 +417,13 @@ func (x *TriggerRequest) GetCard() *CreditCard {
 	return nil
 }
 
+func (x *TriggerRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type TriggerResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -439,6 +463,7 @@ func (*TriggerResponse) Descriptor() ([]byte, []int) {
 type SetAddressesRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Addresses     []*Address             `protobuf:"bytes,1,rep,name=addresses,proto3" json:"addresses,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -478,6 +503,13 @@ func (x *SetAddressesRequest) GetAddresses() []*Address {
 		return x.Addresses
 	}
 	return nil
+}
+
+func (x *SetAddressesRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type SetAddressesResponse struct {
@@ -839,18 +871,26 @@ const file_proto_cdp_autofill_autofill_proto_rawDesc = "" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12\x14\n" +
 	"\x05value\x18\x02 \x01(\tR\x05value\"=\n" +
 	"\aAddress\x122\n" +
-	"\x06fields\x18\x01 \x03(\v2\x1a.cdp.autofill.AddressFieldR\x06fields\"\x0f\n" +
-	"\rEnableRequest\"\x10\n" +
-	"\x0eEnableResponse\"\x10\n" +
-	"\x0eDisableRequest\"\x11\n" +
-	"\x0fDisableResponse\"t\n" +
+	"\x06fields\x18\x01 \x03(\v2\x1a.cdp.autofill.AddressFieldR\x06fields\".\n" +
+	"\rEnableRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x10\n" +
+	"\x0eEnableResponse\"/\n" +
+	"\x0eDisableRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x11\n" +
+	"\x0fDisableResponse\"\x93\x01\n" +
 	"\x0eTriggerRequest\x12\x19\n" +
 	"\bfield_id\x18\x01 \x01(\x05R\afieldId\x12\x19\n" +
 	"\bframe_id\x18\x02 \x01(\tR\aframeId\x12,\n" +
-	"\x04card\x18\x03 \x01(\v2\x18.cdp.autofill.CreditCardR\x04card\"\x11\n" +
-	"\x0fTriggerResponse\"J\n" +
+	"\x04card\x18\x03 \x01(\v2\x18.cdp.autofill.CreditCardR\x04card\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x11\n" +
+	"\x0fTriggerResponse\"i\n" +
 	"\x13SetAddressesRequest\x123\n" +
-	"\taddresses\x18\x01 \x03(\v2\x15.cdp.autofill.AddressR\taddresses\"\x16\n" +
+	"\taddresses\x18\x01 \x03(\v2\x15.cdp.autofill.AddressR\taddresses\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x16\n" +
 	"\x14SetAddressesResponse\"?\n" +
 	"\x1eSubscribeAutofillEventsRequest\x12\x1d\n" +
 	"\n" +

@@ -407,6 +407,7 @@ func (x *DataEntry) GetValue() string {
 
 type EnableRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -439,6 +440,13 @@ func (x *EnableRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use EnableRequest.ProtoReflect.Descriptor instead.
 func (*EnableRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_indexeddb_indexeddb_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *EnableRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type EnableResponse struct {
@@ -479,6 +487,7 @@ func (*EnableResponse) Descriptor() ([]byte, []int) {
 
 type DisableRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -511,6 +520,13 @@ func (x *DisableRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use DisableRequest.ProtoReflect.Descriptor instead.
 func (*DisableRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_indexeddb_indexeddb_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *DisableRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type DisableResponse struct {
@@ -554,6 +570,7 @@ type RequestDatabaseNamesRequest struct {
 	SecurityOrigin string                 `protobuf:"bytes,1,opt,name=security_origin,json=securityOrigin,proto3" json:"security_origin,omitempty"`
 	StorageKey     string                 `protobuf:"bytes,2,opt,name=storage_key,json=storageKey,proto3" json:"storage_key,omitempty"`
 	StorageBucket  string                 `protobuf:"bytes,3,opt,name=storage_bucket,json=storageBucket,proto3" json:"storage_bucket,omitempty"`
+	SessionId      string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
@@ -609,9 +626,17 @@ func (x *RequestDatabaseNamesRequest) GetStorageBucket() string {
 	return ""
 }
 
+func (x *RequestDatabaseNamesRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type RequestDatabaseNamesResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	DatabaseNames []string               `protobuf:"bytes,1,rep,name=database_names,json=databaseNames,proto3" json:"database_names,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -653,12 +678,20 @@ func (x *RequestDatabaseNamesResponse) GetDatabaseNames() []string {
 	return nil
 }
 
+func (x *RequestDatabaseNamesResponse) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type RequestDatabaseRequest struct {
 	state          protoimpl.MessageState `protogen:"open.v1"`
 	SecurityOrigin string                 `protobuf:"bytes,1,opt,name=security_origin,json=securityOrigin,proto3" json:"security_origin,omitempty"`
 	StorageKey     string                 `protobuf:"bytes,2,opt,name=storage_key,json=storageKey,proto3" json:"storage_key,omitempty"`
 	StorageBucket  string                 `protobuf:"bytes,3,opt,name=storage_bucket,json=storageBucket,proto3" json:"storage_bucket,omitempty"`
 	DatabaseName   string                 `protobuf:"bytes,4,opt,name=database_name,json=databaseName,proto3" json:"database_name,omitempty"`
+	SessionId      string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
@@ -721,9 +754,17 @@ func (x *RequestDatabaseRequest) GetDatabaseName() string {
 	return ""
 }
 
+func (x *RequestDatabaseRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type RequestDatabaseResponse struct {
 	state                    protoimpl.MessageState    `protogen:"open.v1"`
 	DatabaseWithObjectStores *DatabaseWithObjectStores `protobuf:"bytes,1,opt,name=database_with_object_stores,json=databaseWithObjectStores,proto3" json:"database_with_object_stores,omitempty"`
+	SessionId                string                    `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields            protoimpl.UnknownFields
 	sizeCache                protoimpl.SizeCache
 }
@@ -765,6 +806,13 @@ func (x *RequestDatabaseResponse) GetDatabaseWithObjectStores() *DatabaseWithObj
 	return nil
 }
 
+func (x *RequestDatabaseResponse) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type RequestDataRequest struct {
 	state           protoimpl.MessageState `protogen:"open.v1"`
 	SecurityOrigin  string                 `protobuf:"bytes,1,opt,name=security_origin,json=securityOrigin,proto3" json:"security_origin,omitempty"`
@@ -776,6 +824,7 @@ type RequestDataRequest struct {
 	SkipCount       int32                  `protobuf:"varint,7,opt,name=skip_count,json=skipCount,proto3" json:"skip_count,omitempty"`
 	PageSize        int32                  `protobuf:"varint,8,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"`
 	KeyRange        *KeyRange              `protobuf:"bytes,9,opt,name=key_range,json=keyRange,proto3" json:"key_range,omitempty"`
+	SessionId       string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
 }
@@ -873,10 +922,18 @@ func (x *RequestDataRequest) GetKeyRange() *KeyRange {
 	return nil
 }
 
+func (x *RequestDataRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type RequestDataResponse struct {
 	state                  protoimpl.MessageState `protogen:"open.v1"`
 	ObjectStoreDataEntries []*DataEntry           `protobuf:"bytes,1,rep,name=object_store_data_entries,json=objectStoreDataEntries,proto3" json:"object_store_data_entries,omitempty"`
 	HasMore                bool                   `protobuf:"varint,2,opt,name=has_more,json=hasMore,proto3" json:"has_more,omitempty"`
+	SessionId              string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields          protoimpl.UnknownFields
 	sizeCache              protoimpl.SizeCache
 }
@@ -925,6 +982,13 @@ func (x *RequestDataResponse) GetHasMore() bool {
 	return false
 }
 
+func (x *RequestDataResponse) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type GetMetadataRequest struct {
 	state           protoimpl.MessageState `protogen:"open.v1"`
 	SecurityOrigin  string                 `protobuf:"bytes,1,opt,name=security_origin,json=securityOrigin,proto3" json:"security_origin,omitempty"`
@@ -932,6 +996,7 @@ type GetMetadataRequest struct {
 	StorageBucket   string                 `protobuf:"bytes,3,opt,name=storage_bucket,json=storageBucket,proto3" json:"storage_bucket,omitempty"`
 	DatabaseName    string                 `protobuf:"bytes,4,opt,name=database_name,json=databaseName,proto3" json:"database_name,omitempty"`
 	ObjectStoreName string                 `protobuf:"bytes,5,opt,name=object_store_name,json=objectStoreName,proto3" json:"object_store_name,omitempty"`
+	SessionId       string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
 }
@@ -1001,6 +1066,13 @@ func (x *GetMetadataRequest) GetObjectStoreName() string {
 	return ""
 }
 
+func (x *GetMetadataRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type GetMetadataResponse struct {
 	state             protoimpl.MessageState `protogen:"open.v1"`
 	EntriesCount      float64                `protobuf:"fixed64,1,opt,name=entries_count,json=entriesCount,proto3" json:"entries_count,omitempty"`
@@ -1059,6 +1131,7 @@ type DeleteDatabaseRequest struct {
 	StorageKey     string                 `protobuf:"bytes,2,opt,name=storage_key,json=storageKey,proto3" json:"storage_key,omitempty"`
 	StorageBucket  string                 `protobuf:"bytes,3,opt,name=storage_bucket,json=storageBucket,proto3" json:"storage_bucket,omitempty"`
 	DatabaseName   string                 `protobuf:"bytes,4,opt,name=database_name,json=databaseName,proto3" json:"database_name,omitempty"`
+	SessionId      string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
@@ -1121,6 +1194,13 @@ func (x *DeleteDatabaseRequest) GetDatabaseName() string {
 	return ""
 }
 
+func (x *DeleteDatabaseRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type DeleteDatabaseResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -1164,6 +1244,7 @@ type ClearObjectStoreRequest struct {
 	StorageBucket   string                 `protobuf:"bytes,3,opt,name=storage_bucket,json=storageBucket,proto3" json:"storage_bucket,omitempty"`
 	DatabaseName    string                 `protobuf:"bytes,4,opt,name=database_name,json=databaseName,proto3" json:"database_name,omitempty"`
 	ObjectStoreName string                 `protobuf:"bytes,5,opt,name=object_store_name,json=objectStoreName,proto3" json:"object_store_name,omitempty"`
+	SessionId       string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
 }
@@ -1233,6 +1314,13 @@ func (x *ClearObjectStoreRequest) GetObjectStoreName() string {
 	return ""
 }
 
+func (x *ClearObjectStoreRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type ClearObjectStoreResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -1277,6 +1365,7 @@ type DeleteObjectStoreEntriesRequest struct {
 	DatabaseName    string                 `protobuf:"bytes,4,opt,name=database_name,json=databaseName,proto3" json:"database_name,omitempty"`
 	ObjectStoreName string                 `protobuf:"bytes,5,opt,name=object_store_name,json=objectStoreName,proto3" json:"object_store_name,omitempty"`
 	KeyRange        *KeyRange              `protobuf:"bytes,6,opt,name=key_range,json=keyRange,proto3" json:"key_range,omitempty"`
+	SessionId       string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
 }
@@ -1353,6 +1442,13 @@ func (x *DeleteObjectStoreEntriesRequest) GetKeyRange() *KeyRange {
 	return nil
 }
 
+func (x *DeleteObjectStoreEntriesRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type DeleteObjectStoreEntriesResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -1424,26 +1520,38 @@ const file_proto_cdp_indexeddb_indexeddb_proto_rawDesc = "" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x1f\n" +
 	"\vprimary_key\x18\x02 \x01(\tR\n" +
 	"primaryKey\x12\x14\n" +
-	"\x05value\x18\x03 \x01(\tR\x05value\"\x0f\n" +
-	"\rEnableRequest\"\x10\n" +
-	"\x0eEnableResponse\"\x10\n" +
-	"\x0eDisableRequest\"\x11\n" +
-	"\x0fDisableResponse\"\x8e\x01\n" +
+	"\x05value\x18\x03 \x01(\tR\x05value\".\n" +
+	"\rEnableRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x10\n" +
+	"\x0eEnableResponse\"/\n" +
+	"\x0eDisableRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x11\n" +
+	"\x0fDisableResponse\"\xad\x01\n" +
 	"\x1bRequestDatabaseNamesRequest\x12'\n" +
 	"\x0fsecurity_origin\x18\x01 \x01(\tR\x0esecurityOrigin\x12\x1f\n" +
 	"\vstorage_key\x18\x02 \x01(\tR\n" +
 	"storageKey\x12%\n" +
-	"\x0estorage_bucket\x18\x03 \x01(\tR\rstorageBucket\"E\n" +
+	"\x0estorage_bucket\x18\x03 \x01(\tR\rstorageBucket\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"d\n" +
 	"\x1cRequestDatabaseNamesResponse\x12%\n" +
-	"\x0edatabase_names\x18\x01 \x03(\tR\rdatabaseNames\"\xae\x01\n" +
+	"\x0edatabase_names\x18\x01 \x03(\tR\rdatabaseNames\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\xcd\x01\n" +
 	"\x16RequestDatabaseRequest\x12'\n" +
 	"\x0fsecurity_origin\x18\x01 \x01(\tR\x0esecurityOrigin\x12\x1f\n" +
 	"\vstorage_key\x18\x02 \x01(\tR\n" +
 	"storageKey\x12%\n" +
 	"\x0estorage_bucket\x18\x03 \x01(\tR\rstorageBucket\x12#\n" +
-	"\rdatabase_name\x18\x04 \x01(\tR\fdatabaseName\"\x81\x01\n" +
+	"\rdatabase_name\x18\x04 \x01(\tR\fdatabaseName\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\xa0\x01\n" +
 	"\x17RequestDatabaseResponse\x12f\n" +
-	"\x1bdatabase_with_object_stores\x18\x01 \x01(\v2'.cdp.indexeddb.DatabaseWithObjectStoresR\x18databaseWithObjectStores\"\xe7\x02\n" +
+	"\x1bdatabase_with_object_stores\x18\x01 \x01(\v2'.cdp.indexeddb.DatabaseWithObjectStoresR\x18databaseWithObjectStores\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x86\x03\n" +
 	"\x12RequestDataRequest\x12'\n" +
 	"\x0fsecurity_origin\x18\x01 \x01(\tR\x0esecurityOrigin\x12\x1f\n" +
 	"\vstorage_key\x18\x02 \x01(\tR\n" +
@@ -1456,35 +1564,45 @@ const file_proto_cdp_indexeddb_indexeddb_proto_rawDesc = "" +
 	"\n" +
 	"skip_count\x18\a \x01(\x05R\tskipCount\x12\x1b\n" +
 	"\tpage_size\x18\b \x01(\x05R\bpageSize\x124\n" +
-	"\tkey_range\x18\t \x01(\v2\x17.cdp.indexeddb.KeyRangeR\bkeyRange\"\x85\x01\n" +
+	"\tkey_range\x18\t \x01(\v2\x17.cdp.indexeddb.KeyRangeR\bkeyRange\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\xa4\x01\n" +
 	"\x13RequestDataResponse\x12S\n" +
 	"\x19object_store_data_entries\x18\x01 \x03(\v2\x18.cdp.indexeddb.DataEntryR\x16objectStoreDataEntries\x12\x19\n" +
-	"\bhas_more\x18\x02 \x01(\bR\ahasMore\"\xd6\x01\n" +
+	"\bhas_more\x18\x02 \x01(\bR\ahasMore\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\xf5\x01\n" +
 	"\x12GetMetadataRequest\x12'\n" +
 	"\x0fsecurity_origin\x18\x01 \x01(\tR\x0esecurityOrigin\x12\x1f\n" +
 	"\vstorage_key\x18\x02 \x01(\tR\n" +
 	"storageKey\x12%\n" +
 	"\x0estorage_bucket\x18\x03 \x01(\tR\rstorageBucket\x12#\n" +
 	"\rdatabase_name\x18\x04 \x01(\tR\fdatabaseName\x12*\n" +
-	"\x11object_store_name\x18\x05 \x01(\tR\x0fobjectStoreName\"j\n" +
+	"\x11object_store_name\x18\x05 \x01(\tR\x0fobjectStoreName\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"j\n" +
 	"\x13GetMetadataResponse\x12#\n" +
 	"\rentries_count\x18\x01 \x01(\x01R\fentriesCount\x12.\n" +
-	"\x13key_generator_value\x18\x02 \x01(\x01R\x11keyGeneratorValue\"\xad\x01\n" +
+	"\x13key_generator_value\x18\x02 \x01(\x01R\x11keyGeneratorValue\"\xcc\x01\n" +
 	"\x15DeleteDatabaseRequest\x12'\n" +
 	"\x0fsecurity_origin\x18\x01 \x01(\tR\x0esecurityOrigin\x12\x1f\n" +
 	"\vstorage_key\x18\x02 \x01(\tR\n" +
 	"storageKey\x12%\n" +
 	"\x0estorage_bucket\x18\x03 \x01(\tR\rstorageBucket\x12#\n" +
-	"\rdatabase_name\x18\x04 \x01(\tR\fdatabaseName\"\x18\n" +
-	"\x16DeleteDatabaseResponse\"\xdb\x01\n" +
+	"\rdatabase_name\x18\x04 \x01(\tR\fdatabaseName\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x18\n" +
+	"\x16DeleteDatabaseResponse\"\xfa\x01\n" +
 	"\x17ClearObjectStoreRequest\x12'\n" +
 	"\x0fsecurity_origin\x18\x01 \x01(\tR\x0esecurityOrigin\x12\x1f\n" +
 	"\vstorage_key\x18\x02 \x01(\tR\n" +
 	"storageKey\x12%\n" +
 	"\x0estorage_bucket\x18\x03 \x01(\tR\rstorageBucket\x12#\n" +
 	"\rdatabase_name\x18\x04 \x01(\tR\fdatabaseName\x12*\n" +
-	"\x11object_store_name\x18\x05 \x01(\tR\x0fobjectStoreName\"\x1a\n" +
-	"\x18ClearObjectStoreResponse\"\x99\x02\n" +
+	"\x11object_store_name\x18\x05 \x01(\tR\x0fobjectStoreName\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x1a\n" +
+	"\x18ClearObjectStoreResponse\"\xb8\x02\n" +
 	"\x1fDeleteObjectStoreEntriesRequest\x12'\n" +
 	"\x0fsecurity_origin\x18\x01 \x01(\tR\x0esecurityOrigin\x12\x1f\n" +
 	"\vstorage_key\x18\x02 \x01(\tR\n" +
@@ -1492,7 +1610,9 @@ const file_proto_cdp_indexeddb_indexeddb_proto_rawDesc = "" +
 	"\x0estorage_bucket\x18\x03 \x01(\tR\rstorageBucket\x12#\n" +
 	"\rdatabase_name\x18\x04 \x01(\tR\fdatabaseName\x12*\n" +
 	"\x11object_store_name\x18\x05 \x01(\tR\x0fobjectStoreName\x124\n" +
-	"\tkey_range\x18\x06 \x01(\v2\x17.cdp.indexeddb.KeyRangeR\bkeyRange\"\"\n" +
+	"\tkey_range\x18\x06 \x01(\v2\x17.cdp.indexeddb.KeyRangeR\bkeyRange\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\"\n" +
 	" DeleteObjectStoreEntriesResponse2\xe3\x06\n" +
 	"\x10IndexedDBService\x12E\n" +
 	"\x06Enable\x12\x1c.cdp.indexeddb.EnableRequest\x1a\x1d.cdp.indexeddb.EnableResponse\x12H\n" +

@@ -77,6 +77,7 @@ type EnableRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Time domain to use for collecting and reporting duration metrics.
 	TimeDomain    string `protobuf:"bytes,1,opt,name=time_domain,json=timeDomain,proto3" json:"time_domain,omitempty"` // "timeTicks","threadTicks"
+	SessionId     string `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -114,6 +115,13 @@ func (*EnableRequest) Descriptor() ([]byte, []int) {
 func (x *EnableRequest) GetTimeDomain() string {
 	if x != nil {
 		return x.TimeDomain
+	}
+	return ""
+}
+
+func (x *EnableRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -156,6 +164,7 @@ func (*EnableResponse) Descriptor() ([]byte, []int) {
 
 type DisableRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -188,6 +197,13 @@ func (x *DisableRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use DisableRequest.ProtoReflect.Descriptor instead.
 func (*DisableRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_performance_performance_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *DisableRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type DisableResponse struct {
@@ -228,6 +244,7 @@ func (*DisableResponse) Descriptor() ([]byte, []int) {
 
 type GetMetricsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -260,6 +277,13 @@ func (x *GetMetricsRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use GetMetricsRequest.ProtoReflect.Descriptor instead.
 func (*GetMetricsRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_performance_performance_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *GetMetricsRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type GetMetricsResponse struct {
@@ -308,6 +332,7 @@ func (x *GetMetricsResponse) GetMetrics() []*Metric {
 
 type SubscribeEventsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -340,6 +365,13 @@ func (x *SubscribeEventsRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use SubscribeEventsRequest.ProtoReflect.Descriptor instead.
 func (*SubscribeEventsRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_performance_performance_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *SubscribeEventsRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type PerformanceEvent struct {
@@ -467,17 +499,25 @@ const file_proto_cdp_performance_performance_proto_rawDesc = "" +
 	"'proto/cdp/performance/performance.proto\x12\x0fcdp.performance\"2\n" +
 	"\x06Metric\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\x01R\x05value\"0\n" +
+	"\x05value\x18\x02 \x01(\x01R\x05value\"O\n" +
 	"\rEnableRequest\x12\x1f\n" +
 	"\vtime_domain\x18\x01 \x01(\tR\n" +
-	"timeDomain\"\x10\n" +
-	"\x0eEnableResponse\"\x10\n" +
-	"\x0eDisableRequest\"\x11\n" +
-	"\x0fDisableResponse\"\x13\n" +
-	"\x11GetMetricsRequest\"G\n" +
+	"timeDomain\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x10\n" +
+	"\x0eEnableResponse\"/\n" +
+	"\x0eDisableRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x11\n" +
+	"\x0fDisableResponse\"2\n" +
+	"\x11GetMetricsRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"G\n" +
 	"\x12GetMetricsResponse\x121\n" +
-	"\ametrics\x18\x01 \x03(\v2\x17.cdp.performance.MetricR\ametrics\"\x18\n" +
-	"\x16SubscribeEventsRequest\"V\n" +
+	"\ametrics\x18\x01 \x03(\v2\x17.cdp.performance.MetricR\ametrics\"7\n" +
+	"\x16SubscribeEventsRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"V\n" +
 	"\x10PerformanceEvent\x129\n" +
 	"\ametrics\x18\x01 \x01(\v2\x1d.cdp.performance.MetricsEventH\x00R\ametricsB\a\n" +
 	"\x05event\"W\n" +

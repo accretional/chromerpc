@@ -20,6 +20,16 @@ func New(client *cdpclient.Client) *Server {
 	return &Server{client: client}
 }
 
+// send routes a CDP command through the specified session, falling back
+// to the client's default session if sessionID is empty.
+func (s *Server) send(ctx context.Context, sessionID string, method string, params interface{}) (json.RawMessage, error) {
+	if sessionID != "" {
+		return s.client.SendWithSession(ctx, method, params, sessionID)
+	}
+	return s.client.Send(ctx, method, params)
+}
+
+
 func (s *Server) RequestCacheNames(ctx context.Context, req *pb.RequestCacheNamesRequest) (*pb.RequestCacheNamesResponse, error) {
 	params := map[string]interface{}{}
 	if req.SecurityOrigin != nil {
@@ -31,7 +41,7 @@ func (s *Server) RequestCacheNames(ctx context.Context, req *pb.RequestCacheName
 	if req.StorageBucket != nil {
 		params["storageBucket"] = *req.StorageBucket
 	}
-	result, err := s.client.Send(ctx, "CacheStorage.requestCacheNames", params)
+	result, err := s.send(ctx, req.SessionId, "CacheStorage.requestCacheNames", params)
 	if err != nil {
 		return nil, fmt.Errorf("CacheStorage.requestCacheNames: %w", err)
 	}
@@ -61,7 +71,7 @@ func (s *Server) RequestEntries(ctx context.Context, req *pb.RequestEntriesReque
 	if req.PathFilter != nil {
 		params["pathFilter"] = *req.PathFilter
 	}
-	result, err := s.client.Send(ctx, "CacheStorage.requestEntries", params)
+	result, err := s.send(ctx, req.SessionId, "CacheStorage.requestEntries", params)
 	if err != nil {
 		return nil, fmt.Errorf("CacheStorage.requestEntries: %w", err)
 	}
@@ -90,7 +100,7 @@ func (s *Server) RequestCachedResponse(ctx context.Context, req *pb.RequestCache
 	if len(req.RequestHeaders) > 0 {
 		params["requestHeaders"] = headersToSlice(req.RequestHeaders)
 	}
-	result, err := s.client.Send(ctx, "CacheStorage.requestCachedResponse", params)
+	result, err := s.send(ctx, req.SessionId, "CacheStorage.requestCachedResponse", params)
 	if err != nil {
 		return nil, fmt.Errorf("CacheStorage.requestCachedResponse: %w", err)
 	}
@@ -115,7 +125,7 @@ func (s *Server) DeleteCache(ctx context.Context, req *pb.DeleteCacheRequest) (*
 	params := map[string]interface{}{
 		"cacheId": req.CacheId,
 	}
-	if _, err := s.client.Send(ctx, "CacheStorage.deleteCache", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "CacheStorage.deleteCache", params); err != nil {
 		return nil, fmt.Errorf("CacheStorage.deleteCache: %w", err)
 	}
 	return &pb.DeleteCacheResponse{}, nil
@@ -126,7 +136,7 @@ func (s *Server) DeleteEntry(ctx context.Context, req *pb.DeleteEntryRequest) (*
 		"cacheId": req.CacheId,
 		"request": req.Request,
 	}
-	if _, err := s.client.Send(ctx, "CacheStorage.deleteEntry", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "CacheStorage.deleteEntry", params); err != nil {
 		return nil, fmt.Errorf("CacheStorage.deleteEntry: %w", err)
 	}
 	return &pb.DeleteEntryResponse{}, nil

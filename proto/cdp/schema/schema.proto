@@ -6,7 +6,9 @@ service SchemaService {
   rpc GetDomains(GetDomainsRequest) returns (GetDomainsResponse);
 }
 
-message GetDomainsRequest {}
+message GetDomainsRequest {
+  string session_id = 99;
+}
 message GetDomainsResponse {
   repeated Domain domains = 1;
 }

@@ -343,6 +343,7 @@ func (x *PictureTile) GetScale() float64 {
 
 type EnableRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -375,6 +376,13 @@ func (x *EnableRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use EnableRequest.ProtoReflect.Descriptor instead.
 func (*EnableRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_layertree_layertree_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *EnableRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type EnableResponse struct {
@@ -415,6 +423,7 @@ func (*EnableResponse) Descriptor() ([]byte, []int) {
 
 type DisableRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -447,6 +456,13 @@ func (x *DisableRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use DisableRequest.ProtoReflect.Descriptor instead.
 func (*DisableRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_layertree_layertree_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *DisableRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type DisableResponse struct {
@@ -488,6 +504,7 @@ func (*DisableResponse) Descriptor() ([]byte, []int) {
 type CompositingReasonsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	LayerId       string                 `protobuf:"bytes,1,opt,name=layer_id,json=layerId,proto3" json:"layer_id,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -525,6 +542,13 @@ func (*CompositingReasonsRequest) Descriptor() ([]byte, []int) {
 func (x *CompositingReasonsRequest) GetLayerId() string {
 	if x != nil {
 		return x.LayerId
+	}
+	return ""
+}
+
+func (x *CompositingReasonsRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -584,6 +608,7 @@ func (x *CompositingReasonsResponse) GetCompositingReasonIds() []string {
 type MakeSnapshotRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	LayerId       string                 `protobuf:"bytes,1,opt,name=layer_id,json=layerId,proto3" json:"layer_id,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -621,6 +646,13 @@ func (*MakeSnapshotRequest) Descriptor() ([]byte, []int) {
 func (x *MakeSnapshotRequest) GetLayerId() string {
 	if x != nil {
 		return x.LayerId
+	}
+	return ""
+}
+
+func (x *MakeSnapshotRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -672,6 +704,7 @@ func (x *MakeSnapshotResponse) GetSnapshotId() string {
 type LoadSnapshotRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Tiles         []*PictureTile         `protobuf:"bytes,1,rep,name=tiles,proto3" json:"tiles,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -711,6 +744,13 @@ func (x *LoadSnapshotRequest) GetTiles() []*PictureTile {
 		return x.Tiles
 	}
 	return nil
+}
+
+func (x *LoadSnapshotRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type LoadSnapshotResponse struct {
@@ -760,6 +800,7 @@ func (x *LoadSnapshotResponse) GetSnapshotId() string {
 type ReleaseSnapshotRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	SnapshotId    string                 `protobuf:"bytes,1,opt,name=snapshot_id,json=snapshotId,proto3" json:"snapshot_id,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -797,6 +838,13 @@ func (*ReleaseSnapshotRequest) Descriptor() ([]byte, []int) {
 func (x *ReleaseSnapshotRequest) GetSnapshotId() string {
 	if x != nil {
 		return x.SnapshotId
+	}
+	return ""
+}
+
+func (x *ReleaseSnapshotRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -843,6 +891,7 @@ type ReplaySnapshotRequest struct {
 	FromStep      int32                  `protobuf:"varint,2,opt,name=from_step,json=fromStep,proto3" json:"from_step,omitempty"`
 	ToStep        int32                  `protobuf:"varint,3,opt,name=to_step,json=toStep,proto3" json:"to_step,omitempty"`
 	Scale         float64                `protobuf:"fixed64,4,opt,name=scale,proto3" json:"scale,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -905,6 +954,13 @@ func (x *ReplaySnapshotRequest) GetScale() float64 {
 	return 0
 }
 
+func (x *ReplaySnapshotRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type ReplaySnapshotResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	DataUrl       string                 `protobuf:"bytes,1,opt,name=data_url,json=dataUrl,proto3" json:"data_url,omitempty"`
@@ -955,6 +1011,7 @@ type ProfileSnapshotRequest struct {
 	MinRepeatCount int32                  `protobuf:"varint,2,opt,name=min_repeat_count,json=minRepeatCount,proto3" json:"min_repeat_count,omitempty"`
 	MinDuration    float64                `protobuf:"fixed64,3,opt,name=min_duration,json=minDuration,proto3" json:"min_duration,omitempty"`
 	ClipRect       *Rect                  `protobuf:"bytes,4,opt,name=clip_rect,json=clipRect,proto3" json:"clip_rect,omitempty"`
+	SessionId      string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
@@ -1017,6 +1074,13 @@ func (x *ProfileSnapshotRequest) GetClipRect() *Rect {
 	return nil
 }
 
+func (x *ProfileSnapshotRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type ProfileSnapshotResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Timings       string                 `protobuf:"bytes,1,opt,name=timings,proto3" json:"timings,omitempty"` // JSON-encoded array of arrays of doubles
@@ -1064,6 +1128,7 @@ func (x *ProfileSnapshotResponse) GetTimings() string {
 type SnapshotCommandLogRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	SnapshotId    string                 `protobuf:"bytes,1,opt,name=snapshot_id,json=snapshotId,proto3" json:"snapshot_id,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1101,6 +1166,13 @@ func (*SnapshotCommandLogRequest) Descriptor() ([]byte, []int) {
 func (x *SnapshotCommandLogRequest) GetSnapshotId() string {
 	if x != nil {
 		return x.SnapshotId
+	}
+	return ""
+}
+
+func (x *SnapshotCommandLogRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -1151,6 +1223,7 @@ func (x *SnapshotCommandLogResponse) GetCommandLog() string {
 
 type SubscribeEventsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1183,6 +1256,13 @@ func (x *SubscribeEventsRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use SubscribeEventsRequest.ProtoReflect.Descriptor instead.
 func (*SubscribeEventsRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_layertree_layertree_proto_rawDescGZIP(), []int{22}
+}
+
+func (x *SubscribeEventsRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type LayerTreeEvent struct {
@@ -1396,53 +1476,73 @@ const file_proto_cdp_layertree_layertree_proto_rawDesc = "" +
 	"\x01x\x18\x01 \x01(\x01R\x01x\x12\f\n" +
 	"\x01y\x18\x02 \x01(\x01R\x01y\x12\x18\n" +
 	"\apicture\x18\x03 \x01(\tR\apicture\x12\x14\n" +
-	"\x05scale\x18\x04 \x01(\x01R\x05scale\"\x0f\n" +
-	"\rEnableRequest\"\x10\n" +
-	"\x0eEnableResponse\"\x10\n" +
-	"\x0eDisableRequest\"\x11\n" +
-	"\x0fDisableResponse\"6\n" +
+	"\x05scale\x18\x04 \x01(\x01R\x05scale\".\n" +
+	"\rEnableRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x10\n" +
+	"\x0eEnableResponse\"/\n" +
+	"\x0eDisableRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x11\n" +
+	"\x0fDisableResponse\"U\n" +
 	"\x19CompositingReasonsRequest\x12\x19\n" +
-	"\blayer_id\x18\x01 \x01(\tR\alayerId\"\x83\x01\n" +
+	"\blayer_id\x18\x01 \x01(\tR\alayerId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x83\x01\n" +
 	"\x1aCompositingReasonsResponse\x12/\n" +
 	"\x13compositing_reasons\x18\x01 \x03(\tR\x12compositingReasons\x124\n" +
-	"\x16compositing_reason_ids\x18\x02 \x03(\tR\x14compositingReasonIds\"0\n" +
+	"\x16compositing_reason_ids\x18\x02 \x03(\tR\x14compositingReasonIds\"O\n" +
 	"\x13MakeSnapshotRequest\x12\x19\n" +
-	"\blayer_id\x18\x01 \x01(\tR\alayerId\"7\n" +
+	"\blayer_id\x18\x01 \x01(\tR\alayerId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"7\n" +
 	"\x14MakeSnapshotResponse\x12\x1f\n" +
 	"\vsnapshot_id\x18\x01 \x01(\tR\n" +
-	"snapshotId\"G\n" +
+	"snapshotId\"f\n" +
 	"\x13LoadSnapshotRequest\x120\n" +
-	"\x05tiles\x18\x01 \x03(\v2\x1a.cdp.layertree.PictureTileR\x05tiles\"7\n" +
+	"\x05tiles\x18\x01 \x03(\v2\x1a.cdp.layertree.PictureTileR\x05tiles\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"7\n" +
 	"\x14LoadSnapshotResponse\x12\x1f\n" +
 	"\vsnapshot_id\x18\x01 \x01(\tR\n" +
-	"snapshotId\"9\n" +
+	"snapshotId\"X\n" +
 	"\x16ReleaseSnapshotRequest\x12\x1f\n" +
 	"\vsnapshot_id\x18\x01 \x01(\tR\n" +
-	"snapshotId\"\x19\n" +
-	"\x17ReleaseSnapshotResponse\"\x84\x01\n" +
+	"snapshotId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x19\n" +
+	"\x17ReleaseSnapshotResponse\"\xa3\x01\n" +
 	"\x15ReplaySnapshotRequest\x12\x1f\n" +
 	"\vsnapshot_id\x18\x01 \x01(\tR\n" +
 	"snapshotId\x12\x1b\n" +
 	"\tfrom_step\x18\x02 \x01(\x05R\bfromStep\x12\x17\n" +
 	"\ato_step\x18\x03 \x01(\x05R\x06toStep\x12\x14\n" +
-	"\x05scale\x18\x04 \x01(\x01R\x05scale\"3\n" +
+	"\x05scale\x18\x04 \x01(\x01R\x05scale\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"3\n" +
 	"\x16ReplaySnapshotResponse\x12\x19\n" +
-	"\bdata_url\x18\x01 \x01(\tR\adataUrl\"\xb8\x01\n" +
+	"\bdata_url\x18\x01 \x01(\tR\adataUrl\"\xd7\x01\n" +
 	"\x16ProfileSnapshotRequest\x12\x1f\n" +
 	"\vsnapshot_id\x18\x01 \x01(\tR\n" +
 	"snapshotId\x12(\n" +
 	"\x10min_repeat_count\x18\x02 \x01(\x05R\x0eminRepeatCount\x12!\n" +
 	"\fmin_duration\x18\x03 \x01(\x01R\vminDuration\x120\n" +
-	"\tclip_rect\x18\x04 \x01(\v2\x13.cdp.layertree.RectR\bclipRect\"3\n" +
+	"\tclip_rect\x18\x04 \x01(\v2\x13.cdp.layertree.RectR\bclipRect\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"3\n" +
 	"\x17ProfileSnapshotResponse\x12\x18\n" +
-	"\atimings\x18\x01 \x01(\tR\atimings\"<\n" +
+	"\atimings\x18\x01 \x01(\tR\atimings\"[\n" +
 	"\x19SnapshotCommandLogRequest\x12\x1f\n" +
 	"\vsnapshot_id\x18\x01 \x01(\tR\n" +
-	"snapshotId\"=\n" +
+	"snapshotId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"=\n" +
 	"\x1aSnapshotCommandLogResponse\x12\x1f\n" +
 	"\vcommand_log\x18\x01 \x01(\tR\n" +
-	"commandLog\"\x18\n" +
-	"\x16SubscribeEventsRequest\"\xbf\x01\n" +
+	"commandLog\"7\n" +
+	"\x16SubscribeEventsRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\xbf\x01\n" +
 	"\x0eLayerTreeEvent\x12[\n" +
 	"\x15layer_tree_did_change\x18\x01 \x01(\v2&.cdp.layertree.LayerTreeDidChangeEventH\x00R\x12layerTreeDidChange\x12G\n" +
 	"\rlayer_painted\x18\x02 \x01(\v2 .cdp.layertree.LayerPaintedEventH\x00R\flayerPaintedB\a\n" +

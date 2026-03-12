@@ -23,6 +23,7 @@ const (
 
 type GetDomainsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -55,6 +56,13 @@ func (x *GetDomainsRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use GetDomainsRequest.ProtoReflect.Descriptor instead.
 func (*GetDomainsRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_schema_schema_proto_rawDescGZIP(), []int{0}
+}
+
+func (x *GetDomainsRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type GetDomainsResponse struct {
@@ -158,8 +166,10 @@ var File_proto_cdp_schema_schema_proto protoreflect.FileDescriptor
 const file_proto_cdp_schema_schema_proto_rawDesc = "" +
 	"\n" +
 	"\x1dproto/cdp/schema/schema.proto\x12\n" +
-	"cdp.schema\"\x13\n" +
-	"\x11GetDomainsRequest\"B\n" +
+	"cdp.schema\"2\n" +
+	"\x11GetDomainsRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"B\n" +
 	"\x12GetDomainsResponse\x12,\n" +
 	"\adomains\x18\x01 \x03(\v2\x12.cdp.schema.DomainR\adomains\"6\n" +
 	"\x06Domain\x12\x12\n" +

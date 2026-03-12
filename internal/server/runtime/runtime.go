@@ -22,15 +22,25 @@ func New(client *cdpclient.Client) *Server {
 	return &Server{client: client}
 }
 
+// send routes a CDP command through the specified session, falling back
+// to the client's default session if sessionID is empty.
+func (s *Server) send(ctx context.Context, sessionID string, method string, params interface{}) (json.RawMessage, error) {
+	if sessionID != "" {
+		return s.client.SendWithSession(ctx, method, params, sessionID)
+	}
+	return s.client.Send(ctx, method, params)
+}
+
+
 func (s *Server) Enable(ctx context.Context, req *pb.EnableRequest) (*pb.EnableResponse, error) {
-	if _, err := s.client.Send(ctx, "Runtime.enable", nil); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Runtime.enable", nil); err != nil {
 		return nil, fmt.Errorf("Runtime.enable: %w", err)
 	}
 	return &pb.EnableResponse{}, nil
 }
 
 func (s *Server) Disable(ctx context.Context, req *pb.DisableRequest) (*pb.DisableResponse, error) {
-	if _, err := s.client.Send(ctx, "Runtime.disable", nil); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Runtime.disable", nil); err != nil {
 		return nil, fmt.Errorf("Runtime.disable: %w", err)
 	}
 	return &pb.DisableResponse{}, nil
@@ -98,7 +108,7 @@ func (s *Server) Evaluate(ctx context.Context, req *pb.EvaluateRequest) (*pb.Eva
 		params["serializationOptions"] = so
 	}
 
-	result, err := s.client.Send(ctx, "Runtime.evaluate", params)
+	result, err := s.send(ctx, req.SessionId, "Runtime.evaluate", params)
 	if err != nil {
 		return nil, fmt.Errorf("Runtime.evaluate: %w", err)
 	}
@@ -177,7 +187,7 @@ func (s *Server) CallFunctionOn(ctx context.Context, req *pb.CallFunctionOnReque
 		params["serializationOptions"] = so
 	}
 
-	result, err := s.client.Send(ctx, "Runtime.callFunctionOn", params)
+	result, err := s.send(ctx, req.SessionId, "Runtime.callFunctionOn", params)
 	if err != nil {
 		return nil, fmt.Errorf("Runtime.callFunctionOn: %w", err)
 	}
@@ -216,7 +226,7 @@ func (s *Server) GetProperties(ctx context.Context, req *pb.GetPropertiesRequest
 		params["nonIndexedPropertiesOnly"] = true
 	}
 
-	result, err := s.client.Send(ctx, "Runtime.getProperties", params)
+	result, err := s.send(ctx, req.SessionId, "Runtime.getProperties", params)
 	if err != nil {
 		return nil, fmt.Errorf("Runtime.getProperties: %w", err)
 	}
@@ -268,7 +278,7 @@ func (s *Server) AwaitPromise(ctx context.Context, req *pb.AwaitPromiseRequest) 
 		params["generatePreview"] = true
 	}
 
-	result, err := s.client.Send(ctx, "Runtime.awaitPromise", params)
+	result, err := s.send(ctx, req.SessionId, "Runtime.awaitPromise", params)
 	if err != nil {
 		return nil, fmt.Errorf("Runtime.awaitPromise: %w", err)
 	}
@@ -294,7 +304,7 @@ func (s *Server) ReleaseObject(ctx context.Context, req *pb.ReleaseObjectRequest
 	params := map[string]interface{}{
 		"objectId": req.ObjectId,
 	}
-	if _, err := s.client.Send(ctx, "Runtime.releaseObject", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Runtime.releaseObject", params); err != nil {
 		return nil, fmt.Errorf("Runtime.releaseObject: %w", err)
 	}
 	return &pb.ReleaseObjectResponse{}, nil
@@ -304,7 +314,7 @@ func (s *Server) ReleaseObjectGroup(ctx context.Context, req *pb.ReleaseObjectGr
 	params := map[string]interface{}{
 		"objectGroup": req.ObjectGroup,
 	}
-	if _, err := s.client.Send(ctx, "Runtime.releaseObjectGroup", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Runtime.releaseObjectGroup", params); err != nil {
 		return nil, fmt.Errorf("Runtime.releaseObjectGroup: %w", err)
 	}
 	return &pb.ReleaseObjectGroupResponse{}, nil
@@ -320,7 +330,7 @@ func (s *Server) CompileScript(ctx context.Context, req *pb.CompileScriptRequest
 		params["executionContextId"] = req.ExecutionContextId
 	}
 
-	result, err := s.client.Send(ctx, "Runtime.compileScript", params)
+	result, err := s.send(ctx, req.SessionId, "Runtime.compileScript", params)
 	if err != nil {
 		return nil, fmt.Errorf("Runtime.compileScript: %w", err)
 	}
@@ -368,7 +378,7 @@ func (s *Server) RunScript(ctx context.Context, req *pb.RunScriptRequest) (*pb.R
 		params["awaitPromise"] = true
 	}
 
-	result, err := s.client.Send(ctx, "Runtime.runScript", params)
+	result, err := s.send(ctx, req.SessionId, "Runtime.runScript", params)
 	if err != nil {
 		return nil, fmt.Errorf("Runtime.runScript: %w", err)
 	}
@@ -391,14 +401,14 @@ func (s *Server) RunScript(ctx context.Context, req *pb.RunScriptRequest) (*pb.R
 }
 
 func (s *Server) RunIfWaitingForDebugger(ctx context.Context, req *pb.RunIfWaitingForDebuggerRequest) (*pb.RunIfWaitingForDebuggerResponse, error) {
-	if _, err := s.client.Send(ctx, "Runtime.runIfWaitingForDebugger", nil); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Runtime.runIfWaitingForDebugger", nil); err != nil {
 		return nil, fmt.Errorf("Runtime.runIfWaitingForDebugger: %w", err)
 	}
 	return &pb.RunIfWaitingForDebuggerResponse{}, nil
 }
 
 func (s *Server) DiscardConsoleEntries(ctx context.Context, req *pb.DiscardConsoleEntriesRequest) (*pb.DiscardConsoleEntriesResponse, error) {
-	if _, err := s.client.Send(ctx, "Runtime.discardConsoleEntries", nil); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Runtime.discardConsoleEntries", nil); err != nil {
 		return nil, fmt.Errorf("Runtime.discardConsoleEntries: %w", err)
 	}
 	return &pb.DiscardConsoleEntriesResponse{}, nil
@@ -415,7 +425,7 @@ func (s *Server) AddBinding(ctx context.Context, req *pb.AddBindingRequest) (*pb
 		params["executionContextName"] = req.ExecutionContextName
 	}
 
-	if _, err := s.client.Send(ctx, "Runtime.addBinding", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Runtime.addBinding", params); err != nil {
 		return nil, fmt.Errorf("Runtime.addBinding: %w", err)
 	}
 	return &pb.AddBindingResponse{}, nil
@@ -425,7 +435,7 @@ func (s *Server) RemoveBinding(ctx context.Context, req *pb.RemoveBindingRequest
 	params := map[string]interface{}{
 		"name": req.Name,
 	}
-	if _, err := s.client.Send(ctx, "Runtime.removeBinding", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Runtime.removeBinding", params); err != nil {
 		return nil, fmt.Errorf("Runtime.removeBinding: %w", err)
 	}
 	return &pb.RemoveBindingResponse{}, nil
@@ -440,9 +450,9 @@ func (s *Server) GlobalLexicalScopeNames(ctx context.Context, req *pb.GlobalLexi
 	var result json.RawMessage
 	var err error
 	if len(params) > 0 {
-		result, err = s.client.Send(ctx, "Runtime.globalLexicalScopeNames", params)
+		result, err = s.send(ctx, req.SessionId, "Runtime.globalLexicalScopeNames", params)
 	} else {
-		result, err = s.client.Send(ctx, "Runtime.globalLexicalScopeNames", nil)
+		result, err = s.send(ctx, req.SessionId, "Runtime.globalLexicalScopeNames", nil)
 	}
 	if err != nil {
 		return nil, fmt.Errorf("Runtime.globalLexicalScopeNames: %w", err)

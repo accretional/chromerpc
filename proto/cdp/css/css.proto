@@ -186,14 +186,19 @@ message MediaQueryExpression {
 
 // ==================== Requests / Responses ====================
 
-message EnableRequest {}
+message EnableRequest {
+  string session_id = 99;
+}
 message EnableResponse {}
 
-message DisableRequest {}
+message DisableRequest {
+  string session_id = 99;
+}
 message DisableResponse {}
 
 message GetMatchedStylesForNodeRequest {
   int32 node_id = 1;
+  string session_id = 99;
 }
 message GetMatchedStylesForNodeResponse {
   CSSStyle inline_style = 1;
@@ -214,6 +219,7 @@ message InheritedStyleEntry {
 
 message GetComputedStyleForNodeRequest {
   int32 node_id = 1;
+  string session_id = 99;
 }
 message GetComputedStyleForNodeResponse {
   repeated CSSComputedStyleProperty computed_style = 1;
@@ -221,6 +227,7 @@ message GetComputedStyleForNodeResponse {
 
 message GetInlineStylesForNodeRequest {
   int32 node_id = 1;
+  string session_id = 99;
 }
 message GetInlineStylesForNodeResponse {
   CSSStyle inline_style = 1;
@@ -229,6 +236,7 @@ message GetInlineStylesForNodeResponse {
 
 message GetStyleSheetTextRequest {
   string style_sheet_id = 1;
+  string session_id = 99;
 }
 message GetStyleSheetTextResponse {
   string text = 1;
@@ -237,6 +245,7 @@ message GetStyleSheetTextResponse {
 message SetStyleSheetTextRequest {
   string style_sheet_id = 1;
   string text = 2;
+  string session_id = 99;
 }
 message SetStyleSheetTextResponse {
   string source_map_url = 1;
@@ -244,6 +253,7 @@ message SetStyleSheetTextResponse {
 
 message SetStyleTextsRequest {
   repeated StyleDeclarationEdit edits = 1;
+  string session_id = 99;
 }
 message SetStyleTextsResponse {
   repeated CSSStyle styles = 1;
@@ -253,6 +263,7 @@ message AddRuleRequest {
   string style_sheet_id = 1;
   string rule_text = 2;
   SourceRange location = 3;
+  string session_id = 99;
 }
 message AddRuleResponse {
   CSSRule rule = 1;
@@ -260,6 +271,7 @@ message AddRuleResponse {
 
 message CreateStyleSheetRequest {
   string frame_id = 1;
+  string session_id = 99;
 }
 message CreateStyleSheetResponse {
   string style_sheet_id = 1;
@@ -267,6 +279,7 @@ message CreateStyleSheetResponse {
 
 message GetBackgroundColorsRequest {
   int32 node_id = 1;
+  string session_id = 99;
 }
 message GetBackgroundColorsResponse {
   repeated string background_colors = 1;
@@ -276,25 +289,34 @@ message GetBackgroundColorsResponse {
 
 message GetPlatformFontsForNodeRequest {
   int32 node_id = 1;
+  string session_id = 99;
 }
 message GetPlatformFontsForNodeResponse {
   repeated PlatformFontUsage fonts = 1;
 }
 
-message GetMediaQueriesRequest {}
+message GetMediaQueriesRequest {
+  string session_id = 99;
+}
 message GetMediaQueriesResponse {
   repeated CSSMedia medias = 1;
 }
 
-message StartRuleUsageTrackingRequest {}
+message StartRuleUsageTrackingRequest {
+  string session_id = 99;
+}
 message StartRuleUsageTrackingResponse {}
 
-message StopRuleUsageTrackingRequest {}
+message StopRuleUsageTrackingRequest {
+  string session_id = 99;
+}
 message StopRuleUsageTrackingResponse {
   repeated RuleUsage rule_usage = 1;
 }
 
-message TakeCoverageDeltaRequest {}
+message TakeCoverageDeltaRequest {
+  string session_id = 99;
+}
 message TakeCoverageDeltaResponse {
   repeated RuleUsage coverage = 1;
   double timestamp = 2;
@@ -302,6 +324,7 @@ message TakeCoverageDeltaResponse {
 
 message CollectClassNamesRequest {
   string style_sheet_id = 1;
+  string session_id = 99;
 }
 message CollectClassNamesResponse {
   repeated string class_names = 1;
@@ -311,6 +334,7 @@ message SetRuleSelectorRequest {
   string style_sheet_id = 1;
   SourceRange range = 2;
   string selector = 3;
+  string session_id = 99;
 }
 message SetRuleSelectorResponse {
   string selector_text = 1;
@@ -319,12 +343,15 @@ message SetRuleSelectorResponse {
 message ForcePseudoStateRequest {
   int32 node_id = 1;
   repeated string forced_pseudo_classes = 2;
+  string session_id = 99;
 }
 message ForcePseudoStateResponse {}
 
 // ==================== Events ====================
 
-message SubscribeEventsRequest {}
+message SubscribeEventsRequest {
+  string session_id = 99;
+}
 
 message CSSEvent {
   oneof event {

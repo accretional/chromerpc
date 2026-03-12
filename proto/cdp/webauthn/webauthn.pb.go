@@ -428,6 +428,7 @@ func (x *Credential) GetBackupState() bool {
 type EnableRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	EnableUi      bool                   `protobuf:"varint,1,opt,name=enable_ui,json=enableUi,proto3" json:"enable_ui,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -469,6 +470,13 @@ func (x *EnableRequest) GetEnableUi() bool {
 	return false
 }
 
+func (x *EnableRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type EnableResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -507,6 +515,7 @@ func (*EnableResponse) Descriptor() ([]byte, []int) {
 
 type DisableRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -539,6 +548,13 @@ func (x *DisableRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use DisableRequest.ProtoReflect.Descriptor instead.
 func (*DisableRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_webauthn_webauthn_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *DisableRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type DisableResponse struct {
@@ -580,6 +596,7 @@ func (*DisableResponse) Descriptor() ([]byte, []int) {
 type AddVirtualAuthenticatorRequest struct {
 	state         protoimpl.MessageState       `protogen:"open.v1"`
 	Options       *VirtualAuthenticatorOptions `protobuf:"bytes,1,opt,name=options,proto3" json:"options,omitempty"`
+	SessionId     string                       `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -619,6 +636,13 @@ func (x *AddVirtualAuthenticatorRequest) GetOptions() *VirtualAuthenticatorOptio
 		return x.Options
 	}
 	return nil
+}
+
+func (x *AddVirtualAuthenticatorRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type AddVirtualAuthenticatorResponse struct {
@@ -668,6 +692,7 @@ func (x *AddVirtualAuthenticatorResponse) GetAuthenticatorId() string {
 type RemoveVirtualAuthenticatorRequest struct {
 	state           protoimpl.MessageState `protogen:"open.v1"`
 	AuthenticatorId string                 `protobuf:"bytes,1,opt,name=authenticator_id,json=authenticatorId,proto3" json:"authenticator_id,omitempty"`
+	SessionId       string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
 }
@@ -705,6 +730,13 @@ func (*RemoveVirtualAuthenticatorRequest) Descriptor() ([]byte, []int) {
 func (x *RemoveVirtualAuthenticatorRequest) GetAuthenticatorId() string {
 	if x != nil {
 		return x.AuthenticatorId
+	}
+	return ""
+}
+
+func (x *RemoveVirtualAuthenticatorRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -749,6 +781,7 @@ type AddCredentialRequest struct {
 	state           protoimpl.MessageState `protogen:"open.v1"`
 	AuthenticatorId string                 `protobuf:"bytes,1,opt,name=authenticator_id,json=authenticatorId,proto3" json:"authenticator_id,omitempty"`
 	Credential      *Credential            `protobuf:"bytes,2,opt,name=credential,proto3" json:"credential,omitempty"`
+	SessionId       string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
 }
@@ -797,6 +830,13 @@ func (x *AddCredentialRequest) GetCredential() *Credential {
 	return nil
 }
 
+func (x *AddCredentialRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type AddCredentialResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -837,6 +877,7 @@ type GetCredentialRequest struct {
 	state           protoimpl.MessageState `protogen:"open.v1"`
 	AuthenticatorId string                 `protobuf:"bytes,1,opt,name=authenticator_id,json=authenticatorId,proto3" json:"authenticator_id,omitempty"`
 	CredentialId    string                 `protobuf:"bytes,2,opt,name=credential_id,json=credentialId,proto3" json:"credential_id,omitempty"`
+	SessionId       string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
 }
@@ -881,6 +922,13 @@ func (x *GetCredentialRequest) GetAuthenticatorId() string {
 func (x *GetCredentialRequest) GetCredentialId() string {
 	if x != nil {
 		return x.CredentialId
+	}
+	return ""
+}
+
+func (x *GetCredentialRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -932,6 +980,7 @@ func (x *GetCredentialResponse) GetCredential() *Credential {
 type GetCredentialsRequest struct {
 	state           protoimpl.MessageState `protogen:"open.v1"`
 	AuthenticatorId string                 `protobuf:"bytes,1,opt,name=authenticator_id,json=authenticatorId,proto3" json:"authenticator_id,omitempty"`
+	SessionId       string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
 }
@@ -969,6 +1018,13 @@ func (*GetCredentialsRequest) Descriptor() ([]byte, []int) {
 func (x *GetCredentialsRequest) GetAuthenticatorId() string {
 	if x != nil {
 		return x.AuthenticatorId
+	}
+	return ""
+}
+
+func (x *GetCredentialsRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -1021,6 +1077,7 @@ type RemoveCredentialRequest struct {
 	state           protoimpl.MessageState `protogen:"open.v1"`
 	AuthenticatorId string                 `protobuf:"bytes,1,opt,name=authenticator_id,json=authenticatorId,proto3" json:"authenticator_id,omitempty"`
 	CredentialId    string                 `protobuf:"bytes,2,opt,name=credential_id,json=credentialId,proto3" json:"credential_id,omitempty"`
+	SessionId       string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
 }
@@ -1069,6 +1126,13 @@ func (x *RemoveCredentialRequest) GetCredentialId() string {
 	return ""
 }
 
+func (x *RemoveCredentialRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type RemoveCredentialResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -1108,6 +1172,7 @@ func (*RemoveCredentialResponse) Descriptor() ([]byte, []int) {
 type ClearCredentialsRequest struct {
 	state           protoimpl.MessageState `protogen:"open.v1"`
 	AuthenticatorId string                 `protobuf:"bytes,1,opt,name=authenticator_id,json=authenticatorId,proto3" json:"authenticator_id,omitempty"`
+	SessionId       string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
 }
@@ -1145,6 +1210,13 @@ func (*ClearCredentialsRequest) Descriptor() ([]byte, []int) {
 func (x *ClearCredentialsRequest) GetAuthenticatorId() string {
 	if x != nil {
 		return x.AuthenticatorId
+	}
+	return ""
+}
+
+func (x *ClearCredentialsRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -1189,6 +1261,7 @@ type SetUserVerifiedRequest struct {
 	state           protoimpl.MessageState `protogen:"open.v1"`
 	AuthenticatorId string                 `protobuf:"bytes,1,opt,name=authenticator_id,json=authenticatorId,proto3" json:"authenticator_id,omitempty"`
 	IsUserVerified  bool                   `protobuf:"varint,2,opt,name=is_user_verified,json=isUserVerified,proto3" json:"is_user_verified,omitempty"`
+	SessionId       string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
 }
@@ -1237,6 +1310,13 @@ func (x *SetUserVerifiedRequest) GetIsUserVerified() bool {
 	return false
 }
 
+func (x *SetUserVerifiedRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type SetUserVerifiedResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -1277,6 +1357,7 @@ type SetAutomaticPresenceSimulationRequest struct {
 	state           protoimpl.MessageState `protogen:"open.v1"`
 	AuthenticatorId string                 `protobuf:"bytes,1,opt,name=authenticator_id,json=authenticatorId,proto3" json:"authenticator_id,omitempty"`
 	Enabled         bool                   `protobuf:"varint,2,opt,name=enabled,proto3" json:"enabled,omitempty"`
+	SessionId       string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
 }
@@ -1325,6 +1406,13 @@ func (x *SetAutomaticPresenceSimulationRequest) GetEnabled() bool {
 	return false
 }
 
+func (x *SetAutomaticPresenceSimulationRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type SetAutomaticPresenceSimulationResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -1367,6 +1455,7 @@ type SetResponseOverrideBitsRequest struct {
 	IsBogusSignature bool                   `protobuf:"varint,2,opt,name=is_bogus_signature,json=isBogusSignature,proto3" json:"is_bogus_signature,omitempty"`
 	IsBadUv          bool                   `protobuf:"varint,3,opt,name=is_bad_uv,json=isBadUv,proto3" json:"is_bad_uv,omitempty"`
 	IsBadUp          bool                   `protobuf:"varint,4,opt,name=is_bad_up,json=isBadUp,proto3" json:"is_bad_up,omitempty"`
+	SessionId        string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields    protoimpl.UnknownFields
 	sizeCache        protoimpl.SizeCache
 }
@@ -1427,6 +1516,13 @@ func (x *SetResponseOverrideBitsRequest) GetIsBadUp() bool {
 		return x.IsBadUp
 	}
 	return false
+}
+
+func (x *SetResponseOverrideBitsRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type SetResponseOverrideBitsResponse struct {
@@ -1729,56 +1825,80 @@ const file_proto_cdp_webauthn_webauthn_proto_rawDesc = "" +
 	"\n" +
 	"large_blob\x18\a \x01(\tR\tlargeBlob\x12-\n" +
 	"\x12backup_eligibility\x18\b \x01(\bR\x11backupEligibility\x12!\n" +
-	"\fbackup_state\x18\t \x01(\bR\vbackupState\",\n" +
+	"\fbackup_state\x18\t \x01(\bR\vbackupState\"K\n" +
 	"\rEnableRequest\x12\x1b\n" +
-	"\tenable_ui\x18\x01 \x01(\bR\benableUi\"\x10\n" +
-	"\x0eEnableResponse\"\x10\n" +
-	"\x0eDisableRequest\"\x11\n" +
-	"\x0fDisableResponse\"e\n" +
+	"\tenable_ui\x18\x01 \x01(\bR\benableUi\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x10\n" +
+	"\x0eEnableResponse\"/\n" +
+	"\x0eDisableRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x11\n" +
+	"\x0fDisableResponse\"\x84\x01\n" +
 	"\x1eAddVirtualAuthenticatorRequest\x12C\n" +
-	"\aoptions\x18\x01 \x01(\v2).cdp.webauthn.VirtualAuthenticatorOptionsR\aoptions\"L\n" +
+	"\aoptions\x18\x01 \x01(\v2).cdp.webauthn.VirtualAuthenticatorOptionsR\aoptions\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"L\n" +
 	"\x1fAddVirtualAuthenticatorResponse\x12)\n" +
-	"\x10authenticator_id\x18\x01 \x01(\tR\x0fauthenticatorId\"N\n" +
+	"\x10authenticator_id\x18\x01 \x01(\tR\x0fauthenticatorId\"m\n" +
 	"!RemoveVirtualAuthenticatorRequest\x12)\n" +
-	"\x10authenticator_id\x18\x01 \x01(\tR\x0fauthenticatorId\"$\n" +
-	"\"RemoveVirtualAuthenticatorResponse\"{\n" +
+	"\x10authenticator_id\x18\x01 \x01(\tR\x0fauthenticatorId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"$\n" +
+	"\"RemoveVirtualAuthenticatorResponse\"\x9a\x01\n" +
 	"\x14AddCredentialRequest\x12)\n" +
 	"\x10authenticator_id\x18\x01 \x01(\tR\x0fauthenticatorId\x128\n" +
 	"\n" +
 	"credential\x18\x02 \x01(\v2\x18.cdp.webauthn.CredentialR\n" +
-	"credential\"\x17\n" +
-	"\x15AddCredentialResponse\"f\n" +
+	"credential\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x17\n" +
+	"\x15AddCredentialResponse\"\x85\x01\n" +
 	"\x14GetCredentialRequest\x12)\n" +
 	"\x10authenticator_id\x18\x01 \x01(\tR\x0fauthenticatorId\x12#\n" +
-	"\rcredential_id\x18\x02 \x01(\tR\fcredentialId\"Q\n" +
+	"\rcredential_id\x18\x02 \x01(\tR\fcredentialId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"Q\n" +
 	"\x15GetCredentialResponse\x128\n" +
 	"\n" +
 	"credential\x18\x01 \x01(\v2\x18.cdp.webauthn.CredentialR\n" +
-	"credential\"B\n" +
+	"credential\"a\n" +
 	"\x15GetCredentialsRequest\x12)\n" +
-	"\x10authenticator_id\x18\x01 \x01(\tR\x0fauthenticatorId\"T\n" +
+	"\x10authenticator_id\x18\x01 \x01(\tR\x0fauthenticatorId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"T\n" +
 	"\x16GetCredentialsResponse\x12:\n" +
-	"\vcredentials\x18\x01 \x03(\v2\x18.cdp.webauthn.CredentialR\vcredentials\"i\n" +
+	"\vcredentials\x18\x01 \x03(\v2\x18.cdp.webauthn.CredentialR\vcredentials\"\x88\x01\n" +
 	"\x17RemoveCredentialRequest\x12)\n" +
 	"\x10authenticator_id\x18\x01 \x01(\tR\x0fauthenticatorId\x12#\n" +
-	"\rcredential_id\x18\x02 \x01(\tR\fcredentialId\"\x1a\n" +
-	"\x18RemoveCredentialResponse\"D\n" +
+	"\rcredential_id\x18\x02 \x01(\tR\fcredentialId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x1a\n" +
+	"\x18RemoveCredentialResponse\"c\n" +
 	"\x17ClearCredentialsRequest\x12)\n" +
-	"\x10authenticator_id\x18\x01 \x01(\tR\x0fauthenticatorId\"\x1a\n" +
-	"\x18ClearCredentialsResponse\"m\n" +
+	"\x10authenticator_id\x18\x01 \x01(\tR\x0fauthenticatorId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x1a\n" +
+	"\x18ClearCredentialsResponse\"\x8c\x01\n" +
 	"\x16SetUserVerifiedRequest\x12)\n" +
 	"\x10authenticator_id\x18\x01 \x01(\tR\x0fauthenticatorId\x12(\n" +
-	"\x10is_user_verified\x18\x02 \x01(\bR\x0eisUserVerified\"\x19\n" +
-	"\x17SetUserVerifiedResponse\"l\n" +
+	"\x10is_user_verified\x18\x02 \x01(\bR\x0eisUserVerified\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x19\n" +
+	"\x17SetUserVerifiedResponse\"\x8b\x01\n" +
 	"%SetAutomaticPresenceSimulationRequest\x12)\n" +
 	"\x10authenticator_id\x18\x01 \x01(\tR\x0fauthenticatorId\x12\x18\n" +
-	"\aenabled\x18\x02 \x01(\bR\aenabled\"(\n" +
-	"&SetAutomaticPresenceSimulationResponse\"\xb1\x01\n" +
+	"\aenabled\x18\x02 \x01(\bR\aenabled\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"(\n" +
+	"&SetAutomaticPresenceSimulationResponse\"\xd0\x01\n" +
 	"\x1eSetResponseOverrideBitsRequest\x12)\n" +
 	"\x10authenticator_id\x18\x01 \x01(\tR\x0fauthenticatorId\x12,\n" +
 	"\x12is_bogus_signature\x18\x02 \x01(\bR\x10isBogusSignature\x12\x1a\n" +
 	"\tis_bad_uv\x18\x03 \x01(\bR\aisBadUv\x12\x1a\n" +
-	"\tis_bad_up\x18\x04 \x01(\bR\aisBadUp\"!\n" +
+	"\tis_bad_up\x18\x04 \x01(\bR\aisBadUp\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"!\n" +
 	"\x1fSetResponseOverrideBitsResponse\"?\n" +
 	"\x1eSubscribeWebAuthnEventsRequest\x12\x1d\n" +
 	"\n" +

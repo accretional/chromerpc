@@ -323,6 +323,7 @@ func (x *VisibleSecurityState) GetSecurityStateIssueIds() []string {
 
 type EnableRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -355,6 +356,13 @@ func (x *EnableRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use EnableRequest.ProtoReflect.Descriptor instead.
 func (*EnableRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_security_security_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *EnableRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type EnableResponse struct {
@@ -395,6 +403,7 @@ func (*EnableResponse) Descriptor() ([]byte, []int) {
 
 type DisableRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -427,6 +436,13 @@ func (x *DisableRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use DisableRequest.ProtoReflect.Descriptor instead.
 func (*DisableRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_security_security_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *DisableRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type DisableResponse struct {
@@ -468,6 +484,7 @@ func (*DisableResponse) Descriptor() ([]byte, []int) {
 type SetIgnoreCertificateErrorsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Ignore        bool                   `protobuf:"varint,1,opt,name=ignore,proto3" json:"ignore,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -509,6 +526,13 @@ func (x *SetIgnoreCertificateErrorsRequest) GetIgnore() bool {
 	return false
 }
 
+func (x *SetIgnoreCertificateErrorsRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type SetIgnoreCertificateErrorsResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -547,6 +571,7 @@ func (*SetIgnoreCertificateErrorsResponse) Descriptor() ([]byte, []int) {
 
 type SubscribeEventsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -579,6 +604,13 @@ func (x *SubscribeEventsRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use SubscribeEventsRequest.ProtoReflect.Descriptor instead.
 func (*SubscribeEventsRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_security_security_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *SubscribeEventsRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type SecurityEvent struct {
@@ -725,15 +757,23 @@ const file_proto_cdp_security_security_proto_rawDesc = "" +
 	"\x0esecurity_state\x18\x01 \x01(\tR\rsecurityState\x12d\n" +
 	"\x1acertificate_security_state\x18\x02 \x01(\v2&.cdp.security.CertificateSecurityStateR\x18certificateSecurityState\x12C\n" +
 	"\x0fsafety_tip_info\x18\x03 \x01(\v2\x1b.cdp.security.SafetyTipInfoR\rsafetyTipInfo\x127\n" +
-	"\x18security_state_issue_ids\x18\x04 \x03(\tR\x15securityStateIssueIds\"\x0f\n" +
-	"\rEnableRequest\"\x10\n" +
-	"\x0eEnableResponse\"\x10\n" +
-	"\x0eDisableRequest\"\x11\n" +
-	"\x0fDisableResponse\";\n" +
+	"\x18security_state_issue_ids\x18\x04 \x03(\tR\x15securityStateIssueIds\".\n" +
+	"\rEnableRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x10\n" +
+	"\x0eEnableResponse\"/\n" +
+	"\x0eDisableRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x11\n" +
+	"\x0fDisableResponse\"Z\n" +
 	"!SetIgnoreCertificateErrorsRequest\x12\x16\n" +
-	"\x06ignore\x18\x01 \x01(\bR\x06ignore\"$\n" +
-	"\"SetIgnoreCertificateErrorsResponse\"\x18\n" +
-	"\x16SubscribeEventsRequest\"\x8f\x01\n" +
+	"\x06ignore\x18\x01 \x01(\bR\x06ignore\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"$\n" +
+	"\"SetIgnoreCertificateErrorsResponse\"7\n" +
+	"\x16SubscribeEventsRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x8f\x01\n" +
 	"\rSecurityEvent\x12u\n" +
 	"\x1evisible_security_state_changed\x18\x01 \x01(\v2..cdp.security.VisibleSecurityStateChangedEventH\x00R\x1bvisibleSecurityStateChangedB\a\n" +
 	"\x05event\"|\n" +

@@ -33,10 +33,14 @@ message ScreenshotParams {
 
 // ==================== Requests / Responses ====================
 
-message EnableRequest {}
+message EnableRequest {
+  string session_id = 99;
+}
 message EnableResponse {}
 
-message DisableRequest {}
+message DisableRequest {
+  string session_id = 99;
+}
 message DisableResponse {}
 
 message BeginFrameRequest {
@@ -48,6 +52,7 @@ message BeginFrameRequest {
   bool no_display_updates = 3;
   // Screenshot parameters. If specified, a screenshot of the frame will be captured.
   ScreenshotParams screenshot = 4;
+  string session_id = 99;
 }
 
 message BeginFrameResponse {

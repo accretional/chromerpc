@@ -23,6 +23,7 @@ const (
 
 type ClearDeviceOrientationOverrideRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -55,6 +56,13 @@ func (x *ClearDeviceOrientationOverrideRequest) ProtoReflect() protoreflect.Mess
 // Deprecated: Use ClearDeviceOrientationOverrideRequest.ProtoReflect.Descriptor instead.
 func (*ClearDeviceOrientationOverrideRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_deviceorientation_deviceorientation_proto_rawDescGZIP(), []int{0}
+}
+
+func (x *ClearDeviceOrientationOverrideRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type ClearDeviceOrientationOverrideResponse struct {
@@ -98,6 +106,7 @@ type SetDeviceOrientationOverrideRequest struct {
 	Alpha         float64                `protobuf:"fixed64,1,opt,name=alpha,proto3" json:"alpha,omitempty"`
 	Beta          float64                `protobuf:"fixed64,2,opt,name=beta,proto3" json:"beta,omitempty"`
 	Gamma         float64                `protobuf:"fixed64,3,opt,name=gamma,proto3" json:"gamma,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -153,6 +162,13 @@ func (x *SetDeviceOrientationOverrideRequest) GetGamma() float64 {
 	return 0
 }
 
+func (x *SetDeviceOrientationOverrideRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type SetDeviceOrientationOverrideResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -193,13 +209,17 @@ var File_proto_cdp_deviceorientation_deviceorientation_proto protoreflect.FileDe
 
 const file_proto_cdp_deviceorientation_deviceorientation_proto_rawDesc = "" +
 	"\n" +
-	"3proto/cdp/deviceorientation/deviceorientation.proto\x12\x15cdp.deviceorientation\"'\n" +
-	"%ClearDeviceOrientationOverrideRequest\"(\n" +
-	"&ClearDeviceOrientationOverrideResponse\"e\n" +
+	"3proto/cdp/deviceorientation/deviceorientation.proto\x12\x15cdp.deviceorientation\"F\n" +
+	"%ClearDeviceOrientationOverrideRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"(\n" +
+	"&ClearDeviceOrientationOverrideResponse\"\x84\x01\n" +
 	"#SetDeviceOrientationOverrideRequest\x12\x14\n" +
 	"\x05alpha\x18\x01 \x01(\x01R\x05alpha\x12\x12\n" +
 	"\x04beta\x18\x02 \x01(\x01R\x04beta\x12\x14\n" +
-	"\x05gamma\x18\x03 \x01(\x01R\x05gamma\"&\n" +
+	"\x05gamma\x18\x03 \x01(\x01R\x05gamma\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"&\n" +
 	"$SetDeviceOrientationOverrideResponse2\xd4\x02\n" +
 	"\x18DeviceOrientationService\x12\x9d\x01\n" +
 	"\x1eClearDeviceOrientationOverride\x12<.cdp.deviceorientation.ClearDeviceOrientationOverrideRequest\x1a=.cdp.deviceorientation.ClearDeviceOrientationOverrideResponse\x12\x97\x01\n" +

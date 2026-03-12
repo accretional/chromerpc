@@ -63,6 +63,7 @@ message GetEventListenersRequest {
   string object_id = 1;
   int32 depth = 2;
   bool pierce = 3;
+  string session_id = 99;
 }
 message GetEventListenersResponse {
   repeated EventListener listeners = 1;
@@ -71,43 +72,51 @@ message GetEventListenersResponse {
 message RemoveDOMBreakpointRequest {
   int32 node_id = 1;
   DOMBreakpointType type = 2;
+  string session_id = 99;
 }
 message RemoveDOMBreakpointResponse {}
 
 message RemoveEventListenerBreakpointRequest {
   string event_name = 1;
   string target_name = 2;
+  string session_id = 99;
 }
 message RemoveEventListenerBreakpointResponse {}
 
 message RemoveInstrumentationBreakpointRequest {
   string event_name = 1;
+  string session_id = 99;
 }
 message RemoveInstrumentationBreakpointResponse {}
 
 message RemoveXHRBreakpointRequest {
   string url = 1;
+  string session_id = 99;
 }
 message RemoveXHRBreakpointResponse {}
 
 message SetDOMBreakpointRequest {
   int32 node_id = 1;
   DOMBreakpointType type = 2;
+  string session_id = 99;
 }
 message SetDOMBreakpointResponse {}
 
 message SetEventListenerBreakpointRequest {
   string event_name = 1;
   string target_name = 2;
+  string session_id = 99;
 }
 message SetEventListenerBreakpointResponse {}
 
 message SetInstrumentationBreakpointRequest {
   string event_name = 1;
+  string session_id = 99;
 }
 message SetInstrumentationBreakpointResponse {}
 
 message SetXHRBreakpointRequest {
   string url = 1;
+  string session_id = 99;
 }
 message SetXHRBreakpointResponse {}

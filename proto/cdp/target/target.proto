@@ -86,6 +86,7 @@ message RemoteLocation {
 
 message ActivateTargetRequest {
   string target_id = 1;
+  string session_id = 99;
 }
 message ActivateTargetResponse {}
 
@@ -95,19 +96,23 @@ message AttachToTargetRequest {
   // attribute in the commands. When enabled, sends protocol messages
   // over the session.
   bool flatten = 2;
+  string session_id = 99;
 }
 message AttachToTargetResponse {
   // Id assigned to the session.
   string session_id = 1;
 }
 
-message AttachToBrowserTargetRequest {}
+message AttachToBrowserTargetRequest {
+  string session_id = 99;
+}
 message AttachToBrowserTargetResponse {
   string session_id = 1;
 }
 
 message CloseTargetRequest {
   string target_id = 1;
+  string session_id = 99;
 }
 message CloseTargetResponse {
   bool success = 1;
@@ -122,6 +127,7 @@ message CreateBrowserContextRequest {
   string proxy_bypass_list = 3;
   // Origins allowed to skip TLS certificate checks (experimental).
   repeated string origins_with_universal_network_access = 4;
+  string session_id = 99;
 }
 message CreateBrowserContextResponse {
   string browser_context_id = 1;
@@ -144,6 +150,7 @@ message CreateTargetRequest {
   bool background = 7;
   // Whether to create the target as a new tab (experimental).
   bool for_tab = 8;
+  string session_id = 99;
 }
 message CreateTargetResponse {
   string target_id = 1;
@@ -158,16 +165,20 @@ message DetachFromTargetResponse {}
 
 message DisposeBrowserContextRequest {
   string browser_context_id = 1;
+  string session_id = 99;
 }
 message DisposeBrowserContextResponse {}
 
-message GetBrowserContextsRequest {}
+message GetBrowserContextsRequest {
+  string session_id = 99;
+}
 message GetBrowserContextsResponse {
   repeated string browser_context_ids = 1;
 }
 
 message GetTargetsRequest {
   repeated FilterEntry filter = 1;
+  string session_id = 99;
 }
 message GetTargetsResponse {
   repeated TargetInfo target_infos = 1;
@@ -175,6 +186,7 @@ message GetTargetsResponse {
 
 message GetTargetInfoRequest {
   string target_id = 1;
+  string session_id = 99;
 }
 message GetTargetInfoResponse {
   TargetInfo target_info = 1;
@@ -185,12 +197,14 @@ message SetAutoAttachRequest {
   bool wait_for_debugger_on_start = 2;
   bool flatten = 3;
   repeated FilterEntry filter = 4;
+  string session_id = 99;
 }
 message SetAutoAttachResponse {}
 
 message SetDiscoverTargetsRequest {
   bool discover = 1;
   repeated FilterEntry filter = 2;
+  string session_id = 99;
 }
 message SetDiscoverTargetsResponse {}
 
@@ -199,6 +213,7 @@ message SetDiscoverTargetsResponse {}
 message SubscribeTargetEventsRequest {
   // Optional filter to only receive events for certain target types.
   repeated FilterEntry filter = 1;
+  string session_id = 99;
 }
 
 message TargetEvent {

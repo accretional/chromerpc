@@ -1089,6 +1089,7 @@ func (x *MediaQueryExpression) GetComputedLength() float64 {
 
 type EnableRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1121,6 +1122,13 @@ func (x *EnableRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use EnableRequest.ProtoReflect.Descriptor instead.
 func (*EnableRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_css_css_proto_rawDescGZIP(), []int{14}
+}
+
+func (x *EnableRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type EnableResponse struct {
@@ -1161,6 +1169,7 @@ func (*EnableResponse) Descriptor() ([]byte, []int) {
 
 type DisableRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1193,6 +1202,13 @@ func (x *DisableRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use DisableRequest.ProtoReflect.Descriptor instead.
 func (*DisableRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_css_css_proto_rawDescGZIP(), []int{16}
+}
+
+func (x *DisableRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type DisableResponse struct {
@@ -1234,6 +1250,7 @@ func (*DisableResponse) Descriptor() ([]byte, []int) {
 type GetMatchedStylesForNodeRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	NodeId        int32                  `protobuf:"varint,1,opt,name=node_id,json=nodeId,proto3" json:"node_id,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1273,6 +1290,13 @@ func (x *GetMatchedStylesForNodeRequest) GetNodeId() int32 {
 		return x.NodeId
 	}
 	return 0
+}
+
+func (x *GetMatchedStylesForNodeRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type GetMatchedStylesForNodeResponse struct {
@@ -1450,6 +1474,7 @@ func (x *InheritedStyleEntry) GetMatchedCssRules() []*RuleMatch {
 type GetComputedStyleForNodeRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	NodeId        int32                  `protobuf:"varint,1,opt,name=node_id,json=nodeId,proto3" json:"node_id,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1489,6 +1514,13 @@ func (x *GetComputedStyleForNodeRequest) GetNodeId() int32 {
 		return x.NodeId
 	}
 	return 0
+}
+
+func (x *GetComputedStyleForNodeRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type GetComputedStyleForNodeResponse struct {
@@ -1538,6 +1570,7 @@ func (x *GetComputedStyleForNodeResponse) GetComputedStyle() []*CSSComputedStyle
 type GetInlineStylesForNodeRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	NodeId        int32                  `protobuf:"varint,1,opt,name=node_id,json=nodeId,proto3" json:"node_id,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1577,6 +1610,13 @@ func (x *GetInlineStylesForNodeRequest) GetNodeId() int32 {
 		return x.NodeId
 	}
 	return 0
+}
+
+func (x *GetInlineStylesForNodeRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type GetInlineStylesForNodeResponse struct {
@@ -1634,6 +1674,7 @@ func (x *GetInlineStylesForNodeResponse) GetAttributesStyle() *CSSStyle {
 type GetStyleSheetTextRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	StyleSheetId  string                 `protobuf:"bytes,1,opt,name=style_sheet_id,json=styleSheetId,proto3" json:"style_sheet_id,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1671,6 +1712,13 @@ func (*GetStyleSheetTextRequest) Descriptor() ([]byte, []int) {
 func (x *GetStyleSheetTextRequest) GetStyleSheetId() string {
 	if x != nil {
 		return x.StyleSheetId
+	}
+	return ""
+}
+
+func (x *GetStyleSheetTextRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -1723,6 +1771,7 @@ type SetStyleSheetTextRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	StyleSheetId  string                 `protobuf:"bytes,1,opt,name=style_sheet_id,json=styleSheetId,proto3" json:"style_sheet_id,omitempty"`
 	Text          string                 `protobuf:"bytes,2,opt,name=text,proto3" json:"text,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1767,6 +1816,13 @@ func (x *SetStyleSheetTextRequest) GetStyleSheetId() string {
 func (x *SetStyleSheetTextRequest) GetText() string {
 	if x != nil {
 		return x.Text
+	}
+	return ""
+}
+
+func (x *SetStyleSheetTextRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -1818,6 +1874,7 @@ func (x *SetStyleSheetTextResponse) GetSourceMapUrl() string {
 type SetStyleTextsRequest struct {
 	state         protoimpl.MessageState  `protogen:"open.v1"`
 	Edits         []*StyleDeclarationEdit `protobuf:"bytes,1,rep,name=edits,proto3" json:"edits,omitempty"`
+	SessionId     string                  `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1857,6 +1914,13 @@ func (x *SetStyleTextsRequest) GetEdits() []*StyleDeclarationEdit {
 		return x.Edits
 	}
 	return nil
+}
+
+func (x *SetStyleTextsRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type SetStyleTextsResponse struct {
@@ -1908,6 +1972,7 @@ type AddRuleRequest struct {
 	StyleSheetId  string                 `protobuf:"bytes,1,opt,name=style_sheet_id,json=styleSheetId,proto3" json:"style_sheet_id,omitempty"`
 	RuleText      string                 `protobuf:"bytes,2,opt,name=rule_text,json=ruleText,proto3" json:"rule_text,omitempty"`
 	Location      *SourceRange           `protobuf:"bytes,3,opt,name=location,proto3" json:"location,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1963,6 +2028,13 @@ func (x *AddRuleRequest) GetLocation() *SourceRange {
 	return nil
 }
 
+func (x *AddRuleRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type AddRuleResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Rule          *CSSRule               `protobuf:"bytes,1,opt,name=rule,proto3" json:"rule,omitempty"`
@@ -2010,6 +2082,7 @@ func (x *AddRuleResponse) GetRule() *CSSRule {
 type CreateStyleSheetRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	FrameId       string                 `protobuf:"bytes,1,opt,name=frame_id,json=frameId,proto3" json:"frame_id,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2047,6 +2120,13 @@ func (*CreateStyleSheetRequest) Descriptor() ([]byte, []int) {
 func (x *CreateStyleSheetRequest) GetFrameId() string {
 	if x != nil {
 		return x.FrameId
+	}
+	return ""
+}
+
+func (x *CreateStyleSheetRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -2098,6 +2178,7 @@ func (x *CreateStyleSheetResponse) GetStyleSheetId() string {
 type GetBackgroundColorsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	NodeId        int32                  `protobuf:"varint,1,opt,name=node_id,json=nodeId,proto3" json:"node_id,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2137,6 +2218,13 @@ func (x *GetBackgroundColorsRequest) GetNodeId() int32 {
 		return x.NodeId
 	}
 	return 0
+}
+
+func (x *GetBackgroundColorsRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type GetBackgroundColorsResponse struct {
@@ -2202,6 +2290,7 @@ func (x *GetBackgroundColorsResponse) GetComputedFontWeight() string {
 type GetPlatformFontsForNodeRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	NodeId        int32                  `protobuf:"varint,1,opt,name=node_id,json=nodeId,proto3" json:"node_id,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2241,6 +2330,13 @@ func (x *GetPlatformFontsForNodeRequest) GetNodeId() int32 {
 		return x.NodeId
 	}
 	return 0
+}
+
+func (x *GetPlatformFontsForNodeRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type GetPlatformFontsForNodeResponse struct {
@@ -2289,6 +2385,7 @@ func (x *GetPlatformFontsForNodeResponse) GetFonts() []*PlatformFontUsage {
 
 type GetMediaQueriesRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2321,6 +2418,13 @@ func (x *GetMediaQueriesRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use GetMediaQueriesRequest.ProtoReflect.Descriptor instead.
 func (*GetMediaQueriesRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_css_css_proto_rawDescGZIP(), []int{40}
+}
+
+func (x *GetMediaQueriesRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type GetMediaQueriesResponse struct {
@@ -2369,6 +2473,7 @@ func (x *GetMediaQueriesResponse) GetMedias() []*CSSMedia {
 
 type StartRuleUsageTrackingRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2401,6 +2506,13 @@ func (x *StartRuleUsageTrackingRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use StartRuleUsageTrackingRequest.ProtoReflect.Descriptor instead.
 func (*StartRuleUsageTrackingRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_css_css_proto_rawDescGZIP(), []int{42}
+}
+
+func (x *StartRuleUsageTrackingRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type StartRuleUsageTrackingResponse struct {
@@ -2441,6 +2553,7 @@ func (*StartRuleUsageTrackingResponse) Descriptor() ([]byte, []int) {
 
 type StopRuleUsageTrackingRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2473,6 +2586,13 @@ func (x *StopRuleUsageTrackingRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use StopRuleUsageTrackingRequest.ProtoReflect.Descriptor instead.
 func (*StopRuleUsageTrackingRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_css_css_proto_rawDescGZIP(), []int{44}
+}
+
+func (x *StopRuleUsageTrackingRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type StopRuleUsageTrackingResponse struct {
@@ -2521,6 +2641,7 @@ func (x *StopRuleUsageTrackingResponse) GetRuleUsage() []*RuleUsage {
 
 type TakeCoverageDeltaRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2553,6 +2674,13 @@ func (x *TakeCoverageDeltaRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use TakeCoverageDeltaRequest.ProtoReflect.Descriptor instead.
 func (*TakeCoverageDeltaRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_css_css_proto_rawDescGZIP(), []int{46}
+}
+
+func (x *TakeCoverageDeltaRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type TakeCoverageDeltaResponse struct {
@@ -2610,6 +2738,7 @@ func (x *TakeCoverageDeltaResponse) GetTimestamp() float64 {
 type CollectClassNamesRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	StyleSheetId  string                 `protobuf:"bytes,1,opt,name=style_sheet_id,json=styleSheetId,proto3" json:"style_sheet_id,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2647,6 +2776,13 @@ func (*CollectClassNamesRequest) Descriptor() ([]byte, []int) {
 func (x *CollectClassNamesRequest) GetStyleSheetId() string {
 	if x != nil {
 		return x.StyleSheetId
+	}
+	return ""
+}
+
+func (x *CollectClassNamesRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -2700,6 +2836,7 @@ type SetRuleSelectorRequest struct {
 	StyleSheetId  string                 `protobuf:"bytes,1,opt,name=style_sheet_id,json=styleSheetId,proto3" json:"style_sheet_id,omitempty"`
 	Range         *SourceRange           `protobuf:"bytes,2,opt,name=range,proto3" json:"range,omitempty"`
 	Selector      string                 `protobuf:"bytes,3,opt,name=selector,proto3" json:"selector,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2755,6 +2892,13 @@ func (x *SetRuleSelectorRequest) GetSelector() string {
 	return ""
 }
 
+func (x *SetRuleSelectorRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type SetRuleSelectorResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	SelectorText  string                 `protobuf:"bytes,1,opt,name=selector_text,json=selectorText,proto3" json:"selector_text,omitempty"`
@@ -2803,6 +2947,7 @@ type ForcePseudoStateRequest struct {
 	state               protoimpl.MessageState `protogen:"open.v1"`
 	NodeId              int32                  `protobuf:"varint,1,opt,name=node_id,json=nodeId,proto3" json:"node_id,omitempty"`
 	ForcedPseudoClasses []string               `protobuf:"bytes,2,rep,name=forced_pseudo_classes,json=forcedPseudoClasses,proto3" json:"forced_pseudo_classes,omitempty"`
+	SessionId           string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields       protoimpl.UnknownFields
 	sizeCache           protoimpl.SizeCache
 }
@@ -2851,6 +2996,13 @@ func (x *ForcePseudoStateRequest) GetForcedPseudoClasses() []string {
 	return nil
 }
 
+func (x *ForcePseudoStateRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type ForcePseudoStateResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -2889,6 +3041,7 @@ func (*ForcePseudoStateResponse) Descriptor() ([]byte, []int) {
 
 type SubscribeEventsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2921,6 +3074,13 @@ func (x *SubscribeEventsRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use SubscribeEventsRequest.ProtoReflect.Descriptor instead.
 func (*SubscribeEventsRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_css_css_proto_rawDescGZIP(), []int{54}
+}
+
+func (x *SubscribeEventsRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type CSSEvent struct {
@@ -3366,13 +3526,19 @@ const file_proto_cdp_css_css_proto_rawDesc = "" +
 	"\afeature\x18\x03 \x01(\tR\afeature\x125\n" +
 	"\vvalue_range\x18\x04 \x01(\v2\x14.cdp.css.SourceRangeR\n" +
 	"valueRange\x12'\n" +
-	"\x0fcomputed_length\x18\x05 \x01(\x01R\x0ecomputedLength\"\x0f\n" +
-	"\rEnableRequest\"\x10\n" +
-	"\x0eEnableResponse\"\x10\n" +
-	"\x0eDisableRequest\"\x11\n" +
-	"\x0fDisableResponse\"9\n" +
+	"\x0fcomputed_length\x18\x05 \x01(\x01R\x0ecomputedLength\".\n" +
+	"\rEnableRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x10\n" +
+	"\x0eEnableResponse\"/\n" +
+	"\x0eDisableRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x11\n" +
+	"\x0fDisableResponse\"X\n" +
 	"\x1eGetMatchedStylesForNodeRequest\x12\x17\n" +
-	"\anode_id\x18\x01 \x01(\x05R\x06nodeId\"\x91\x02\n" +
+	"\anode_id\x18\x01 \x01(\x05R\x06nodeId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x91\x02\n" +
 	"\x1fGetMatchedStylesForNodeResponse\x124\n" +
 	"\finline_style\x18\x01 \x01(\v2\x11.cdp.css.CSSStyleR\vinlineStyle\x12<\n" +
 	"\x10attributes_style\x18\x02 \x01(\v2\x11.cdp.css.CSSStyleR\x0fattributesStyle\x12>\n" +
@@ -3383,78 +3549,112 @@ const file_proto_cdp_css_css_proto_rawDesc = "" +
 	"\x12matching_selectors\x18\x02 \x03(\x05R\x11matchingSelectors\"\x8b\x01\n" +
 	"\x13InheritedStyleEntry\x124\n" +
 	"\finline_style\x18\x01 \x01(\v2\x11.cdp.css.CSSStyleR\vinlineStyle\x12>\n" +
-	"\x11matched_css_rules\x18\x02 \x03(\v2\x12.cdp.css.RuleMatchR\x0fmatchedCssRules\"9\n" +
+	"\x11matched_css_rules\x18\x02 \x03(\v2\x12.cdp.css.RuleMatchR\x0fmatchedCssRules\"X\n" +
 	"\x1eGetComputedStyleForNodeRequest\x12\x17\n" +
-	"\anode_id\x18\x01 \x01(\x05R\x06nodeId\"k\n" +
+	"\anode_id\x18\x01 \x01(\x05R\x06nodeId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"k\n" +
 	"\x1fGetComputedStyleForNodeResponse\x12H\n" +
-	"\x0ecomputed_style\x18\x01 \x03(\v2!.cdp.css.CSSComputedStylePropertyR\rcomputedStyle\"8\n" +
+	"\x0ecomputed_style\x18\x01 \x03(\v2!.cdp.css.CSSComputedStylePropertyR\rcomputedStyle\"W\n" +
 	"\x1dGetInlineStylesForNodeRequest\x12\x17\n" +
-	"\anode_id\x18\x01 \x01(\x05R\x06nodeId\"\x94\x01\n" +
+	"\anode_id\x18\x01 \x01(\x05R\x06nodeId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x94\x01\n" +
 	"\x1eGetInlineStylesForNodeResponse\x124\n" +
 	"\finline_style\x18\x01 \x01(\v2\x11.cdp.css.CSSStyleR\vinlineStyle\x12<\n" +
-	"\x10attributes_style\x18\x02 \x01(\v2\x11.cdp.css.CSSStyleR\x0fattributesStyle\"@\n" +
+	"\x10attributes_style\x18\x02 \x01(\v2\x11.cdp.css.CSSStyleR\x0fattributesStyle\"_\n" +
 	"\x18GetStyleSheetTextRequest\x12$\n" +
-	"\x0estyle_sheet_id\x18\x01 \x01(\tR\fstyleSheetId\"/\n" +
+	"\x0estyle_sheet_id\x18\x01 \x01(\tR\fstyleSheetId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"/\n" +
 	"\x19GetStyleSheetTextResponse\x12\x12\n" +
-	"\x04text\x18\x01 \x01(\tR\x04text\"T\n" +
+	"\x04text\x18\x01 \x01(\tR\x04text\"s\n" +
 	"\x18SetStyleSheetTextRequest\x12$\n" +
 	"\x0estyle_sheet_id\x18\x01 \x01(\tR\fstyleSheetId\x12\x12\n" +
-	"\x04text\x18\x02 \x01(\tR\x04text\"A\n" +
+	"\x04text\x18\x02 \x01(\tR\x04text\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"A\n" +
 	"\x19SetStyleSheetTextResponse\x12$\n" +
-	"\x0esource_map_url\x18\x01 \x01(\tR\fsourceMapUrl\"K\n" +
+	"\x0esource_map_url\x18\x01 \x01(\tR\fsourceMapUrl\"j\n" +
 	"\x14SetStyleTextsRequest\x123\n" +
-	"\x05edits\x18\x01 \x03(\v2\x1d.cdp.css.StyleDeclarationEditR\x05edits\"B\n" +
+	"\x05edits\x18\x01 \x03(\v2\x1d.cdp.css.StyleDeclarationEditR\x05edits\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"B\n" +
 	"\x15SetStyleTextsResponse\x12)\n" +
-	"\x06styles\x18\x01 \x03(\v2\x11.cdp.css.CSSStyleR\x06styles\"\x85\x01\n" +
+	"\x06styles\x18\x01 \x03(\v2\x11.cdp.css.CSSStyleR\x06styles\"\xa4\x01\n" +
 	"\x0eAddRuleRequest\x12$\n" +
 	"\x0estyle_sheet_id\x18\x01 \x01(\tR\fstyleSheetId\x12\x1b\n" +
 	"\trule_text\x18\x02 \x01(\tR\bruleText\x120\n" +
-	"\blocation\x18\x03 \x01(\v2\x14.cdp.css.SourceRangeR\blocation\"7\n" +
+	"\blocation\x18\x03 \x01(\v2\x14.cdp.css.SourceRangeR\blocation\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"7\n" +
 	"\x0fAddRuleResponse\x12$\n" +
-	"\x04rule\x18\x01 \x01(\v2\x10.cdp.css.CSSRuleR\x04rule\"4\n" +
+	"\x04rule\x18\x01 \x01(\v2\x10.cdp.css.CSSRuleR\x04rule\"S\n" +
 	"\x17CreateStyleSheetRequest\x12\x19\n" +
-	"\bframe_id\x18\x01 \x01(\tR\aframeId\"@\n" +
+	"\bframe_id\x18\x01 \x01(\tR\aframeId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"@\n" +
 	"\x18CreateStyleSheetResponse\x12$\n" +
-	"\x0estyle_sheet_id\x18\x01 \x01(\tR\fstyleSheetId\"5\n" +
+	"\x0estyle_sheet_id\x18\x01 \x01(\tR\fstyleSheetId\"T\n" +
 	"\x1aGetBackgroundColorsRequest\x12\x17\n" +
-	"\anode_id\x18\x01 \x01(\x05R\x06nodeId\"\xaa\x01\n" +
+	"\anode_id\x18\x01 \x01(\x05R\x06nodeId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\xaa\x01\n" +
 	"\x1bGetBackgroundColorsResponse\x12+\n" +
 	"\x11background_colors\x18\x01 \x03(\tR\x10backgroundColors\x12,\n" +
 	"\x12computed_font_size\x18\x02 \x01(\tR\x10computedFontSize\x120\n" +
-	"\x14computed_font_weight\x18\x03 \x01(\tR\x12computedFontWeight\"9\n" +
+	"\x14computed_font_weight\x18\x03 \x01(\tR\x12computedFontWeight\"X\n" +
 	"\x1eGetPlatformFontsForNodeRequest\x12\x17\n" +
-	"\anode_id\x18\x01 \x01(\x05R\x06nodeId\"S\n" +
+	"\anode_id\x18\x01 \x01(\x05R\x06nodeId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"S\n" +
 	"\x1fGetPlatformFontsForNodeResponse\x120\n" +
-	"\x05fonts\x18\x01 \x03(\v2\x1a.cdp.css.PlatformFontUsageR\x05fonts\"\x18\n" +
-	"\x16GetMediaQueriesRequest\"D\n" +
+	"\x05fonts\x18\x01 \x03(\v2\x1a.cdp.css.PlatformFontUsageR\x05fonts\"7\n" +
+	"\x16GetMediaQueriesRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"D\n" +
 	"\x17GetMediaQueriesResponse\x12)\n" +
-	"\x06medias\x18\x01 \x03(\v2\x11.cdp.css.CSSMediaR\x06medias\"\x1f\n" +
-	"\x1dStartRuleUsageTrackingRequest\" \n" +
-	"\x1eStartRuleUsageTrackingResponse\"\x1e\n" +
-	"\x1cStopRuleUsageTrackingRequest\"R\n" +
+	"\x06medias\x18\x01 \x03(\v2\x11.cdp.css.CSSMediaR\x06medias\">\n" +
+	"\x1dStartRuleUsageTrackingRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\" \n" +
+	"\x1eStartRuleUsageTrackingResponse\"=\n" +
+	"\x1cStopRuleUsageTrackingRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"R\n" +
 	"\x1dStopRuleUsageTrackingResponse\x121\n" +
 	"\n" +
-	"rule_usage\x18\x01 \x03(\v2\x12.cdp.css.RuleUsageR\truleUsage\"\x1a\n" +
-	"\x18TakeCoverageDeltaRequest\"i\n" +
+	"rule_usage\x18\x01 \x03(\v2\x12.cdp.css.RuleUsageR\truleUsage\"9\n" +
+	"\x18TakeCoverageDeltaRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"i\n" +
 	"\x19TakeCoverageDeltaResponse\x12.\n" +
 	"\bcoverage\x18\x01 \x03(\v2\x12.cdp.css.RuleUsageR\bcoverage\x12\x1c\n" +
-	"\ttimestamp\x18\x02 \x01(\x01R\ttimestamp\"@\n" +
+	"\ttimestamp\x18\x02 \x01(\x01R\ttimestamp\"_\n" +
 	"\x18CollectClassNamesRequest\x12$\n" +
-	"\x0estyle_sheet_id\x18\x01 \x01(\tR\fstyleSheetId\"<\n" +
+	"\x0estyle_sheet_id\x18\x01 \x01(\tR\fstyleSheetId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"<\n" +
 	"\x19CollectClassNamesResponse\x12\x1f\n" +
 	"\vclass_names\x18\x01 \x03(\tR\n" +
-	"classNames\"\x86\x01\n" +
+	"classNames\"\xa5\x01\n" +
 	"\x16SetRuleSelectorRequest\x12$\n" +
 	"\x0estyle_sheet_id\x18\x01 \x01(\tR\fstyleSheetId\x12*\n" +
 	"\x05range\x18\x02 \x01(\v2\x14.cdp.css.SourceRangeR\x05range\x12\x1a\n" +
-	"\bselector\x18\x03 \x01(\tR\bselector\">\n" +
+	"\bselector\x18\x03 \x01(\tR\bselector\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\">\n" +
 	"\x17SetRuleSelectorResponse\x12#\n" +
-	"\rselector_text\x18\x01 \x01(\tR\fselectorText\"f\n" +
+	"\rselector_text\x18\x01 \x01(\tR\fselectorText\"\x85\x01\n" +
 	"\x17ForcePseudoStateRequest\x12\x17\n" +
 	"\anode_id\x18\x01 \x01(\x05R\x06nodeId\x122\n" +
-	"\x15forced_pseudo_classes\x18\x02 \x03(\tR\x13forcedPseudoClasses\"\x1a\n" +
-	"\x18ForcePseudoStateResponse\"\x18\n" +
-	"\x16SubscribeEventsRequest\"\xaf\x03\n" +
+	"\x15forced_pseudo_classes\x18\x02 \x03(\tR\x13forcedPseudoClasses\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x1a\n" +
+	"\x18ForcePseudoStateResponse\"7\n" +
+	"\x16SubscribeEventsRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\xaf\x03\n" +
 	"\bCSSEvent\x12K\n" +
 	"\x11style_sheet_added\x18\x01 \x01(\v2\x1d.cdp.css.StyleSheetAddedEventH\x00R\x0fstyleSheetAdded\x12Q\n" +
 	"\x13style_sheet_removed\x18\x02 \x01(\v2\x1f.cdp.css.StyleSheetRemovedEventH\x00R\x11styleSheetRemoved\x12Q\n" +

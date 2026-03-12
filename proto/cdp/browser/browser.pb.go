@@ -315,6 +315,7 @@ func (x *PermissionDescriptor) GetPanTiltZoom() bool {
 
 type GetVersionRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -347,6 +348,13 @@ func (x *GetVersionRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use GetVersionRequest.ProtoReflect.Descriptor instead.
 func (*GetVersionRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_browser_browser_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *GetVersionRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type GetVersionResponse struct {
@@ -427,6 +435,7 @@ func (x *GetVersionResponse) GetJsVersion() string {
 
 type CloseRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -459,6 +468,13 @@ func (x *CloseRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use CloseRequest.ProtoReflect.Descriptor instead.
 func (*CloseRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_browser_browser_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *CloseRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type CloseResponse struct {
@@ -499,6 +515,7 @@ func (*CloseResponse) Descriptor() ([]byte, []int) {
 
 type GetBrowserCommandLineRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -531,6 +548,13 @@ func (x *GetBrowserCommandLineRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use GetBrowserCommandLineRequest.ProtoReflect.Descriptor instead.
 func (*GetBrowserCommandLineRequest) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_browser_browser_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *GetBrowserCommandLineRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type GetBrowserCommandLineResponse struct {
@@ -581,6 +605,7 @@ type GetHistogramsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Query         string                 `protobuf:"bytes,1,opt,name=query,proto3" json:"query,omitempty"`
 	Delta         bool                   `protobuf:"varint,2,opt,name=delta,proto3" json:"delta,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -627,6 +652,13 @@ func (x *GetHistogramsRequest) GetDelta() bool {
 		return x.Delta
 	}
 	return false
+}
+
+func (x *GetHistogramsRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type GetHistogramsResponse struct {
@@ -677,6 +709,7 @@ type GetHistogramRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 	Delta         bool                   `protobuf:"varint,2,opt,name=delta,proto3" json:"delta,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -723,6 +756,13 @@ func (x *GetHistogramRequest) GetDelta() bool {
 		return x.Delta
 	}
 	return false
+}
+
+func (x *GetHistogramRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type GetHistogramResponse struct {
@@ -772,6 +812,7 @@ func (x *GetHistogramResponse) GetHistogram() *Histogram {
 type GetWindowBoundsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	WindowId      int32                  `protobuf:"varint,1,opt,name=window_id,json=windowId,proto3" json:"window_id,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -811,6 +852,13 @@ func (x *GetWindowBoundsRequest) GetWindowId() int32 {
 		return x.WindowId
 	}
 	return 0
+}
+
+func (x *GetWindowBoundsRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
 }
 
 type GetWindowBoundsResponse struct {
@@ -860,6 +908,7 @@ func (x *GetWindowBoundsResponse) GetBounds() *Bounds {
 type GetWindowForTargetRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	TargetId      string                 `protobuf:"bytes,1,opt,name=target_id,json=targetId,proto3" json:"target_id,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -897,6 +946,13 @@ func (*GetWindowForTargetRequest) Descriptor() ([]byte, []int) {
 func (x *GetWindowForTargetRequest) GetTargetId() string {
 	if x != nil {
 		return x.TargetId
+	}
+	return ""
+}
+
+func (x *GetWindowForTargetRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -957,6 +1013,7 @@ type SetWindowBoundsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	WindowId      int32                  `protobuf:"varint,1,opt,name=window_id,json=windowId,proto3" json:"window_id,omitempty"`
 	Bounds        *Bounds                `protobuf:"bytes,2,opt,name=bounds,proto3" json:"bounds,omitempty"`
+	SessionId     string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1005,6 +1062,13 @@ func (x *SetWindowBoundsRequest) GetBounds() *Bounds {
 	return nil
 }
 
+func (x *SetWindowBoundsRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type SetWindowBoundsResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -1047,6 +1111,7 @@ type SetPermissionRequest struct {
 	Setting          string                 `protobuf:"bytes,2,opt,name=setting,proto3" json:"setting,omitempty"` // "granted","denied","prompt"
 	Origin           string                 `protobuf:"bytes,3,opt,name=origin,proto3" json:"origin,omitempty"`
 	BrowserContextId string                 `protobuf:"bytes,4,opt,name=browser_context_id,json=browserContextId,proto3" json:"browser_context_id,omitempty"`
+	SessionId        string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields    protoimpl.UnknownFields
 	sizeCache        protoimpl.SizeCache
 }
@@ -1109,6 +1174,13 @@ func (x *SetPermissionRequest) GetBrowserContextId() string {
 	return ""
 }
 
+func (x *SetPermissionRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type SetPermissionResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -1150,6 +1222,7 @@ type GrantPermissionsRequest struct {
 	Permissions      []string               `protobuf:"bytes,1,rep,name=permissions,proto3" json:"permissions,omitempty"`
 	Origin           string                 `protobuf:"bytes,2,opt,name=origin,proto3" json:"origin,omitempty"`
 	BrowserContextId string                 `protobuf:"bytes,3,opt,name=browser_context_id,json=browserContextId,proto3" json:"browser_context_id,omitempty"`
+	SessionId        string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields    protoimpl.UnknownFields
 	sizeCache        protoimpl.SizeCache
 }
@@ -1205,6 +1278,13 @@ func (x *GrantPermissionsRequest) GetBrowserContextId() string {
 	return ""
 }
 
+func (x *GrantPermissionsRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type GrantPermissionsResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -1244,6 +1324,7 @@ func (*GrantPermissionsResponse) Descriptor() ([]byte, []int) {
 type ResetPermissionsRequest struct {
 	state            protoimpl.MessageState `protogen:"open.v1"`
 	BrowserContextId string                 `protobuf:"bytes,1,opt,name=browser_context_id,json=browserContextId,proto3" json:"browser_context_id,omitempty"`
+	SessionId        string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields    protoimpl.UnknownFields
 	sizeCache        protoimpl.SizeCache
 }
@@ -1281,6 +1362,13 @@ func (*ResetPermissionsRequest) Descriptor() ([]byte, []int) {
 func (x *ResetPermissionsRequest) GetBrowserContextId() string {
 	if x != nil {
 		return x.BrowserContextId
+	}
+	return ""
+}
+
+func (x *ResetPermissionsRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -1327,6 +1415,7 @@ type SetDownloadBehaviorRequest struct {
 	BrowserContextId string                 `protobuf:"bytes,2,opt,name=browser_context_id,json=browserContextId,proto3" json:"browser_context_id,omitempty"`
 	DownloadPath     string                 `protobuf:"bytes,3,opt,name=download_path,json=downloadPath,proto3" json:"download_path,omitempty"`
 	EventsEnabled    bool                   `protobuf:"varint,4,opt,name=events_enabled,json=eventsEnabled,proto3" json:"events_enabled,omitempty"`
+	SessionId        string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields    protoimpl.UnknownFields
 	sizeCache        protoimpl.SizeCache
 }
@@ -1389,6 +1478,13 @@ func (x *SetDownloadBehaviorRequest) GetEventsEnabled() bool {
 	return false
 }
 
+func (x *SetDownloadBehaviorRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
 type SetDownloadBehaviorResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -1429,6 +1525,7 @@ type CancelDownloadRequest struct {
 	state            protoimpl.MessageState `protogen:"open.v1"`
 	Guid             string                 `protobuf:"bytes,1,opt,name=guid,proto3" json:"guid,omitempty"`
 	BrowserContextId string                 `protobuf:"bytes,2,opt,name=browser_context_id,json=browserContextId,proto3" json:"browser_context_id,omitempty"`
+	SessionId        string                 `protobuf:"bytes,99,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
 	unknownFields    protoimpl.UnknownFields
 	sizeCache        protoimpl.SizeCache
 }
@@ -1473,6 +1570,13 @@ func (x *CancelDownloadRequest) GetGuid() string {
 func (x *CancelDownloadRequest) GetBrowserContextId() string {
 	if x != nil {
 		return x.BrowserContextId
+	}
+	return ""
+}
+
+func (x *CancelDownloadRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
 	}
 	return ""
 }
@@ -1539,8 +1643,10 @@ const file_proto_cdp_browser_browser_proto_rawDesc = "" +
 	"\x11user_visible_only\x18\x03 \x01(\bR\x0fuserVisibleOnly\x12<\n" +
 	"\x1aallow_without_sanitization\x18\x04 \x01(\bR\x18allowWithoutSanitization\x122\n" +
 	"\x15allow_without_gesture\x18\x05 \x01(\bR\x13allowWithoutGesture\x12\"\n" +
-	"\rpan_tilt_zoom\x18\x06 \x01(\bR\vpanTiltZoom\"\x13\n" +
-	"\x11GetVersionRequest\"\xb3\x01\n" +
+	"\rpan_tilt_zoom\x18\x06 \x01(\bR\vpanTiltZoom\"2\n" +
+	"\x11GetVersionRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\xb3\x01\n" +
 	"\x12GetVersionResponse\x12)\n" +
 	"\x10protocol_version\x18\x01 \x01(\tR\x0fprotocolVersion\x12\x18\n" +
 	"\aproduct\x18\x02 \x01(\tR\aproduct\x12\x1a\n" +
@@ -1548,62 +1654,86 @@ const file_proto_cdp_browser_browser_proto_rawDesc = "" +
 	"\n" +
 	"user_agent\x18\x04 \x01(\tR\tuserAgent\x12\x1d\n" +
 	"\n" +
-	"js_version\x18\x05 \x01(\tR\tjsVersion\"\x0e\n" +
-	"\fCloseRequest\"\x0f\n" +
-	"\rCloseResponse\"\x1e\n" +
-	"\x1cGetBrowserCommandLineRequest\"=\n" +
+	"js_version\x18\x05 \x01(\tR\tjsVersion\"-\n" +
+	"\fCloseRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x0f\n" +
+	"\rCloseResponse\"=\n" +
+	"\x1cGetBrowserCommandLineRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"=\n" +
 	"\x1dGetBrowserCommandLineResponse\x12\x1c\n" +
-	"\targuments\x18\x01 \x03(\tR\targuments\"B\n" +
+	"\targuments\x18\x01 \x03(\tR\targuments\"a\n" +
 	"\x14GetHistogramsRequest\x12\x14\n" +
 	"\x05query\x18\x01 \x01(\tR\x05query\x12\x14\n" +
-	"\x05delta\x18\x02 \x01(\bR\x05delta\"O\n" +
+	"\x05delta\x18\x02 \x01(\bR\x05delta\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"O\n" +
 	"\x15GetHistogramsResponse\x126\n" +
 	"\n" +
 	"histograms\x18\x01 \x03(\v2\x16.cdp.browser.HistogramR\n" +
-	"histograms\"?\n" +
+	"histograms\"^\n" +
 	"\x13GetHistogramRequest\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12\x14\n" +
-	"\x05delta\x18\x02 \x01(\bR\x05delta\"L\n" +
+	"\x05delta\x18\x02 \x01(\bR\x05delta\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"L\n" +
 	"\x14GetHistogramResponse\x124\n" +
-	"\thistogram\x18\x01 \x01(\v2\x16.cdp.browser.HistogramR\thistogram\"5\n" +
+	"\thistogram\x18\x01 \x01(\v2\x16.cdp.browser.HistogramR\thistogram\"T\n" +
 	"\x16GetWindowBoundsRequest\x12\x1b\n" +
-	"\twindow_id\x18\x01 \x01(\x05R\bwindowId\"F\n" +
+	"\twindow_id\x18\x01 \x01(\x05R\bwindowId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"F\n" +
 	"\x17GetWindowBoundsResponse\x12+\n" +
-	"\x06bounds\x18\x01 \x01(\v2\x13.cdp.browser.BoundsR\x06bounds\"8\n" +
+	"\x06bounds\x18\x01 \x01(\v2\x13.cdp.browser.BoundsR\x06bounds\"W\n" +
 	"\x19GetWindowForTargetRequest\x12\x1b\n" +
-	"\ttarget_id\x18\x01 \x01(\tR\btargetId\"f\n" +
+	"\ttarget_id\x18\x01 \x01(\tR\btargetId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"f\n" +
 	"\x1aGetWindowForTargetResponse\x12\x1b\n" +
 	"\twindow_id\x18\x01 \x01(\x05R\bwindowId\x12+\n" +
-	"\x06bounds\x18\x02 \x01(\v2\x13.cdp.browser.BoundsR\x06bounds\"b\n" +
+	"\x06bounds\x18\x02 \x01(\v2\x13.cdp.browser.BoundsR\x06bounds\"\x81\x01\n" +
 	"\x16SetWindowBoundsRequest\x12\x1b\n" +
 	"\twindow_id\x18\x01 \x01(\x05R\bwindowId\x12+\n" +
-	"\x06bounds\x18\x02 \x01(\v2\x13.cdp.browser.BoundsR\x06bounds\"\x19\n" +
-	"\x17SetWindowBoundsResponse\"\xb9\x01\n" +
+	"\x06bounds\x18\x02 \x01(\v2\x13.cdp.browser.BoundsR\x06bounds\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x19\n" +
+	"\x17SetWindowBoundsResponse\"\xd8\x01\n" +
 	"\x14SetPermissionRequest\x12A\n" +
 	"\n" +
 	"permission\x18\x01 \x01(\v2!.cdp.browser.PermissionDescriptorR\n" +
 	"permission\x12\x18\n" +
 	"\asetting\x18\x02 \x01(\tR\asetting\x12\x16\n" +
 	"\x06origin\x18\x03 \x01(\tR\x06origin\x12,\n" +
-	"\x12browser_context_id\x18\x04 \x01(\tR\x10browserContextId\"\x17\n" +
-	"\x15SetPermissionResponse\"\x81\x01\n" +
+	"\x12browser_context_id\x18\x04 \x01(\tR\x10browserContextId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x17\n" +
+	"\x15SetPermissionResponse\"\xa0\x01\n" +
 	"\x17GrantPermissionsRequest\x12 \n" +
 	"\vpermissions\x18\x01 \x03(\tR\vpermissions\x12\x16\n" +
 	"\x06origin\x18\x02 \x01(\tR\x06origin\x12,\n" +
-	"\x12browser_context_id\x18\x03 \x01(\tR\x10browserContextId\"\x1a\n" +
-	"\x18GrantPermissionsResponse\"G\n" +
+	"\x12browser_context_id\x18\x03 \x01(\tR\x10browserContextId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x1a\n" +
+	"\x18GrantPermissionsResponse\"f\n" +
 	"\x17ResetPermissionsRequest\x12,\n" +
-	"\x12browser_context_id\x18\x01 \x01(\tR\x10browserContextId\"\x1a\n" +
-	"\x18ResetPermissionsResponse\"\xb2\x01\n" +
+	"\x12browser_context_id\x18\x01 \x01(\tR\x10browserContextId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x1a\n" +
+	"\x18ResetPermissionsResponse\"\xd1\x01\n" +
 	"\x1aSetDownloadBehaviorRequest\x12\x1a\n" +
 	"\bbehavior\x18\x01 \x01(\tR\bbehavior\x12,\n" +
 	"\x12browser_context_id\x18\x02 \x01(\tR\x10browserContextId\x12#\n" +
 	"\rdownload_path\x18\x03 \x01(\tR\fdownloadPath\x12%\n" +
-	"\x0eevents_enabled\x18\x04 \x01(\bR\reventsEnabled\"\x1d\n" +
-	"\x1bSetDownloadBehaviorResponse\"Y\n" +
+	"\x0eevents_enabled\x18\x04 \x01(\bR\reventsEnabled\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x1d\n" +
+	"\x1bSetDownloadBehaviorResponse\"x\n" +
 	"\x15CancelDownloadRequest\x12\x12\n" +
 	"\x04guid\x18\x01 \x01(\tR\x04guid\x12,\n" +
-	"\x12browser_context_id\x18\x02 \x01(\tR\x10browserContextId\"\x18\n" +
+	"\x12browser_context_id\x18\x02 \x01(\tR\x10browserContextId\x12\x1d\n" +
+	"\n" +
+	"session_id\x18c \x01(\tR\tsessionId\"\x18\n" +
 	"\x16CancelDownloadResponse2\xbe\t\n" +
 	"\x0eBrowserService\x12M\n" +
 	"\n" +

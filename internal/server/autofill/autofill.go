@@ -19,15 +19,25 @@ func New(client *cdpclient.Client) *Server {
 	return &Server{client: client}
 }
 
+// send routes a CDP command through the specified session, falling back
+// to the client's default session if sessionID is empty.
+func (s *Server) send(ctx context.Context, sessionID string, method string, params interface{}) (json.RawMessage, error) {
+	if sessionID != "" {
+		return s.client.SendWithSession(ctx, method, params, sessionID)
+	}
+	return s.client.Send(ctx, method, params)
+}
+
+
 func (s *Server) Enable(ctx context.Context, req *pb.EnableRequest) (*pb.EnableResponse, error) {
-	if _, err := s.client.Send(ctx, "Autofill.enable", nil); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Autofill.enable", nil); err != nil {
 		return nil, fmt.Errorf("Autofill.enable: %w", err)
 	}
 	return &pb.EnableResponse{}, nil
 }
 
 func (s *Server) Disable(ctx context.Context, req *pb.DisableRequest) (*pb.DisableResponse, error) {
-	if _, err := s.client.Send(ctx, "Autofill.disable", nil); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Autofill.disable", nil); err != nil {
 		return nil, fmt.Errorf("Autofill.disable: %w", err)
 	}
 	return &pb.DisableResponse{}, nil
@@ -49,7 +59,7 @@ func (s *Server) Trigger(ctx context.Context, req *pb.TriggerRequest) (*pb.Trigg
 			"cvc":         req.Card.Cvc,
 		}
 	}
-	if _, err := s.client.Send(ctx, "Autofill.trigger", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Autofill.trigger", params); err != nil {
 		return nil, fmt.Errorf("Autofill.trigger: %w", err)
 	}
 	return &pb.TriggerResponse{}, nil
@@ -72,7 +82,7 @@ func (s *Server) SetAddresses(ctx context.Context, req *pb.SetAddressesRequest) 
 	params := map[string]interface{}{
 		"addresses": addresses,
 	}
-	if _, err := s.client.Send(ctx, "Autofill.setAddresses", params); err != nil {
+	if _, err := s.send(ctx, req.SessionId, "Autofill.setAddresses", params); err != nil {
 		return nil, fmt.Errorf("Autofill.setAddresses: %w", err)
 	}
 	return &pb.SetAddressesResponse{}, nil

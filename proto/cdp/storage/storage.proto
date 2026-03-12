@@ -87,17 +87,20 @@ message CookieParam {
 message ClearDataForOriginRequest {
   string origin = 1;
   string storage_types = 2; // comma-separated: "appcache,cookies,file_systems,indexeddb,local_storage,shader_cache,websql,service_workers,cache_storage,interest_groups,shared_storage,storage_buckets,all,other"
+  string session_id = 99;
 }
 message ClearDataForOriginResponse {}
 
 message ClearDataForStorageKeyRequest {
   string storage_key = 1;
   string storage_types = 2;
+  string session_id = 99;
 }
 message ClearDataForStorageKeyResponse {}
 
 message GetUsageAndQuotaRequest {
   string origin = 1;
+  string session_id = 99;
 }
 message GetUsageAndQuotaResponse {
   double usage = 1;
@@ -108,6 +111,7 @@ message GetUsageAndQuotaResponse {
 
 message GetCookiesRequest {
   string browser_context_id = 1;
+  string session_id = 99;
 }
 message GetCookiesResponse {
   repeated StorageCookie cookies = 1;
@@ -116,37 +120,45 @@ message GetCookiesResponse {
 message SetCookiesRequest {
   repeated CookieParam cookies = 1;
   string browser_context_id = 2;
+  string session_id = 99;
 }
 message SetCookiesResponse {}
 
 message ClearCookiesRequest {
   string browser_context_id = 1;
+  string session_id = 99;
 }
 message ClearCookiesResponse {}
 
 message TrackIndexedDBForOriginRequest {
   string origin = 1;
+  string session_id = 99;
 }
 message TrackIndexedDBForOriginResponse {}
 
 message UntrackIndexedDBForOriginRequest {
   string origin = 1;
+  string session_id = 99;
 }
 message UntrackIndexedDBForOriginResponse {}
 
 message TrackCacheStorageForOriginRequest {
   string origin = 1;
+  string session_id = 99;
 }
 message TrackCacheStorageForOriginResponse {}
 
 message UntrackCacheStorageForOriginRequest {
   string origin = 1;
+  string session_id = 99;
 }
 message UntrackCacheStorageForOriginResponse {}
 
 // ==================== Events ====================
 
-message SubscribeEventsRequest {}
+message SubscribeEventsRequest {
+  string session_id = 99;
+}
 
 message StorageEvent {
   oneof event {
