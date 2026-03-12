@@ -1,0 +1,420 @@
+syntax = "proto3";
+
+package cdp.dom;
+
+option go_package = "github.com/accretional/chromerpc/proto/cdp/dom";
+
+// DOM domain exposes DOM read/write operations.
+
+service DOMService {
+  // Enables DOM agent.
+  rpc Enable(EnableRequest) returns (EnableResponse);
+
+  // Disables DOM agent.
+  rpc Disable(DisableRequest) returns (DisableResponse);
+
+  // Returns the root DOM node (and optionally the subtree) to the caller.
+  rpc GetDocument(GetDocumentRequest) returns (GetDocumentResponse);
+
+  // Executes querySelector on a given node.
+  rpc QuerySelector(QuerySelectorRequest) returns (QuerySelectorResponse);
+
+  // Executes querySelectorAll on a given node.
+  rpc QuerySelectorAll(QuerySelectorAllRequest) returns (QuerySelectorAllResponse);
+
+  // Returns node's HTML markup.
+  rpc GetOuterHTML(GetOuterHTMLRequest) returns (GetOuterHTMLResponse);
+
+  // Sets node value for a node with given id.
+  rpc SetOuterHTML(SetOuterHTMLRequest) returns (SetOuterHTMLResponse);
+
+  // Returns attributes for the specified node.
+  rpc GetAttributes(GetAttributesRequest) returns (GetAttributesResponse);
+
+  // Sets attribute for an element with given id.
+  rpc SetAttributeValue(SetAttributeValueRequest) returns (SetAttributeValueResponse);
+
+  // Sets attributes on element with given id (parses attribute text).
+  rpc SetAttributesAsText(SetAttributesAsTextRequest) returns (SetAttributesAsTextResponse);
+
+  // Removes attribute with given name from an element with given id.
+  rpc RemoveAttribute(RemoveAttributeRequest) returns (RemoveAttributeResponse);
+
+  // Removes node with given id.
+  rpc RemoveNode(RemoveNodeRequest) returns (RemoveNodeResponse);
+
+  // Sets node name for a node with given id. Returns new node's id.
+  rpc SetNodeName(SetNodeNameRequest) returns (SetNodeNameResponse);
+
+  // Sets node value for a node with given id.
+  rpc SetNodeValue(SetNodeValueRequest) returns (SetNodeValueResponse);
+
+  // Moves node into the new container, places it before the given anchor.
+  rpc MoveTo(MoveToRequest) returns (MoveToResponse);
+
+  // Requests that children of the node are returned as setChildNodes events.
+  rpc RequestChildNodes(RequestChildNodesRequest) returns (RequestChildNodesResponse);
+
+  // Requests node be sent to caller given its JavaScript object reference.
+  rpc RequestNode(RequestNodeRequest) returns (RequestNodeResponse);
+
+  // Resolves the JavaScript node object for a given NodeId or BackendNodeId.
+  rpc ResolveNode(ResolveNodeRequest) returns (ResolveNodeResponse);
+
+  // Describes node without requiring domain to be enabled.
+  rpc DescribeNode(DescribeNodeRequest) returns (DescribeNodeResponse);
+
+  // Returns boxes for the given node.
+  rpc GetBoxModel(GetBoxModelRequest) returns (GetBoxModelResponse);
+
+  // Returns node id at given location.
+  rpc GetNodeForLocation(GetNodeForLocationRequest) returns (GetNodeForLocationResponse);
+
+  // Returns the container of the given node based on container query conditions (experimental).
+  rpc GetContainerForNode(GetContainerForNodeRequest) returns (GetContainerForNodeResponse);
+
+  // Highlights DOM node.
+  rpc HighlightNode(HighlightNodeRequest) returns (HighlightNodeResponse);
+
+  // Hides any highlight.
+  rpc HideHighlight(HideHighlightRequest) returns (HideHighlightResponse);
+
+  // Marks DOM node as inspected.
+  rpc MarkUndoableState(MarkUndoableStateRequest) returns (MarkUndoableStateResponse);
+
+  // Focuses the given element.
+  rpc Focus(FocusRequest) returns (FocusResponse);
+
+  // Returns file information for the given File wrapper.
+  rpc GetFileInfo(GetFileInfoRequest) returns (GetFileInfoResponse);
+
+  // Copies a subtree into the clipboard (experimental).
+  rpc CopyTo(CopyToRequest) returns (CopyToResponse);
+
+  // Enables DOM domain events.
+  rpc SubscribeEvents(SubscribeDOMEventsRequest) returns (stream DOMEvent);
+}
+
+// ==================== Types ====================
+
+// DOM interaction is expressed in terms of mirror objects that represent
+// the actual DOM nodes.
+message Node {
+  int32 node_id = 1;
+  int32 parent_id = 2;
+  int32 backend_node_id = 3;
+  int32 node_type = 4;
+  string node_name = 5;
+  string local_name = 6;
+  string node_value = 7;
+  int32 child_node_count = 8;
+  repeated Node children = 9;
+  // Attributes as interleaved [name, value, name, value, ...].
+  repeated string attributes = 10;
+  string document_url = 11;
+  string base_url = 12;
+  string public_id = 13;
+  string system_id = 14;
+  string internal_subset = 15;
+  string xml_version = 16;
+  string name = 17;
+  string value = 18;
+  // Pseudo type for pseudo elements.
+  string pseudo_type = 19;
+  string pseudo_identifier = 20;
+  // Shadow root type.
+  string shadow_root_type = 21; // "user-agent", "open", "closed"
+  string frame_id = 22;
+  Node content_document = 23;
+  repeated Node shadow_roots = 24;
+  Node template_content = 25;
+  repeated Node pseudo_elements = 26;
+  string compatibility_mode = 27;
+  Node assigned_slot = 28;
+  bool is_scrollable = 29;
+}
+
+// RGBA color.
+message RGBA {
+  int32 r = 1;
+  int32 g = 2;
+  int32 b = 3;
+  double a = 4; // 0-1, default 1
+}
+
+// Box model.
+message BoxModel {
+  repeated double content = 1; // Content box quad
+  repeated double padding = 2; // Padding box quad
+  repeated double border = 3;  // Border box quad
+  repeated double margin = 4;  // Margin box quad
+  int32 width = 5;
+  int32 height = 6;
+  ShapeOutsideInfo shape_outside = 7;
+}
+
+message ShapeOutsideInfo {
+  repeated double bounds = 1;
+  // Shape and marginShape are complex — represented as JSON strings.
+  string shape = 2;
+  string margin_shape = 3;
+}
+
+// ==================== Requests / Responses ====================
+
+message EnableRequest {
+  string include_whitespace = 1; // "none", "all"
+}
+message EnableResponse {}
+
+message DisableRequest {}
+message DisableResponse {}
+
+message GetDocumentRequest {
+  // Maximum depth of children to return (default 1, -1 for entire subtree).
+  int32 depth = 1;
+  // Whether to traverse frames and shadow DOM.
+  bool pierce = 2;
+}
+message GetDocumentResponse {
+  Node root = 1;
+}
+
+message QuerySelectorRequest {
+  int32 node_id = 1;
+  string selector = 2;
+}
+message QuerySelectorResponse {
+  int32 node_id = 1;
+}
+
+message QuerySelectorAllRequest {
+  int32 node_id = 1;
+  string selector = 2;
+}
+message QuerySelectorAllResponse {
+  repeated int32 node_ids = 1;
+}
+
+message GetOuterHTMLRequest {
+  int32 node_id = 1;
+  int32 backend_node_id = 2;
+  string object_id = 3;
+}
+message GetOuterHTMLResponse {
+  string outer_html = 1;
+}
+
+message SetOuterHTMLRequest {
+  int32 node_id = 1;
+  string outer_html = 2;
+}
+message SetOuterHTMLResponse {}
+
+message GetAttributesRequest {
+  int32 node_id = 1;
+}
+message GetAttributesResponse {
+  // Interleaved array: [name1, value1, name2, value2, ...].
+  repeated string attributes = 1;
+}
+
+message SetAttributeValueRequest {
+  int32 node_id = 1;
+  string name = 2;
+  string value = 3;
+}
+message SetAttributeValueResponse {}
+
+message SetAttributesAsTextRequest {
+  int32 node_id = 1;
+  string text = 2;
+  string name = 3;
+}
+message SetAttributesAsTextResponse {}
+
+message RemoveAttributeRequest {
+  int32 node_id = 1;
+  string name = 2;
+}
+message RemoveAttributeResponse {}
+
+message RemoveNodeRequest {
+  int32 node_id = 1;
+}
+message RemoveNodeResponse {}
+
+message SetNodeNameRequest {
+  int32 node_id = 1;
+  string name = 2;
+}
+message SetNodeNameResponse {
+  int32 node_id = 1; // New node's id.
+}
+
+message SetNodeValueRequest {
+  int32 node_id = 1;
+  string value = 2;
+}
+message SetNodeValueResponse {}
+
+message MoveToRequest {
+  int32 node_id = 1;
+  int32 target_node_id = 2;
+  int32 insert_before_node_id = 3;
+}
+message MoveToResponse {
+  int32 node_id = 1; // New id of the moved node.
+}
+
+message RequestChildNodesRequest {
+  int32 node_id = 1;
+  int32 depth = 2;
+  bool pierce = 3;
+}
+message RequestChildNodesResponse {}
+
+message RequestNodeRequest {
+  string object_id = 1; // Runtime.RemoteObjectId
+}
+message RequestNodeResponse {
+  int32 node_id = 1;
+}
+
+message ResolveNodeRequest {
+  int32 node_id = 1;
+  int32 backend_node_id = 2;
+  string object_group = 3;
+  int32 execution_context_id = 4;
+}
+message ResolveNodeResponse {
+  // Simplified — the full RemoteObject is in the Runtime domain.
+  string object_json = 1; // JSON-encoded Runtime.RemoteObject
+}
+
+message DescribeNodeRequest {
+  int32 node_id = 1;
+  int32 backend_node_id = 2;
+  string object_id = 3;
+  int32 depth = 4;
+  bool pierce = 5;
+}
+message DescribeNodeResponse {
+  Node node = 1;
+}
+
+message GetBoxModelRequest {
+  int32 node_id = 1;
+  int32 backend_node_id = 2;
+  string object_id = 3;
+}
+message GetBoxModelResponse {
+  BoxModel model = 1;
+}
+
+message GetNodeForLocationRequest {
+  int32 x = 1;
+  int32 y = 2;
+  bool include_user_agent_shadow_dom = 3;
+  bool ignore_pointer_events_none = 4;
+}
+message GetNodeForLocationResponse {
+  int32 backend_node_id = 1;
+  string frame_id = 2;
+  int32 node_id = 3;
+}
+
+message GetContainerForNodeRequest {
+  int32 node_id = 1;
+  string container_name = 2;
+  string physical_axes = 3;
+  string logical_axes = 4;
+  bool queries_scroll_state = 5;
+}
+message GetContainerForNodeResponse {
+  int32 node_id = 1;
+}
+
+message HighlightNodeRequest {}
+message HighlightNodeResponse {}
+
+message HideHighlightRequest {}
+message HideHighlightResponse {}
+
+message MarkUndoableStateRequest {}
+message MarkUndoableStateResponse {}
+
+message FocusRequest {
+  int32 node_id = 1;
+  int32 backend_node_id = 2;
+  string object_id = 3;
+}
+message FocusResponse {}
+
+message GetFileInfoRequest {
+  string object_id = 1;
+}
+message GetFileInfoResponse {
+  string path = 1;
+}
+
+message CopyToRequest {
+  int32 node_id = 1;
+  int32 target_node_id = 2;
+  int32 insert_before_node_id = 3;
+}
+message CopyToResponse {
+  int32 node_id = 1;
+}
+
+// ==================== Events ====================
+
+message SubscribeDOMEventsRequest {
+  string session_id = 1;
+}
+
+message DOMEvent {
+  oneof event {
+    AttributeModifiedEvent attribute_modified = 1;
+    AttributeRemovedEvent attribute_removed = 2;
+    ChildNodeInsertedEvent child_node_inserted = 3;
+    ChildNodeRemovedEvent child_node_removed = 4;
+    SetChildNodesEvent set_child_nodes = 5;
+    DocumentUpdatedEvent document_updated = 6;
+    ChildNodeCountUpdatedEvent child_node_count_updated = 7;
+  }
+}
+
+message AttributeModifiedEvent {
+  int32 node_id = 1;
+  string name = 2;
+  string value = 3;
+}
+
+message AttributeRemovedEvent {
+  int32 node_id = 1;
+  string name = 2;
+}
+
+message ChildNodeInsertedEvent {
+  int32 parent_node_id = 1;
+  int32 previous_node_id = 2;
+  Node node = 3;
+}
+
+message ChildNodeRemovedEvent {
+  int32 parent_node_id = 1;
+  int32 node_id = 2;
+}
+
+message SetChildNodesEvent {
+  int32 parent_id = 1;
+  repeated Node nodes = 2;
+}
+
+message DocumentUpdatedEvent {}
+
+message ChildNodeCountUpdatedEvent {
+  int32 node_id = 1;
+  int32 child_node_count = 2;
+}

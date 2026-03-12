@@ -13,7 +13,14 @@ proto:
 	protoc \
 		--go_out=. --go_opt=paths=source_relative \
 		--go-grpc_out=. --go-grpc_opt=paths=source_relative \
-		proto/cdp/target/target.proto proto/cdp/page/page.proto
+		proto/cdp/target/target.proto \
+		proto/cdp/page/page.proto \
+		proto/cdp/runtime/runtime.proto \
+		proto/cdp/network/network.proto \
+		proto/cdp/dom/dom.proto \
+		proto/cdp/emulation/emulation.proto \
+		proto/cdp/input/input.proto \
+		proto/cdp/browser/browser.proto
 
 # Build Docker image
 docker:

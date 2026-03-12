@@ -20,21 +20,39 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 
 	"github.com/accretional/chromerpc/internal/cdpclient"
+	browserserver "github.com/accretional/chromerpc/internal/server/browser"
+	domserver "github.com/accretional/chromerpc/internal/server/dom"
+	emulationserver "github.com/accretional/chromerpc/internal/server/emulation"
+	inputserver "github.com/accretional/chromerpc/internal/server/input"
+	networkserver "github.com/accretional/chromerpc/internal/server/network"
 	pageserver "github.com/accretional/chromerpc/internal/server/page"
+	runtimeserver "github.com/accretional/chromerpc/internal/server/runtime"
 	targetserver "github.com/accretional/chromerpc/internal/server/target"
+	browserpb "github.com/accretional/chromerpc/proto/cdp/browser"
+	dompb "github.com/accretional/chromerpc/proto/cdp/dom"
+	emulationpb "github.com/accretional/chromerpc/proto/cdp/emulation"
+	inputpb "github.com/accretional/chromerpc/proto/cdp/input"
+	networkpb "github.com/accretional/chromerpc/proto/cdp/network"
 	pagepb "github.com/accretional/chromerpc/proto/cdp/page"
+	runtimepb "github.com/accretional/chromerpc/proto/cdp/runtime"
 	targetpb "github.com/accretional/chromerpc/proto/cdp/target"
 )
 
 // testEnv holds a running Chrome + gRPC server for tests.
 type testEnv struct {
-	grpcAddr     string
-	grpcServer   *grpc.Server
-	client       *cdpclient.Client
-	launchResult *cdpclient.LaunchResult
-	pageClient   pagepb.PageServiceClient
-	targetClient targetpb.TargetServiceClient
-	conn         *grpc.ClientConn
+	grpcAddr       string
+	grpcServer     *grpc.Server
+	client         *cdpclient.Client
+	launchResult   *cdpclient.LaunchResult
+	pageClient     pagepb.PageServiceClient
+	targetClient   targetpb.TargetServiceClient
+	runtimeClient  runtimepb.RuntimeServiceClient
+	networkClient  networkpb.NetworkServiceClient
+	domClient      dompb.DOMServiceClient
+	emulationClient emulationpb.EmulationServiceClient
+	inputClient    inputpb.InputServiceClient
+	browserClient  browserpb.BrowserServiceClient
+	conn           *grpc.ClientConn
 }
 
 func (e *testEnv) cleanup() {
@@ -104,6 +122,12 @@ func setupTestEnv(t *testing.T) *testEnv {
 	grpcServer := grpc.NewServer()
 	targetpb.RegisterTargetServiceServer(grpcServer, targetserver.New(client))
 	pagepb.RegisterPageServiceServer(grpcServer, pageserver.New(client))
+	runtimepb.RegisterRuntimeServiceServer(grpcServer, runtimeserver.New(client))
+	networkpb.RegisterNetworkServiceServer(grpcServer, networkserver.New(client))
+	dompb.RegisterDOMServiceServer(grpcServer, domserver.New(client))
+	emulationpb.RegisterEmulationServiceServer(grpcServer, emulationserver.New(client))
+	inputpb.RegisterInputServiceServer(grpcServer, inputserver.New(client))
+	browserpb.RegisterBrowserServiceServer(grpcServer, browserserver.New(client))
 
 	go grpcServer.Serve(lis)
 
@@ -117,13 +141,19 @@ func setupTestEnv(t *testing.T) *testEnv {
 	}
 
 	env := &testEnv{
-		grpcAddr:     lis.Addr().String(),
-		grpcServer:   grpcServer,
-		client:       client,
-		launchResult: launchResult,
-		pageClient:   pagepb.NewPageServiceClient(conn),
-		targetClient: targetpb.NewTargetServiceClient(conn),
-		conn:         conn,
+		grpcAddr:       lis.Addr().String(),
+		grpcServer:     grpcServer,
+		client:         client,
+		launchResult:   launchResult,
+		pageClient:     pagepb.NewPageServiceClient(conn),
+		targetClient:   targetpb.NewTargetServiceClient(conn),
+		runtimeClient:  runtimepb.NewRuntimeServiceClient(conn),
+		networkClient:  networkpb.NewNetworkServiceClient(conn),
+		domClient:      dompb.NewDOMServiceClient(conn),
+		emulationClient: emulationpb.NewEmulationServiceClient(conn),
+		inputClient:    inputpb.NewInputServiceClient(conn),
+		browserClient:  browserpb.NewBrowserServiceClient(conn),
+		conn:           conn,
 	}
 
 	t.Cleanup(env.cleanup)

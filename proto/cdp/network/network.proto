@@ -1,0 +1,399 @@
+syntax = "proto3";
+
+package cdp.network;
+
+option go_package = "github.com/accretional/chromerpc/proto/cdp/network";
+
+// Network domain allows tracking network activities of the page.
+
+service NetworkService {
+  // Enables network tracking.
+  rpc Enable(EnableRequest) returns (EnableResponse);
+
+  // Disables network tracking.
+  rpc Disable(DisableRequest) returns (DisableResponse);
+
+  // Toggles ignoring cache for each request.
+  rpc SetCacheDisabled(SetCacheDisabledRequest) returns (SetCacheDisabledResponse);
+
+  // Specifies whether to always send extra HTTP headers with the requests.
+  rpc SetExtraHTTPHeaders(SetExtraHTTPHeadersRequest) returns (SetExtraHTTPHeadersResponse);
+
+  // Returns content served for the given request.
+  rpc GetResponseBody(GetResponseBodyRequest) returns (GetResponseBodyResponse);
+
+  // Returns all browser cookies.
+  rpc GetCookies(GetCookiesRequest) returns (GetCookiesResponse);
+
+  // Sets a cookie.
+  rpc SetCookie(SetCookieRequest) returns (SetCookieResponse);
+
+  // Deletes browser cookies.
+  rpc DeleteCookies(DeleteCookiesRequest) returns (DeleteCookiesResponse);
+
+  // Clears browser cookies.
+  rpc ClearBrowserCookies(ClearBrowserCookiesRequest) returns (ClearBrowserCookiesResponse);
+
+  // Clears browser cache.
+  rpc ClearBrowserCache(ClearBrowserCacheRequest) returns (ClearBrowserCacheResponse);
+
+  // Activates emulation of network conditions.
+  rpc EmulateNetworkConditions(EmulateNetworkConditionsRequest) returns (EmulateNetworkConditionsResponse);
+
+  // Allows overriding user agent with the given string.
+  rpc SetUserAgentOverride(SetUserAgentOverrideRequest) returns (SetUserAgentOverrideResponse);
+
+  // Returns the DER-encoded certificate (experimental).
+  rpc GetCertificate(GetCertificateRequest) returns (GetCertificateResponse);
+
+  // Sets the requests to intercept that match the provided patterns (Fetch domain preferred).
+  rpc SetRequestInterception(SetRequestInterceptionRequest) returns (SetRequestInterceptionResponse);
+
+  // Searches for given string in response content (experimental).
+  rpc SearchInResponseBody(SearchInResponseBodyRequest) returns (SearchInResponseBodyResponse);
+
+  // Blocks URLs from loading (experimental).
+  rpc SetBlockedURLs(SetBlockedURLsRequest) returns (SetBlockedURLsResponse);
+
+  // Returns information about the COEP/COOP isolation status (experimental).
+  rpc GetSecurityIsolationStatus(GetSecurityIsolationStatusRequest) returns (GetSecurityIsolationStatusResponse);
+
+  // Fetches the resource and returns the content (experimental).
+  rpc LoadNetworkResource(LoadNetworkResourceRequest) returns (LoadNetworkResourceResponse);
+
+  // Subscribe to network events.
+  rpc SubscribeEvents(SubscribeNetworkEventsRequest) returns (stream NetworkEvent);
+}
+
+// ==================== Types ====================
+
+// HTTP request data.
+message Request {
+  string url = 1;
+  string url_fragment = 2;
+  string method = 3;
+  map<string, string> headers = 4;
+  string post_data = 5;
+  bool has_post_data = 6;
+  string mixed_content_type = 7;
+  string initial_priority = 8; // VeryLow, Low, Medium, High, VeryHigh
+  string referrer_policy = 9;
+  bool is_link_preload = 10;
+  bool is_same_site = 11;
+}
+
+// HTTP response data.
+message Response {
+  string url = 1;
+  int32 status = 2;
+  string status_text = 3;
+  map<string, string> headers = 4;
+  string mime_type = 5;
+  string charset = 6;
+  map<string, string> request_headers = 7;
+  bool connection_reused = 8;
+  double connection_id = 9;
+  string remote_ip_address = 10;
+  int32 remote_port = 11;
+  bool from_disk_cache = 12;
+  bool from_service_worker = 13;
+  bool from_prefetch_cache = 14;
+  double encoded_data_length = 15;
+  ResourceTiming timing = 16;
+  string protocol = 17;
+  string security_state = 18;
+  SecurityDetails security_details = 19;
+}
+
+// Timing information for the request.
+message ResourceTiming {
+  double request_time = 1;
+  double proxy_start = 2;
+  double proxy_end = 3;
+  double dns_start = 4;
+  double dns_end = 5;
+  double connect_start = 6;
+  double connect_end = 7;
+  double ssl_start = 8;
+  double ssl_end = 9;
+  double send_start = 10;
+  double send_end = 11;
+  double receive_headers_start = 12;
+  double receive_headers_end = 13;
+}
+
+// Security details about a request's connection.
+message SecurityDetails {
+  string protocol = 1;
+  string key_exchange = 2;
+  string key_exchange_group = 3;
+  string cipher = 4;
+  string mac = 5;
+  int32 certificate_id = 6;
+  string subject_name = 7;
+  repeated string san_list = 8;
+  string issuer = 9;
+  double valid_from = 10;
+  double valid_to = 11;
+  string certificate_transparency_compliance = 12;
+  string server_signature_algorithm = 13;
+  bool encrypted_client_hello = 14;
+}
+
+// Cookie object.
+message Cookie {
+  string name = 1;
+  string value = 2;
+  string domain = 3;
+  string path = 4;
+  double expires = 5; // -1 = session cookie
+  int32 size = 6;
+  bool http_only = 7;
+  bool secure = 8;
+  bool session = 9;
+  string same_site = 10; // "Strict", "Lax", "None"
+  string priority = 11;  // "Low", "Medium", "High"
+  string source_scheme = 12;
+  int32 source_port = 13;
+}
+
+// Cookie parameter for setCookie.
+message CookieParam {
+  string name = 1;
+  string value = 2;
+  string url = 3;
+  string domain = 4;
+  string path = 5;
+  bool secure = 6;
+  bool http_only = 7;
+  string same_site = 8;
+  double expires = 9;
+  string priority = 10;
+  string source_scheme = 11;
+  int32 source_port = 12;
+}
+
+// Request pattern for interception.
+message RequestPattern {
+  string url_pattern = 1;
+  string resource_type = 2;
+  string interception_stage = 3; // "Request" or "HeadersReceived"
+}
+
+// Network resource for LoadNetworkResource.
+message LoadNetworkResourcePageResult {
+  bool success = 1;
+  double net_error = 2;
+  string net_error_name = 3;
+  double http_status_code = 4;
+  string stream = 5; // IO.StreamHandle
+  map<string, string> headers = 6;
+}
+
+// ==================== Requests / Responses ====================
+
+message EnableRequest {
+  // Buffer size in bytes to use when preserving network payloads.
+  int32 max_total_buffer_size = 1;
+  // Per-resource buffer size.
+  int32 max_resource_buffer_size = 2;
+  // Longest post body size (in bytes) that would be included in requestWillBeSent.
+  int32 max_post_data_size = 3;
+}
+message EnableResponse {}
+
+message DisableRequest {}
+message DisableResponse {}
+
+message SetCacheDisabledRequest {
+  bool cache_disabled = 1;
+}
+message SetCacheDisabledResponse {}
+
+message SetExtraHTTPHeadersRequest {
+  map<string, string> headers = 1;
+}
+message SetExtraHTTPHeadersResponse {}
+
+message GetResponseBodyRequest {
+  string request_id = 1;
+}
+message GetResponseBodyResponse {
+  string body = 1;
+  bool base64_encoded = 2;
+}
+
+message GetCookiesRequest {
+  repeated string urls = 1;
+}
+message GetCookiesResponse {
+  repeated Cookie cookies = 1;
+}
+
+message SetCookieRequest {
+  string name = 1;
+  string value = 2;
+  string url = 3;
+  string domain = 4;
+  string path = 5;
+  bool secure = 6;
+  bool http_only = 7;
+  string same_site = 8;
+  double expires = 9;
+  string priority = 10;
+  string source_scheme = 11;
+  int32 source_port = 12;
+}
+message SetCookieResponse {
+  bool success = 1;
+}
+
+message DeleteCookiesRequest {
+  string name = 1;
+  string url = 2;
+  string domain = 3;
+  string path = 4;
+}
+message DeleteCookiesResponse {}
+
+message ClearBrowserCookiesRequest {}
+message ClearBrowserCookiesResponse {}
+
+message ClearBrowserCacheRequest {}
+message ClearBrowserCacheResponse {}
+
+message EmulateNetworkConditionsRequest {
+  bool offline = 1;
+  double latency = 2; // Minimum latency in ms.
+  double download_throughput = 3; // Maximal aggregated download throughput (bytes/sec). -1 disables.
+  double upload_throughput = 4;   // Maximal aggregated upload throughput (bytes/sec). -1 disables.
+  string connection_type = 5;     // none, cellular2g, cellular3g, cellular4g, bluetooth, ethernet, wifi, wimax, other
+}
+message EmulateNetworkConditionsResponse {}
+
+message SetUserAgentOverrideRequest {
+  string user_agent = 1;
+  string accept_language = 2;
+  string platform = 3;
+}
+message SetUserAgentOverrideResponse {}
+
+message GetCertificateRequest {
+  string origin = 1;
+}
+message GetCertificateResponse {
+  repeated string table_names = 1;
+}
+
+message SetRequestInterceptionRequest {
+  repeated RequestPattern patterns = 1;
+}
+message SetRequestInterceptionResponse {}
+
+message SearchInResponseBodyRequest {
+  string request_id = 1;
+  string query = 2;
+  bool case_sensitive = 3;
+  bool is_regex = 4;
+}
+message SearchInResponseBodyResponse {
+  repeated SearchMatch result = 1;
+}
+
+message SearchMatch {
+  double line_number = 1;
+  string line_content = 2;
+}
+
+message SetBlockedURLsRequest {
+  repeated string urls = 1;
+}
+message SetBlockedURLsResponse {}
+
+message GetSecurityIsolationStatusRequest {
+  string frame_id = 1;
+}
+message GetSecurityIsolationStatusResponse {
+  // Status is complex — simplified to JSON for now.
+  string status = 1; // JSON-encoded
+}
+
+message LoadNetworkResourceRequest {
+  string frame_id = 1;
+  string url = 2;
+  LoadNetworkResourceOptions options = 3;
+}
+message LoadNetworkResourceOptions {
+  bool disable_cache = 1;
+  bool include_credentials = 2;
+}
+message LoadNetworkResourceResponse {
+  LoadNetworkResourcePageResult resource = 1;
+}
+
+// ==================== Events ====================
+
+message SubscribeNetworkEventsRequest {
+  string session_id = 1;
+}
+
+message NetworkEvent {
+  oneof event {
+    RequestWillBeSentEvent request_will_be_sent = 1;
+    ResponseReceivedEvent response_received = 2;
+    DataReceivedEvent data_received = 3;
+    LoadingFinishedEvent loading_finished = 4;
+    LoadingFailedEvent loading_failed = 5;
+    RequestServedFromCacheEvent request_served_from_cache = 6;
+  }
+}
+
+message RequestWillBeSentEvent {
+  string request_id = 1;
+  string loader_id = 2;
+  string document_url = 3;
+  Request request = 4;
+  double timestamp = 5;
+  double wall_time = 6;
+  string initiator_type = 7;
+  Response redirect_response = 8;
+  string type = 9; // ResourceType
+  string frame_id = 10;
+  bool has_user_gesture = 11;
+}
+
+message ResponseReceivedEvent {
+  string request_id = 1;
+  string loader_id = 2;
+  double timestamp = 3;
+  string type = 4;
+  Response response = 5;
+  bool has_extra_info = 6;
+  string frame_id = 7;
+}
+
+message DataReceivedEvent {
+  string request_id = 1;
+  double timestamp = 2;
+  int32 data_length = 3;
+  int32 encoded_data_length = 4;
+}
+
+message LoadingFinishedEvent {
+  string request_id = 1;
+  double timestamp = 2;
+  double encoded_data_length = 3;
+}
+
+message LoadingFailedEvent {
+  string request_id = 1;
+  double timestamp = 2;
+  string type = 3;
+  string error_text = 4;
+  bool canceled = 5;
+  string blocked_reason = 6;
+}
+
+message RequestServedFromCacheEvent {
+  string request_id = 1;
+}

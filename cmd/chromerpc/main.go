@@ -25,9 +25,21 @@ import (
 	"google.golang.org/grpc/reflection"
 
 	"github.com/accretional/chromerpc/internal/cdpclient"
+	browserserver "github.com/accretional/chromerpc/internal/server/browser"
+	domserver "github.com/accretional/chromerpc/internal/server/dom"
+	emulationserver "github.com/accretional/chromerpc/internal/server/emulation"
+	inputserver "github.com/accretional/chromerpc/internal/server/input"
+	networkserver "github.com/accretional/chromerpc/internal/server/network"
 	pageserver "github.com/accretional/chromerpc/internal/server/page"
+	runtimeserver "github.com/accretional/chromerpc/internal/server/runtime"
 	targetserver "github.com/accretional/chromerpc/internal/server/target"
+	browserpb "github.com/accretional/chromerpc/proto/cdp/browser"
+	dompb "github.com/accretional/chromerpc/proto/cdp/dom"
+	emulationpb "github.com/accretional/chromerpc/proto/cdp/emulation"
+	inputpb "github.com/accretional/chromerpc/proto/cdp/input"
+	networkpb "github.com/accretional/chromerpc/proto/cdp/network"
 	pagepb "github.com/accretional/chromerpc/proto/cdp/page"
+	runtimepb "github.com/accretional/chromerpc/proto/cdp/runtime"
 	targetpb "github.com/accretional/chromerpc/proto/cdp/target"
 )
 
@@ -90,6 +102,12 @@ func main() {
 	grpcServer := grpc.NewServer()
 	targetpb.RegisterTargetServiceServer(grpcServer, targetserver.New(client))
 	pagepb.RegisterPageServiceServer(grpcServer, pageserver.New(client))
+	runtimepb.RegisterRuntimeServiceServer(grpcServer, runtimeserver.New(client))
+	networkpb.RegisterNetworkServiceServer(grpcServer, networkserver.New(client))
+	dompb.RegisterDOMServiceServer(grpcServer, domserver.New(client))
+	emulationpb.RegisterEmulationServiceServer(grpcServer, emulationserver.New(client))
+	inputpb.RegisterInputServiceServer(grpcServer, inputserver.New(client))
+	browserpb.RegisterBrowserServiceServer(grpcServer, browserserver.New(client))
 
 	// Enable gRPC reflection for tools like grpcurl.
 	reflection.Register(grpcServer)

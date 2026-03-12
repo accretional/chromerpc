@@ -1,0 +1,401 @@
+syntax = "proto3";
+
+package cdp.runtime;
+
+option go_package = "github.com/accretional/chromerpc/proto/cdp/runtime";
+
+// Runtime domain exposes JavaScript runtime by means of remote evaluation
+// and mirror objects.
+
+service RuntimeService {
+  // Enables reporting of execution contexts creation.
+  rpc Enable(EnableRequest) returns (EnableResponse);
+
+  // Disables reporting of execution contexts creation.
+  rpc Disable(DisableRequest) returns (DisableResponse);
+
+  // Evaluates expression on global object.
+  rpc Evaluate(EvaluateRequest) returns (EvaluateResponse);
+
+  // Calls function with given declaration on the given object.
+  rpc CallFunctionOn(CallFunctionOnRequest) returns (CallFunctionOnResponse);
+
+  // Returns properties of a given object.
+  rpc GetProperties(GetPropertiesRequest) returns (GetPropertiesResponse);
+
+  // Add handler to promise with given promise object id.
+  rpc AwaitPromise(AwaitPromiseRequest) returns (AwaitPromiseResponse);
+
+  // Releases remote object with given id.
+  rpc ReleaseObject(ReleaseObjectRequest) returns (ReleaseObjectResponse);
+
+  // Releases all remote objects that belong to a given group.
+  rpc ReleaseObjectGroup(ReleaseObjectGroupRequest) returns (ReleaseObjectGroupResponse);
+
+  // Compiles expression.
+  rpc CompileScript(CompileScriptRequest) returns (CompileScriptResponse);
+
+  // Runs script with given id in a given context.
+  rpc RunScript(RunScriptRequest) returns (RunScriptResponse);
+
+  // Tells inspected instance to run if it was waiting for debugger to attach.
+  rpc RunIfWaitingForDebugger(RunIfWaitingForDebuggerRequest) returns (RunIfWaitingForDebuggerResponse);
+
+  // Discards collected exceptions and console API calls.
+  rpc DiscardConsoleEntries(DiscardConsoleEntriesRequest) returns (DiscardConsoleEntriesResponse);
+
+  // Adds binding to global object. Can be called from JS as a global function.
+  rpc AddBinding(AddBindingRequest) returns (AddBindingResponse);
+
+  // Removes a previously added binding.
+  rpc RemoveBinding(RemoveBindingRequest) returns (RemoveBindingResponse);
+
+  // Returns all let, const, and class variables from global scope.
+  rpc GlobalLexicalScopeNames(GlobalLexicalScopeNamesRequest) returns (GlobalLexicalScopeNamesResponse);
+
+  // Subscribe to runtime events.
+  rpc SubscribeEvents(SubscribeRuntimeEventsRequest) returns (stream RuntimeEvent);
+}
+
+// ==================== Types ====================
+
+// Mirror object referencing original JavaScript object.
+message RemoteObject {
+  // Object type.
+  string type = 1; // "object","function","undefined","string","number","boolean","symbol","bigint"
+  // Object subtype hint.
+  string subtype = 2; // "array","null","node","regexp","date","map","set","weakmap","weakset","iterator","generator","error","proxy","promise","typedarray","arraybuffer","dataview","webassemblymemory","wasmvalue"
+  // Object class (constructor) name.
+  string class_name = 3;
+  // Remote object value in case of primitive values or JSON values (if requested).
+  string value = 4; // JSON-encoded
+  // Primitive value which can not be JSON-stringified.
+  string unserializable_value = 5;
+  // String representation of the object.
+  string description = 6;
+  // Unique object identifier (for non-primitive values).
+  string object_id = 7;
+  // Deep serialized value.
+  DeepSerializedValue deep_serialized_value = 8;
+}
+
+message DeepSerializedValue {
+  string type = 1;
+  string value = 2; // JSON-encoded
+  string object_id = 3;
+  int32 weak_local_object_reference = 4;
+}
+
+// Detailed information about exception (or error) that was thrown.
+message ExceptionDetails {
+  int32 exception_id = 1;
+  string text = 2;
+  int32 line_number = 3;
+  int32 column_number = 4;
+  string script_id = 5;
+  string url = 6;
+  StackTrace stack_trace = 7;
+  RemoteObject exception = 8;
+  int32 execution_context_id = 9;
+}
+
+// Call frames for assertions or error messages.
+message StackTrace {
+  string description = 1;
+  repeated CallFrame call_frames = 2;
+  StackTrace parent = 3;
+}
+
+message CallFrame {
+  string function_name = 1;
+  string script_id = 2;
+  string url = 3;
+  int32 line_number = 4;
+  int32 column_number = 5;
+}
+
+// Represents function call argument.
+message CallArgument {
+  // Primitive value or serializable js object (JSON-encoded).
+  string value = 1;
+  // Primitive value which can not be JSON-stringified.
+  string unserializable_value = 2;
+  // Remote object handle.
+  string object_id = 3;
+}
+
+// Description of an isolated world.
+message ExecutionContextDescription {
+  int32 id = 1;
+  string origin = 2;
+  string name = 3;
+  string unique_id = 4;
+  // Embedder-specific auxiliary data.
+  string aux_data = 5; // JSON-encoded
+}
+
+// Object property descriptor.
+message PropertyDescriptor {
+  string name = 1;
+  RemoteObject value = 2;
+  bool writable = 3;
+  RemoteObject get = 4;
+  RemoteObject set = 5;
+  bool configurable = 6;
+  bool enumerable = 7;
+  bool was_thrown = 8;
+  bool is_own = 9;
+  RemoteObject symbol = 10;
+}
+
+// Object internal property descriptor (e.g. [[PrimitiveValue]]).
+message InternalPropertyDescriptor {
+  string name = 1;
+  RemoteObject value = 2;
+}
+
+// Object private field descriptor.
+message PrivatePropertyDescriptor {
+  string name = 1;
+  RemoteObject value = 2;
+  RemoteObject get = 3;
+  RemoteObject set = 4;
+}
+
+// Serialization options for Runtime.evaluate etc.
+message SerializationOptions {
+  string serialization = 1; // "deep", "json", "idOnly"
+  int32 max_depth = 2;
+  // Additional serialization parameters (JSON-encoded).
+  string additional_parameters = 3;
+}
+
+// ==================== Requests / Responses ====================
+
+message EnableRequest {}
+message EnableResponse {}
+
+message DisableRequest {}
+message DisableResponse {}
+
+message EvaluateRequest {
+  // Expression to evaluate.
+  string expression = 1;
+  // Symbolic group name for result release.
+  string object_group = 2;
+  // Include command line API (console, $_, etc).
+  bool include_command_line_api = 3;
+  // Do not report exceptions and do not pause on exceptions.
+  bool silent = 4;
+  // Execution context to evaluate in.
+  int32 context_id = 5;
+  // Whether the result should be returned by value (JSON).
+  bool return_by_value = 6;
+  // Whether preview should be generated for the result.
+  bool generate_preview = 7;
+  // Whether execution should be treated as initiated by user.
+  bool user_gesture = 8;
+  // Whether execution should await the resulting value (for async functions).
+  bool await_promise = 9;
+  // Terminate execution after timing out.
+  bool throw_on_side_effect = 10;
+  // Timeout in milliseconds. 0 = no timeout.
+  double timeout = 11;
+  // Disable breakpoints during evaluation.
+  bool disable_breaks = 12;
+  // Setting this flag to true enables let re-declaration and top-level await.
+  bool repl_mode = 13;
+  // Allow eval even if CSP blocks it.
+  bool allow_unsafe_eval_blocked_by_csp = 14;
+  // An alternative way to specify the execution context.
+  string unique_context_id = 15;
+  // Specifies resultant serialization.
+  SerializationOptions serialization_options = 16;
+}
+
+message EvaluateResponse {
+  RemoteObject result = 1;
+  ExceptionDetails exception_details = 2;
+}
+
+message CallFunctionOnRequest {
+  // Declaration of the function to call.
+  string function_declaration = 1;
+  // Identifier of the object to call function on.
+  string object_id = 2;
+  // Call arguments.
+  repeated CallArgument arguments = 3;
+  // Do not report exceptions.
+  bool silent = 4;
+  // Whether the result should be returned by value.
+  bool return_by_value = 5;
+  // Whether preview should be generated for the result.
+  bool generate_preview = 6;
+  // Whether execution should be treated as initiated by user.
+  bool user_gesture = 7;
+  // Whether execution should await result.
+  bool await_promise = 8;
+  // Execution context (alternative to objectId).
+  int32 execution_context_id = 9;
+  // Symbolic group name for result release.
+  string object_group = 10;
+  // Whether to throw on side effects.
+  bool throw_on_side_effect = 11;
+  // Alternative context specification.
+  string unique_context_id = 12;
+  // Specifies resultant serialization.
+  SerializationOptions serialization_options = 13;
+}
+
+message CallFunctionOnResponse {
+  RemoteObject result = 1;
+  ExceptionDetails exception_details = 2;
+}
+
+message GetPropertiesRequest {
+  // Identifier of the object to return properties for.
+  string object_id = 1;
+  // If true, returns properties belonging only to the element itself.
+  bool own_properties = 2;
+  // If true, returns accessor properties only.
+  bool accessor_properties_only = 3;
+  // Whether preview should be generated for property values.
+  bool generate_preview = 4;
+  // If true, returns non-indexed properties only.
+  bool non_indexed_properties_only = 5;
+}
+
+message GetPropertiesResponse {
+  repeated PropertyDescriptor result = 1;
+  repeated InternalPropertyDescriptor internal_properties = 2;
+  repeated PrivatePropertyDescriptor private_properties = 3;
+  ExceptionDetails exception_details = 4;
+}
+
+message AwaitPromiseRequest {
+  string promise_object_id = 1;
+  bool return_by_value = 2;
+  bool generate_preview = 3;
+}
+
+message AwaitPromiseResponse {
+  RemoteObject result = 1;
+  ExceptionDetails exception_details = 2;
+}
+
+message ReleaseObjectRequest {
+  string object_id = 1;
+}
+message ReleaseObjectResponse {}
+
+message ReleaseObjectGroupRequest {
+  string object_group = 1;
+}
+message ReleaseObjectGroupResponse {}
+
+message CompileScriptRequest {
+  string expression = 1;
+  string source_url = 2;
+  bool persist_script = 3;
+  int32 execution_context_id = 4;
+}
+
+message CompileScriptResponse {
+  string script_id = 1;
+  ExceptionDetails exception_details = 2;
+}
+
+message RunScriptRequest {
+  string script_id = 1;
+  int32 execution_context_id = 2;
+  string object_group = 3;
+  bool silent = 4;
+  bool include_command_line_api = 5;
+  bool return_by_value = 6;
+  bool generate_preview = 7;
+  bool await_promise = 8;
+}
+
+message RunScriptResponse {
+  RemoteObject result = 1;
+  ExceptionDetails exception_details = 2;
+}
+
+message RunIfWaitingForDebuggerRequest {}
+message RunIfWaitingForDebuggerResponse {}
+
+message DiscardConsoleEntriesRequest {}
+message DiscardConsoleEntriesResponse {}
+
+message AddBindingRequest {
+  string name = 1;
+  int32 execution_context_id = 2;
+  string execution_context_name = 3;
+}
+message AddBindingResponse {}
+
+message RemoveBindingRequest {
+  string name = 1;
+}
+message RemoveBindingResponse {}
+
+message GlobalLexicalScopeNamesRequest {
+  int32 execution_context_id = 1;
+}
+message GlobalLexicalScopeNamesResponse {
+  repeated string names = 1;
+}
+
+// ==================== Events ====================
+
+message SubscribeRuntimeEventsRequest {
+  string session_id = 1;
+}
+
+message RuntimeEvent {
+  oneof event {
+    ConsoleAPICalledEvent console_api_called = 1;
+    ExceptionThrownEvent exception_thrown = 2;
+    ExceptionRevokedEvent exception_revoked = 3;
+    ExecutionContextCreatedEvent execution_context_created = 4;
+    ExecutionContextDestroyedEvent execution_context_destroyed = 5;
+    ExecutionContextsClearedEvent execution_contexts_cleared = 6;
+    BindingCalledEvent binding_called = 7;
+  }
+}
+
+message ConsoleAPICalledEvent {
+  string type = 1; // "log","debug","info","error","warning","dir","dirxml","table","trace","clear","startGroup","startGroupCollapsed","endGroup","assert","profile","profileEnd","count","timeEnd"
+  repeated RemoteObject args = 2;
+  int32 execution_context_id = 3;
+  double timestamp = 4;
+  StackTrace stack_trace = 5;
+  string context = 6;
+}
+
+message ExceptionThrownEvent {
+  double timestamp = 1;
+  ExceptionDetails exception_details = 2;
+}
+
+message ExceptionRevokedEvent {
+  string reason = 1;
+  int32 exception_id = 2;
+}
+
+message ExecutionContextCreatedEvent {
+  ExecutionContextDescription context = 1;
+}
+
+message ExecutionContextDestroyedEvent {
+  int32 execution_context_id = 1;
+  string execution_context_unique_id = 2;
+}
+
+message ExecutionContextsClearedEvent {}
+
+message BindingCalledEvent {
+  string name = 1;
+  string payload = 2;
+  int32 execution_context_id = 3;
+}

@@ -1,0 +1,174 @@
+syntax = "proto3";
+
+package cdp.browser;
+
+option go_package = "github.com/accretional/chromerpc/proto/cdp/browser";
+
+// Browser domain defines methods and events for browser managing.
+
+service BrowserService {
+  // Returns version information.
+  rpc GetVersion(GetVersionRequest) returns (GetVersionResponse);
+
+  // Close browser gracefully.
+  rpc Close(CloseRequest) returns (CloseResponse);
+
+  // Returns the command line switches for the browser process (experimental).
+  rpc GetBrowserCommandLine(GetBrowserCommandLineRequest) returns (GetBrowserCommandLineResponse);
+
+  // Get Chrome histograms (experimental).
+  rpc GetHistograms(GetHistogramsRequest) returns (GetHistogramsResponse);
+
+  // Get a Chrome histogram by name (experimental).
+  rpc GetHistogram(GetHistogramRequest) returns (GetHistogramResponse);
+
+  // Get position and size of the browser window (experimental).
+  rpc GetWindowBounds(GetWindowBoundsRequest) returns (GetWindowBoundsResponse);
+
+  // Get the browser window that contains the devtools target (experimental).
+  rpc GetWindowForTarget(GetWindowForTargetRequest) returns (GetWindowForTargetResponse);
+
+  // Set position and/or size of the browser window (experimental).
+  rpc SetWindowBounds(SetWindowBoundsRequest) returns (SetWindowBoundsResponse);
+
+  // Set permission settings for given origin (experimental).
+  rpc SetPermission(SetPermissionRequest) returns (SetPermissionResponse);
+
+  // Grant specific permissions to the given origin.
+  rpc GrantPermissions(GrantPermissionsRequest) returns (GrantPermissionsResponse);
+
+  // Reset all permission management for all origins.
+  rpc ResetPermissions(ResetPermissionsRequest) returns (ResetPermissionsResponse);
+
+  // Set the behavior when downloading a file (experimental).
+  rpc SetDownloadBehavior(SetDownloadBehaviorRequest) returns (SetDownloadBehaviorResponse);
+
+  // Cancel a download (experimental).
+  rpc CancelDownload(CancelDownloadRequest) returns (CancelDownloadResponse);
+}
+
+// ==================== Types ====================
+
+// Browser window bounds information.
+message Bounds {
+  int32 left = 1;
+  int32 top = 2;
+  int32 width = 3;
+  int32 height = 4;
+  // Window state.
+  string window_state = 5; // "normal","minimized","maximized","fullscreen"
+}
+
+// Chrome histogram.
+message Histogram {
+  string name = 1;
+  int32 sum = 2;
+  int32 count = 3;
+  repeated Bucket buckets = 4;
+}
+
+message Bucket {
+  int32 low = 1;
+  int32 high = 2;
+  int32 count = 3;
+}
+
+// Definition of PermissionDescriptor.
+message PermissionDescriptor {
+  string name = 1;
+  bool sysex = 2;
+  bool user_visible_only = 3;
+  bool allow_without_sanitization = 4;
+  bool allow_without_gesture = 5;
+  bool pan_tilt_zoom = 6;
+}
+
+// ==================== Requests / Responses ====================
+
+message GetVersionRequest {}
+message GetVersionResponse {
+  string protocol_version = 1;
+  string product = 2;
+  string revision = 3;
+  string user_agent = 4;
+  string js_version = 5;
+}
+
+message CloseRequest {}
+message CloseResponse {}
+
+message GetBrowserCommandLineRequest {}
+message GetBrowserCommandLineResponse {
+  repeated string arguments = 1;
+}
+
+message GetHistogramsRequest {
+  string query = 1;
+  bool delta = 2;
+}
+message GetHistogramsResponse {
+  repeated Histogram histograms = 1;
+}
+
+message GetHistogramRequest {
+  string name = 1;
+  bool delta = 2;
+}
+message GetHistogramResponse {
+  Histogram histogram = 1;
+}
+
+message GetWindowBoundsRequest {
+  int32 window_id = 1;
+}
+message GetWindowBoundsResponse {
+  Bounds bounds = 1;
+}
+
+message GetWindowForTargetRequest {
+  string target_id = 1;
+}
+message GetWindowForTargetResponse {
+  int32 window_id = 1;
+  Bounds bounds = 2;
+}
+
+message SetWindowBoundsRequest {
+  int32 window_id = 1;
+  Bounds bounds = 2;
+}
+message SetWindowBoundsResponse {}
+
+message SetPermissionRequest {
+  PermissionDescriptor permission = 1;
+  string setting = 2; // "granted","denied","prompt"
+  string origin = 3;
+  string browser_context_id = 4;
+}
+message SetPermissionResponse {}
+
+message GrantPermissionsRequest {
+  repeated string permissions = 1;
+  string origin = 2;
+  string browser_context_id = 3;
+}
+message GrantPermissionsResponse {}
+
+message ResetPermissionsRequest {
+  string browser_context_id = 1;
+}
+message ResetPermissionsResponse {}
+
+message SetDownloadBehaviorRequest {
+  string behavior = 1; // "deny","allow","allowAndName","default"
+  string browser_context_id = 2;
+  string download_path = 3;
+  bool events_enabled = 4;
+}
+message SetDownloadBehaviorResponse {}
+
+message CancelDownloadRequest {
+  string guid = 1;
+  string browser_context_id = 2;
+}
+message CancelDownloadResponse {}

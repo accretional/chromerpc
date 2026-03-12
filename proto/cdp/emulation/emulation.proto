@@ -1,0 +1,218 @@
+syntax = "proto3";
+
+package cdp.emulation;
+
+option go_package = "github.com/accretional/chromerpc/proto/cdp/emulation";
+
+// Emulation domain emulates different environments for the page.
+
+service EmulationService {
+  // Overrides the values of device screen dimensions.
+  rpc SetDeviceMetricsOverride(SetDeviceMetricsOverrideRequest) returns (SetDeviceMetricsOverrideResponse);
+
+  // Clears the overridden device metrics.
+  rpc ClearDeviceMetricsOverride(ClearDeviceMetricsOverrideRequest) returns (ClearDeviceMetricsOverrideResponse);
+
+  // Allows overriding user agent with the given string.
+  rpc SetUserAgentOverride(SetUserAgentOverrideRequest) returns (SetUserAgentOverrideResponse);
+
+  // Overrides the Geolocation Position or Error.
+  rpc SetGeolocationOverride(SetGeolocationOverrideRequest) returns (SetGeolocationOverrideResponse);
+
+  // Clears the overridden Geolocation Position and Error.
+  rpc ClearGeolocationOverride(ClearGeolocationOverrideRequest) returns (ClearGeolocationOverrideResponse);
+
+  // Enables touch on platforms which do not support them.
+  rpc SetTouchEmulationEnabled(SetTouchEmulationEnabledRequest) returns (SetTouchEmulationEnabledResponse);
+
+  // Emulates the given media type or media feature.
+  rpc SetEmulatedMedia(SetEmulatedMediaRequest) returns (SetEmulatedMediaResponse);
+
+  // Overrides default host system timezone with the specified one.
+  rpc SetTimezoneOverride(SetTimezoneOverrideRequest) returns (SetTimezoneOverrideResponse);
+
+  // Overrides default host system locale.
+  rpc SetLocaleOverride(SetLocaleOverrideRequest) returns (SetLocaleOverrideResponse);
+
+  // Turns on/off scrollbars.
+  rpc SetScrollbarsHidden(SetScrollbarsHiddenRequest) returns (SetScrollbarsHiddenResponse);
+
+  // Disables document.cookie.
+  rpc SetDocumentCookieDisabled(SetDocumentCookieDisabledRequest) returns (SetDocumentCookieDisabledResponse);
+
+  // Emulates the given vision deficiency.
+  rpc SetEmulatedVisionDeficiency(SetEmulatedVisionDeficiencyRequest) returns (SetEmulatedVisionDeficiencyResponse);
+
+  // Sets the disabled state of the image (experimental).
+  rpc SetDisabledImageTypes(SetDisabledImageTypesRequest) returns (SetDisabledImageTypesResponse);
+
+  // Overrides the automation flag (experimental).
+  rpc SetAutomationOverride(SetAutomationOverrideRequest) returns (SetAutomationOverrideResponse);
+
+  // Allows overriding the default CPU throttling rate (experimental).
+  rpc SetCPUThrottlingRate(SetCPUThrottlingRateRequest) returns (SetCPUThrottlingRateResponse);
+
+  // Sets or clears an override of the default background color (experimental).
+  rpc SetDefaultBackgroundColorOverride(SetDefaultBackgroundColorOverrideRequest) returns (SetDefaultBackgroundColorOverrideResponse);
+
+  // Requests that page scale factor is reset to initial values (experimental).
+  rpc ResetPageScaleFactor(ResetPageScaleFactorRequest) returns (ResetPageScaleFactorResponse);
+
+  // Sets a specified page scale factor (experimental).
+  rpc SetPageScaleFactor(SetPageScaleFactorRequest) returns (SetPageScaleFactorResponse);
+
+  // Overrides value returned by the javascript navigator object (experimental).
+  rpc SetHardwareConcurrencyOverride(SetHardwareConcurrencyOverrideRequest) returns (SetHardwareConcurrencyOverrideResponse);
+}
+
+// ==================== Types ====================
+
+// Screen orientation.
+message ScreenOrientation {
+  string type = 1; // "portraitPrimary", "portraitSecondary", "landscapePrimary", "landscapeSecondary"
+  int32 angle = 2;
+}
+
+// Media feature for setEmulatedMedia.
+message MediaFeature {
+  string name = 1;
+  string value = 2;
+}
+
+// User agent metadata for Client Hints.
+message UserAgentMetadata {
+  repeated UserAgentBrandVersion brands = 1;
+  repeated UserAgentBrandVersion full_version_list = 2;
+  string full_version = 3;
+  string platform = 4;
+  string platform_version = 5;
+  string architecture = 6;
+  string model = 7;
+  bool mobile = 8;
+  string bitness = 9;
+  bool wow64 = 10;
+}
+
+message UserAgentBrandVersion {
+  string brand = 1;
+  string version = 2;
+}
+
+// RGBA color.
+message RGBA {
+  int32 r = 1;
+  int32 g = 2;
+  int32 b = 3;
+  double a = 4;
+}
+
+// ==================== Requests / Responses ====================
+
+message SetDeviceMetricsOverrideRequest {
+  int32 width = 1;
+  int32 height = 2;
+  double device_scale_factor = 3;
+  bool mobile = 4;
+  ScreenOrientation screen_orientation = 5;
+  // Experimental fields.
+  int32 screen_width = 6;
+  int32 screen_height = 7;
+  int32 position_x = 8;
+  int32 position_y = 9;
+  bool dont_set_visible_size = 10;
+}
+message SetDeviceMetricsOverrideResponse {}
+
+message ClearDeviceMetricsOverrideRequest {}
+message ClearDeviceMetricsOverrideResponse {}
+
+message SetUserAgentOverrideRequest {
+  string user_agent = 1;
+  string accept_language = 2;
+  string platform = 3;
+  UserAgentMetadata user_agent_metadata = 4;
+}
+message SetUserAgentOverrideResponse {}
+
+message SetGeolocationOverrideRequest {
+  double latitude = 1;
+  double longitude = 2;
+  double accuracy = 3;
+}
+message SetGeolocationOverrideResponse {}
+
+message ClearGeolocationOverrideRequest {}
+message ClearGeolocationOverrideResponse {}
+
+message SetTouchEmulationEnabledRequest {
+  bool enabled = 1;
+  int32 max_touch_points = 2;
+}
+message SetTouchEmulationEnabledResponse {}
+
+message SetEmulatedMediaRequest {
+  // Media type to emulate. Empty string disables the override.
+  string media = 1;
+  // Media features to emulate.
+  repeated MediaFeature features = 2;
+}
+message SetEmulatedMediaResponse {}
+
+message SetTimezoneOverrideRequest {
+  string timezone_id = 1;
+}
+message SetTimezoneOverrideResponse {}
+
+message SetLocaleOverrideRequest {
+  string locale = 1;
+}
+message SetLocaleOverrideResponse {}
+
+message SetScrollbarsHiddenRequest {
+  bool hidden = 1;
+}
+message SetScrollbarsHiddenResponse {}
+
+message SetDocumentCookieDisabledRequest {
+  bool disabled = 1;
+}
+message SetDocumentCookieDisabledResponse {}
+
+message SetEmulatedVisionDeficiencyRequest {
+  // Vision deficiency to emulate.
+  string type = 1; // "none","achromatopsia","blurredVision","deuteranopia","protanopia","tritanopia"
+}
+message SetEmulatedVisionDeficiencyResponse {}
+
+message SetDisabledImageTypesRequest {
+  repeated string image_types = 1; // "avif","webp"
+}
+message SetDisabledImageTypesResponse {}
+
+message SetAutomationOverrideRequest {
+  bool enabled = 1;
+}
+message SetAutomationOverrideResponse {}
+
+message SetCPUThrottlingRateRequest {
+  double rate = 1; // Throttling rate as a slowdown factor (1=no throttle, 2=2x slowdown).
+}
+message SetCPUThrottlingRateResponse {}
+
+message SetDefaultBackgroundColorOverrideRequest {
+  RGBA color = 1; // If not specified, clears the override.
+}
+message SetDefaultBackgroundColorOverrideResponse {}
+
+message ResetPageScaleFactorRequest {}
+message ResetPageScaleFactorResponse {}
+
+message SetPageScaleFactorRequest {
+  double page_scale_factor = 1;
+}
+message SetPageScaleFactorResponse {}
+
+message SetHardwareConcurrencyOverrideRequest {
+  int32 hardware_concurrency = 1;
+}
+message SetHardwareConcurrencyOverrideResponse {}
