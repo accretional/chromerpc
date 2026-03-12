@@ -1,0 +1,92 @@
+syntax = "proto3";
+
+package cdp.media;
+
+option go_package = "github.com/accretional/chromerpc/proto/cdp/media";
+
+// Media domain allows tracking media players and their events.
+
+service MediaService {
+  // Enables the Media domain.
+  rpc Enable(EnableRequest) returns (EnableResponse);
+
+  // Disables the Media domain.
+  rpc Disable(DisableRequest) returns (DisableResponse);
+
+  // Subscribe to Media events.
+  rpc SubscribeEvents(SubscribeEventsRequest) returns (stream MediaEvent);
+}
+
+// ==================== Types ====================
+
+message PlayerProperty {
+  string name = 1;
+  string value = 2;
+}
+
+message PlayerEvent {
+  double timestamp = 1;
+  string value = 2;
+}
+
+message PlayerMessage {
+  string level = 1;
+  string message = 2;
+}
+
+message PlayerError {
+  string type = 1;
+  string error_code = 2;
+  // Stack trace as JSON string.
+  string stack = 3;
+}
+
+// ==================== Requests / Responses ====================
+
+message EnableRequest {}
+message EnableResponse {}
+
+message DisableRequest {}
+message DisableResponse {}
+
+// ==================== Events ====================
+
+message SubscribeEventsRequest {}
+
+message MediaEvent {
+  oneof event {
+    PlayerPropertiesChangedEvent player_properties_changed = 1;
+    PlayerEventsAddedEvent player_events_added = 2;
+    PlayerMessagesLoggedEvent player_messages_logged = 3;
+    PlayerErrorsRaisedEvent player_errors_raised = 4;
+    PlayersCreatedEvent players_created = 5;
+  }
+}
+
+message PlayerPropertiesChangedEvent {
+  string player_id = 1;
+  repeated PlayerProperty properties = 2;
+}
+
+message PlayerEventsAddedEvent {
+  string player_id = 1;
+  repeated PlayerEvent events = 2;
+}
+
+message PlayerMessagesLoggedEvent {
+  string player_id = 1;
+  repeated PlayerMessage messages = 2;
+}
+
+message PlayerErrorsRaisedEvent {
+  string player_id = 1;
+  repeated PlayerError errors = 2;
+}
+
+message PlayersCreatedEvent {
+  repeated PlayerInfo players = 1;
+}
+
+message PlayerInfo {
+  string player_id = 1;
+}

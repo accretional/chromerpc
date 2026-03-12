@@ -1,0 +1,149 @@
+syntax = "proto3";
+
+package cdp.animation;
+
+option go_package = "github.com/accretional/chromerpc/proto/cdp/animation";
+
+// Animation domain provides access to animation-related functionality.
+
+service AnimationService {
+  // Enable animation domain notifications.
+  rpc Enable(EnableRequest) returns (EnableResponse);
+
+  // Disable animation domain notifications.
+  rpc Disable(DisableRequest) returns (DisableResponse);
+
+  // Gets the playback rate of the document timeline.
+  rpc GetPlaybackRate(GetPlaybackRateRequest) returns (GetPlaybackRateResponse);
+
+  // Sets the playback rate of the document timeline.
+  rpc SetPlaybackRate(SetPlaybackRateRequest) returns (SetPlaybackRateResponse);
+
+  // Returns the current time of the animation.
+  rpc GetCurrentTime(GetCurrentTimeRequest) returns (GetCurrentTimeResponse);
+
+  // Sets the paused state of a set of animations.
+  rpc SetPaused(SetPausedRequest) returns (SetPausedResponse);
+
+  // Sets the timing of an animation node.
+  rpc SetTiming(SetTimingRequest) returns (SetTimingResponse);
+
+  // Seek a set of animations to a particular time.
+  rpc SeekAnimations(SeekAnimationsRequest) returns (SeekAnimationsResponse);
+
+  // Releases a set of animations to no longer be manipulated.
+  rpc ReleaseAnimations(ReleaseAnimationsRequest) returns (ReleaseAnimationsResponse);
+
+  // Resolves the animation to its corresponding remote object.
+  rpc ResolveAnimation(ResolveAnimationRequest) returns (ResolveAnimationResponse);
+
+  // Subscribe to Animation events.
+  rpc SubscribeEvents(SubscribeEventsRequest) returns (stream AnimationEvent);
+}
+
+// ==================== Types ====================
+
+message AnimationEffect {
+  double delay = 1;
+  double end_delay = 2;
+  double iteration_start = 3;
+  double iterations = 4;
+  double duration = 5;
+  string direction = 6;
+  string fill = 7;
+  int32 backend_node_id = 8;
+  string easing = 9;
+}
+
+message AnimationObj {
+  string id = 1;
+  string name = 2;
+  bool paused_state = 3;
+  string play_state = 4;
+  double playback_rate = 5;
+  double start_time = 6;
+  double current_time = 7;
+  string type = 8;
+  AnimationEffect source = 9;
+  string css_id = 10;
+}
+
+// ==================== Requests / Responses ====================
+
+message EnableRequest {}
+message EnableResponse {}
+
+message DisableRequest {}
+message DisableResponse {}
+
+message GetPlaybackRateRequest {}
+message GetPlaybackRateResponse {
+  double playback_rate = 1;
+}
+
+message SetPlaybackRateRequest {
+  double playback_rate = 1;
+}
+message SetPlaybackRateResponse {}
+
+message GetCurrentTimeRequest {
+  string id = 1;
+}
+message GetCurrentTimeResponse {
+  double current_time = 1;
+}
+
+message SetPausedRequest {
+  repeated string animations = 1;
+  bool paused = 2;
+}
+message SetPausedResponse {}
+
+message SetTimingRequest {
+  string animation_id = 1;
+  double duration = 2;
+  double delay = 3;
+}
+message SetTimingResponse {}
+
+message SeekAnimationsRequest {
+  repeated string animations = 1;
+  double current_time = 2;
+}
+message SeekAnimationsResponse {}
+
+message ReleaseAnimationsRequest {
+  repeated string animations = 1;
+}
+message ReleaseAnimationsResponse {}
+
+message ResolveAnimationRequest {
+  string animation_id = 1;
+}
+message ResolveAnimationResponse {
+  string remote_object = 1;
+}
+
+// ==================== Events ====================
+
+message SubscribeEventsRequest {}
+
+message AnimationEvent {
+  oneof event {
+    AnimationCreatedEvent animation_created = 1;
+    AnimationStartedEvent animation_started = 2;
+    AnimationCanceledEvent animation_canceled = 3;
+  }
+}
+
+message AnimationCreatedEvent {
+  string id = 1;
+}
+
+message AnimationStartedEvent {
+  AnimationObj animation = 1;
+}
+
+message AnimationCanceledEvent {
+  string id = 1;
+}

@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+package cdp.systeminfo;
+
+option go_package = "github.com/accretional/chromerpc/proto/cdp/systeminfo";
+
+// SystemInfo domain provides information about the system.
+
+service SystemInfoService {
+  // Returns information about the system.
+  rpc GetInfo(GetInfoRequest) returns (GetInfoResponse);
+
+  // Returns information about whether a feature state is enabled.
+  rpc GetFeatureState(GetFeatureStateRequest) returns (GetFeatureStateResponse);
+
+  // Returns information about all running processes.
+  rpc GetProcessInfo(GetProcessInfoRequest) returns (GetProcessInfoResponse);
+}
+
+// ==================== Types ====================
+
+message ProcessInfo {
+  string type = 1;
+  int32 id = 2;
+  double cpu_time = 3;
+}
+
+// ==================== Requests / Responses ====================
+
+message GetInfoRequest {}
+message GetInfoResponse {
+  string gpu = 1; // JSON string of GPUInfo
+  string model_name = 2;
+  string model_version = 3;
+  string command_line = 4;
+}
+
+message GetFeatureStateRequest {
+  string feature_state = 1;
+}
+message GetFeatureStateResponse {
+  bool feature_enabled = 1;
+}
+
+message GetProcessInfoRequest {}
+message GetProcessInfoResponse {
+  repeated ProcessInfo process_info = 1;
+}

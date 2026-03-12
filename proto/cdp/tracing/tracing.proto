@@ -1,0 +1,105 @@
+syntax = "proto3";
+
+package cdp.tracing;
+
+option go_package = "github.com/accretional/chromerpc/proto/cdp/tracing";
+
+// Tracing domain exposes Chrome's trace recording capabilities.
+
+service TracingService {
+  // Start trace events collection.
+  rpc Start(StartRequest) returns (StartResponse);
+
+  // Stop trace events collection.
+  rpc End(EndRequest) returns (EndResponse);
+
+  // Gets supported tracing categories.
+  rpc GetCategories(GetCategoriesRequest) returns (GetCategoriesResponse);
+
+  // Record a clock sync marker in the trace.
+  rpc RecordClockSyncMarker(RecordClockSyncMarkerRequest) returns (RecordClockSyncMarkerResponse);
+
+  // Request a global memory dump.
+  rpc RequestMemoryDump(RequestMemoryDumpRequest) returns (RequestMemoryDumpResponse);
+
+  // Subscribe to Tracing events.
+  rpc SubscribeEvents(SubscribeEventsRequest) returns (stream TracingEvent);
+}
+
+// ==================== Types ====================
+
+message TraceConfig {
+  string record_mode = 1;
+  double trace_buffer_size_in_kb = 2;
+  bool enable_sampling = 3;
+  bool enable_systrace = 4;
+  bool enable_argument_filter = 5;
+  repeated string included_categories = 6;
+  repeated string excluded_categories = 7;
+  repeated string synthetic_delays = 8;
+  string memory_dump_config = 9; // JSON string
+}
+
+// ==================== Requests / Responses ====================
+
+message StartRequest {
+  string categories = 1;
+  string options = 2;
+  double buffer_usage_reporting_interval = 3;
+  string transfer_mode = 4; // "ReportEvents","ReturnAsStream"
+  string stream_format = 5;
+  string stream_compression = 6;
+  TraceConfig trace_config = 7;
+}
+message StartResponse {}
+
+message EndRequest {}
+message EndResponse {}
+
+message GetCategoriesRequest {}
+message GetCategoriesResponse {
+  repeated string categories = 1;
+}
+
+message RecordClockSyncMarkerRequest {
+  string sync_id = 1;
+}
+message RecordClockSyncMarkerResponse {}
+
+message RequestMemoryDumpRequest {
+  bool deterministic = 1;
+  string level_of_detail = 2;
+}
+message RequestMemoryDumpResponse {
+  string dump_guid = 1;
+  bool success = 2;
+}
+
+// ==================== Events ====================
+
+message SubscribeEventsRequest {}
+
+message TracingEvent {
+  oneof event {
+    BufferUsageEvent buffer_usage = 1;
+    DataCollectedEvent data_collected = 2;
+    TracingCompleteEvent tracing_complete = 3;
+  }
+}
+
+message BufferUsageEvent {
+  double percent_full = 1;
+  double event_count = 2;
+  double value = 3;
+}
+
+message DataCollectedEvent {
+  string value = 1; // JSON string
+}
+
+message TracingCompleteEvent {
+  bool data_loss_occurred = 1;
+  string stream = 2;
+  string trace_format = 3;
+  string stream_compression = 4;
+}

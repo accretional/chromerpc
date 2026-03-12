@@ -1,0 +1,157 @@
+syntax = "proto3";
+
+package cdp.layertree;
+
+option go_package = "github.com/accretional/chromerpc/proto/cdp/layertree";
+
+// LayerTree domain provides access to compositing layers.
+
+service LayerTreeService {
+  // Enables compositing layer inspection.
+  rpc Enable(EnableRequest) returns (EnableResponse);
+
+  // Disables compositing layer inspection.
+  rpc Disable(DisableRequest) returns (DisableResponse);
+
+  // Returns the compositing reasons for a given layer.
+  rpc CompositingReasons(CompositingReasonsRequest) returns (CompositingReasonsResponse);
+
+  // Returns the snapshot identifier.
+  rpc MakeSnapshot(MakeSnapshotRequest) returns (MakeSnapshotResponse);
+
+  // Returns the snapshot identifier from tiles.
+  rpc LoadSnapshot(LoadSnapshotRequest) returns (LoadSnapshotResponse);
+
+  // Releases a snapshot by its identifier.
+  rpc ReleaseSnapshot(ReleaseSnapshotRequest) returns (ReleaseSnapshotResponse);
+
+  // Replays the snapshot and returns a data URL of the resulting image.
+  rpc ReplaySnapshot(ReplaySnapshotRequest) returns (ReplaySnapshotResponse);
+
+  // Profiles the snapshot and returns timing data.
+  rpc ProfileSnapshot(ProfileSnapshotRequest) returns (ProfileSnapshotResponse);
+
+  // Returns the command log for a snapshot.
+  rpc SnapshotCommandLog(SnapshotCommandLogRequest) returns (SnapshotCommandLogResponse);
+
+  // Subscribe to LayerTree events.
+  rpc SubscribeEvents(SubscribeEventsRequest) returns (stream LayerTreeEvent);
+}
+
+// ==================== Types ====================
+
+message Rect {
+  double x = 1;
+  double y = 2;
+  double width = 3;
+  double height = 4;
+}
+
+message ScrollRect {
+  Rect rect = 1;
+  string type = 2;
+}
+
+message Layer {
+  string layer_id = 1;
+  string parent_layer_id = 2;
+  int32 backend_node_id = 3;
+  double offset_x = 4;
+  double offset_y = 5;
+  double width = 6;
+  double height = 7;
+  int32 paint_count = 8;
+  bool draws_content = 9;
+  bool invisible = 10;
+  repeated ScrollRect scroll_rects = 11;
+  string sticky_position_constraint = 12; // JSON-encoded
+}
+
+message PictureTile {
+  double x = 1;
+  double y = 2;
+  string picture = 3;
+  double scale = 4;
+}
+
+// ==================== Requests / Responses ====================
+
+message EnableRequest {}
+message EnableResponse {}
+
+message DisableRequest {}
+message DisableResponse {}
+
+message CompositingReasonsRequest {
+  string layer_id = 1;
+}
+message CompositingReasonsResponse {
+  repeated string compositing_reasons = 1;
+  repeated string compositing_reason_ids = 2;
+}
+
+message MakeSnapshotRequest {
+  string layer_id = 1;
+}
+message MakeSnapshotResponse {
+  string snapshot_id = 1;
+}
+
+message LoadSnapshotRequest {
+  repeated PictureTile tiles = 1;
+}
+message LoadSnapshotResponse {
+  string snapshot_id = 1;
+}
+
+message ReleaseSnapshotRequest {
+  string snapshot_id = 1;
+}
+message ReleaseSnapshotResponse {}
+
+message ReplaySnapshotRequest {
+  string snapshot_id = 1;
+  int32 from_step = 2;
+  int32 to_step = 3;
+  double scale = 4;
+}
+message ReplaySnapshotResponse {
+  string data_url = 1;
+}
+
+message ProfileSnapshotRequest {
+  string snapshot_id = 1;
+  int32 min_repeat_count = 2;
+  double min_duration = 3;
+  Rect clip_rect = 4;
+}
+message ProfileSnapshotResponse {
+  string timings = 1; // JSON-encoded array of arrays of doubles
+}
+
+message SnapshotCommandLogRequest {
+  string snapshot_id = 1;
+}
+message SnapshotCommandLogResponse {
+  string command_log = 1; // JSON-encoded array
+}
+
+// ==================== Events ====================
+
+message SubscribeEventsRequest {}
+
+message LayerTreeEvent {
+  oneof event {
+    LayerTreeDidChangeEvent layer_tree_did_change = 1;
+    LayerPaintedEvent layer_painted = 2;
+  }
+}
+
+message LayerTreeDidChangeEvent {
+  repeated Layer layers = 1;
+}
+
+message LayerPaintedEvent {
+  string layer_id = 1;
+  Rect clip = 2;
+}

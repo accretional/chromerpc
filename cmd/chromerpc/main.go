@@ -26,6 +26,8 @@ import (
 
 	"github.com/accretional/chromerpc/internal/cdpclient"
 	accessibilityserver "github.com/accretional/chromerpc/internal/server/accessibility"
+	animationserver "github.com/accretional/chromerpc/internal/server/animation"
+	auditsserver "github.com/accretional/chromerpc/internal/server/audits"
 	browserserver "github.com/accretional/chromerpc/internal/server/browser"
 	cachestorageserver "github.com/accretional/chromerpc/internal/server/cachestorage"
 	consoleserver "github.com/accretional/chromerpc/internal/server/console"
@@ -39,7 +41,9 @@ import (
 	indexeddbserver "github.com/accretional/chromerpc/internal/server/indexeddb"
 	inputserver "github.com/accretional/chromerpc/internal/server/input"
 	ioserver "github.com/accretional/chromerpc/internal/server/io"
+	layertreeserver "github.com/accretional/chromerpc/internal/server/layertree"
 	logserver "github.com/accretional/chromerpc/internal/server/log"
+	mediaserver "github.com/accretional/chromerpc/internal/server/media"
 	networkserver "github.com/accretional/chromerpc/internal/server/network"
 	overlayserver "github.com/accretional/chromerpc/internal/server/overlay"
 	pageserver "github.com/accretional/chromerpc/internal/server/page"
@@ -49,8 +53,12 @@ import (
 	securityserver "github.com/accretional/chromerpc/internal/server/security"
 	serviceworkerserver "github.com/accretional/chromerpc/internal/server/serviceworker"
 	storageserver "github.com/accretional/chromerpc/internal/server/storage"
+	systeminfoserver "github.com/accretional/chromerpc/internal/server/systeminfo"
 	targetserver "github.com/accretional/chromerpc/internal/server/target"
+	tracingserver "github.com/accretional/chromerpc/internal/server/tracing"
 	accessibilitypb "github.com/accretional/chromerpc/proto/cdp/accessibility"
+	animationpb "github.com/accretional/chromerpc/proto/cdp/animation"
+	auditspb "github.com/accretional/chromerpc/proto/cdp/audits"
 	browserpb "github.com/accretional/chromerpc/proto/cdp/browser"
 	cachestoragepb "github.com/accretional/chromerpc/proto/cdp/cachestorage"
 	consolepb "github.com/accretional/chromerpc/proto/cdp/console"
@@ -64,7 +72,9 @@ import (
 	indexeddbpb "github.com/accretional/chromerpc/proto/cdp/indexeddb"
 	inputpb "github.com/accretional/chromerpc/proto/cdp/input"
 	iopb "github.com/accretional/chromerpc/proto/cdp/io"
+	layertreepb "github.com/accretional/chromerpc/proto/cdp/layertree"
 	logpb "github.com/accretional/chromerpc/proto/cdp/log"
+	mediapb "github.com/accretional/chromerpc/proto/cdp/media"
 	networkpb "github.com/accretional/chromerpc/proto/cdp/network"
 	overlaypb "github.com/accretional/chromerpc/proto/cdp/overlay"
 	pagepb "github.com/accretional/chromerpc/proto/cdp/page"
@@ -74,7 +84,9 @@ import (
 	securitypb "github.com/accretional/chromerpc/proto/cdp/security"
 	serviceworkerpb "github.com/accretional/chromerpc/proto/cdp/serviceworker"
 	storagepb "github.com/accretional/chromerpc/proto/cdp/storage"
+	systeminfopb "github.com/accretional/chromerpc/proto/cdp/systeminfo"
 	targetpb "github.com/accretional/chromerpc/proto/cdp/target"
+	tracingpb "github.com/accretional/chromerpc/proto/cdp/tracing"
 )
 
 func main() {
@@ -159,6 +171,12 @@ func main() {
 	serviceworkerpb.RegisterServiceWorkerServiceServer(grpcServer, serviceworkerserver.New(client))
 	indexeddbpb.RegisterIndexedDBServiceServer(grpcServer, indexeddbserver.New(client))
 	cachestoragepb.RegisterCacheStorageServiceServer(grpcServer, cachestorageserver.New(client))
+	auditspb.RegisterAuditsServiceServer(grpcServer, auditsserver.New(client))
+	layertreepb.RegisterLayerTreeServiceServer(grpcServer, layertreeserver.New(client))
+	animationpb.RegisterAnimationServiceServer(grpcServer, animationserver.New(client))
+	mediapb.RegisterMediaServiceServer(grpcServer, mediaserver.New(client))
+	tracingpb.RegisterTracingServiceServer(grpcServer, tracingserver.New(client))
+	systeminfopb.RegisterSystemInfoServiceServer(grpcServer, systeminfoserver.New(client))
 
 	// Enable gRPC reflection for tools like grpcurl.
 	reflection.Register(grpcServer)

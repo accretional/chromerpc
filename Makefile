@@ -37,7 +37,13 @@ proto:
 		proto/cdp/heapprofiler/heapprofiler.proto \
 		proto/cdp/serviceworker/serviceworker.proto \
 		proto/cdp/indexeddb/indexeddb.proto \
-		proto/cdp/cachestorage/cachestorage.proto
+		proto/cdp/cachestorage/cachestorage.proto \
+		proto/cdp/tracing/tracing.proto \
+		proto/cdp/systeminfo/systeminfo.proto \
+		proto/cdp/audits/audits.proto \
+		proto/cdp/layertree/layertree.proto \
+		proto/cdp/animation/animation.proto \
+		proto/cdp/media/media.proto
 
 # Build Docker image
 docker:

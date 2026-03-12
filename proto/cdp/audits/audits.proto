@@ -1,0 +1,88 @@
+syntax = "proto3";
+
+package cdp.audits;
+
+option go_package = "github.com/accretional/chromerpc/proto/cdp/audits";
+
+// Audits domain provides the ability to investigate and report issues.
+
+service AuditsService {
+  // Enables issues domain, sending Audits.issueAdded events.
+  rpc Enable(EnableRequest) returns (EnableResponse);
+
+  // Disables issues domain.
+  rpc Disable(DisableRequest) returns (DisableResponse);
+
+  // Returns the response body and size if it were re-encoded with the specified settings.
+  rpc GetEncodedResponse(GetEncodedResponseRequest) returns (GetEncodedResponseResponse);
+
+  // Runs the contrast check for the target page.
+  rpc CheckContrast(CheckContrastRequest) returns (CheckContrastResponse);
+
+  // Runs the form issues check for the target page.
+  rpc CheckFormsIssues(CheckFormsIssuesRequest) returns (CheckFormsIssuesResponse);
+
+  // Subscribe to Audits events.
+  rpc SubscribeEvents(SubscribeEventsRequest) returns (stream AuditsEvent);
+}
+
+// ==================== Requests / Responses ====================
+
+message EnableRequest {}
+message EnableResponse {}
+
+message DisableRequest {}
+message DisableResponse {}
+
+message GetEncodedResponseRequest {
+  // Identifier of the network request to get content for.
+  string request_id = 1;
+  // The encoding to use. Allowed values: "webp", "jpeg", "png".
+  string encoding = 2;
+  // The quality of the encoding (0-1). Defaults to 1.
+  optional double quality = 3;
+  // Whether to only return the size information (defaults to false).
+  optional bool size_only = 4;
+}
+
+message GetEncodedResponseResponse {
+  // The encoded body as a base64 string. Omitted if sizeOnly is true.
+  optional string body = 1;
+  // Size before re-encoding.
+  int32 original_size = 2;
+  // Size after re-encoding.
+  int32 encoded_size = 3;
+}
+
+message CheckContrastRequest {
+  // Whether to report WCAG AAA level issues. Default is false.
+  optional bool report_aaa = 1;
+}
+message CheckContrastResponse {}
+
+message CheckFormsIssuesRequest {}
+message CheckFormsIssuesResponse {
+  // List of form issues found. Each entry is a JSON-encoded GenericIssueDetails.
+  repeated string form_issues = 1;
+}
+
+// ==================== Events ====================
+
+message SubscribeEventsRequest {}
+
+message AuditsEvent {
+  oneof event {
+    IssueAddedEvent issue_added = 1;
+  }
+}
+
+message IssueAddedEvent {
+  InspectorIssue issue = 1;
+}
+
+message InspectorIssue {
+  // Issue code.
+  string code = 1;
+  // JSON-encoded issue details.
+  string details = 2;
+}
