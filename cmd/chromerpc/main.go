@@ -185,6 +185,17 @@ func main() {
 		log.Printf("Page commands may fail without a session. Use Target.AttachToTarget first.")
 	}
 
+	// Re-establish the default session after reconnection.
+	client.OnReconnect = func(rctx context.Context, c *cdpclient.Client) error {
+		log.Println("Re-establishing default session after reconnect...")
+		if err := setupDefaultSession(rctx, c); err != nil {
+			log.Printf("Warning: could not re-establish session: %v", err)
+			return err
+		}
+		log.Println("Default session re-established.")
+		return nil
+	}
+
 	// Start gRPC server.
 	lis, err := net.Listen("tcp", *addr)
 	if err != nil {

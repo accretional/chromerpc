@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"strings"
+	"sync/atomic"
 	"testing"
 	"time"
 
@@ -302,6 +303,130 @@ func TestParseWSURLFromString(t *testing.T) {
 		if ok != tt.ok || got != tt.want {
 			t.Errorf("ParseWSURLFromString(%q) = (%q, %v), want (%q, %v)", tt.input, got, ok, tt.want, tt.ok)
 		}
+	}
+}
+
+func TestReconnectAfterDisconnect(t *testing.T) {
+	var connCount atomic.Int32
+
+	// Server that handles connections, tracks how many.
+	upgrader := websocket.Upgrader{}
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		connCount.Add(1)
+		conn, err := upgrader.Upgrade(w, r, nil)
+		if err != nil {
+			return
+		}
+		defer conn.Close()
+		for {
+			_, msg, err := conn.ReadMessage()
+			if err != nil {
+				return
+			}
+			var req CDPRequest
+			json.Unmarshal(msg, &req)
+			resp := map[string]interface{}{
+				"id":     req.ID,
+				"result": map[string]interface{}{"conn": connCount.Load()},
+			}
+			data, _ := json.Marshal(resp)
+			conn.WriteMessage(websocket.TextMessage, data)
+		}
+	}))
+	defer srv.Close()
+
+	wsURL := "ws" + strings.TrimPrefix(srv.URL, "http")
+	ctx := context.Background()
+
+	client, err := Dial(ctx, wsURL)
+	if err != nil {
+		t.Fatalf("dial: %v", err)
+	}
+	defer client.Close()
+
+	// Track reconnect callbacks.
+	var reconnected atomic.Bool
+	client.OnReconnect = func(ctx context.Context, c *Client) error {
+		reconnected.Store(true)
+		return nil
+	}
+
+	// First send should work.
+	_, err = client.Send(ctx, "Test.method", nil)
+	if err != nil {
+		t.Fatalf("first send: %v", err)
+	}
+	if connCount.Load() != 1 {
+		t.Fatalf("expected 1 connection, got %d", connCount.Load())
+	}
+
+	// Force-close the underlying connection to simulate a disconnect.
+	client.connMu.RLock()
+	client.conn.Close()
+	client.connMu.RUnlock()
+
+	// Wait for reconnection.
+	time.Sleep(500 * time.Millisecond)
+
+	// Send should work again after reconnection.
+	sendCtx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+	_, err = client.Send(sendCtx, "Test.method", nil)
+	if err != nil {
+		t.Fatalf("send after reconnect: %v", err)
+	}
+
+	if connCount.Load() < 2 {
+		t.Fatalf("expected at least 2 connections, got %d", connCount.Load())
+	}
+	if !reconnected.Load() {
+		t.Error("OnReconnect callback was not called")
+	}
+}
+
+func TestNoReconnectAfterClose(t *testing.T) {
+	var connCount atomic.Int32
+
+	upgrader := websocket.Upgrader{}
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		connCount.Add(1)
+		conn, err := upgrader.Upgrade(w, r, nil)
+		if err != nil {
+			return
+		}
+		defer conn.Close()
+		for {
+			_, _, err := conn.ReadMessage()
+			if err != nil {
+				return
+			}
+		}
+	}))
+	defer srv.Close()
+
+	wsURL := "ws" + strings.TrimPrefix(srv.URL, "http")
+	ctx := context.Background()
+
+	client, err := Dial(ctx, wsURL)
+	if err != nil {
+		t.Fatalf("dial: %v", err)
+	}
+
+	// Close intentionally — should NOT reconnect.
+	client.Close()
+
+	time.Sleep(300 * time.Millisecond)
+
+	if connCount.Load() != 1 {
+		t.Fatalf("expected exactly 1 connection (no reconnect), got %d", connCount.Load())
+	}
+
+	// Done channel should be closed.
+	select {
+	case <-client.Done():
+		// good
+	default:
+		t.Error("Done() channel should be closed after Close()")
 	}
 }
 
