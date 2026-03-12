@@ -1,0 +1,52 @@
+syntax = "proto3";
+
+package cdp.io;
+
+option go_package = "github.com/accretional/chromerpc/proto/cdp/io";
+
+// IO domain provides stream reading/writing operations.
+
+service IOService {
+  // Read a chunk of a stream.
+  rpc Read(ReadRequest) returns (ReadResponse);
+
+  // Close a stream.
+  rpc Close(CloseRequest) returns (CloseResponse);
+
+  // Resolve a Blob object to its UUID.
+  rpc ResolveBlob(ResolveBlobRequest) returns (ResolveBlobResponse);
+}
+
+// ==================== Requests / Responses ====================
+
+message ReadRequest {
+  // Handle of the stream to read.
+  string handle = 1;
+  // Seek to the specified offset before reading (optional).
+  int32 offset = 2;
+  // Maximum number of bytes to read (optional, defaults to 32768).
+  int32 size = 3;
+}
+message ReadResponse {
+  // Data chunk read from the stream (base64 encoded if base64_encoded is true).
+  string data = 1;
+  // Whether the data is base64-encoded.
+  bool base64_encoded = 2;
+  // Whether end of file was reached.
+  bool eof = 3;
+}
+
+message CloseRequest {
+  // Handle of the stream to close.
+  string handle = 1;
+}
+message CloseResponse {}
+
+message ResolveBlobRequest {
+  // Object id of a Blob object wrapper.
+  string object_id = 1;
+}
+message ResolveBlobResponse {
+  // UUID of the specified Blob.
+  string uuid = 1;
+}

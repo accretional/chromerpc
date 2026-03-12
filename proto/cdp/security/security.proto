@@ -1,0 +1,83 @@
+syntax = "proto3";
+
+package cdp.security;
+
+option go_package = "github.com/accretional/chromerpc/proto/cdp/security";
+
+// Security domain allows controlling security state and certificate errors.
+
+service SecurityService {
+  // Enables the security domain.
+  rpc Enable(EnableRequest) returns (EnableResponse);
+
+  // Disables the security domain.
+  rpc Disable(DisableRequest) returns (DisableResponse);
+
+  // Enable/disable whether all certificate errors should be ignored.
+  rpc SetIgnoreCertificateErrors(SetIgnoreCertificateErrorsRequest) returns (SetIgnoreCertificateErrorsResponse);
+
+  // Subscribe to Security events.
+  rpc SubscribeEvents(SubscribeEventsRequest) returns (stream SecurityEvent);
+}
+
+// ==================== Types ====================
+
+message CertificateSecurityState {
+  string protocol = 1;
+  string key_exchange = 2;
+  string key_exchange_group = 3;
+  string cipher = 4;
+  string mac = 5;
+  repeated string certificate = 6;
+  string subject_name = 7;
+  string issuer = 8;
+  double valid_from = 9;
+  double valid_to = 10;
+  string certificate_network_error = 11;
+  bool certificate_has_weak_signature = 12;
+  bool certificate_has_sha1_signature = 13;
+  bool modern_ssl = 14;
+  bool obsolete_ssl_protocol = 15;
+  bool obsolete_ssl_key_exchange = 16;
+  bool obsolete_ssl_cipher = 17;
+  bool obsolete_ssl_signature = 18;
+}
+
+message SafetyTipInfo {
+  string safety_tip_status = 1; // "badReputation","lookalike"
+  string safe_url = 2;
+}
+
+message VisibleSecurityState {
+  string security_state = 1; // "unknown","neutral","insecure","secure","info","insecureBroken"
+  CertificateSecurityState certificate_security_state = 2;
+  SafetyTipInfo safety_tip_info = 3;
+  repeated string security_state_issue_ids = 4;
+}
+
+// ==================== Requests / Responses ====================
+
+message EnableRequest {}
+message EnableResponse {}
+
+message DisableRequest {}
+message DisableResponse {}
+
+message SetIgnoreCertificateErrorsRequest {
+  bool ignore = 1;
+}
+message SetIgnoreCertificateErrorsResponse {}
+
+// ==================== Events ====================
+
+message SubscribeEventsRequest {}
+
+message SecurityEvent {
+  oneof event {
+    VisibleSecurityStateChangedEvent visible_security_state_changed = 1;
+  }
+}
+
+message VisibleSecurityStateChangedEvent {
+  VisibleSecurityState visible_security_state = 1;
+}

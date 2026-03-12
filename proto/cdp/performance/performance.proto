@@ -1,0 +1,59 @@
+syntax = "proto3";
+
+package cdp.performance;
+
+option go_package = "github.com/accretional/chromerpc/proto/cdp/performance";
+
+// Performance domain enables collecting performance metrics.
+
+service PerformanceService {
+  // Enable collecting performance metrics.
+  rpc Enable(EnableRequest) returns (EnableResponse);
+
+  // Disable collecting performance metrics.
+  rpc Disable(DisableRequest) returns (DisableResponse);
+
+  // Retrieve current values of run-time metrics.
+  rpc GetMetrics(GetMetricsRequest) returns (GetMetricsResponse);
+
+  // Subscribe to Performance events.
+  rpc SubscribeEvents(SubscribeEventsRequest) returns (stream PerformanceEvent);
+}
+
+// ==================== Types ====================
+
+message Metric {
+  string name = 1;
+  double value = 2;
+}
+
+// ==================== Requests / Responses ====================
+
+message EnableRequest {
+  // Time domain to use for collecting and reporting duration metrics.
+  string time_domain = 1; // "timeTicks","threadTicks"
+}
+message EnableResponse {}
+
+message DisableRequest {}
+message DisableResponse {}
+
+message GetMetricsRequest {}
+message GetMetricsResponse {
+  repeated Metric metrics = 1;
+}
+
+// ==================== Events ====================
+
+message SubscribeEventsRequest {}
+
+message PerformanceEvent {
+  oneof event {
+    MetricsEvent metrics = 1;
+  }
+}
+
+message MetricsEvent {
+  repeated Metric metrics = 1;
+  string title = 2;
+}

@@ -1,0 +1,171 @@
+syntax = "proto3";
+
+package cdp.fetch;
+
+option go_package = "github.com/accretional/chromerpc/proto/cdp/fetch";
+
+// Fetch domain allows interception of network requests at request and response stages.
+
+service FetchService {
+  // Enables request interception.
+  rpc Enable(EnableRequest) returns (EnableResponse);
+
+  // Disables request interception.
+  rpc Disable(DisableRequest) returns (DisableResponse);
+
+  // Continues the request, optionally modifying it.
+  rpc ContinueRequest(ContinueRequestRequest) returns (ContinueRequestResponse);
+
+  // Provides a complete response to a paused request.
+  rpc FulfillRequest(FulfillRequestRequest) returns (FulfillRequestResponse);
+
+  // Fails the request with a given reason.
+  rpc FailRequest(FailRequestRequest) returns (FailRequestResponse);
+
+  // Continues the request with authentication credentials.
+  rpc ContinueWithAuth(ContinueWithAuthRequest) returns (ContinueWithAuthResponse);
+
+  // Gets the response body for an intercepted request.
+  rpc GetResponseBody(GetResponseBodyRequest) returns (GetResponseBodyResponse);
+
+  // Takes body as an IO stream.
+  rpc TakeResponseBodyAsStream(TakeResponseBodyAsStreamRequest) returns (TakeResponseBodyAsStreamResponse);
+
+  // Continues a paused response, optionally modifying it.
+  rpc ContinueResponse(ContinueResponseRequest) returns (ContinueResponseResponse);
+
+  // Subscribe to Fetch events (requestPaused, authRequired).
+  rpc SubscribeEvents(SubscribeEventsRequest) returns (stream FetchEvent);
+}
+
+// ==================== Types ====================
+
+message RequestPattern {
+  string url_pattern = 1;
+  string resource_type = 2;
+  string request_stage = 3; // "Request", "Response"
+}
+
+message HeaderEntry {
+  string name = 1;
+  string value = 2;
+}
+
+// ==================== Requests / Responses ====================
+
+message EnableRequest {
+  repeated RequestPattern patterns = 1;
+  bool handle_auth_requests = 2;
+}
+message EnableResponse {}
+
+message DisableRequest {}
+message DisableResponse {}
+
+message ContinueRequestRequest {
+  string request_id = 1;
+  string url = 2;
+  string method = 3;
+  string post_data = 4;
+  repeated HeaderEntry headers = 5;
+  bool intercept_response = 6;
+}
+message ContinueRequestResponse {}
+
+message FulfillRequestRequest {
+  string request_id = 1;
+  int32 response_code = 2;
+  repeated HeaderEntry response_headers = 3;
+  bytes body = 4;
+  string response_phrase = 5;
+  string binary_response_headers = 6;
+}
+message FulfillRequestResponse {}
+
+message FailRequestRequest {
+  string request_id = 1;
+  string reason = 2; // Network.ErrorReason
+}
+message FailRequestResponse {}
+
+message ContinueWithAuthRequest {
+  string request_id = 1;
+  AuthChallengeResponse auth_challenge_response = 2;
+}
+message ContinueWithAuthResponse {}
+
+message AuthChallengeResponse {
+  string response = 1; // "Default", "CancelAuth", "ProvideCredentials"
+  string username = 2;
+  string password = 3;
+}
+
+message GetResponseBodyRequest {
+  string request_id = 1;
+}
+message GetResponseBodyResponse {
+  string body = 1;
+  bool base64_encoded = 2;
+}
+
+message TakeResponseBodyAsStreamRequest {
+  string request_id = 1;
+}
+message TakeResponseBodyAsStreamResponse {
+  string stream = 1;
+}
+
+message ContinueResponseRequest {
+  string request_id = 1;
+  int32 response_code = 2;
+  string response_phrase = 3;
+  repeated HeaderEntry response_headers = 4;
+  string binary_response_headers = 5;
+}
+message ContinueResponseResponse {}
+
+// ==================== Events ====================
+
+message SubscribeEventsRequest {}
+
+message FetchEvent {
+  oneof event {
+    RequestPausedEvent request_paused = 1;
+    AuthRequiredEvent auth_required = 2;
+  }
+}
+
+message RequestPausedEvent {
+  string request_id = 1;
+  RequestInfo request = 2;
+  string frame_id = 3;
+  string resource_type = 4;
+  string response_error_reason = 5;
+  int32 response_status_code = 6;
+  string response_status_text = 7;
+  repeated HeaderEntry response_headers = 8;
+  string network_id = 9;
+  string redirected_request_id = 10;
+}
+
+message RequestInfo {
+  string url = 1;
+  string method = 2;
+  string post_data = 3;
+  map<string, string> headers = 4;
+}
+
+message AuthChallenge {
+  string source = 1; // "Server", "Proxy"
+  string origin = 2;
+  string scheme = 3;
+  string realm = 4;
+}
+
+message AuthRequiredEvent {
+  string request_id = 1;
+  RequestInfo request = 2;
+  string frame_id = 3;
+  string resource_type = 4;
+  AuthChallenge auth_challenge = 5;
+}

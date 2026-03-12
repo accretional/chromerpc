@@ -1,0 +1,165 @@
+syntax = "proto3";
+
+package cdp.accessibility;
+
+option go_package = "github.com/accretional/chromerpc/proto/cdp/accessibility";
+
+// Accessibility domain provides access to the accessibility tree.
+
+service AccessibilityService {
+  // Enables the accessibility domain.
+  rpc Enable(EnableRequest) returns (EnableResponse);
+
+  // Disables the accessibility domain.
+  rpc Disable(DisableRequest) returns (DisableResponse);
+
+  // Fetches the accessibility node and partial accessibility tree for a DOM node.
+  rpc GetPartialAXTree(GetPartialAXTreeRequest) returns (GetPartialAXTreeResponse);
+
+  // Fetches the entire accessibility tree for the root document.
+  rpc GetFullAXTree(GetFullAXTreeRequest) returns (GetFullAXTreeResponse);
+
+  // Fetches the root node.
+  rpc GetRootAXNode(GetRootAXNodeRequest) returns (GetRootAXNodeResponse);
+
+  // Fetches a node and its ancestors up to the root.
+  rpc GetAXNodeAndAncestors(GetAXNodeAndAncestorsRequest) returns (GetAXNodeAndAncestorsResponse);
+
+  // Fetches direct children of a node.
+  rpc GetChildAXNodes(GetChildAXNodesRequest) returns (GetChildAXNodesResponse);
+
+  // Query all nodes by accessible name and role.
+  rpc QueryAXTree(QueryAXTreeRequest) returns (QueryAXTreeResponse);
+
+  // Subscribe to Accessibility events.
+  rpc SubscribeEvents(SubscribeEventsRequest) returns (stream AccessibilityEvent);
+}
+
+// ==================== Types ====================
+
+// Accessibility node.
+message AXNode {
+  string node_id = 1;
+  bool ignored = 2;
+  repeated AXProperty ignored_reasons = 3;
+  AXValue role = 4;
+  AXValue name = 5;
+  AXValue description = 6;
+  AXValue value = 7;
+  repeated AXProperty properties = 8;
+  repeated string child_ids = 9;
+  int32 backend_dom_node_id = 10;
+  string frame_id = 11;
+  string parent_id = 12;
+}
+
+message AXValue {
+  string type = 1; // "boolean","tristate","booleanOrUndefined","idref","idrefList","integer","node","nodeList","number","string","computedString","token","tokenList","domRelation","role","internalRole","valueUndefined"
+  string value = 2; // JSON-encoded value
+  repeated AXRelatedNode related_nodes = 3;
+  repeated AXValueSource sources = 4;
+}
+
+message AXRelatedNode {
+  int32 backend_dom_node_id = 1;
+  string idref = 2;
+  string text = 3;
+}
+
+message AXValueSource {
+  string type = 1; // "attribute","implicit","style","contents","placeholder","relatedElement"
+  AXValue value = 2;
+  string attribute = 3;
+  AXValue attribute_value = 4;
+  bool superseded = 5;
+  string native_source = 6;
+  AXValue native_source_value = 7;
+  bool invalid = 8;
+  string invalid_reason = 9;
+}
+
+message AXProperty {
+  string name = 1;
+  AXValue value = 2;
+}
+
+// ==================== Requests / Responses ====================
+
+message EnableRequest {}
+message EnableResponse {}
+
+message DisableRequest {}
+message DisableResponse {}
+
+message GetPartialAXTreeRequest {
+  int32 node_id = 1;
+  int32 backend_node_id = 2;
+  string object_id = 3;
+  bool fetch_relatives = 4;
+  int32 depth = 5;
+}
+message GetPartialAXTreeResponse {
+  repeated AXNode nodes = 1;
+}
+
+message GetFullAXTreeRequest {
+  int32 depth = 1;
+  string frame_id = 2;
+}
+message GetFullAXTreeResponse {
+  repeated AXNode nodes = 1;
+}
+
+message GetRootAXNodeRequest {
+  string frame_id = 1;
+}
+message GetRootAXNodeResponse {
+  AXNode node = 1;
+}
+
+message GetAXNodeAndAncestorsRequest {
+  int32 node_id = 1;
+  int32 backend_node_id = 2;
+  string object_id = 3;
+}
+message GetAXNodeAndAncestorsResponse {
+  repeated AXNode nodes = 1;
+}
+
+message GetChildAXNodesRequest {
+  string id = 1;
+  string frame_id = 2;
+}
+message GetChildAXNodesResponse {
+  repeated AXNode nodes = 1;
+}
+
+message QueryAXTreeRequest {
+  int32 node_id = 1;
+  int32 backend_node_id = 2;
+  string object_id = 3;
+  string accessible_name = 4;
+  string role = 5;
+}
+message QueryAXTreeResponse {
+  repeated AXNode nodes = 1;
+}
+
+// ==================== Events ====================
+
+message SubscribeEventsRequest {}
+
+message AccessibilityEvent {
+  oneof event {
+    LoadCompleteEvent load_complete = 1;
+    NodesUpdatedEvent nodes_updated = 2;
+  }
+}
+
+message LoadCompleteEvent {
+  AXNode root = 1;
+}
+
+message NodesUpdatedEvent {
+  repeated AXNode nodes = 1;
+}

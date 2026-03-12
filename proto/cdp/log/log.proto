@@ -1,0 +1,94 @@
+syntax = "proto3";
+
+package cdp.log;
+
+option go_package = "github.com/accretional/chromerpc/proto/cdp/log";
+
+// Log domain exposes browser log entries.
+
+service LogService {
+  // Enables log domain.
+  rpc Enable(EnableRequest) returns (EnableResponse);
+
+  // Disables log domain.
+  rpc Disable(DisableRequest) returns (DisableResponse);
+
+  // Clears the log.
+  rpc Clear(ClearRequest) returns (ClearResponse);
+
+  // Start receiving violation reports.
+  rpc StartViolationsReport(StartViolationsReportRequest) returns (StartViolationsReportResponse);
+
+  // Stop receiving violation reports.
+  rpc StopViolationsReport(StopViolationsReportRequest) returns (StopViolationsReportResponse);
+
+  // Subscribe to Log events.
+  rpc SubscribeEvents(SubscribeEventsRequest) returns (stream LogEvent);
+}
+
+// ==================== Types ====================
+
+message LogEntry {
+  // Log entry source.
+  string source = 1; // "xml","javascript","network","storage","appcache","rendering","security","deprecation","worker","violation","intervention","recommendation","other"
+  // Log entry severity.
+  string level = 2; // "verbose","info","warning","error"
+  // Logged text.
+  string text = 3;
+  // Timestamp (milliseconds since epoch).
+  double timestamp = 4;
+  // URL of the log entry origin.
+  string url = 5;
+  // Line number in the resource.
+  int32 line_number = 6;
+  // Stack trace.
+  string stack_trace = 7; // JSON-encoded StackTrace
+  // Network request ID.
+  string network_request_id = 8;
+  // Worker ID.
+  string worker_id = 9;
+  // Call arguments.
+  string args = 10; // JSON-encoded array of RemoteObject
+  // Log entry category.
+  string category = 11; // "cors"
+}
+
+message ViolationSetting {
+  // Violation type.
+  string name = 1; // "longTask","longLayout","blockedEvent","blockedParser","discouragedAPIUse","handler","recurringHandler"
+  // Threshold in milliseconds.
+  double threshold = 2;
+}
+
+// ==================== Requests / Responses ====================
+
+message EnableRequest {}
+message EnableResponse {}
+
+message DisableRequest {}
+message DisableResponse {}
+
+message ClearRequest {}
+message ClearResponse {}
+
+message StartViolationsReportRequest {
+  repeated ViolationSetting config = 1;
+}
+message StartViolationsReportResponse {}
+
+message StopViolationsReportRequest {}
+message StopViolationsReportResponse {}
+
+// ==================== Events ====================
+
+message SubscribeEventsRequest {}
+
+message LogEvent {
+  oneof event {
+    EntryAddedEvent entry_added = 1;
+  }
+}
+
+message EntryAddedEvent {
+  LogEntry entry = 1;
+}

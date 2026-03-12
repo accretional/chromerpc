@@ -1,0 +1,355 @@
+syntax = "proto3";
+
+package cdp.css;
+
+option go_package = "github.com/accretional/chromerpc/proto/cdp/css";
+
+// CSS domain exposes CSS read/write operations.
+
+service CSSService {
+  // Enables the CSS agent.
+  rpc Enable(EnableRequest) returns (EnableResponse);
+
+  // Disables the CSS agent.
+  rpc Disable(DisableRequest) returns (DisableResponse);
+
+  // Returns matched CSS styles for a DOM node.
+  rpc GetMatchedStylesForNode(GetMatchedStylesForNodeRequest) returns (GetMatchedStylesForNodeResponse);
+
+  // Returns computed style for a DOM node.
+  rpc GetComputedStyleForNode(GetComputedStyleForNodeRequest) returns (GetComputedStyleForNodeResponse);
+
+  // Returns inline and attribute styles for a DOM node.
+  rpc GetInlineStylesForNode(GetInlineStylesForNodeRequest) returns (GetInlineStylesForNodeResponse);
+
+  // Returns the text of a stylesheet.
+  rpc GetStyleSheetText(GetStyleSheetTextRequest) returns (GetStyleSheetTextResponse);
+
+  // Sets the text of a stylesheet.
+  rpc SetStyleSheetText(SetStyleSheetTextRequest) returns (SetStyleSheetTextResponse);
+
+  // Modifies CSS style text(s).
+  rpc SetStyleTexts(SetStyleTextsRequest) returns (SetStyleTextsResponse);
+
+  // Adds a new CSS rule.
+  rpc AddRule(AddRuleRequest) returns (AddRuleResponse);
+
+  // Creates a new inspector stylesheet.
+  rpc CreateStyleSheet(CreateStyleSheetRequest) returns (CreateStyleSheetResponse);
+
+  // Gets background colors for a node.
+  rpc GetBackgroundColors(GetBackgroundColorsRequest) returns (GetBackgroundColorsResponse);
+
+  // Gets platform fonts used for rendering text in a node.
+  rpc GetPlatformFontsForNode(GetPlatformFontsForNodeRequest) returns (GetPlatformFontsForNodeResponse);
+
+  // Gets all media queries.
+  rpc GetMediaQueries(GetMediaQueriesRequest) returns (GetMediaQueriesResponse);
+
+  // Starts tracking CSS rule usage.
+  rpc StartRuleUsageTracking(StartRuleUsageTrackingRequest) returns (StartRuleUsageTrackingResponse);
+
+  // Stops tracking CSS rule usage.
+  rpc StopRuleUsageTracking(StopRuleUsageTrackingRequest) returns (StopRuleUsageTrackingResponse);
+
+  // Gets coverage delta since last call.
+  rpc TakeCoverageDelta(TakeCoverageDeltaRequest) returns (TakeCoverageDeltaResponse);
+
+  // Collects class names for a stylesheet.
+  rpc CollectClassNames(CollectClassNamesRequest) returns (CollectClassNamesResponse);
+
+  // Modifies the rule selector.
+  rpc SetRuleSelector(SetRuleSelectorRequest) returns (SetRuleSelectorResponse);
+
+  // Forces pseudo state for a node.
+  rpc ForcePseudoState(ForcePseudoStateRequest) returns (ForcePseudoStateResponse);
+
+  // Subscribe to CSS events.
+  rpc SubscribeEvents(SubscribeEventsRequest) returns (stream CSSEvent);
+}
+
+// ==================== Types ====================
+
+// CSS style description.
+message CSSStyle {
+  string style_sheet_id = 1;
+  repeated CSSProperty css_properties = 2;
+  repeated ShorthandEntry shorthand_entries = 3;
+  string css_text = 4;
+  SourceRange range = 5;
+}
+
+message CSSProperty {
+  string name = 1;
+  string value = 2;
+  bool important = 3;
+  bool implicit = 4;
+  string text = 5;
+  bool parsed_ok = 6;
+  bool disabled = 7;
+  SourceRange range = 8;
+}
+
+message ShorthandEntry {
+  string name = 1;
+  string value = 2;
+  bool important = 3;
+}
+
+message SourceRange {
+  int32 start_line = 1;
+  int32 start_column = 2;
+  int32 end_line = 3;
+  int32 end_column = 4;
+}
+
+// CSS rule.
+message CSSRule {
+  string style_sheet_id = 1;
+  string selector_text = 2;
+  repeated SelectorEntry selectors = 3;
+  string origin = 4; // "injected","user-agent","inspector","regular"
+  CSSStyle style = 5;
+  repeated CSSMedia media = 6;
+}
+
+message SelectorEntry {
+  string value = 1;
+  SourceRange range = 2;
+  int32 specificity_a = 3;
+  int32 specificity_b = 4;
+  int32 specificity_c = 5;
+}
+
+message CSSMedia {
+  string text = 1;
+  string source = 2; // "mediaRule","importRule","linkedSheet","inlineSheet"
+  string source_url = 3;
+  SourceRange range = 4;
+  string style_sheet_id = 5;
+}
+
+message CSSComputedStyleProperty {
+  string name = 1;
+  string value = 2;
+}
+
+message PlatformFontUsage {
+  string family_name = 1;
+  bool is_custom_font = 2;
+  double glyph_count = 3;
+}
+
+message RuleUsage {
+  string style_sheet_id = 1;
+  double start_offset = 2;
+  double end_offset = 3;
+  bool used = 4;
+}
+
+message StyleDeclarationEdit {
+  string style_sheet_id = 1;
+  SourceRange range = 2;
+  string text = 3;
+}
+
+message CSSStyleSheetHeader {
+  string style_sheet_id = 1;
+  string frame_id = 2;
+  string source_url = 3;
+  string origin = 4;
+  string title = 5;
+  string owner_node = 6;
+  bool disabled = 7;
+  bool is_inline = 8;
+  bool is_mutable = 9;
+  bool is_constructed = 10;
+  double start_line = 11;
+  double start_column = 12;
+  double length = 13;
+  double end_line = 14;
+  double end_column = 15;
+}
+
+message CSSMediaQuery {
+  repeated MediaQueryExpression expressions = 1;
+  bool active = 2;
+}
+
+message MediaQueryExpression {
+  double value = 1;
+  string unit = 2;
+  string feature = 3;
+  SourceRange value_range = 4;
+  double computed_length = 5;
+}
+
+// ==================== Requests / Responses ====================
+
+message EnableRequest {}
+message EnableResponse {}
+
+message DisableRequest {}
+message DisableResponse {}
+
+message GetMatchedStylesForNodeRequest {
+  int32 node_id = 1;
+}
+message GetMatchedStylesForNodeResponse {
+  CSSStyle inline_style = 1;
+  CSSStyle attributes_style = 2;
+  repeated RuleMatch matched_css_rules = 3;
+  repeated InheritedStyleEntry inherited = 4;
+}
+
+message RuleMatch {
+  CSSRule rule = 1;
+  repeated int32 matching_selectors = 2;
+}
+
+message InheritedStyleEntry {
+  CSSStyle inline_style = 1;
+  repeated RuleMatch matched_css_rules = 2;
+}
+
+message GetComputedStyleForNodeRequest {
+  int32 node_id = 1;
+}
+message GetComputedStyleForNodeResponse {
+  repeated CSSComputedStyleProperty computed_style = 1;
+}
+
+message GetInlineStylesForNodeRequest {
+  int32 node_id = 1;
+}
+message GetInlineStylesForNodeResponse {
+  CSSStyle inline_style = 1;
+  CSSStyle attributes_style = 2;
+}
+
+message GetStyleSheetTextRequest {
+  string style_sheet_id = 1;
+}
+message GetStyleSheetTextResponse {
+  string text = 1;
+}
+
+message SetStyleSheetTextRequest {
+  string style_sheet_id = 1;
+  string text = 2;
+}
+message SetStyleSheetTextResponse {
+  string source_map_url = 1;
+}
+
+message SetStyleTextsRequest {
+  repeated StyleDeclarationEdit edits = 1;
+}
+message SetStyleTextsResponse {
+  repeated CSSStyle styles = 1;
+}
+
+message AddRuleRequest {
+  string style_sheet_id = 1;
+  string rule_text = 2;
+  SourceRange location = 3;
+}
+message AddRuleResponse {
+  CSSRule rule = 1;
+}
+
+message CreateStyleSheetRequest {
+  string frame_id = 1;
+}
+message CreateStyleSheetResponse {
+  string style_sheet_id = 1;
+}
+
+message GetBackgroundColorsRequest {
+  int32 node_id = 1;
+}
+message GetBackgroundColorsResponse {
+  repeated string background_colors = 1;
+  string computed_font_size = 2;
+  string computed_font_weight = 3;
+}
+
+message GetPlatformFontsForNodeRequest {
+  int32 node_id = 1;
+}
+message GetPlatformFontsForNodeResponse {
+  repeated PlatformFontUsage fonts = 1;
+}
+
+message GetMediaQueriesRequest {}
+message GetMediaQueriesResponse {
+  repeated CSSMedia medias = 1;
+}
+
+message StartRuleUsageTrackingRequest {}
+message StartRuleUsageTrackingResponse {}
+
+message StopRuleUsageTrackingRequest {}
+message StopRuleUsageTrackingResponse {
+  repeated RuleUsage rule_usage = 1;
+}
+
+message TakeCoverageDeltaRequest {}
+message TakeCoverageDeltaResponse {
+  repeated RuleUsage coverage = 1;
+  double timestamp = 2;
+}
+
+message CollectClassNamesRequest {
+  string style_sheet_id = 1;
+}
+message CollectClassNamesResponse {
+  repeated string class_names = 1;
+}
+
+message SetRuleSelectorRequest {
+  string style_sheet_id = 1;
+  SourceRange range = 2;
+  string selector = 3;
+}
+message SetRuleSelectorResponse {
+  string selector_text = 1;
+}
+
+message ForcePseudoStateRequest {
+  int32 node_id = 1;
+  repeated string forced_pseudo_classes = 2;
+}
+message ForcePseudoStateResponse {}
+
+// ==================== Events ====================
+
+message SubscribeEventsRequest {}
+
+message CSSEvent {
+  oneof event {
+    StyleSheetAddedEvent style_sheet_added = 1;
+    StyleSheetRemovedEvent style_sheet_removed = 2;
+    StyleSheetChangedEvent style_sheet_changed = 3;
+    MediaQueryResultChangedEvent media_query_result_changed = 4;
+    FontsUpdatedEvent fonts_updated = 5;
+  }
+}
+
+message StyleSheetAddedEvent {
+  CSSStyleSheetHeader header = 1;
+}
+
+message StyleSheetRemovedEvent {
+  string style_sheet_id = 1;
+}
+
+message StyleSheetChangedEvent {
+  string style_sheet_id = 1;
+}
+
+message MediaQueryResultChangedEvent {}
+
+message FontsUpdatedEvent {
+  string font = 1; // JSON-encoded font face
+}

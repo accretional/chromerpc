@@ -20,39 +20,60 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 
 	"github.com/accretional/chromerpc/internal/cdpclient"
+	accessibilityserver "github.com/accretional/chromerpc/internal/server/accessibility"
 	browserserver "github.com/accretional/chromerpc/internal/server/browser"
+	cssserver "github.com/accretional/chromerpc/internal/server/css"
 	domserver "github.com/accretional/chromerpc/internal/server/dom"
 	emulationserver "github.com/accretional/chromerpc/internal/server/emulation"
+	fetchserver "github.com/accretional/chromerpc/internal/server/fetch"
 	inputserver "github.com/accretional/chromerpc/internal/server/input"
+	ioserver "github.com/accretional/chromerpc/internal/server/io"
+	logserver "github.com/accretional/chromerpc/internal/server/log"
 	networkserver "github.com/accretional/chromerpc/internal/server/network"
 	pageserver "github.com/accretional/chromerpc/internal/server/page"
+	performanceserver "github.com/accretional/chromerpc/internal/server/performance"
 	runtimeserver "github.com/accretional/chromerpc/internal/server/runtime"
+	securityserver "github.com/accretional/chromerpc/internal/server/security"
 	targetserver "github.com/accretional/chromerpc/internal/server/target"
+	accessibilitypb "github.com/accretional/chromerpc/proto/cdp/accessibility"
 	browserpb "github.com/accretional/chromerpc/proto/cdp/browser"
+	csspb "github.com/accretional/chromerpc/proto/cdp/css"
 	dompb "github.com/accretional/chromerpc/proto/cdp/dom"
 	emulationpb "github.com/accretional/chromerpc/proto/cdp/emulation"
+	fetchpb "github.com/accretional/chromerpc/proto/cdp/fetch"
 	inputpb "github.com/accretional/chromerpc/proto/cdp/input"
+	iopb "github.com/accretional/chromerpc/proto/cdp/io"
+	logpb "github.com/accretional/chromerpc/proto/cdp/log"
 	networkpb "github.com/accretional/chromerpc/proto/cdp/network"
 	pagepb "github.com/accretional/chromerpc/proto/cdp/page"
+	performancepb "github.com/accretional/chromerpc/proto/cdp/performance"
 	runtimepb "github.com/accretional/chromerpc/proto/cdp/runtime"
+	securitypb "github.com/accretional/chromerpc/proto/cdp/security"
 	targetpb "github.com/accretional/chromerpc/proto/cdp/target"
 )
 
 // testEnv holds a running Chrome + gRPC server for tests.
 type testEnv struct {
-	grpcAddr       string
-	grpcServer     *grpc.Server
-	client         *cdpclient.Client
-	launchResult   *cdpclient.LaunchResult
-	pageClient     pagepb.PageServiceClient
-	targetClient   targetpb.TargetServiceClient
-	runtimeClient  runtimepb.RuntimeServiceClient
-	networkClient  networkpb.NetworkServiceClient
-	domClient      dompb.DOMServiceClient
-	emulationClient emulationpb.EmulationServiceClient
-	inputClient    inputpb.InputServiceClient
-	browserClient  browserpb.BrowserServiceClient
-	conn           *grpc.ClientConn
+	grpcAddr            string
+	grpcServer          *grpc.Server
+	client              *cdpclient.Client
+	launchResult        *cdpclient.LaunchResult
+	pageClient          pagepb.PageServiceClient
+	targetClient        targetpb.TargetServiceClient
+	runtimeClient       runtimepb.RuntimeServiceClient
+	networkClient       networkpb.NetworkServiceClient
+	domClient           dompb.DOMServiceClient
+	emulationClient     emulationpb.EmulationServiceClient
+	inputClient         inputpb.InputServiceClient
+	browserClient       browserpb.BrowserServiceClient
+	fetchClient         fetchpb.FetchServiceClient
+	cssClient           csspb.CSSServiceClient
+	logClient           logpb.LogServiceClient
+	performanceClient   performancepb.PerformanceServiceClient
+	accessibilityClient accessibilitypb.AccessibilityServiceClient
+	ioClient            iopb.IOServiceClient
+	securityClient      securitypb.SecurityServiceClient
+	conn                *grpc.ClientConn
 }
 
 func (e *testEnv) cleanup() {
@@ -128,6 +149,13 @@ func setupTestEnv(t *testing.T) *testEnv {
 	emulationpb.RegisterEmulationServiceServer(grpcServer, emulationserver.New(client))
 	inputpb.RegisterInputServiceServer(grpcServer, inputserver.New(client))
 	browserpb.RegisterBrowserServiceServer(grpcServer, browserserver.New(client))
+	fetchpb.RegisterFetchServiceServer(grpcServer, fetchserver.New(client))
+	csspb.RegisterCSSServiceServer(grpcServer, cssserver.New(client))
+	logpb.RegisterLogServiceServer(grpcServer, logserver.New(client))
+	performancepb.RegisterPerformanceServiceServer(grpcServer, performanceserver.New(client))
+	accessibilitypb.RegisterAccessibilityServiceServer(grpcServer, accessibilityserver.New(client))
+	iopb.RegisterIOServiceServer(grpcServer, ioserver.New(client))
+	securitypb.RegisterSecurityServiceServer(grpcServer, securityserver.New(client))
 
 	go grpcServer.Serve(lis)
 
@@ -141,19 +169,26 @@ func setupTestEnv(t *testing.T) *testEnv {
 	}
 
 	env := &testEnv{
-		grpcAddr:       lis.Addr().String(),
-		grpcServer:     grpcServer,
-		client:         client,
-		launchResult:   launchResult,
-		pageClient:     pagepb.NewPageServiceClient(conn),
-		targetClient:   targetpb.NewTargetServiceClient(conn),
-		runtimeClient:  runtimepb.NewRuntimeServiceClient(conn),
-		networkClient:  networkpb.NewNetworkServiceClient(conn),
-		domClient:      dompb.NewDOMServiceClient(conn),
-		emulationClient: emulationpb.NewEmulationServiceClient(conn),
-		inputClient:    inputpb.NewInputServiceClient(conn),
-		browserClient:  browserpb.NewBrowserServiceClient(conn),
-		conn:           conn,
+		grpcAddr:            lis.Addr().String(),
+		grpcServer:          grpcServer,
+		client:              client,
+		launchResult:        launchResult,
+		pageClient:          pagepb.NewPageServiceClient(conn),
+		targetClient:        targetpb.NewTargetServiceClient(conn),
+		runtimeClient:       runtimepb.NewRuntimeServiceClient(conn),
+		networkClient:       networkpb.NewNetworkServiceClient(conn),
+		domClient:           dompb.NewDOMServiceClient(conn),
+		emulationClient:     emulationpb.NewEmulationServiceClient(conn),
+		inputClient:         inputpb.NewInputServiceClient(conn),
+		browserClient:       browserpb.NewBrowserServiceClient(conn),
+		fetchClient:         fetchpb.NewFetchServiceClient(conn),
+		cssClient:           csspb.NewCSSServiceClient(conn),
+		logClient:           logpb.NewLogServiceClient(conn),
+		performanceClient:   performancepb.NewPerformanceServiceClient(conn),
+		accessibilityClient: accessibilitypb.NewAccessibilityServiceClient(conn),
+		ioClient:            iopb.NewIOServiceClient(conn),
+		securityClient:      securitypb.NewSecurityServiceClient(conn),
+		conn:                conn,
 	}
 
 	t.Cleanup(env.cleanup)

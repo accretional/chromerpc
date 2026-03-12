@@ -20,7 +20,14 @@ proto:
 		proto/cdp/dom/dom.proto \
 		proto/cdp/emulation/emulation.proto \
 		proto/cdp/input/input.proto \
-		proto/cdp/browser/browser.proto
+		proto/cdp/browser/browser.proto \
+		proto/cdp/fetch/fetch.proto \
+		proto/cdp/css/css.proto \
+		proto/cdp/log/log.proto \
+		proto/cdp/performance/performance.proto \
+		proto/cdp/accessibility/accessibility.proto \
+		proto/cdp/io/io.proto \
+		proto/cdp/security/security.proto
 
 # Build Docker image
 docker:

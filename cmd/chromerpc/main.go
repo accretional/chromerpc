@@ -25,21 +25,35 @@ import (
 	"google.golang.org/grpc/reflection"
 
 	"github.com/accretional/chromerpc/internal/cdpclient"
+	accessibilityserver "github.com/accretional/chromerpc/internal/server/accessibility"
 	browserserver "github.com/accretional/chromerpc/internal/server/browser"
+	cssserver "github.com/accretional/chromerpc/internal/server/css"
 	domserver "github.com/accretional/chromerpc/internal/server/dom"
 	emulationserver "github.com/accretional/chromerpc/internal/server/emulation"
+	fetchserver "github.com/accretional/chromerpc/internal/server/fetch"
 	inputserver "github.com/accretional/chromerpc/internal/server/input"
+	ioserver "github.com/accretional/chromerpc/internal/server/io"
+	logserver "github.com/accretional/chromerpc/internal/server/log"
 	networkserver "github.com/accretional/chromerpc/internal/server/network"
 	pageserver "github.com/accretional/chromerpc/internal/server/page"
+	performanceserver "github.com/accretional/chromerpc/internal/server/performance"
 	runtimeserver "github.com/accretional/chromerpc/internal/server/runtime"
+	securityserver "github.com/accretional/chromerpc/internal/server/security"
 	targetserver "github.com/accretional/chromerpc/internal/server/target"
+	accessibilitypb "github.com/accretional/chromerpc/proto/cdp/accessibility"
 	browserpb "github.com/accretional/chromerpc/proto/cdp/browser"
+	csspb "github.com/accretional/chromerpc/proto/cdp/css"
 	dompb "github.com/accretional/chromerpc/proto/cdp/dom"
 	emulationpb "github.com/accretional/chromerpc/proto/cdp/emulation"
+	fetchpb "github.com/accretional/chromerpc/proto/cdp/fetch"
 	inputpb "github.com/accretional/chromerpc/proto/cdp/input"
+	iopb "github.com/accretional/chromerpc/proto/cdp/io"
+	logpb "github.com/accretional/chromerpc/proto/cdp/log"
 	networkpb "github.com/accretional/chromerpc/proto/cdp/network"
 	pagepb "github.com/accretional/chromerpc/proto/cdp/page"
+	performancepb "github.com/accretional/chromerpc/proto/cdp/performance"
 	runtimepb "github.com/accretional/chromerpc/proto/cdp/runtime"
+	securitypb "github.com/accretional/chromerpc/proto/cdp/security"
 	targetpb "github.com/accretional/chromerpc/proto/cdp/target"
 )
 
@@ -108,6 +122,13 @@ func main() {
 	emulationpb.RegisterEmulationServiceServer(grpcServer, emulationserver.New(client))
 	inputpb.RegisterInputServiceServer(grpcServer, inputserver.New(client))
 	browserpb.RegisterBrowserServiceServer(grpcServer, browserserver.New(client))
+	fetchpb.RegisterFetchServiceServer(grpcServer, fetchserver.New(client))
+	csspb.RegisterCSSServiceServer(grpcServer, cssserver.New(client))
+	logpb.RegisterLogServiceServer(grpcServer, logserver.New(client))
+	performancepb.RegisterPerformanceServiceServer(grpcServer, performanceserver.New(client))
+	accessibilitypb.RegisterAccessibilityServiceServer(grpcServer, accessibilityserver.New(client))
+	iopb.RegisterIOServiceServer(grpcServer, ioserver.New(client))
+	securitypb.RegisterSecurityServiceServer(grpcServer, securityserver.New(client))
 
 	// Enable gRPC reflection for tools like grpcurl.
 	reflection.Register(grpcServer)
