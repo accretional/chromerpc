@@ -62,8 +62,13 @@ import (
 	systeminfoserver "github.com/accretional/chromerpc/internal/server/systeminfo"
 	targetserver "github.com/accretional/chromerpc/internal/server/target"
 	tracingserver "github.com/accretional/chromerpc/internal/server/tracing"
+	eventbreakpointsserver "github.com/accretional/chromerpc/internal/server/eventbreakpoints"
+	headlessexperimentalserver "github.com/accretional/chromerpc/internal/server/headlessexperimental"
 	performancetimelineserver "github.com/accretional/chromerpc/internal/server/performancetimeline"
 	preloadserver "github.com/accretional/chromerpc/internal/server/preload"
+	pwaserver "github.com/accretional/chromerpc/internal/server/pwa"
+	schemaserver "github.com/accretional/chromerpc/internal/server/schema"
+	tetheringserver "github.com/accretional/chromerpc/internal/server/tethering"
 	webaudioserver "github.com/accretional/chromerpc/internal/server/webaudio"
 	webauthnserver "github.com/accretional/chromerpc/internal/server/webauthn"
 	accessibilitypb "github.com/accretional/chromerpc/proto/cdp/accessibility"
@@ -103,8 +108,13 @@ import (
 	systeminfopb "github.com/accretional/chromerpc/proto/cdp/systeminfo"
 	targetpb "github.com/accretional/chromerpc/proto/cdp/target"
 	tracingpb "github.com/accretional/chromerpc/proto/cdp/tracing"
+	eventbreakpointspb "github.com/accretional/chromerpc/proto/cdp/eventbreakpoints"
+	headlessexperimentalpb "github.com/accretional/chromerpc/proto/cdp/headlessexperimental"
 	performancetimelinepb "github.com/accretional/chromerpc/proto/cdp/performancetimeline"
 	preloadpb "github.com/accretional/chromerpc/proto/cdp/preload"
+	pwapb "github.com/accretional/chromerpc/proto/cdp/pwa"
+	schemapb "github.com/accretional/chromerpc/proto/cdp/schema"
+	tetheringpb "github.com/accretional/chromerpc/proto/cdp/tethering"
 	webaudiopb "github.com/accretional/chromerpc/proto/cdp/webaudio"
 	webauthnpb "github.com/accretional/chromerpc/proto/cdp/webauthn"
 )
@@ -207,6 +217,11 @@ func main() {
 	webauthnpb.RegisterWebAuthnServiceServer(grpcServer, webauthnserver.New(client))
 	performancetimelinepb.RegisterPerformanceTimelineServiceServer(grpcServer, performancetimelineserver.New(client))
 	preloadpb.RegisterPreloadServiceServer(grpcServer, preloadserver.New(client))
+	eventbreakpointspb.RegisterEventBreakpointsServiceServer(grpcServer, eventbreakpointsserver.New(client))
+	headlessexperimentalpb.RegisterHeadlessExperimentalServiceServer(grpcServer, headlessexperimentalserver.New(client))
+	pwapb.RegisterPWAServiceServer(grpcServer, pwaserver.New(client))
+	schemapb.RegisterSchemaServiceServer(grpcServer, schemaserver.New(client))
+	tetheringpb.RegisterTetheringServiceServer(grpcServer, tetheringserver.New(client))
 
 	// Enable gRPC reflection for tools like grpcurl.
 	reflection.Register(grpcServer)

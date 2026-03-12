@@ -1,0 +1,17 @@
+syntax = "proto3";
+package cdp.tethering;
+option go_package = "github.com/accretional/chromerpc/proto/cdp/tethering";
+
+service TetheringService {
+  rpc Bind(BindRequest) returns (BindResponse);
+  rpc Unbind(UnbindRequest) returns (UnbindResponse);
+}
+
+message BindRequest {
+  int32 port = 1;
+}
+message BindResponse {}
+message UnbindRequest {
+  int32 port = 1;
+}
+message UnbindResponse {}

@@ -1,0 +1,16 @@
+syntax = "proto3";
+package cdp.schema;
+option go_package = "github.com/accretional/chromerpc/proto/cdp/schema";
+
+service SchemaService {
+  rpc GetDomains(GetDomainsRequest) returns (GetDomainsResponse);
+}
+
+message GetDomainsRequest {}
+message GetDomainsResponse {
+  repeated Domain domains = 1;
+}
+message Domain {
+  string name = 1;
+  string version = 2;
+}

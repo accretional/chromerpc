@@ -1,0 +1,80 @@
+syntax = "proto3";
+
+package cdp.pwa;
+
+option go_package = "github.com/accretional/chromerpc/proto/cdp/pwa";
+
+// PWA domain allows querying and managing Progressive Web Apps.
+
+service PWAService {
+  // Returns the OS app state for a PWA.
+  rpc GetOsAppState(GetOsAppStateRequest) returns (GetOsAppStateResponse);
+
+  // Installs a PWA.
+  rpc Install(InstallRequest) returns (InstallResponse);
+
+  // Uninstalls a PWA.
+  rpc Uninstall(UninstallRequest) returns (UninstallResponse);
+
+  // Launches a PWA.
+  rpc Launch(LaunchRequest) returns (LaunchResponse);
+
+  // Launches files in a PWA.
+  rpc LaunchFilesInApp(LaunchFilesInAppRequest) returns (LaunchFilesInAppResponse);
+
+  // Changes user settings for a PWA.
+  rpc ChangeAppUserSettings(ChangeAppUserSettingsRequest) returns (ChangeAppUserSettingsResponse);
+}
+
+// ==================== Requests / Responses ====================
+
+message GetOsAppStateRequest {
+  string manifest_id = 1;
+}
+
+message GetOsAppStateResponse {
+  int32 badge_count = 1;
+  // unknown_not_installed | known_not_installed | installed
+  string installation_state = 2;
+  // standalone | browser | minimal-ui | fullscreen | window-controls-overlay | borderless | tabbed
+  string display_mode = 3;
+}
+
+message InstallRequest {
+  string manifest_id = 1;
+  optional string install_url_or_bundle_url = 2;
+}
+
+message InstallResponse {}
+
+message UninstallRequest {
+  string manifest_id = 1;
+}
+
+message UninstallResponse {}
+
+message LaunchRequest {
+  string manifest_id = 1;
+  optional string url = 2;
+}
+
+message LaunchResponse {
+  string target_id = 1;
+}
+
+message LaunchFilesInAppRequest {
+  string manifest_id = 1;
+  repeated string files = 2;
+}
+
+message LaunchFilesInAppResponse {
+  repeated string target_ids = 1;
+}
+
+message ChangeAppUserSettingsRequest {
+  string manifest_id = 1;
+  optional bool link_capturing = 2;
+  optional string display_mode = 3;
+}
+
+message ChangeAppUserSettingsResponse {}

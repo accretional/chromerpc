@@ -53,7 +53,12 @@ proto:
 		proto/cdp/deviceorientation/deviceorientation.proto \
 		proto/cdp/webauthn/webauthn.proto \
 		proto/cdp/performancetimeline/performancetimeline.proto \
-		proto/cdp/preload/preload.proto
+		proto/cdp/preload/preload.proto \
+		proto/cdp/eventbreakpoints/eventbreakpoints.proto \
+		proto/cdp/headlessexperimental/headlessexperimental.proto \
+		proto/cdp/pwa/pwa.proto \
+		proto/cdp/schema/schema.proto \
+		proto/cdp/tethering/tethering.proto
 
 # Build Docker image
 docker:

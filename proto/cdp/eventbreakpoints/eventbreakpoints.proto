@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package cdp.eventbreakpoints;
+
+option go_package = "github.com/accretional/chromerpc/proto/cdp/eventbreakpoints";
+
+// EventBreakpoints domain allows setting breakpoints on particular CDP events.
+
+service EventBreakpointsService {
+  // Set an instrumentation breakpoint for a particular event.
+  rpc SetInstrumentationBreakpoint(SetInstrumentationBreakpointRequest) returns (SetInstrumentationBreakpointResponse);
+
+  // Remove an instrumentation breakpoint for a particular event.
+  rpc RemoveInstrumentationBreakpoint(RemoveInstrumentationBreakpointRequest) returns (RemoveInstrumentationBreakpointResponse);
+
+  // Disable the EventBreakpoints domain.
+  rpc Disable(DisableRequest) returns (DisableResponse);
+}
+
+// ==================== Requests / Responses ====================
+
+message SetInstrumentationBreakpointRequest {
+  string event_name = 1;
+}
+message SetInstrumentationBreakpointResponse {}
+
+message RemoveInstrumentationBreakpointRequest {
+  string event_name = 1;
+}
+message RemoveInstrumentationBreakpointResponse {}
+
+message DisableRequest {}
+message DisableResponse {}

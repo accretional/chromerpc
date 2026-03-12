@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+package cdp.headlessexperimental;
+
+option go_package = "github.com/accretional/chromerpc/proto/cdp/headlessexperimental";
+
+// HeadlessExperimental domain provides experimental commands for headless Chrome.
+
+service HeadlessExperimentalService {
+  // Enable the HeadlessExperimental domain.
+  rpc Enable(EnableRequest) returns (EnableResponse);
+
+  // Disable the HeadlessExperimental domain.
+  rpc Disable(DisableRequest) returns (DisableResponse);
+
+  // Sends a BeginFrame to the target and returns when the frame was completed.
+  rpc BeginFrame(BeginFrameRequest) returns (BeginFrameResponse);
+}
+
+// ==================== Types ====================
+
+message ScreenshotParams {
+  // Image compression format (defaults to png). Values: jpeg, png.
+  string format = 1;
+  // Compression quality from range [0..100] (jpeg only).
+  int32 quality = 2;
+  // Optimize image encoding for speed, not for resulting size.
+  bool optimize_for_speed = 3;
+}
+
+// ==================== Requests / Responses ====================
+
+message EnableRequest {}
+message EnableResponse {}
+
+message DisableRequest {}
+message DisableResponse {}
+
+message BeginFrameRequest {
+  // Timestamp of this BeginFrame in Renderer TimeTicks (Monotonic Time).
+  optional double frame_time_ticks = 1;
+  // The interval between BeginFrames that is reported to the compositor, in milliseconds.
+  optional double interval = 2;
+  // Whether updates should not be committed and visualized on the screen.
+  bool no_display_updates = 3;
+  // Screenshot parameters. If specified, a screenshot of the frame will be captured.
+  ScreenshotParams screenshot = 4;
+}
+
+message BeginFrameResponse {
+  // Whether the BeginFrame resulted in damage and thus a new display frame was committed.
+  bool has_damage = 1;
+  // Base64-decoded screenshot data, captured if screenshot was requested.
+  bytes screenshot_data = 2;
+}
