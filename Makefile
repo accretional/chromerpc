@@ -63,7 +63,10 @@ proto:
 		proto/cdp/domsnapshot/domsnapshot.proto \
 		proto/cdp/fedcm/fedcm.proto \
 		proto/cdp/autofill/autofill.proto \
-		proto/cdp/extensions/extensions.proto
+		proto/cdp/extensions/extensions.proto \
+		proto/cdp/deviceaccess/deviceaccess.proto \
+		proto/cdp/filesystem/filesystem.proto \
+		proto/cdp/bluetoothemulation/bluetoothemulation.proto
 
 # Build Docker image
 docker:

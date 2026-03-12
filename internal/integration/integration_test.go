@@ -22,6 +22,7 @@ import (
 	"github.com/accretional/chromerpc/internal/cdpclient"
 	accessibilityserver "github.com/accretional/chromerpc/internal/server/accessibility"
 	autofillserver "github.com/accretional/chromerpc/internal/server/autofill"
+	bluetoothemulationserver "github.com/accretional/chromerpc/internal/server/bluetoothemulation"
 	animationserver "github.com/accretional/chromerpc/internal/server/animation"
 	auditsserver "github.com/accretional/chromerpc/internal/server/audits"
 	backgroundserviceserver "github.com/accretional/chromerpc/internal/server/backgroundservice"
@@ -31,6 +32,7 @@ import (
 	consoleserver "github.com/accretional/chromerpc/internal/server/console"
 	cssserver "github.com/accretional/chromerpc/internal/server/css"
 	databaseserver "github.com/accretional/chromerpc/internal/server/database"
+	deviceaccessserver "github.com/accretional/chromerpc/internal/server/deviceaccess"
 	debuggerserver "github.com/accretional/chromerpc/internal/server/debugger"
 	deviceorientationserver "github.com/accretional/chromerpc/internal/server/deviceorientation"
 	domserver "github.com/accretional/chromerpc/internal/server/dom"
@@ -62,6 +64,7 @@ import (
 	tracingserver "github.com/accretional/chromerpc/internal/server/tracing"
 	eventbreakpointsserver "github.com/accretional/chromerpc/internal/server/eventbreakpoints"
 	extensionsserver "github.com/accretional/chromerpc/internal/server/extensions"
+	filesystemserver "github.com/accretional/chromerpc/internal/server/filesystem"
 	fedcmserver "github.com/accretional/chromerpc/internal/server/fedcm"
 	headlessexperimentalserver "github.com/accretional/chromerpc/internal/server/headlessexperimental"
 	performancetimelineserver "github.com/accretional/chromerpc/internal/server/performancetimeline"
@@ -73,6 +76,7 @@ import (
 	webauthnserver "github.com/accretional/chromerpc/internal/server/webauthn"
 	accessibilitypb "github.com/accretional/chromerpc/proto/cdp/accessibility"
 	autofillpb "github.com/accretional/chromerpc/proto/cdp/autofill"
+	bluetoothemulationpb "github.com/accretional/chromerpc/proto/cdp/bluetoothemulation"
 	animationpb "github.com/accretional/chromerpc/proto/cdp/animation"
 	auditspb "github.com/accretional/chromerpc/proto/cdp/audits"
 	backgroundservicepb "github.com/accretional/chromerpc/proto/cdp/backgroundservice"
@@ -82,6 +86,7 @@ import (
 	consolepb "github.com/accretional/chromerpc/proto/cdp/console"
 	csspb "github.com/accretional/chromerpc/proto/cdp/css"
 	databasepb "github.com/accretional/chromerpc/proto/cdp/database"
+	deviceaccesspb "github.com/accretional/chromerpc/proto/cdp/deviceaccess"
 	debuggerpb "github.com/accretional/chromerpc/proto/cdp/debugger"
 	deviceorientationpb "github.com/accretional/chromerpc/proto/cdp/deviceorientation"
 	dompb "github.com/accretional/chromerpc/proto/cdp/dom"
@@ -113,6 +118,7 @@ import (
 	tracingpb "github.com/accretional/chromerpc/proto/cdp/tracing"
 	eventbreakpointspb "github.com/accretional/chromerpc/proto/cdp/eventbreakpoints"
 	extensionspb "github.com/accretional/chromerpc/proto/cdp/extensions"
+	filesystempb "github.com/accretional/chromerpc/proto/cdp/filesystem"
 	fedcmpb "github.com/accretional/chromerpc/proto/cdp/fedcm"
 	headlessexperimentalpb "github.com/accretional/chromerpc/proto/cdp/headlessexperimental"
 	performancetimelinepb "github.com/accretional/chromerpc/proto/cdp/performancetimeline"
@@ -181,6 +187,9 @@ type testEnv struct {
 	fedCmClient                      fedcmpb.FedCmServiceClient
 	autofillClient                   autofillpb.AutofillServiceClient
 	extensionsClient                 extensionspb.ExtensionsServiceClient
+	deviceAccessClient               deviceaccesspb.DeviceAccessServiceClient
+	fileSystemClient                 filesystempb.FileSystemServiceClient
+	bluetoothEmulationClient         bluetoothemulationpb.BluetoothEmulationServiceClient
 	conn                             *grpc.ClientConn
 }
 
@@ -300,6 +309,9 @@ func setupTestEnv(t *testing.T) *testEnv {
 	fedcmpb.RegisterFedCmServiceServer(grpcServer, fedcmserver.New(client))
 	autofillpb.RegisterAutofillServiceServer(grpcServer, autofillserver.New(client))
 	extensionspb.RegisterExtensionsServiceServer(grpcServer, extensionsserver.New(client))
+	deviceaccesspb.RegisterDeviceAccessServiceServer(grpcServer, deviceaccessserver.New(client))
+	filesystempb.RegisterFileSystemServiceServer(grpcServer, filesystemserver.New(client))
+	bluetoothemulationpb.RegisterBluetoothEmulationServiceServer(grpcServer, bluetoothemulationserver.New(client))
 
 	go grpcServer.Serve(lis)
 
@@ -368,6 +380,9 @@ func setupTestEnv(t *testing.T) *testEnv {
 		fedCmClient:                      fedcmpb.NewFedCmServiceClient(conn),
 		autofillClient:                   autofillpb.NewAutofillServiceClient(conn),
 		extensionsClient:                 extensionspb.NewExtensionsServiceClient(conn),
+		deviceAccessClient:               deviceaccesspb.NewDeviceAccessServiceClient(conn),
+		fileSystemClient:                 filesystempb.NewFileSystemServiceClient(conn),
+		bluetoothEmulationClient:         bluetoothemulationpb.NewBluetoothEmulationServiceClient(conn),
 		conn:                             conn,
 	}
 

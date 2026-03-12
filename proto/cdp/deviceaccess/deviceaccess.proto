@@ -1,0 +1,24 @@
+syntax = "proto3";
+package cdp.deviceaccess;
+option go_package = "github.com/accretional/chromerpc/proto/cdp/deviceaccess";
+
+service DeviceAccessService {
+  rpc Enable(EnableRequest) returns (EnableResponse);
+  rpc Disable(DisableRequest) returns (DisableResponse);
+  rpc SelectPrompt(SelectPromptRequest) returns (SelectPromptResponse);
+  rpc CancelPrompt(CancelPromptRequest) returns (CancelPromptResponse);
+}
+
+message EnableRequest {}
+message EnableResponse {}
+message DisableRequest {}
+message DisableResponse {}
+message SelectPromptRequest {
+  string id = 1;
+  string device_id = 2;
+}
+message SelectPromptResponse {}
+message CancelPromptRequest {
+  string id = 1;
+}
+message CancelPromptResponse {}

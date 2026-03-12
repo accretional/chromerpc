@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package cdp.filesystem;
+
+option go_package = "github.com/accretional/chromerpc/proto/cdp/filesystem";
+
+// FileSystem domain provides access to the FileSystem API.
+
+service FileSystemService {
+  // Returns the directory listing for the given bucket file system locator.
+  rpc GetDirectory(GetDirectoryRequest) returns (GetDirectoryResponse);
+}
+
+// ==================== Types ====================
+
+message BucketFileSystemLocator {
+  string storage_key = 1;
+  repeated string path_components = 2;
+  optional string bucket_name = 3;
+}
+
+// ==================== Requests / Responses ====================
+
+message GetDirectoryRequest {
+  BucketFileSystemLocator bucket_file_system_locator = 1;
+}
+
+message GetDirectoryResponse {
+  bytes directory_json = 1;
+}

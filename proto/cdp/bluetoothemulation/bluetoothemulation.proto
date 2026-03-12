@@ -1,0 +1,64 @@
+syntax = "proto3";
+
+package cdp.bluetoothemulation;
+
+option go_package = "github.com/accretional/chromerpc/proto/cdp/bluetoothemulation";
+
+// BluetoothEmulation domain allows emulating Bluetooth Low Energy devices.
+
+service BluetoothEmulationService {
+  // Enable the BluetoothEmulation domain.
+  rpc Enable(EnableRequest) returns (EnableResponse);
+
+  // Disable the BluetoothEmulation domain.
+  rpc Disable(DisableRequest) returns (DisableResponse);
+
+  // Simulate a preconnected peripheral.
+  rpc SimulatePreconnectedPeripheral(SimulatePreconnectedPeripheralRequest) returns (SimulatePreconnectedPeripheralResponse);
+
+  // Simulate an advertisement.
+  rpc SimulateAdvertisement(SimulateAdvertisementRequest) returns (SimulateAdvertisementResponse);
+}
+
+// ==================== Types ====================
+
+message ManufacturerData {
+  int32 key = 1;
+  string data = 2;
+}
+
+message ScanRecord {
+  optional string name = 1;
+  repeated string uuids = 2;
+  optional int32 appearance = 3;
+  repeated ManufacturerData manufacturer_data = 4;
+}
+
+message ScanEntry {
+  string device_address = 1;
+  int32 rssi = 2;
+  ScanRecord scan_record = 3;
+}
+
+// ==================== Requests / Responses ====================
+
+message EnableRequest {
+  string state = 1;
+}
+message EnableResponse {}
+
+message DisableRequest {}
+message DisableResponse {}
+
+message SimulatePreconnectedPeripheralRequest {
+  string address = 1;
+  string name = 2;
+  repeated ManufacturerData manufacturer_data = 3;
+  repeated string known_service_uuids = 4;
+}
+message SimulatePreconnectedPeripheralResponse {}
+
+message SimulateAdvertisementRequest {
+  ScanEntry entry = 1;
+}
+message SimulateAdvertisementResponse {}
