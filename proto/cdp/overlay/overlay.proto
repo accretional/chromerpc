@@ -1,0 +1,179 @@
+syntax = "proto3";
+
+package cdp.overlay;
+
+option go_package = "github.com/accretional/chromerpc/proto/cdp/overlay";
+
+// Overlay domain provides DOM highlighting and visual aids.
+
+service OverlayService {
+  // Enables the overlay domain.
+  rpc Enable(EnableRequest) returns (EnableResponse);
+
+  // Disables the overlay domain.
+  rpc Disable(DisableRequest) returns (DisableResponse);
+
+  // Highlights a DOM node.
+  rpc HighlightNode(HighlightNodeRequest) returns (HighlightNodeResponse);
+
+  // Highlights a given rectangle.
+  rpc HighlightRect(HighlightRectRequest) returns (HighlightRectResponse);
+
+  // Highlights the given quad.
+  rpc HighlightQuad(HighlightQuadRequest) returns (HighlightQuadResponse);
+
+  // Hides any highlight.
+  rpc HideHighlight(HideHighlightRequest) returns (HideHighlightResponse);
+
+  // Enters inspect mode.
+  rpc SetInspectMode(SetInspectModeRequest) returns (SetInspectModeResponse);
+
+  // Shows paint rectangles.
+  rpc SetShowPaintRects(SetShowPaintRectsRequest) returns (SetShowPaintRectsResponse);
+
+  // Shows layout shift regions.
+  rpc SetShowLayoutShiftRegions(SetShowLayoutShiftRegionsRequest) returns (SetShowLayoutShiftRegionsResponse);
+
+  // Shows scroll bottleneck rects.
+  rpc SetShowScrollBottleneckRects(SetShowScrollBottleneckRectsRequest) returns (SetShowScrollBottleneckRectsResponse);
+
+  // Shows FPS counter.
+  rpc SetShowFPSCounter(SetShowFPSCounterRequest) returns (SetShowFPSCounterResponse);
+
+  // Shows debug borders.
+  rpc SetShowDebugBorders(SetShowDebugBordersRequest) returns (SetShowDebugBordersResponse);
+
+  // Sets paused in debugger message.
+  rpc SetPausedInDebuggerMessage(SetPausedInDebuggerMessageRequest) returns (SetPausedInDebuggerMessageResponse);
+
+  // Subscribe to Overlay events.
+  rpc SubscribeEvents(SubscribeEventsRequest) returns (stream OverlayEvent);
+}
+
+// ==================== Types ====================
+
+message HighlightConfig {
+  bool show_info = 1;
+  bool show_styles = 2;
+  bool show_rulers = 3;
+  bool show_accessibility_info = 4;
+  bool show_extension_lines = 5;
+  RGBA content_color = 6;
+  RGBA padding_color = 7;
+  RGBA border_color = 8;
+  RGBA margin_color = 9;
+  RGBA event_target_color = 10;
+  RGBA shape_color = 11;
+  RGBA shape_margin_color = 12;
+  RGBA css_grid_color = 13;
+  string color_format = 14; // "rgb","hsl","hwb","hex"
+}
+
+message RGBA {
+  int32 r = 1;
+  int32 g = 2;
+  int32 b = 3;
+  double a = 4;
+}
+
+// ==================== Requests / Responses ====================
+
+message EnableRequest {}
+message EnableResponse {}
+
+message DisableRequest {}
+message DisableResponse {}
+
+message HighlightNodeRequest {
+  HighlightConfig highlight_config = 1;
+  int32 node_id = 2;
+  int32 backend_node_id = 3;
+  string object_id = 4;
+  string selector = 5;
+}
+message HighlightNodeResponse {}
+
+message HighlightRectRequest {
+  int32 x = 1;
+  int32 y = 2;
+  int32 width = 3;
+  int32 height = 4;
+  RGBA color = 5;
+  RGBA outline_color = 6;
+}
+message HighlightRectResponse {}
+
+message HighlightQuadRequest {
+  repeated double quad = 1;
+  RGBA color = 2;
+  RGBA outline_color = 3;
+}
+message HighlightQuadResponse {}
+
+message HideHighlightRequest {}
+message HideHighlightResponse {}
+
+message SetInspectModeRequest {
+  string mode = 1; // "searchForNode","searchForUAShadowDOM","captureAreaScreenshot","showDistances","none"
+  HighlightConfig highlight_config = 2;
+}
+message SetInspectModeResponse {}
+
+message SetShowPaintRectsRequest {
+  bool result = 1;
+}
+message SetShowPaintRectsResponse {}
+
+message SetShowLayoutShiftRegionsRequest {
+  bool result = 1;
+}
+message SetShowLayoutShiftRegionsResponse {}
+
+message SetShowScrollBottleneckRectsRequest {
+  bool show = 1;
+}
+message SetShowScrollBottleneckRectsResponse {}
+
+message SetShowFPSCounterRequest {
+  bool show = 1;
+}
+message SetShowFPSCounterResponse {}
+
+message SetShowDebugBordersRequest {
+  bool show = 1;
+}
+message SetShowDebugBordersResponse {}
+
+message SetPausedInDebuggerMessageRequest {
+  string message = 1;
+}
+message SetPausedInDebuggerMessageResponse {}
+
+// ==================== Events ====================
+
+message SubscribeEventsRequest {}
+
+message OverlayEvent {
+  oneof event {
+    InspectNodeRequestedEvent inspect_node_requested = 1;
+    NodeHighlightRequestedEvent node_highlight_requested = 2;
+    ScreenshotRequestedEvent screenshot_requested = 3;
+  }
+}
+
+message InspectNodeRequestedEvent {
+  int32 backend_node_id = 1;
+}
+
+message NodeHighlightRequestedEvent {
+  int32 node_id = 1;
+}
+
+message ScreenshotRequestedEvent {
+  // Viewport for the screenshot.
+  double x = 1;
+  double y = 2;
+  double width = 3;
+  double height = 4;
+  double scale = 5;
+}

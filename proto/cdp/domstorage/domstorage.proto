@@ -1,0 +1,112 @@
+syntax = "proto3";
+
+package cdp.domstorage;
+
+option go_package = "github.com/accretional/chromerpc/proto/cdp/domstorage";
+
+// DOMStorage domain allows reading and writing localStorage/sessionStorage.
+
+service DOMStorageService {
+  // Enables the DOMStorage domain.
+  rpc Enable(EnableRequest) returns (EnableResponse);
+
+  // Disables the DOMStorage domain.
+  rpc Disable(DisableRequest) returns (DisableResponse);
+
+  // Gets all key-value pairs from a storage.
+  rpc GetDOMStorageItems(GetDOMStorageItemsRequest) returns (GetDOMStorageItemsResponse);
+
+  // Sets a key-value pair.
+  rpc SetDOMStorageItem(SetDOMStorageItemRequest) returns (SetDOMStorageItemResponse);
+
+  // Removes a key-value pair.
+  rpc RemoveDOMStorageItem(RemoveDOMStorageItemRequest) returns (RemoveDOMStorageItemResponse);
+
+  // Clears a storage.
+  rpc Clear(ClearRequest) returns (ClearResponse);
+
+  // Subscribe to DOMStorage events.
+  rpc SubscribeEvents(SubscribeEventsRequest) returns (stream DOMStorageEvent);
+}
+
+// ==================== Types ====================
+
+// DOM Storage identifier.
+message StorageId {
+  string security_origin = 1;
+  string storage_key = 2;
+  bool is_local_storage = 3;
+}
+
+message Item {
+  string key = 1;
+  string value = 2;
+}
+
+// ==================== Requests / Responses ====================
+
+message EnableRequest {}
+message EnableResponse {}
+
+message DisableRequest {}
+message DisableResponse {}
+
+message GetDOMStorageItemsRequest {
+  StorageId storage_id = 1;
+}
+message GetDOMStorageItemsResponse {
+  repeated Item entries = 1;
+}
+
+message SetDOMStorageItemRequest {
+  StorageId storage_id = 1;
+  string key = 2;
+  string value = 3;
+}
+message SetDOMStorageItemResponse {}
+
+message RemoveDOMStorageItemRequest {
+  StorageId storage_id = 1;
+  string key = 2;
+}
+message RemoveDOMStorageItemResponse {}
+
+message ClearRequest {
+  StorageId storage_id = 1;
+}
+message ClearResponse {}
+
+// ==================== Events ====================
+
+message SubscribeEventsRequest {}
+
+message DOMStorageEvent {
+  oneof event {
+    DOMStorageItemAddedEvent dom_storage_item_added = 1;
+    DOMStorageItemRemovedEvent dom_storage_item_removed = 2;
+    DOMStorageItemUpdatedEvent dom_storage_item_updated = 3;
+    DOMStorageItemsClearedEvent dom_storage_items_cleared = 4;
+  }
+}
+
+message DOMStorageItemAddedEvent {
+  StorageId storage_id = 1;
+  string key = 2;
+  string new_value = 3;
+}
+
+message DOMStorageItemRemovedEvent {
+  StorageId storage_id = 1;
+  string key = 2;
+}
+
+message DOMStorageItemUpdatedEvent {
+  StorageId storage_id = 1;
+  string key = 2;
+  string old_value = 3;
+  string new_value = 4;
+}
+
+message DOMStorageItemsClearedEvent {
+  StorageId storage_id = 1;
+}

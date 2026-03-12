@@ -1,0 +1,185 @@
+syntax = "proto3";
+
+package cdp.storage;
+
+option go_package = "github.com/accretional/chromerpc/proto/cdp/storage";
+
+// Storage domain allows managing browser storage.
+
+service StorageService {
+  // Clears storage for origin.
+  rpc ClearDataForOrigin(ClearDataForOriginRequest) returns (ClearDataForOriginResponse);
+
+  // Clears storage for storage key.
+  rpc ClearDataForStorageKey(ClearDataForStorageKeyRequest) returns (ClearDataForStorageKeyResponse);
+
+  // Returns usage and quota for the specified origin.
+  rpc GetUsageAndQuota(GetUsageAndQuotaRequest) returns (GetUsageAndQuotaResponse);
+
+  // Gets cookies for the given browser context or storage key.
+  rpc GetCookies(GetCookiesRequest) returns (GetCookiesResponse);
+
+  // Sets cookies.
+  rpc SetCookies(SetCookiesRequest) returns (SetCookiesResponse);
+
+  // Clears cookies for the given browser context or storage key.
+  rpc ClearCookies(ClearCookiesRequest) returns (ClearCookiesResponse);
+
+  // Registers origin to be notified when IndexedDB changes.
+  rpc TrackIndexedDBForOrigin(TrackIndexedDBForOriginRequest) returns (TrackIndexedDBForOriginResponse);
+
+  // Unregisters origin from IndexedDB tracking.
+  rpc UntrackIndexedDBForOrigin(UntrackIndexedDBForOriginRequest) returns (UntrackIndexedDBForOriginResponse);
+
+  // Registers origin to be notified when CacheStorage changes.
+  rpc TrackCacheStorageForOrigin(TrackCacheStorageForOriginRequest) returns (TrackCacheStorageForOriginResponse);
+
+  // Unregisters origin from CacheStorage tracking.
+  rpc UntrackCacheStorageForOrigin(UntrackCacheStorageForOriginRequest) returns (UntrackCacheStorageForOriginResponse);
+
+  // Subscribe to Storage events.
+  rpc SubscribeEvents(SubscribeEventsRequest) returns (stream StorageEvent);
+}
+
+// ==================== Types ====================
+
+message UsageForType {
+  string storage_type = 1;
+  double usage = 2;
+}
+
+message StorageCookie {
+  string name = 1;
+  string value = 2;
+  string domain = 3;
+  string path = 4;
+  double expires = 5;
+  int32 size = 6;
+  bool http_only = 7;
+  bool secure = 8;
+  string same_site = 9;
+  string priority = 10;
+  bool same_party = 11;
+  string source_scheme = 12;
+  int32 source_port = 13;
+  string partition_key = 14;
+}
+
+message CookieParam {
+  string name = 1;
+  string value = 2;
+  string url = 3;
+  string domain = 4;
+  string path = 5;
+  bool secure = 6;
+  bool http_only = 7;
+  string same_site = 8;
+  double expires = 9;
+  string priority = 10;
+  bool same_party = 11;
+  string source_scheme = 12;
+  int32 source_port = 13;
+  string partition_key = 14;
+}
+
+// ==================== Requests / Responses ====================
+
+message ClearDataForOriginRequest {
+  string origin = 1;
+  string storage_types = 2; // comma-separated: "appcache,cookies,file_systems,indexeddb,local_storage,shader_cache,websql,service_workers,cache_storage,interest_groups,shared_storage,storage_buckets,all,other"
+}
+message ClearDataForOriginResponse {}
+
+message ClearDataForStorageKeyRequest {
+  string storage_key = 1;
+  string storage_types = 2;
+}
+message ClearDataForStorageKeyResponse {}
+
+message GetUsageAndQuotaRequest {
+  string origin = 1;
+}
+message GetUsageAndQuotaResponse {
+  double usage = 1;
+  double quota = 2;
+  bool override_active = 3;
+  repeated UsageForType usage_breakdown = 4;
+}
+
+message GetCookiesRequest {
+  string browser_context_id = 1;
+}
+message GetCookiesResponse {
+  repeated StorageCookie cookies = 1;
+}
+
+message SetCookiesRequest {
+  repeated CookieParam cookies = 1;
+  string browser_context_id = 2;
+}
+message SetCookiesResponse {}
+
+message ClearCookiesRequest {
+  string browser_context_id = 1;
+}
+message ClearCookiesResponse {}
+
+message TrackIndexedDBForOriginRequest {
+  string origin = 1;
+}
+message TrackIndexedDBForOriginResponse {}
+
+message UntrackIndexedDBForOriginRequest {
+  string origin = 1;
+}
+message UntrackIndexedDBForOriginResponse {}
+
+message TrackCacheStorageForOriginRequest {
+  string origin = 1;
+}
+message TrackCacheStorageForOriginResponse {}
+
+message UntrackCacheStorageForOriginRequest {
+  string origin = 1;
+}
+message UntrackCacheStorageForOriginResponse {}
+
+// ==================== Events ====================
+
+message SubscribeEventsRequest {}
+
+message StorageEvent {
+  oneof event {
+    CacheStorageContentUpdatedEvent cache_storage_content_updated = 1;
+    CacheStorageListUpdatedEvent cache_storage_list_updated = 2;
+    IndexedDBContentUpdatedEvent indexed_db_content_updated = 3;
+    IndexedDBListUpdatedEvent indexed_db_list_updated = 4;
+  }
+}
+
+message CacheStorageContentUpdatedEvent {
+  string origin = 1;
+  string storage_key = 2;
+  string bucket_id = 3;
+  string cache_name = 4;
+}
+
+message CacheStorageListUpdatedEvent {
+  string origin = 1;
+  string storage_key = 2;
+  string bucket_id = 3;
+}
+
+message IndexedDBContentUpdatedEvent {
+  string origin = 1;
+  string storage_key = 2;
+  string bucket_id = 3;
+  string database_name = 4;
+  string object_store_name = 5;
+}
+
+message IndexedDBListUpdatedEvent {
+  string origin = 1;
+  string storage_key = 2;
+  string bucket_id = 3;
+}

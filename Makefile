@@ -27,7 +27,12 @@ proto:
 		proto/cdp/performance/performance.proto \
 		proto/cdp/accessibility/accessibility.proto \
 		proto/cdp/io/io.proto \
-		proto/cdp/security/security.proto
+		proto/cdp/security/security.proto \
+		proto/cdp/storage/storage.proto \
+		proto/cdp/overlay/overlay.proto \
+		proto/cdp/domstorage/domstorage.proto \
+		proto/cdp/debugger/debugger.proto \
+		proto/cdp/profiler/profiler.proto
 
 # Build Docker image
 docker:

@@ -28,32 +28,42 @@ import (
 	accessibilityserver "github.com/accretional/chromerpc/internal/server/accessibility"
 	browserserver "github.com/accretional/chromerpc/internal/server/browser"
 	cssserver "github.com/accretional/chromerpc/internal/server/css"
+	debuggerserver "github.com/accretional/chromerpc/internal/server/debugger"
 	domserver "github.com/accretional/chromerpc/internal/server/dom"
+	domstorageserver "github.com/accretional/chromerpc/internal/server/domstorage"
 	emulationserver "github.com/accretional/chromerpc/internal/server/emulation"
 	fetchserver "github.com/accretional/chromerpc/internal/server/fetch"
 	inputserver "github.com/accretional/chromerpc/internal/server/input"
 	ioserver "github.com/accretional/chromerpc/internal/server/io"
 	logserver "github.com/accretional/chromerpc/internal/server/log"
 	networkserver "github.com/accretional/chromerpc/internal/server/network"
+	overlayserver "github.com/accretional/chromerpc/internal/server/overlay"
 	pageserver "github.com/accretional/chromerpc/internal/server/page"
 	performanceserver "github.com/accretional/chromerpc/internal/server/performance"
+	profilerserver "github.com/accretional/chromerpc/internal/server/profiler"
 	runtimeserver "github.com/accretional/chromerpc/internal/server/runtime"
 	securityserver "github.com/accretional/chromerpc/internal/server/security"
+	storageserver "github.com/accretional/chromerpc/internal/server/storage"
 	targetserver "github.com/accretional/chromerpc/internal/server/target"
 	accessibilitypb "github.com/accretional/chromerpc/proto/cdp/accessibility"
 	browserpb "github.com/accretional/chromerpc/proto/cdp/browser"
 	csspb "github.com/accretional/chromerpc/proto/cdp/css"
+	debuggerpb "github.com/accretional/chromerpc/proto/cdp/debugger"
 	dompb "github.com/accretional/chromerpc/proto/cdp/dom"
+	domstoragepb "github.com/accretional/chromerpc/proto/cdp/domstorage"
 	emulationpb "github.com/accretional/chromerpc/proto/cdp/emulation"
 	fetchpb "github.com/accretional/chromerpc/proto/cdp/fetch"
 	inputpb "github.com/accretional/chromerpc/proto/cdp/input"
 	iopb "github.com/accretional/chromerpc/proto/cdp/io"
 	logpb "github.com/accretional/chromerpc/proto/cdp/log"
 	networkpb "github.com/accretional/chromerpc/proto/cdp/network"
+	overlaypb "github.com/accretional/chromerpc/proto/cdp/overlay"
 	pagepb "github.com/accretional/chromerpc/proto/cdp/page"
 	performancepb "github.com/accretional/chromerpc/proto/cdp/performance"
+	profilerpb "github.com/accretional/chromerpc/proto/cdp/profiler"
 	runtimepb "github.com/accretional/chromerpc/proto/cdp/runtime"
 	securitypb "github.com/accretional/chromerpc/proto/cdp/security"
+	storagepb "github.com/accretional/chromerpc/proto/cdp/storage"
 	targetpb "github.com/accretional/chromerpc/proto/cdp/target"
 )
 
@@ -129,6 +139,11 @@ func main() {
 	accessibilitypb.RegisterAccessibilityServiceServer(grpcServer, accessibilityserver.New(client))
 	iopb.RegisterIOServiceServer(grpcServer, ioserver.New(client))
 	securitypb.RegisterSecurityServiceServer(grpcServer, securityserver.New(client))
+	storagepb.RegisterStorageServiceServer(grpcServer, storageserver.New(client))
+	overlaypb.RegisterOverlayServiceServer(grpcServer, overlayserver.New(client))
+	domstoragepb.RegisterDOMStorageServiceServer(grpcServer, domstorageserver.New(client))
+	debuggerpb.RegisterDebuggerServiceServer(grpcServer, debuggerserver.New(client))
+	profilerpb.RegisterProfilerServiceServer(grpcServer, profilerserver.New(client))
 
 	// Enable gRPC reflection for tools like grpcurl.
 	reflection.Register(grpcServer)
