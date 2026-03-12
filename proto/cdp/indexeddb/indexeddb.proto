@@ -1,0 +1,159 @@
+syntax = "proto3";
+
+package cdp.indexeddb;
+
+option go_package = "github.com/accretional/chromerpc/proto/cdp/indexeddb";
+
+// IndexedDB domain allows inspecting and manipulating IndexedDB databases.
+
+service IndexedDBService {
+  // Enables the IndexedDB domain.
+  rpc Enable(EnableRequest) returns (EnableResponse);
+
+  // Disables the IndexedDB domain.
+  rpc Disable(DisableRequest) returns (DisableResponse);
+
+  // Requests database names for given security origin or storage key.
+  rpc RequestDatabaseNames(RequestDatabaseNamesRequest) returns (RequestDatabaseNamesResponse);
+
+  // Requests database with object store details.
+  rpc RequestDatabase(RequestDatabaseRequest) returns (RequestDatabaseResponse);
+
+  // Requests data from an object store or index.
+  rpc RequestData(RequestDataRequest) returns (RequestDataResponse);
+
+  // Gets metadata of an object store.
+  rpc GetMetadata(GetMetadataRequest) returns (GetMetadataResponse);
+
+  // Deletes a database.
+  rpc DeleteDatabase(DeleteDatabaseRequest) returns (DeleteDatabaseResponse);
+
+  // Clears all entries from an object store.
+  rpc ClearObjectStore(ClearObjectStoreRequest) returns (ClearObjectStoreResponse);
+
+  // Deletes a range of entries from an object store.
+  rpc DeleteObjectStoreEntries(DeleteObjectStoreEntriesRequest) returns (DeleteObjectStoreEntriesResponse);
+}
+
+// ==================== Types ====================
+
+message KeyPath {
+  string type = 1;
+  string string_value = 2;
+  repeated string array_values = 3;
+}
+
+message KeyRange {
+  string lower = 1;
+  string upper = 2;
+  bool lower_open = 3;
+  bool upper_open = 4;
+}
+
+message ObjectStoreIndex {
+  string name = 1;
+  KeyPath key_path = 2;
+  bool unique = 3;
+  bool multi_entry = 4;
+}
+
+message ObjectStore {
+  string name = 1;
+  KeyPath key_path = 2;
+  bool auto_increment = 3;
+  repeated ObjectStoreIndex indexes = 4;
+}
+
+message DatabaseWithObjectStores {
+  string name = 1;
+  double version = 2;
+  repeated ObjectStore object_stores = 3;
+}
+
+message DataEntry {
+  string key = 1;
+  string primary_key = 2;
+  string value = 3;
+}
+
+// ==================== Requests / Responses ====================
+
+message EnableRequest {}
+message EnableResponse {}
+
+message DisableRequest {}
+message DisableResponse {}
+
+message RequestDatabaseNamesRequest {
+  string security_origin = 1;
+  string storage_key = 2;
+  string storage_bucket = 3;
+}
+message RequestDatabaseNamesResponse {
+  repeated string database_names = 1;
+}
+
+message RequestDatabaseRequest {
+  string security_origin = 1;
+  string storage_key = 2;
+  string storage_bucket = 3;
+  string database_name = 4;
+}
+message RequestDatabaseResponse {
+  DatabaseWithObjectStores database_with_object_stores = 1;
+}
+
+message RequestDataRequest {
+  string security_origin = 1;
+  string storage_key = 2;
+  string storage_bucket = 3;
+  string database_name = 4;
+  string object_store_name = 5;
+  string index_name = 6;
+  int32 skip_count = 7;
+  int32 page_size = 8;
+  KeyRange key_range = 9;
+}
+message RequestDataResponse {
+  repeated DataEntry object_store_data_entries = 1;
+  bool has_more = 2;
+}
+
+message GetMetadataRequest {
+  string security_origin = 1;
+  string storage_key = 2;
+  string storage_bucket = 3;
+  string database_name = 4;
+  string object_store_name = 5;
+}
+message GetMetadataResponse {
+  double entries_count = 1;
+  double key_generator_value = 2;
+}
+
+message DeleteDatabaseRequest {
+  string security_origin = 1;
+  string storage_key = 2;
+  string storage_bucket = 3;
+  string database_name = 4;
+}
+message DeleteDatabaseResponse {}
+
+message ClearObjectStoreRequest {
+  string security_origin = 1;
+  string storage_key = 2;
+  string storage_bucket = 3;
+  string database_name = 4;
+  string object_store_name = 5;
+}
+message ClearObjectStoreResponse {}
+
+message DeleteObjectStoreEntriesRequest {
+  string security_origin = 1;
+  string storage_key = 2;
+  string storage_bucket = 3;
+  string database_name = 4;
+  string object_store_name = 5;
+  KeyRange key_range = 6;
+}
+message DeleteObjectStoreEntriesResponse {}

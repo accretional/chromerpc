@@ -1,0 +1,173 @@
+syntax = "proto3";
+
+package cdp.serviceworker;
+
+option go_package = "github.com/accretional/chromerpc/proto/cdp/serviceworker";
+
+// ServiceWorker domain provides management of service workers.
+
+service ServiceWorkerService {
+  // Enables ServiceWorker domain events.
+  rpc Enable(EnableRequest) returns (EnableResponse);
+
+  // Disables ServiceWorker domain events.
+  rpc Disable(DisableRequest) returns (DisableResponse);
+
+  // Delivers a push message to a service worker.
+  rpc DeliverPushMessage(DeliverPushMessageRequest) returns (DeliverPushMessageResponse);
+
+  // Dispatches a sync event to a service worker.
+  rpc DispatchSyncEvent(DispatchSyncEventRequest) returns (DispatchSyncEventResponse);
+
+  // Dispatches a periodic sync event to a service worker.
+  rpc DispatchPeriodicSyncEvent(DispatchPeriodicSyncEventRequest) returns (DispatchPeriodicSyncEventResponse);
+
+  // Inspects a service worker.
+  rpc InspectWorker(InspectWorkerRequest) returns (InspectWorkerResponse);
+
+  // Forces update on page load for service workers.
+  rpc SetForceUpdateOnPageLoad(SetForceUpdateOnPageLoadRequest) returns (SetForceUpdateOnPageLoadResponse);
+
+  // Skips waiting for a service worker.
+  rpc SkipWaiting(SkipWaitingRequest) returns (SkipWaitingResponse);
+
+  // Starts a service worker.
+  rpc StartWorker(StartWorkerRequest) returns (StartWorkerResponse);
+
+  // Stops all service workers.
+  rpc StopAllWorkers(StopAllWorkersRequest) returns (StopAllWorkersResponse);
+
+  // Stops a specific service worker.
+  rpc StopWorker(StopWorkerRequest) returns (StopWorkerResponse);
+
+  // Unregisters a service worker.
+  rpc Unregister(UnregisterRequest) returns (UnregisterResponse);
+
+  // Updates a service worker registration.
+  rpc UpdateRegistration(UpdateRegistrationRequest) returns (UpdateRegistrationResponse);
+
+  // Subscribe to ServiceWorker events.
+  rpc SubscribeEvents(SubscribeEventsRequest) returns (stream ServiceWorkerEvent);
+}
+
+// ==================== Types ====================
+
+message ServiceWorkerErrorMessage {
+  string error_message = 1;
+  string registration_id = 2;
+  string version_id = 3;
+  string source_url = 4;
+  int32 line_number = 5;
+  int32 column_number = 6;
+}
+
+message ServiceWorkerRegistration {
+  string registration_id = 1;
+  string scope_url = 2;
+  bool is_deleted = 3;
+}
+
+message ServiceWorkerVersion {
+  string version_id = 1;
+  string registration_id = 2;
+  string script_url = 3;
+  string running_status = 4;
+  string status = 5;
+  optional double script_last_modified = 6;
+  optional double script_response_time = 7;
+  repeated string controlled_clients = 8;
+  optional string target_id = 9;
+  optional string router_rules = 10;
+}
+
+// ==================== Requests / Responses ====================
+
+message EnableRequest {}
+message EnableResponse {}
+
+message DisableRequest {}
+message DisableResponse {}
+
+message DeliverPushMessageRequest {
+  string origin = 1;
+  string registration_id = 2;
+  string data = 3;
+}
+message DeliverPushMessageResponse {}
+
+message DispatchSyncEventRequest {
+  string origin = 1;
+  string registration_id = 2;
+  string tag = 3;
+  bool last_chance = 4;
+}
+message DispatchSyncEventResponse {}
+
+message DispatchPeriodicSyncEventRequest {
+  string origin = 1;
+  string registration_id = 2;
+  string tag = 3;
+}
+message DispatchPeriodicSyncEventResponse {}
+
+message InspectWorkerRequest {
+  string version_id = 1;
+}
+message InspectWorkerResponse {}
+
+message SetForceUpdateOnPageLoadRequest {
+  bool force_update_on_page_load = 1;
+}
+message SetForceUpdateOnPageLoadResponse {}
+
+message SkipWaitingRequest {
+  string scope_url = 1;
+}
+message SkipWaitingResponse {}
+
+message StartWorkerRequest {
+  string scope_url = 1;
+}
+message StartWorkerResponse {}
+
+message StopAllWorkersRequest {}
+message StopAllWorkersResponse {}
+
+message StopWorkerRequest {
+  string version_id = 1;
+}
+message StopWorkerResponse {}
+
+message UnregisterRequest {
+  string scope_url = 1;
+}
+message UnregisterResponse {}
+
+message UpdateRegistrationRequest {
+  string scope_url = 1;
+}
+message UpdateRegistrationResponse {}
+
+// ==================== Events ====================
+
+message SubscribeEventsRequest {}
+
+message ServiceWorkerEvent {
+  oneof event {
+    WorkerErrorReportedEvent worker_error_reported = 1;
+    WorkerRegistrationUpdatedEvent worker_registration_updated = 2;
+    WorkerVersionUpdatedEvent worker_version_updated = 3;
+  }
+}
+
+message WorkerErrorReportedEvent {
+  ServiceWorkerErrorMessage error_message = 1;
+}
+
+message WorkerRegistrationUpdatedEvent {
+  repeated ServiceWorkerRegistration registrations = 1;
+}
+
+message WorkerVersionUpdatedEvent {
+  repeated ServiceWorkerVersion versions = 1;
+}

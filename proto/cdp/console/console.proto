@@ -1,0 +1,63 @@
+syntax = "proto3";
+
+package cdp.console;
+
+option go_package = "github.com/accretional/chromerpc/proto/cdp/console";
+
+// Console domain defines methods and events for interacting with the JavaScript console.
+
+service ConsoleService {
+  // Enables console domain, sends the collected messages so far and starts reporting.
+  rpc Enable(EnableRequest) returns (EnableResponse);
+
+  // Disables console domain.
+  rpc Disable(DisableRequest) returns (DisableResponse);
+
+  // Clears console messages collected so far.
+  rpc ClearMessages(ClearMessagesRequest) returns (ClearMessagesResponse);
+
+  // Subscribe to Console events.
+  rpc SubscribeEvents(SubscribeEventsRequest) returns (stream ConsoleEvent);
+}
+
+// ==================== Types ====================
+
+message ConsoleMessage {
+  // Message source.
+  string source = 1; // "xml","javascript","network","console-api","storage","appcache","rendering","security","other","deprecation","worker"
+  // Message severity.
+  string level = 2; // "log","warning","error","debug","info"
+  // Message text.
+  string text = 3;
+  // URL of the message origin.
+  string url = 4;
+  // Line number in the resource that generated this message (0-based).
+  int32 line = 5;
+  // Column number in the resource that generated this message (0-based).
+  int32 column = 6;
+}
+
+// ==================== Requests / Responses ====================
+
+message EnableRequest {}
+message EnableResponse {}
+
+message DisableRequest {}
+message DisableResponse {}
+
+message ClearMessagesRequest {}
+message ClearMessagesResponse {}
+
+// ==================== Events ====================
+
+message SubscribeEventsRequest {}
+
+message ConsoleEvent {
+  oneof event {
+    MessageAddedEvent message_added = 1;
+  }
+}
+
+message MessageAddedEvent {
+  ConsoleMessage message = 1;
+}

@@ -22,12 +22,16 @@ import (
 	"github.com/accretional/chromerpc/internal/cdpclient"
 	accessibilityserver "github.com/accretional/chromerpc/internal/server/accessibility"
 	browserserver "github.com/accretional/chromerpc/internal/server/browser"
+	cachestorageserver "github.com/accretional/chromerpc/internal/server/cachestorage"
+	consoleserver "github.com/accretional/chromerpc/internal/server/console"
 	cssserver "github.com/accretional/chromerpc/internal/server/css"
 	debuggerserver "github.com/accretional/chromerpc/internal/server/debugger"
 	domserver "github.com/accretional/chromerpc/internal/server/dom"
 	domstorageserver "github.com/accretional/chromerpc/internal/server/domstorage"
 	emulationserver "github.com/accretional/chromerpc/internal/server/emulation"
 	fetchserver "github.com/accretional/chromerpc/internal/server/fetch"
+	heapprofilerserver "github.com/accretional/chromerpc/internal/server/heapprofiler"
+	indexeddbserver "github.com/accretional/chromerpc/internal/server/indexeddb"
 	inputserver "github.com/accretional/chromerpc/internal/server/input"
 	ioserver "github.com/accretional/chromerpc/internal/server/io"
 	logserver "github.com/accretional/chromerpc/internal/server/log"
@@ -38,16 +42,21 @@ import (
 	profilerserver "github.com/accretional/chromerpc/internal/server/profiler"
 	runtimeserver "github.com/accretional/chromerpc/internal/server/runtime"
 	securityserver "github.com/accretional/chromerpc/internal/server/security"
+	serviceworkerserver "github.com/accretional/chromerpc/internal/server/serviceworker"
 	storageserver "github.com/accretional/chromerpc/internal/server/storage"
 	targetserver "github.com/accretional/chromerpc/internal/server/target"
 	accessibilitypb "github.com/accretional/chromerpc/proto/cdp/accessibility"
 	browserpb "github.com/accretional/chromerpc/proto/cdp/browser"
+	cachestoragepb "github.com/accretional/chromerpc/proto/cdp/cachestorage"
+	consolepb "github.com/accretional/chromerpc/proto/cdp/console"
 	csspb "github.com/accretional/chromerpc/proto/cdp/css"
 	debuggerpb "github.com/accretional/chromerpc/proto/cdp/debugger"
 	dompb "github.com/accretional/chromerpc/proto/cdp/dom"
 	domstoragepb "github.com/accretional/chromerpc/proto/cdp/domstorage"
 	emulationpb "github.com/accretional/chromerpc/proto/cdp/emulation"
 	fetchpb "github.com/accretional/chromerpc/proto/cdp/fetch"
+	heapprofilerpb "github.com/accretional/chromerpc/proto/cdp/heapprofiler"
+	indexeddbpb "github.com/accretional/chromerpc/proto/cdp/indexeddb"
 	inputpb "github.com/accretional/chromerpc/proto/cdp/input"
 	iopb "github.com/accretional/chromerpc/proto/cdp/io"
 	logpb "github.com/accretional/chromerpc/proto/cdp/log"
@@ -58,6 +67,7 @@ import (
 	profilerpb "github.com/accretional/chromerpc/proto/cdp/profiler"
 	runtimepb "github.com/accretional/chromerpc/proto/cdp/runtime"
 	securitypb "github.com/accretional/chromerpc/proto/cdp/security"
+	serviceworkerpb "github.com/accretional/chromerpc/proto/cdp/serviceworker"
 	storagepb "github.com/accretional/chromerpc/proto/cdp/storage"
 	targetpb "github.com/accretional/chromerpc/proto/cdp/target"
 )
@@ -88,6 +98,11 @@ type testEnv struct {
 	domstorageClient    domstoragepb.DOMStorageServiceClient
 	debuggerClient      debuggerpb.DebuggerServiceClient
 	profilerClient      profilerpb.ProfilerServiceClient
+	consoleClient       consolepb.ConsoleServiceClient
+	heapProfilerClient  heapprofilerpb.HeapProfilerServiceClient
+	serviceWorkerClient serviceworkerpb.ServiceWorkerServiceClient
+	indexedDBClient     indexeddbpb.IndexedDBServiceClient
+	cacheStorageClient  cachestoragepb.CacheStorageServiceClient
 	conn                *grpc.ClientConn
 }
 
@@ -176,6 +191,11 @@ func setupTestEnv(t *testing.T) *testEnv {
 	domstoragepb.RegisterDOMStorageServiceServer(grpcServer, domstorageserver.New(client))
 	debuggerpb.RegisterDebuggerServiceServer(grpcServer, debuggerserver.New(client))
 	profilerpb.RegisterProfilerServiceServer(grpcServer, profilerserver.New(client))
+	consolepb.RegisterConsoleServiceServer(grpcServer, consoleserver.New(client))
+	heapprofilerpb.RegisterHeapProfilerServiceServer(grpcServer, heapprofilerserver.New(client))
+	serviceworkerpb.RegisterServiceWorkerServiceServer(grpcServer, serviceworkerserver.New(client))
+	indexeddbpb.RegisterIndexedDBServiceServer(grpcServer, indexeddbserver.New(client))
+	cachestoragepb.RegisterCacheStorageServiceServer(grpcServer, cachestorageserver.New(client))
 
 	go grpcServer.Serve(lis)
 
@@ -213,6 +233,11 @@ func setupTestEnv(t *testing.T) *testEnv {
 		domstorageClient:    domstoragepb.NewDOMStorageServiceClient(conn),
 		debuggerClient:      debuggerpb.NewDebuggerServiceClient(conn),
 		profilerClient:      profilerpb.NewProfilerServiceClient(conn),
+		consoleClient:       consolepb.NewConsoleServiceClient(conn),
+		heapProfilerClient:  heapprofilerpb.NewHeapProfilerServiceClient(conn),
+		serviceWorkerClient: serviceworkerpb.NewServiceWorkerServiceClient(conn),
+		indexedDBClient:     indexeddbpb.NewIndexedDBServiceClient(conn),
+		cacheStorageClient:  cachestoragepb.NewCacheStorageServiceClient(conn),
 		conn:                conn,
 	}
 

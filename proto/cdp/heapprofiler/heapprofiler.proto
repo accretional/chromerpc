@@ -1,0 +1,169 @@
+syntax = "proto3";
+
+package cdp.heapprofiler;
+
+option go_package = "github.com/accretional/chromerpc/proto/cdp/heapprofiler";
+
+// HeapProfiler domain exposes heap profiling capabilities.
+
+service HeapProfilerService {
+  // Enable heap profiler.
+  rpc Enable(EnableRequest) returns (EnableResponse);
+
+  // Disable heap profiler.
+  rpc Disable(DisableRequest) returns (DisableResponse);
+
+  // Start tracking heap objects.
+  rpc StartTrackingHeapObjects(StartTrackingHeapObjectsRequest) returns (StartTrackingHeapObjectsResponse);
+
+  // Stop tracking heap objects.
+  rpc StopTrackingHeapObjects(StopTrackingHeapObjectsRequest) returns (StopTrackingHeapObjectsResponse);
+
+  // Take a heap snapshot.
+  rpc TakeHeapSnapshot(TakeHeapSnapshotRequest) returns (TakeHeapSnapshotResponse);
+
+  // Collect garbage.
+  rpc CollectGarbage(CollectGarbageRequest) returns (CollectGarbageResponse);
+
+  // Get object by heap object ID.
+  rpc GetObjectByHeapObjectId(GetObjectByHeapObjectIdRequest) returns (GetObjectByHeapObjectIdResponse);
+
+  // Add inspected heap object.
+  rpc AddInspectedHeapObject(AddInspectedHeapObjectRequest) returns (AddInspectedHeapObjectResponse);
+
+  // Get heap object ID for a given object.
+  rpc GetHeapObjectId(GetHeapObjectIdRequest) returns (GetHeapObjectIdResponse);
+
+  // Start sampling heap profiler.
+  rpc StartSampling(StartSamplingRequest) returns (StartSamplingResponse);
+
+  // Stop sampling heap profiler.
+  rpc StopSampling(StopSamplingRequest) returns (StopSamplingResponse);
+
+  // Subscribe to HeapProfiler events.
+  rpc SubscribeEvents(SubscribeEventsRequest) returns (stream HeapProfilerEvent);
+}
+
+// ==================== Types ====================
+
+message CallFrame {
+  string function_name = 1;
+  string script_id = 2;
+  string url = 3;
+  int32 line_number = 4;
+  int32 column_number = 5;
+}
+
+message SamplingHeapProfileNode {
+  CallFrame call_frame = 1;
+  double self_size = 2;
+  int32 id = 3;
+  repeated SamplingHeapProfileNode children = 4;
+}
+
+message SamplingHeapProfileSample {
+  double size = 1;
+  int32 node_id = 2;
+  double ordinal = 3;
+}
+
+message SamplingHeapProfile {
+  SamplingHeapProfileNode head = 1;
+  repeated SamplingHeapProfileSample samples = 2;
+}
+
+// ==================== Requests / Responses ====================
+
+message EnableRequest {}
+message EnableResponse {}
+
+message DisableRequest {}
+message DisableResponse {}
+
+message StartTrackingHeapObjectsRequest {
+  bool track_allocations = 1;
+}
+message StartTrackingHeapObjectsResponse {}
+
+message StopTrackingHeapObjectsRequest {
+  bool report_progress = 1;
+  bool treat_global_objects_as_roots = 2;
+  bool capture_numeric_value = 3;
+  bool expose_internals = 4;
+}
+message StopTrackingHeapObjectsResponse {}
+
+message TakeHeapSnapshotRequest {
+  bool report_progress = 1;
+  bool treat_global_objects_as_roots = 2;
+  bool capture_numeric_value = 3;
+  bool expose_internals = 4;
+}
+message TakeHeapSnapshotResponse {}
+
+message CollectGarbageRequest {}
+message CollectGarbageResponse {}
+
+message GetObjectByHeapObjectIdRequest {
+  string object_id = 1;
+  string object_group = 2;
+}
+message GetObjectByHeapObjectIdResponse {
+  string result = 1;
+}
+
+message AddInspectedHeapObjectRequest {
+  string heap_object_id = 1;
+}
+message AddInspectedHeapObjectResponse {}
+
+message GetHeapObjectIdRequest {
+  string object_id = 1;
+}
+message GetHeapObjectIdResponse {
+  string heap_snapshot_object_id = 1;
+}
+
+message StartSamplingRequest {
+  double sampling_interval = 1;
+  bool include_objects_collected_by_major_gc = 2;
+  bool include_objects_collected_by_minor_gc = 3;
+}
+message StartSamplingResponse {}
+
+message StopSamplingRequest {}
+message StopSamplingResponse {
+  SamplingHeapProfile profile = 1;
+}
+
+// ==================== Events ====================
+
+message SubscribeEventsRequest {}
+
+message HeapProfilerEvent {
+  oneof event {
+    AddHeapSnapshotChunkEvent add_heap_snapshot_chunk = 1;
+    ReportHeapSnapshotProgressEvent report_heap_snapshot_progress = 2;
+    LastSeenObjectIdEvent last_seen_object_id = 3;
+    HeapStatsUpdateEvent heap_stats_update = 4;
+  }
+}
+
+message AddHeapSnapshotChunkEvent {
+  string chunk = 1;
+}
+
+message ReportHeapSnapshotProgressEvent {
+  int32 done = 1;
+  int32 total = 2;
+  bool finished = 3;
+}
+
+message LastSeenObjectIdEvent {
+  int32 last_seen_object_id = 1;
+  double timestamp = 2;
+}
+
+message HeapStatsUpdateEvent {
+  repeated int32 stats_update = 1;
+}

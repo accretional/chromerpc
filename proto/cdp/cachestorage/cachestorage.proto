@@ -1,0 +1,96 @@
+syntax = "proto3";
+
+package cdp.cachestorage;
+
+option go_package = "github.com/accretional/chromerpc/proto/cdp/cachestorage";
+
+// CacheStorage domain allows interacting with the Cache Storage API.
+
+service CacheStorageService {
+  // Requests cache names for a given security origin or storage key.
+  rpc RequestCacheNames(RequestCacheNamesRequest) returns (RequestCacheNamesResponse);
+
+  // Requests data entries from a cache.
+  rpc RequestEntries(RequestEntriesRequest) returns (RequestEntriesResponse);
+
+  // Fetches a cached response for the given request.
+  rpc RequestCachedResponse(RequestCachedResponseRequest) returns (RequestCachedResponseResponse);
+
+  // Deletes a cache.
+  rpc DeleteCache(DeleteCacheRequest) returns (DeleteCacheResponse);
+
+  // Deletes a cache entry.
+  rpc DeleteEntry(DeleteEntryRequest) returns (DeleteEntryResponse);
+}
+
+// ==================== Types ====================
+
+message Header {
+  string name = 1;
+  string value = 2;
+}
+
+message Cache {
+  string cache_id = 1;
+  string security_origin = 2;
+  string storage_key = 3;
+  optional string storage_bucket = 4;
+  string cache_name = 5;
+}
+
+message DataEntry {
+  string request_url = 1;
+  string request_method = 2;
+  repeated Header request_headers = 3;
+  double response_time = 4;
+  int32 response_status = 5;
+  string response_status_text = 6;
+  string response_type = 7;
+  repeated Header response_headers = 8;
+}
+
+message CachedResponse {
+  bytes body = 1;
+}
+
+// ==================== Requests / Responses ====================
+
+message RequestCacheNamesRequest {
+  optional string security_origin = 1;
+  optional string storage_key = 2;
+  optional string storage_bucket = 3;
+}
+message RequestCacheNamesResponse {
+  repeated Cache caches = 1;
+}
+
+message RequestEntriesRequest {
+  string cache_id = 1;
+  optional int32 skip_count = 2;
+  optional int32 page_size = 3;
+  optional string path_filter = 4;
+}
+message RequestEntriesResponse {
+  repeated DataEntry cache_data_entries = 1;
+  double return_count = 2;
+}
+
+message RequestCachedResponseRequest {
+  string cache_id = 1;
+  string request_url = 2;
+  repeated Header request_headers = 3;
+}
+message RequestCachedResponseResponse {
+  CachedResponse body = 1;
+}
+
+message DeleteCacheRequest {
+  string cache_id = 1;
+}
+message DeleteCacheResponse {}
+
+message DeleteEntryRequest {
+  string cache_id = 1;
+  string request = 2;
+}
+message DeleteEntryResponse {}

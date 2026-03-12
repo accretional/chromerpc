@@ -32,7 +32,12 @@ proto:
 		proto/cdp/overlay/overlay.proto \
 		proto/cdp/domstorage/domstorage.proto \
 		proto/cdp/debugger/debugger.proto \
-		proto/cdp/profiler/profiler.proto
+		proto/cdp/profiler/profiler.proto \
+		proto/cdp/console/console.proto \
+		proto/cdp/heapprofiler/heapprofiler.proto \
+		proto/cdp/serviceworker/serviceworker.proto \
+		proto/cdp/indexeddb/indexeddb.proto \
+		proto/cdp/cachestorage/cachestorage.proto
 
 # Build Docker image
 docker:
