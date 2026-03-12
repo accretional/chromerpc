@@ -1,0 +1,17 @@
+services:
+  chromerpc:
+    build: .
+    ports:
+      - "50051:50051"
+    # Chrome in containers needs these flags
+    command:
+      - "--headless"
+      - "--addr=:50051"
+      - "--chrome=/usr/bin/google-chrome-stable"
+    # Chrome sandboxing requires either:
+    # 1. --no-sandbox (less secure, for dev)
+    # 2. SYS_ADMIN capability (more secure)
+    cap_add:
+      - SYS_ADMIN
+    # Shared memory size for Chrome
+    shm_size: "2gb"

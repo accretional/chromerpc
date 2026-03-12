@@ -1,0 +1,244 @@
+syntax = "proto3";
+
+package cdp.target;
+
+option go_package = "github.com/anthropics/chromerpc/proto/cdp/target";
+
+// Target domain — supports discovering available inspection targets, attaching
+// to them, and routing CDP messages through sessions.
+
+service TargetService {
+  // Activates (focuses) the target.
+  rpc ActivateTarget(ActivateTargetRequest) returns (ActivateTargetResponse);
+
+  // Attaches to the target with given id.
+  rpc AttachToTarget(AttachToTargetRequest) returns (AttachToTargetResponse);
+
+  // Attaches to the browser target (experimental).
+  rpc AttachToBrowserTarget(AttachToBrowserTargetRequest) returns (AttachToBrowserTargetResponse);
+
+  // Closes the target. If the target is a page that gets closed too.
+  rpc CloseTarget(CloseTargetRequest) returns (CloseTargetResponse);
+
+  // Creates a new browser context (incognito profile).
+  rpc CreateBrowserContext(CreateBrowserContextRequest) returns (CreateBrowserContextResponse);
+
+  // Creates a new page target.
+  rpc CreateTarget(CreateTargetRequest) returns (CreateTargetResponse);
+
+  // Detaches session from target.
+  rpc DetachFromTarget(DetachFromTargetRequest) returns (DetachFromTargetResponse);
+
+  // Deletes a BrowserContext and closes all associated pages.
+  rpc DisposeBrowserContext(DisposeBrowserContextRequest) returns (DisposeBrowserContextResponse);
+
+  // Returns all browser contexts.
+  rpc GetBrowserContexts(GetBrowserContextsRequest) returns (GetBrowserContextsResponse);
+
+  // Retrieves a list of available targets.
+  rpc GetTargets(GetTargetsRequest) returns (GetTargetsResponse);
+
+  // Retrieves information about a target (experimental).
+  rpc GetTargetInfo(GetTargetInfoRequest) returns (GetTargetInfoResponse);
+
+  // Controls whether to automatically attach to new targets.
+  rpc SetAutoAttach(SetAutoAttachRequest) returns (SetAutoAttachResponse);
+
+  // Controls whether to discover available targets.
+  rpc SetDiscoverTargets(SetDiscoverTargetsRequest) returns (SetDiscoverTargetsResponse);
+
+  // Subscribes to target lifecycle events (created, destroyed, changed, crashed).
+  rpc SubscribeEvents(SubscribeTargetEventsRequest) returns (stream TargetEvent);
+}
+
+// --- Types ---
+
+message TargetInfo {
+  string target_id = 1;
+  // Type of the target: "page", "background_page", "service_worker",
+  // "shared_worker", "browser", "other", "webview".
+  string type = 2;
+  string title = 3;
+  string url = 4;
+  bool attached = 5;
+  // Opener target id.
+  string opener_id = 6;
+  // Whether the target has access to the browser target (experimental).
+  bool can_access_opener = 7;
+  string browser_context_id = 8;
+  // Subtype string (experimental).
+  string subtype = 9;
+}
+
+message FilterEntry {
+  // If set, causes exclusion of matching targets from the list.
+  bool exclude = 1;
+  // If present, only targets of this type will be matched.
+  string type = 2;
+}
+
+message RemoteLocation {
+  string host = 1;
+  int32 port = 2;
+}
+
+// --- Requests / Responses ---
+
+message ActivateTargetRequest {
+  string target_id = 1;
+}
+message ActivateTargetResponse {}
+
+message AttachToTargetRequest {
+  string target_id = 1;
+  // Enables "flat" access to the session via specifying sessionId
+  // attribute in the commands. When enabled, sends protocol messages
+  // over the session.
+  bool flatten = 2;
+}
+message AttachToTargetResponse {
+  // Id assigned to the session.
+  string session_id = 1;
+}
+
+message AttachToBrowserTargetRequest {}
+message AttachToBrowserTargetResponse {
+  string session_id = 1;
+}
+
+message CloseTargetRequest {
+  string target_id = 1;
+}
+message CloseTargetResponse {
+  bool success = 1;
+}
+
+message CreateBrowserContextRequest {
+  // If true, dispose the context on detach (experimental).
+  bool dispose_on_detach = 1;
+  // Proxy server (experimental).
+  string proxy_server = 2;
+  // Proxy bypass list (experimental).
+  string proxy_bypass_list = 3;
+  // Origins allowed to skip TLS certificate checks (experimental).
+  repeated string origins_with_universal_network_access = 4;
+}
+message CreateBrowserContextResponse {
+  string browser_context_id = 1;
+}
+
+message CreateTargetRequest {
+  // The initial URL the page will be navigated to (about:blank if empty).
+  string url = 1;
+  // Frame width in DIP (headless chrome only).
+  int32 width = 2;
+  // Frame height in DIP (headless chrome only).
+  int32 height = 3;
+  // Browser context to create the page in.
+  string browser_context_id = 4;
+  // Whether to begin navigation (experimental).
+  bool enable_begin_frame_control = 5;
+  // Whether to create a new window or tab (experimental).
+  bool new_window = 6;
+  // Whether to create the target in background (experimental).
+  bool background = 7;
+  // Whether to create the target as a new tab (experimental).
+  bool for_tab = 8;
+}
+message CreateTargetResponse {
+  string target_id = 1;
+}
+
+message DetachFromTargetRequest {
+  string session_id = 1;
+  // Deprecated.
+  string target_id = 2;
+}
+message DetachFromTargetResponse {}
+
+message DisposeBrowserContextRequest {
+  string browser_context_id = 1;
+}
+message DisposeBrowserContextResponse {}
+
+message GetBrowserContextsRequest {}
+message GetBrowserContextsResponse {
+  repeated string browser_context_ids = 1;
+}
+
+message GetTargetsRequest {
+  repeated FilterEntry filter = 1;
+}
+message GetTargetsResponse {
+  repeated TargetInfo target_infos = 1;
+}
+
+message GetTargetInfoRequest {
+  string target_id = 1;
+}
+message GetTargetInfoResponse {
+  TargetInfo target_info = 1;
+}
+
+message SetAutoAttachRequest {
+  bool auto_attach = 1;
+  bool wait_for_debugger_on_start = 2;
+  bool flatten = 3;
+  repeated FilterEntry filter = 4;
+}
+message SetAutoAttachResponse {}
+
+message SetDiscoverTargetsRequest {
+  bool discover = 1;
+  repeated FilterEntry filter = 2;
+}
+message SetDiscoverTargetsResponse {}
+
+// --- Events ---
+
+message SubscribeTargetEventsRequest {
+  // Optional filter to only receive events for certain target types.
+  repeated FilterEntry filter = 1;
+}
+
+message TargetEvent {
+  oneof event {
+    TargetCreatedEvent target_created = 1;
+    TargetDestroyedEvent target_destroyed = 2;
+    TargetInfoChangedEvent target_info_changed = 3;
+    TargetCrashedEvent target_crashed = 4;
+    AttachedToTargetEvent attached_to_target = 5;
+    DetachedFromTargetEvent detached_from_target = 6;
+  }
+}
+
+message TargetCreatedEvent {
+  TargetInfo target_info = 1;
+}
+
+message TargetDestroyedEvent {
+  string target_id = 1;
+}
+
+message TargetInfoChangedEvent {
+  TargetInfo target_info = 1;
+}
+
+message TargetCrashedEvent {
+  string target_id = 1;
+  // Termination status type.
+  string status = 2;
+  // Termination error code.
+  int32 error_code = 3;
+}
+
+message AttachedToTargetEvent {
+  string session_id = 1;
+  TargetInfo target_info = 2;
+  bool waiting_for_debugger = 3;
+}
+
+message DetachedFromTargetEvent {
+  string session_id = 1;
+  string target_id = 2;
+}

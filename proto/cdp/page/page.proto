@@ -1,0 +1,909 @@
+syntax = "proto3";
+
+package cdp.page;
+
+option go_package = "github.com/anthropics/chromerpc/proto/cdp/page";
+
+// Page domain — actions and events related to the inspected page.
+// Modeled from the Chrome DevTools Protocol Page domain.
+
+service PageService {
+  // Enables page domain notifications.
+  rpc Enable(EnableRequest) returns (EnableResponse);
+
+  // Disables page domain notifications.
+  rpc Disable(DisableRequest) returns (DisableResponse);
+
+  // Navigates current page to the given URL.
+  rpc Navigate(NavigateRequest) returns (NavigateResponse);
+
+  // Reloads given page.
+  rpc Reload(ReloadRequest) returns (ReloadResponse);
+
+  // Force the page stop all navigations and pending resource fetches.
+  rpc StopLoading(StopLoadingRequest) returns (StopLoadingResponse);
+
+  // Returns navigation history for the current page.
+  rpc GetNavigationHistory(GetNavigationHistoryRequest) returns (GetNavigationHistoryResponse);
+
+  // Navigates current page to the given history entry.
+  rpc NavigateToHistoryEntry(NavigateToHistoryEntryRequest) returns (NavigateToHistoryEntryResponse);
+
+  // Resets navigation history.
+  rpc ResetNavigationHistory(ResetNavigationHistoryRequest) returns (ResetNavigationHistoryResponse);
+
+  // Capture page screenshot.
+  rpc CaptureScreenshot(CaptureScreenshotRequest) returns (CaptureScreenshotResponse);
+
+  // Returns a snapshot of the page as a string (MHTML). Experimental.
+  rpc CaptureSnapshot(CaptureSnapshotRequest) returns (CaptureSnapshotResponse);
+
+  // Print page as PDF.
+  rpc PrintToPDF(PrintToPDFRequest) returns (PrintToPDFResponse);
+
+  // Returns present frame tree structure.
+  rpc GetFrameTree(GetFrameTreeRequest) returns (GetFrameTreeResponse);
+
+  // Returns metrics relating to the layouting of the page.
+  rpc GetLayoutMetrics(GetLayoutMetricsRequest) returns (GetLayoutMetricsResponse);
+
+  // Sets given markup as the document's HTML.
+  rpc SetDocumentContent(SetDocumentContentRequest) returns (SetDocumentContentResponse);
+
+  // Brings page to front (activates tab).
+  rpc BringToFront(BringToFrontRequest) returns (BringToFrontResponse);
+
+  // Tries to close page, running its beforeunload hooks, if any.
+  rpc Close(CloseRequest) returns (CloseResponse);
+
+  // Evaluates given script in every frame upon creation.
+  rpc AddScriptToEvaluateOnNewDocument(AddScriptToEvaluateOnNewDocumentRequest) returns (AddScriptToEvaluateOnNewDocumentResponse);
+
+  // Removes given script from the list.
+  rpc RemoveScriptToEvaluateOnNewDocument(RemoveScriptToEvaluateOnNewDocumentRequest) returns (RemoveScriptToEvaluateOnNewDocumentResponse);
+
+  // Enable Chrome's experimental ad filter on all sites.
+  rpc SetAdBlockingEnabled(SetAdBlockingEnabledRequest) returns (SetAdBlockingEnabledResponse);
+
+  // Overrides the values of device screen dimensions.
+  rpc SetBypassCSP(SetBypassCSPRequest) returns (SetBypassCSPResponse);
+
+  // Controls whether page will emit lifecycle events.
+  rpc SetLifecycleEventsEnabled(SetLifecycleEventsEnabledRequest) returns (SetLifecycleEventsEnabledResponse);
+
+  // Accepts or dismisses a JavaScript initiated dialog.
+  rpc HandleJavaScriptDialog(HandleJavaScriptDialogRequest) returns (HandleJavaScriptDialogResponse);
+
+  // Returns content of the given resource (experimental).
+  rpc GetResourceContent(GetResourceContentRequest) returns (GetResourceContentResponse);
+
+  // Returns present frame / resource tree structure (experimental).
+  rpc GetResourceTree(GetResourceTreeRequest) returns (GetResourceTreeResponse);
+
+  // Searches for given string in resource content (experimental).
+  rpc SearchInResource(SearchInResourceRequest) returns (SearchInResourceResponse);
+
+  // Creates an isolated world for the given frame.
+  rpc CreateIsolatedWorld(CreateIsolatedWorldRequest) returns (CreateIsolatedWorldResponse);
+
+  // Starts sending each frame using the screencastFrame event (experimental).
+  rpc StartScreencast(StartScreencastRequest) returns (StartScreencastResponse);
+
+  // Stops sending each frame in the screencastFrame (experimental).
+  rpc StopScreencast(StopScreencastRequest) returns (StopScreencastResponse);
+
+  // Acknowledges that a screencast frame has been received (experimental).
+  rpc ScreencastFrameAck(ScreencastFrameAckRequest) returns (ScreencastFrameAckResponse);
+
+  // Set generic font families (experimental).
+  rpc SetFontFamilies(SetFontFamiliesRequest) returns (SetFontFamiliesResponse);
+
+  // Set default font sizes (experimental).
+  rpc SetFontSizes(SetFontSizesRequest) returns (SetFontSizesResponse);
+
+  // Intercept file chooser requests and transfer control to protocol clients (experimental).
+  rpc SetInterceptFileChooserDialog(SetInterceptFileChooserDialogRequest) returns (SetInterceptFileChooserDialogResponse);
+
+  // Crashes renderer (experimental).
+  rpc Crash(CrashRequest) returns (CrashResponse);
+
+  // Generates a report for testing (experimental).
+  rpc GenerateTestReport(GenerateTestReportRequest) returns (GenerateTestReportResponse);
+
+  // Pauses page execution (experimental).
+  rpc WaitForDebugger(WaitForDebuggerRequest) returns (WaitForDebuggerResponse);
+
+  // Sets the web lifecycle state of the page (experimental).
+  rpc SetWebLifecycleState(SetWebLifecycleStateRequest) returns (SetWebLifecycleStateResponse);
+
+  // Returns the list of errors for the page's installability (experimental).
+  rpc GetInstallabilityErrors(GetInstallabilityErrorsRequest) returns (GetInstallabilityErrorsResponse);
+
+  // Returns the web app manifest for the page (experimental).
+  rpc GetAppManifest(GetAppManifestRequest) returns (GetAppManifestResponse);
+
+  // Returns the unique (dedicated) app id for the page (experimental).
+  rpc GetAppId(GetAppIdRequest) returns (GetAppIdResponse);
+
+  // Returns permissions policy state for the page (experimental).
+  rpc GetPermissionsPolicyState(GetPermissionsPolicyStateRequest) returns (GetPermissionsPolicyStateResponse);
+
+  // Returns origin trials for the frame (experimental).
+  rpc GetOriginTrials(GetOriginTrialsRequest) returns (GetOriginTrialsResponse);
+
+  // Forces compilation cache to be generated (experimental).
+  rpc ProduceCompilationCache(ProduceCompilationCacheRequest) returns (ProduceCompilationCacheResponse);
+
+  // Seeds compilation cache for a given URL (experimental).
+  rpc AddCompilationCache(AddCompilationCacheRequest) returns (AddCompilationCacheResponse);
+
+  // Clears seeded compilation cache (experimental).
+  rpc ClearCompilationCache(ClearCompilationCacheRequest) returns (ClearCompilationCacheResponse);
+
+  // Sets whether prerendering is allowed (experimental).
+  rpc SetPrerenderingAllowed(SetPrerenderingAllowedRequest) returns (SetPrerenderingAllowedResponse);
+
+  // Subscribe to page lifecycle events as a server-side stream.
+  rpc SubscribeEvents(SubscribePageEventsRequest) returns (stream PageEvent);
+}
+
+// ==================== Types ====================
+
+// Unique frame identifier.
+// In protobuf, this is a string wrapper to preserve type semantics.
+message FrameId {
+  string value = 1;
+}
+
+// Information about the Frame on the page.
+message Frame {
+  string id = 1;
+  string parent_id = 2;
+  string loader_id = 3;
+  string name = 4;
+  string url = 5;
+  string url_fragment = 6;           // experimental
+  string domain_and_registry = 7;    // experimental
+  string security_origin = 8;
+  string mime_type = 9;
+  string unreachable_url = 10;       // experimental
+  AdFrameStatus ad_frame_status = 11; // experimental
+  SecureContextType secure_context_type = 12; // experimental
+  CrossOriginIsolatedContextType cross_origin_isolated_context_type = 13; // experimental
+  repeated GatedAPIFeature gated_api_features = 14; // experimental
+}
+
+message FrameTree {
+  Frame frame = 1;
+  repeated FrameTree child_frames = 2;
+}
+
+message FrameResource {
+  string url = 1;
+  string type = 2; // Network.ResourceType
+  string mime_type = 3;
+  double last_modified = 4; // Network.TimeSinceEpoch
+  double content_size = 5;
+  bool failed = 6;
+  bool canceled = 7;
+}
+
+message FrameResourceTree {
+  Frame frame = 1;
+  repeated FrameResourceTree child_frames = 2;
+  repeated FrameResource resources = 3;
+}
+
+// Viewport for capturing screenshot.
+message Viewport {
+  double x = 1;
+  double y = 2;
+  double width = 3;
+  double height = 4;
+  double scale = 5;
+}
+
+message LayoutViewport {
+  int32 page_x = 1;
+  int32 page_y = 2;
+  int32 client_width = 3;
+  int32 client_height = 4;
+}
+
+message VisualViewport {
+  double offset_x = 1;
+  double offset_y = 2;
+  double page_x = 3;
+  double page_y = 4;
+  double client_width = 5;
+  double client_height = 6;
+  double scale = 7;
+  double zoom = 8;
+}
+
+message NavigationEntry {
+  int32 id = 1;
+  string url = 2;
+  string user_typed_url = 3;
+  string title = 4;
+  TransitionType transition_type = 5;
+}
+
+enum TransitionType {
+  TRANSITION_TYPE_UNSPECIFIED = 0;
+  TRANSITION_TYPE_LINK = 1;
+  TRANSITION_TYPE_TYPED = 2;
+  TRANSITION_TYPE_ADDRESS_BAR = 3;
+  TRANSITION_TYPE_AUTO_BOOKMARK = 4;
+  TRANSITION_TYPE_AUTO_SUBFRAME = 5;
+  TRANSITION_TYPE_MANUAL_SUBFRAME = 6;
+  TRANSITION_TYPE_GENERATED = 7;
+  TRANSITION_TYPE_AUTO_TOPLEVEL = 8;
+  TRANSITION_TYPE_FORM_SUBMIT = 9;
+  TRANSITION_TYPE_RELOAD = 10;
+  TRANSITION_TYPE_KEYWORD = 11;
+  TRANSITION_TYPE_KEYWORD_GENERATED = 12;
+  TRANSITION_TYPE_OTHER = 13;
+}
+
+enum DialogType {
+  DIALOG_TYPE_UNSPECIFIED = 0;
+  DIALOG_TYPE_ALERT = 1;
+  DIALOG_TYPE_CONFIRM = 2;
+  DIALOG_TYPE_PROMPT = 3;
+  DIALOG_TYPE_BEFOREUNLOAD = 4;
+}
+
+enum SecureContextType {
+  SECURE_CONTEXT_TYPE_UNSPECIFIED = 0;
+  SECURE_CONTEXT_TYPE_SECURE = 1;
+  SECURE_CONTEXT_TYPE_SECURE_LOCALHOST = 2;
+  SECURE_CONTEXT_TYPE_INSECURE_SCHEME = 3;
+  SECURE_CONTEXT_TYPE_INSECURE_ANCESTOR = 4;
+}
+
+enum CrossOriginIsolatedContextType {
+  CROSS_ORIGIN_ISOLATED_CONTEXT_TYPE_UNSPECIFIED = 0;
+  CROSS_ORIGIN_ISOLATED_CONTEXT_TYPE_ISOLATED = 1;
+  CROSS_ORIGIN_ISOLATED_CONTEXT_TYPE_NOT_ISOLATED = 2;
+  CROSS_ORIGIN_ISOLATED_CONTEXT_TYPE_NOT_ISOLATED_FEATURE_DISABLED = 3;
+}
+
+enum GatedAPIFeature {
+  GATED_API_FEATURE_UNSPECIFIED = 0;
+  GATED_API_FEATURE_SHARED_ARRAY_BUFFERS = 1;
+  GATED_API_FEATURE_SHARED_ARRAY_BUFFERS_TRANSFER_ALLOWED = 2;
+  GATED_API_FEATURE_PERFORMANCE_MEASURE_MEMORY = 3;
+  GATED_API_FEATURE_PERFORMANCE_PROFILE = 4;
+}
+
+enum ScreenshotFormat {
+  SCREENSHOT_FORMAT_UNSPECIFIED = 0;
+  SCREENSHOT_FORMAT_JPEG = 1;
+  SCREENSHOT_FORMAT_PNG = 2;
+  SCREENSHOT_FORMAT_WEBP = 3;
+}
+
+enum CaptureSnapshotFormat {
+  CAPTURE_SNAPSHOT_FORMAT_UNSPECIFIED = 0;
+  CAPTURE_SNAPSHOT_FORMAT_MHTML = 1;
+}
+
+enum PrintToPDFTransferMode {
+  PRINT_TO_PDF_TRANSFER_MODE_UNSPECIFIED = 0;
+  PRINT_TO_PDF_TRANSFER_MODE_RETURN_AS_BASE64 = 1;
+  PRINT_TO_PDF_TRANSFER_MODE_RETURN_AS_STREAM = 2;
+}
+
+enum ReferrerPolicy {
+  REFERRER_POLICY_UNSPECIFIED = 0;
+  REFERRER_POLICY_NO_REFERRER = 1;
+  REFERRER_POLICY_NO_REFERRER_WHEN_DOWNGRADE = 2;
+  REFERRER_POLICY_ORIGIN = 3;
+  REFERRER_POLICY_ORIGIN_WHEN_CROSS_ORIGIN = 4;
+  REFERRER_POLICY_SAME_ORIGIN = 5;
+  REFERRER_POLICY_STRICT_ORIGIN = 6;
+  REFERRER_POLICY_STRICT_ORIGIN_WHEN_CROSS_ORIGIN = 7;
+  REFERRER_POLICY_UNSAFE_URL = 8;
+}
+
+enum WebLifecycleState {
+  WEB_LIFECYCLE_STATE_UNSPECIFIED = 0;
+  WEB_LIFECYCLE_STATE_FROZEN = 1;
+  WEB_LIFECYCLE_STATE_ACTIVE = 2;
+}
+
+enum ScreencastFormat {
+  SCREENCAST_FORMAT_UNSPECIFIED = 0;
+  SCREENCAST_FORMAT_JPEG = 1;
+  SCREENCAST_FORMAT_PNG = 2;
+}
+
+// Ad frame status (experimental).
+message AdFrameStatus {
+  AdFrameType ad_frame_type = 1;
+  repeated AdFrameExplanation explanations = 2;
+}
+
+enum AdFrameType {
+  AD_FRAME_TYPE_UNSPECIFIED = 0;
+  AD_FRAME_TYPE_NONE = 1;
+  AD_FRAME_TYPE_CHILD = 2;
+  AD_FRAME_TYPE_ROOT = 3;
+}
+
+enum AdFrameExplanation {
+  AD_FRAME_EXPLANATION_UNSPECIFIED = 0;
+  AD_FRAME_EXPLANATION_PARENT_IS_AD = 1;
+  AD_FRAME_EXPLANATION_CREATED_BY_AD_SCRIPT = 2;
+  AD_FRAME_EXPLANATION_MATCHED_BLOCKING_RULE = 3;
+}
+
+// App manifest error.
+message AppManifestError {
+  string message = 1;
+  int32 critical = 2;
+  int32 line = 3;
+  int32 column = 4;
+}
+
+message FontFamilies {
+  string standard = 1;
+  string fixed = 2;
+  string serif = 3;
+  string sans_serif = 4;
+  string cursive = 5;
+  string fantasy = 6;
+  string math = 7;
+}
+
+message FontSizes {
+  int32 standard = 1;
+  int32 fixed = 2;
+}
+
+message ScriptFontFamilies {
+  string script = 1;
+  FontFamilies font_families = 2;
+}
+
+message InstallabilityError {
+  string error_id = 1;
+  repeated InstallabilityErrorArgument error_arguments = 2;
+}
+
+message InstallabilityErrorArgument {
+  string name = 1;
+  string value = 2;
+}
+
+message OriginTrial {
+  string trial_name = 1;
+  string status = 2; // OriginTrialStatus
+  repeated OriginTrialTokenWithStatus tokens_with_status = 3;
+}
+
+message OriginTrialTokenWithStatus {
+  string raw_token_text = 1;
+  OriginTrialToken parsed_token = 2;
+  string status = 3; // OriginTrialTokenStatus
+}
+
+message OriginTrialToken {
+  string origin = 1;
+  bool match_sub_domains = 2;
+  string trial_name = 3;
+  double expiry_time = 4;
+  bool is_third_party = 5;
+  string usage_restriction = 6;
+}
+
+message PermissionsPolicyFeatureState {
+  string feature = 1;
+  bool allowed = 2;
+  PermissionsPolicyBlockLocator locator = 3;
+}
+
+message PermissionsPolicyBlockLocator {
+  string frame_id = 1;
+  string block_reason = 2;
+}
+
+message CompilationCacheParams {
+  string url = 1;
+  bool eager = 2;
+}
+
+message ScreencastFrameMetadata {
+  double offset_top = 1;
+  double page_scale_factor = 2;
+  double device_width = 3;
+  double device_height = 4;
+  double scroll_offset_x = 5;
+  double scroll_offset_y = 6;
+  double timestamp = 7;
+}
+
+message SearchMatch {
+  double line_number = 1;
+  string line_content = 2;
+}
+
+// ==================== Requests / Responses ====================
+
+message EnableRequest {
+  // Whether to also enable the FileChooserOpened event (experimental).
+  bool enable_file_chooser_opened_event = 1;
+}
+message EnableResponse {}
+
+message DisableRequest {}
+message DisableResponse {}
+
+message NavigateRequest {
+  string url = 1;
+  string referrer = 2;
+  TransitionType transition_type = 3;
+  string frame_id = 4;
+  ReferrerPolicy referrer_policy = 5; // experimental
+}
+message NavigateResponse {
+  string frame_id = 1;
+  string loader_id = 2;
+  string error_text = 3;
+}
+
+message ReloadRequest {
+  bool ignore_cache = 1;
+  string script_to_evaluate_on_load = 2;
+  string loader_id = 3; // experimental
+}
+message ReloadResponse {}
+
+message StopLoadingRequest {}
+message StopLoadingResponse {}
+
+message GetNavigationHistoryRequest {}
+message GetNavigationHistoryResponse {
+  int32 current_index = 1;
+  repeated NavigationEntry entries = 2;
+}
+
+message NavigateToHistoryEntryRequest {
+  int32 entry_id = 1;
+}
+message NavigateToHistoryEntryResponse {}
+
+message ResetNavigationHistoryRequest {}
+message ResetNavigationHistoryResponse {}
+
+message CaptureScreenshotRequest {
+  ScreenshotFormat format = 1;
+  // Compression quality from range [0..100] (jpeg/webp only).
+  int32 quality = 2;
+  // Capture the screenshot of a given region only.
+  Viewport clip = 3;
+  // Capture the screenshot from the surface, rather than the view (experimental).
+  bool from_surface = 4;
+  // Capture the screenshot beyond the viewport (experimental).
+  bool capture_beyond_viewport = 5;
+  // Optimize image encoding for speed, not for resulting size (experimental).
+  bool optimize_for_speed = 6;
+}
+message CaptureScreenshotResponse {
+  // Base64-encoded image data.
+  bytes data = 1;
+}
+
+message CaptureSnapshotRequest {
+  CaptureSnapshotFormat format = 1;
+}
+message CaptureSnapshotResponse {
+  // Serialized page data.
+  string data = 1;
+}
+
+message PrintToPDFRequest {
+  bool landscape = 1;
+  bool display_header_footer = 2;
+  bool print_background = 3;
+  double scale = 4;
+  // Paper width in inches. Defaults to 8.5 inches.
+  double paper_width = 5;
+  // Paper height in inches. Defaults to 11 inches.
+  double paper_height = 6;
+  // Top margin in inches. Defaults to 1cm (~0.4 inches).
+  double margin_top = 7;
+  // Bottom margin in inches. Defaults to 1cm (~0.4 inches).
+  double margin_bottom = 8;
+  // Left margin in inches. Defaults to 1cm (~0.4 inches).
+  double margin_left = 9;
+  // Right margin in inches. Defaults to 1cm (~0.4 inches).
+  double margin_right = 10;
+  // Paper ranges to print, e.g., '1-5, 8, 11-13'.
+  string page_ranges = 11;
+  // HTML template for the print header.
+  string header_template = 12;
+  // HTML template for the print footer.
+  string footer_template = 13;
+  // Whether or not to prefer page size as defined by css.
+  bool prefer_css_page_size = 14;
+  // Return as stream or base64 (experimental).
+  PrintToPDFTransferMode transfer_mode = 15;
+  // Whether to generate tagged (accessible) PDF (experimental).
+  bool generate_tagged_pdf = 16;
+  // Whether to embed the document outline into the PDF (experimental).
+  bool generate_document_outline = 17;
+}
+message PrintToPDFResponse {
+  // Base64-encoded pdf data. Empty if transfer_mode was ReturnAsStream.
+  bytes data = 1;
+  // Stream handle for reading PDF data if transfer_mode was ReturnAsStream (experimental).
+  string stream = 2;
+}
+
+message GetFrameTreeRequest {}
+message GetFrameTreeResponse {
+  FrameTree frame_tree = 1;
+}
+
+message GetLayoutMetricsRequest {}
+message GetLayoutMetricsResponse {
+  LayoutViewport css_layout_viewport = 1;
+  VisualViewport css_visual_viewport = 2;
+  // Content size in CSS pixels.
+  Rect css_content_size = 3;
+}
+
+// DOM.Rect equivalent.
+message Rect {
+  double x = 1;
+  double y = 2;
+  double width = 3;
+  double height = 4;
+}
+
+message SetDocumentContentRequest {
+  string frame_id = 1;
+  string html = 2;
+}
+message SetDocumentContentResponse {}
+
+message BringToFrontRequest {}
+message BringToFrontResponse {}
+
+message CloseRequest {}
+message CloseResponse {}
+
+message AddScriptToEvaluateOnNewDocumentRequest {
+  string source = 1;
+  // If specified, creates an isolated world with the given name (experimental).
+  string world_name = 2;
+  // Whether to include command line API in the created context (experimental).
+  bool include_command_line_api = 3;
+  // If true, the script will be injected into all frames immediately (experimental).
+  bool run_immediately = 4;
+}
+message AddScriptToEvaluateOnNewDocumentResponse {
+  string identifier = 1;
+}
+
+message RemoveScriptToEvaluateOnNewDocumentRequest {
+  string identifier = 1;
+}
+message RemoveScriptToEvaluateOnNewDocumentResponse {}
+
+message SetAdBlockingEnabledRequest {
+  bool enabled = 1;
+}
+message SetAdBlockingEnabledResponse {}
+
+message SetBypassCSPRequest {
+  bool enabled = 1;
+}
+message SetBypassCSPResponse {}
+
+message SetLifecycleEventsEnabledRequest {
+  bool enabled = 1;
+}
+message SetLifecycleEventsEnabledResponse {}
+
+message HandleJavaScriptDialogRequest {
+  bool accept = 1;
+  string prompt_text = 2;
+}
+message HandleJavaScriptDialogResponse {}
+
+message GetResourceContentRequest {
+  string frame_id = 1;
+  string url = 2;
+}
+message GetResourceContentResponse {
+  string content = 1;
+  bool base64_encoded = 2;
+}
+
+message GetResourceTreeRequest {}
+message GetResourceTreeResponse {
+  FrameResourceTree frame_tree = 1;
+}
+
+message SearchInResourceRequest {
+  string frame_id = 1;
+  string url = 2;
+  string query = 3;
+  bool case_sensitive = 4;
+  bool is_regex = 5;
+}
+message SearchInResourceResponse {
+  repeated SearchMatch result = 1;
+}
+
+message CreateIsolatedWorldRequest {
+  string frame_id = 1;
+  string world_name = 2;
+  bool grant_universal_access = 3;
+}
+message CreateIsolatedWorldResponse {
+  int32 execution_context_id = 1;
+}
+
+message StartScreencastRequest {
+  ScreencastFormat format = 1;
+  int32 quality = 2;
+  int32 max_width = 3;
+  int32 max_height = 4;
+  int32 every_nth_frame = 5;
+}
+message StartScreencastResponse {}
+
+message StopScreencastRequest {}
+message StopScreencastResponse {}
+
+message ScreencastFrameAckRequest {
+  int32 session_id = 1;
+}
+message ScreencastFrameAckResponse {}
+
+message SetFontFamiliesRequest {
+  FontFamilies font_families = 1;
+  repeated ScriptFontFamilies for_scripts = 2;
+}
+message SetFontFamiliesResponse {}
+
+message SetFontSizesRequest {
+  FontSizes font_sizes = 1;
+}
+message SetFontSizesResponse {}
+
+message SetInterceptFileChooserDialogRequest {
+  bool enabled = 1;
+}
+message SetInterceptFileChooserDialogResponse {}
+
+message CrashRequest {}
+message CrashResponse {}
+
+message GenerateTestReportRequest {
+  string message = 1;
+  string group = 2;
+}
+message GenerateTestReportResponse {}
+
+message WaitForDebuggerRequest {}
+message WaitForDebuggerResponse {}
+
+message SetWebLifecycleStateRequest {
+  WebLifecycleState state = 1;
+}
+message SetWebLifecycleStateResponse {}
+
+message GetInstallabilityErrorsRequest {}
+message GetInstallabilityErrorsResponse {
+  repeated InstallabilityError installability_errors = 1;
+}
+
+message GetAppManifestRequest {
+  string manifest_id = 1;
+}
+message GetAppManifestResponse {
+  string url = 1;
+  repeated AppManifestError errors = 2;
+  string data = 3;
+}
+
+message GetAppIdRequest {}
+message GetAppIdResponse {
+  string app_id = 1;
+  string recommended_id = 2;
+}
+
+message GetPermissionsPolicyStateRequest {
+  string frame_id = 1;
+}
+message GetPermissionsPolicyStateResponse {
+  repeated PermissionsPolicyFeatureState states = 1;
+}
+
+message GetOriginTrialsRequest {
+  string frame_id = 1;
+}
+message GetOriginTrialsResponse {
+  repeated OriginTrial origin_trials = 1;
+}
+
+message ProduceCompilationCacheRequest {
+  repeated CompilationCacheParams scripts = 1;
+}
+message ProduceCompilationCacheResponse {}
+
+message AddCompilationCacheRequest {
+  string url = 1;
+  // Base64-encoded data.
+  bytes data = 2;
+}
+message AddCompilationCacheResponse {}
+
+message ClearCompilationCacheRequest {}
+message ClearCompilationCacheResponse {}
+
+message SetPrerenderingAllowedRequest {
+  bool is_allowed = 1;
+}
+message SetPrerenderingAllowedResponse {}
+
+// ==================== Events ====================
+
+message SubscribePageEventsRequest {
+  // The CDP session_id to subscribe events for.
+  // If empty, uses the default browser session.
+  string session_id = 1;
+}
+
+message PageEvent {
+  oneof event {
+    DomContentEventFiredEvent dom_content_event_fired = 1;
+    LoadEventFiredEvent load_event_fired = 2;
+    FrameAttachedEvent frame_attached = 3;
+    FrameDetachedEvent frame_detached = 4;
+    FrameNavigatedEvent frame_navigated = 5;
+    JavascriptDialogOpeningEvent javascript_dialog_opening = 6;
+    JavascriptDialogClosedEvent javascript_dialog_closed = 7;
+    LifecycleEventEvent lifecycle_event = 8;
+    WindowOpenEvent window_open = 9;
+    FrameStartedLoadingEvent frame_started_loading = 10;
+    FrameStoppedLoadingEvent frame_stopped_loading = 11;
+    FrameStartedNavigatingEvent frame_started_navigating = 12;
+    FrameRequestedNavigationEvent frame_requested_navigation = 13;
+    NavigatedWithinDocumentEvent navigated_within_document = 14;
+    InterstitialShownEvent interstitial_shown = 15;
+    InterstitialHiddenEvent interstitial_hidden = 16;
+    FileChooserOpenedEvent file_chooser_opened = 17;
+    ScreencastFrameEvent screencast_frame = 18;
+    ScreencastVisibilityChangedEvent screencast_visibility_changed = 19;
+    DocumentOpenedEvent document_opened = 20;
+    FrameResizedEvent frame_resized = 21;
+    BackForwardCacheNotUsedEvent back_forward_cache_not_used = 22;
+    CompilationCacheProducedEvent compilation_cache_produced = 23;
+  }
+}
+
+message DomContentEventFiredEvent {
+  double timestamp = 1;
+}
+
+message LoadEventFiredEvent {
+  double timestamp = 1;
+}
+
+message FrameAttachedEvent {
+  string frame_id = 1;
+  string parent_frame_id = 2;
+}
+
+message FrameDetachedEvent {
+  string frame_id = 1;
+  string reason = 2; // "remove" or "swap"
+}
+
+message FrameNavigatedEvent {
+  Frame frame = 1;
+  string type = 2; // NavigationType: "Navigation" | "BackForwardCacheRestore"
+}
+
+message JavascriptDialogOpeningEvent {
+  string url = 1;
+  string message = 2;
+  DialogType type = 3;
+  bool has_browser_handler = 4;
+  string default_prompt = 5;
+}
+
+message JavascriptDialogClosedEvent {
+  bool result = 1;
+  string user_input = 2;
+}
+
+message LifecycleEventEvent {
+  string frame_id = 1;
+  string loader_id = 2;
+  string name = 3;
+  double timestamp = 4;
+}
+
+message WindowOpenEvent {
+  string url = 1;
+  string window_name = 2;
+  repeated string window_features = 3;
+  bool user_gesture = 4;
+}
+
+message FrameStartedLoadingEvent {
+  string frame_id = 1;
+}
+
+message FrameStoppedLoadingEvent {
+  string frame_id = 1;
+}
+
+message FrameStartedNavigatingEvent {
+  string frame_id = 1;
+  string url = 2;
+  string loader_id = 3;
+  string navigation_type = 4;
+}
+
+message FrameRequestedNavigationEvent {
+  string frame_id = 1;
+  string reason = 2;
+  string url = 3;
+  string disposition = 4;
+}
+
+message NavigatedWithinDocumentEvent {
+  string frame_id = 1;
+  string url = 2;
+  string navigation_type = 3;
+}
+
+message InterstitialShownEvent {}
+message InterstitialHiddenEvent {}
+
+message FileChooserOpenedEvent {
+  string frame_id = 1;
+  string mode = 2; // "selectSingle" or "selectMultiple"
+  int32 backend_node_id = 3;
+}
+
+message ScreencastFrameEvent {
+  bytes data = 1; // Base64-decoded compressed image.
+  ScreencastFrameMetadata metadata = 2;
+  int32 session_id = 3;
+}
+
+message ScreencastVisibilityChangedEvent {
+  bool visible = 1;
+}
+
+message DocumentOpenedEvent {
+  Frame frame = 1;
+}
+
+message FrameResizedEvent {}
+
+message BackForwardCacheNotUsedEvent {
+  string loader_id = 1;
+  string frame_id = 2;
+  repeated BackForwardCacheNotRestoredExplanation not_restored_explanations = 3;
+}
+
+message BackForwardCacheNotRestoredExplanation {
+  string type = 1;
+  string reason = 2;
+  string context = 3;
+}
+
+message CompilationCacheProducedEvent {
+  string url = 1;
+  bytes data = 2;
+}
