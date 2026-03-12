@@ -1,0 +1,113 @@
+syntax = "proto3";
+
+package cdp.domdebugger;
+
+option go_package = "github.com/accretional/chromerpc/proto/cdp/domdebugger";
+
+// DOMDebugger domain allows setting breakpoints on DOM operations and events.
+
+service DOMDebuggerService {
+  // Returns event listeners of the given object.
+  rpc GetEventListeners(GetEventListenersRequest) returns (GetEventListenersResponse);
+
+  // Removes DOM breakpoint that was set using setDOMBreakpoint.
+  rpc RemoveDOMBreakpoint(RemoveDOMBreakpointRequest) returns (RemoveDOMBreakpointResponse);
+
+  // Removes breakpoint on particular DOM event.
+  rpc RemoveEventListenerBreakpoint(RemoveEventListenerBreakpointRequest) returns (RemoveEventListenerBreakpointResponse);
+
+  // Removes an instrumentation breakpoint.
+  rpc RemoveInstrumentationBreakpoint(RemoveInstrumentationBreakpointRequest) returns (RemoveInstrumentationBreakpointResponse);
+
+  // Removes breakpoint from XMLHttpRequest.
+  rpc RemoveXHRBreakpoint(RemoveXHRBreakpointRequest) returns (RemoveXHRBreakpointResponse);
+
+  // Sets breakpoint on particular DOM operation.
+  rpc SetDOMBreakpoint(SetDOMBreakpointRequest) returns (SetDOMBreakpointResponse);
+
+  // Sets breakpoint on particular DOM event.
+  rpc SetEventListenerBreakpoint(SetEventListenerBreakpointRequest) returns (SetEventListenerBreakpointResponse);
+
+  // Sets an instrumentation breakpoint.
+  rpc SetInstrumentationBreakpoint(SetInstrumentationBreakpointRequest) returns (SetInstrumentationBreakpointResponse);
+
+  // Sets breakpoint on XMLHttpRequest.
+  rpc SetXHRBreakpoint(SetXHRBreakpointRequest) returns (SetXHRBreakpointResponse);
+}
+
+// ==================== Types ====================
+
+enum DOMBreakpointType {
+  DOM_BREAKPOINT_TYPE_UNSPECIFIED = 0;
+  DOM_BREAKPOINT_TYPE_SUBTREE_MODIFIED = 1;
+  DOM_BREAKPOINT_TYPE_ATTRIBUTE_MODIFIED = 2;
+  DOM_BREAKPOINT_TYPE_NODE_REMOVED = 3;
+}
+
+message EventListener {
+  string type = 1;
+  bool use_capture = 2;
+  bool passive = 3;
+  bool once = 4;
+  string script_id = 5;
+  int32 line_number = 6;
+  int32 column_number = 7;
+  string handler = 8;
+  string original_handler = 9;
+  int32 backend_node_id = 10;
+}
+
+// ==================== Requests / Responses ====================
+
+message GetEventListenersRequest {
+  string object_id = 1;
+  int32 depth = 2;
+  bool pierce = 3;
+}
+message GetEventListenersResponse {
+  repeated EventListener listeners = 1;
+}
+
+message RemoveDOMBreakpointRequest {
+  int32 node_id = 1;
+  DOMBreakpointType type = 2;
+}
+message RemoveDOMBreakpointResponse {}
+
+message RemoveEventListenerBreakpointRequest {
+  string event_name = 1;
+  string target_name = 2;
+}
+message RemoveEventListenerBreakpointResponse {}
+
+message RemoveInstrumentationBreakpointRequest {
+  string event_name = 1;
+}
+message RemoveInstrumentationBreakpointResponse {}
+
+message RemoveXHRBreakpointRequest {
+  string url = 1;
+}
+message RemoveXHRBreakpointResponse {}
+
+message SetDOMBreakpointRequest {
+  int32 node_id = 1;
+  DOMBreakpointType type = 2;
+}
+message SetDOMBreakpointResponse {}
+
+message SetEventListenerBreakpointRequest {
+  string event_name = 1;
+  string target_name = 2;
+}
+message SetEventListenerBreakpointResponse {}
+
+message SetInstrumentationBreakpointRequest {
+  string event_name = 1;
+}
+message SetInstrumentationBreakpointResponse {}
+
+message SetXHRBreakpointRequest {
+  string url = 1;
+}
+message SetXHRBreakpointResponse {}

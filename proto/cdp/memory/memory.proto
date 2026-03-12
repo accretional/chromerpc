@@ -1,0 +1,100 @@
+syntax = "proto3";
+
+package cdp.memory;
+
+option go_package = "github.com/accretional/chromerpc/proto/cdp/memory";
+
+// Memory domain provides access to memory-related functionality.
+
+service MemoryService {
+  // Returns DOM counters (documents, nodes, jsEventListeners).
+  rpc GetDOMCounters(GetDOMCountersRequest) returns (GetDOMCountersResponse);
+
+  // Prepares for leak detection.
+  rpc PrepareForLeakDetection(PrepareForLeakDetectionRequest) returns (PrepareForLeakDetectionResponse);
+
+  // Forcibly purges JavaScript memory.
+  rpc ForciblyPurgeJavaScriptMemory(ForciblyPurgeJavaScriptMemoryRequest) returns (ForciblyPurgeJavaScriptMemoryResponse);
+
+  // Sets whether pressure notifications are suppressed.
+  rpc SetPressureNotificationsSuppressed(SetPressureNotificationsSuppressedRequest) returns (SetPressureNotificationsSuppressedResponse);
+
+  // Simulates a memory pressure notification.
+  rpc SimulatePressureNotification(SimulatePressureNotificationRequest) returns (SimulatePressureNotificationResponse);
+
+  // Starts memory sampling.
+  rpc StartSampling(StartSamplingRequest) returns (StartSamplingResponse);
+
+  // Stops memory sampling.
+  rpc StopSampling(StopSamplingRequest) returns (StopSamplingResponse);
+
+  // Returns the all-time sampling profile.
+  rpc GetAllTimeSamplingProfile(GetAllTimeSamplingProfileRequest) returns (GetAllTimeSamplingProfileResponse);
+
+  // Returns the current sampling profile.
+  rpc GetSamplingProfile(GetSamplingProfileRequest) returns (GetSamplingProfileResponse);
+
+  // Returns the browser sampling profile.
+  rpc GetBrowserSamplingProfile(GetBrowserSamplingProfileRequest) returns (GetBrowserSamplingProfileResponse);
+}
+
+// ==================== Types ====================
+
+message SamplingProfileNode {
+  double size = 1;
+  double total = 2;
+  repeated string stack = 3;
+}
+
+message SamplingProfile {
+  repeated SamplingProfileNode samples = 1;
+}
+
+// ==================== Requests / Responses ====================
+
+message GetDOMCountersRequest {}
+message GetDOMCountersResponse {
+  int32 documents = 1;
+  int32 nodes = 2;
+  int32 js_event_listeners = 3;
+}
+
+message PrepareForLeakDetectionRequest {}
+message PrepareForLeakDetectionResponse {}
+
+message ForciblyPurgeJavaScriptMemoryRequest {}
+message ForciblyPurgeJavaScriptMemoryResponse {}
+
+message SetPressureNotificationsSuppressedRequest {
+  bool suppressed = 1;
+}
+message SetPressureNotificationsSuppressedResponse {}
+
+message SimulatePressureNotificationRequest {
+  string level = 1;
+}
+message SimulatePressureNotificationResponse {}
+
+message StartSamplingRequest {
+  optional int32 sampling_interval = 1;
+  optional bool suppress_randomness = 2;
+}
+message StartSamplingResponse {}
+
+message StopSamplingRequest {}
+message StopSamplingResponse {}
+
+message GetAllTimeSamplingProfileRequest {}
+message GetAllTimeSamplingProfileResponse {
+  SamplingProfile profile = 1;
+}
+
+message GetSamplingProfileRequest {}
+message GetSamplingProfileResponse {
+  SamplingProfile profile = 1;
+}
+
+message GetBrowserSamplingProfileRequest {}
+message GetBrowserSamplingProfileResponse {
+  SamplingProfile profile = 1;
+}

@@ -28,22 +28,28 @@ import (
 	accessibilityserver "github.com/accretional/chromerpc/internal/server/accessibility"
 	animationserver "github.com/accretional/chromerpc/internal/server/animation"
 	auditsserver "github.com/accretional/chromerpc/internal/server/audits"
+	backgroundserviceserver "github.com/accretional/chromerpc/internal/server/backgroundservice"
 	browserserver "github.com/accretional/chromerpc/internal/server/browser"
 	cachestorageserver "github.com/accretional/chromerpc/internal/server/cachestorage"
 	consoleserver "github.com/accretional/chromerpc/internal/server/console"
 	cssserver "github.com/accretional/chromerpc/internal/server/css"
+	databaseserver "github.com/accretional/chromerpc/internal/server/database"
 	debuggerserver "github.com/accretional/chromerpc/internal/server/debugger"
+	deviceorientationserver "github.com/accretional/chromerpc/internal/server/deviceorientation"
 	domserver "github.com/accretional/chromerpc/internal/server/dom"
+	domdebuggerserver "github.com/accretional/chromerpc/internal/server/domdebugger"
 	domstorageserver "github.com/accretional/chromerpc/internal/server/domstorage"
 	emulationserver "github.com/accretional/chromerpc/internal/server/emulation"
 	fetchserver "github.com/accretional/chromerpc/internal/server/fetch"
 	heapprofilerserver "github.com/accretional/chromerpc/internal/server/heapprofiler"
 	indexeddbserver "github.com/accretional/chromerpc/internal/server/indexeddb"
 	inputserver "github.com/accretional/chromerpc/internal/server/input"
+	inspectorserver "github.com/accretional/chromerpc/internal/server/inspector"
 	ioserver "github.com/accretional/chromerpc/internal/server/io"
 	layertreeserver "github.com/accretional/chromerpc/internal/server/layertree"
 	logserver "github.com/accretional/chromerpc/internal/server/log"
 	mediaserver "github.com/accretional/chromerpc/internal/server/media"
+	memoryserver "github.com/accretional/chromerpc/internal/server/memory"
 	networkserver "github.com/accretional/chromerpc/internal/server/network"
 	overlayserver "github.com/accretional/chromerpc/internal/server/overlay"
 	pageserver "github.com/accretional/chromerpc/internal/server/page"
@@ -56,25 +62,35 @@ import (
 	systeminfoserver "github.com/accretional/chromerpc/internal/server/systeminfo"
 	targetserver "github.com/accretional/chromerpc/internal/server/target"
 	tracingserver "github.com/accretional/chromerpc/internal/server/tracing"
+	performancetimelineserver "github.com/accretional/chromerpc/internal/server/performancetimeline"
+	preloadserver "github.com/accretional/chromerpc/internal/server/preload"
+	webaudioserver "github.com/accretional/chromerpc/internal/server/webaudio"
+	webauthnserver "github.com/accretional/chromerpc/internal/server/webauthn"
 	accessibilitypb "github.com/accretional/chromerpc/proto/cdp/accessibility"
 	animationpb "github.com/accretional/chromerpc/proto/cdp/animation"
 	auditspb "github.com/accretional/chromerpc/proto/cdp/audits"
+	backgroundservicepb "github.com/accretional/chromerpc/proto/cdp/backgroundservice"
 	browserpb "github.com/accretional/chromerpc/proto/cdp/browser"
 	cachestoragepb "github.com/accretional/chromerpc/proto/cdp/cachestorage"
 	consolepb "github.com/accretional/chromerpc/proto/cdp/console"
 	csspb "github.com/accretional/chromerpc/proto/cdp/css"
+	databasepb "github.com/accretional/chromerpc/proto/cdp/database"
 	debuggerpb "github.com/accretional/chromerpc/proto/cdp/debugger"
+	deviceorientationpb "github.com/accretional/chromerpc/proto/cdp/deviceorientation"
 	dompb "github.com/accretional/chromerpc/proto/cdp/dom"
+	domdebuggerpb "github.com/accretional/chromerpc/proto/cdp/domdebugger"
 	domstoragepb "github.com/accretional/chromerpc/proto/cdp/domstorage"
 	emulationpb "github.com/accretional/chromerpc/proto/cdp/emulation"
 	fetchpb "github.com/accretional/chromerpc/proto/cdp/fetch"
 	heapprofilerpb "github.com/accretional/chromerpc/proto/cdp/heapprofiler"
 	indexeddbpb "github.com/accretional/chromerpc/proto/cdp/indexeddb"
 	inputpb "github.com/accretional/chromerpc/proto/cdp/input"
+	inspectorpb "github.com/accretional/chromerpc/proto/cdp/inspector"
 	iopb "github.com/accretional/chromerpc/proto/cdp/io"
 	layertreepb "github.com/accretional/chromerpc/proto/cdp/layertree"
 	logpb "github.com/accretional/chromerpc/proto/cdp/log"
 	mediapb "github.com/accretional/chromerpc/proto/cdp/media"
+	memorypb "github.com/accretional/chromerpc/proto/cdp/memory"
 	networkpb "github.com/accretional/chromerpc/proto/cdp/network"
 	overlaypb "github.com/accretional/chromerpc/proto/cdp/overlay"
 	pagepb "github.com/accretional/chromerpc/proto/cdp/page"
@@ -87,6 +103,10 @@ import (
 	systeminfopb "github.com/accretional/chromerpc/proto/cdp/systeminfo"
 	targetpb "github.com/accretional/chromerpc/proto/cdp/target"
 	tracingpb "github.com/accretional/chromerpc/proto/cdp/tracing"
+	performancetimelinepb "github.com/accretional/chromerpc/proto/cdp/performancetimeline"
+	preloadpb "github.com/accretional/chromerpc/proto/cdp/preload"
+	webaudiopb "github.com/accretional/chromerpc/proto/cdp/webaudio"
+	webauthnpb "github.com/accretional/chromerpc/proto/cdp/webauthn"
 )
 
 func main() {
@@ -177,6 +197,16 @@ func main() {
 	mediapb.RegisterMediaServiceServer(grpcServer, mediaserver.New(client))
 	tracingpb.RegisterTracingServiceServer(grpcServer, tracingserver.New(client))
 	systeminfopb.RegisterSystemInfoServiceServer(grpcServer, systeminfoserver.New(client))
+	memorypb.RegisterMemoryServiceServer(grpcServer, memoryserver.New(client))
+	domdebuggerpb.RegisterDOMDebuggerServiceServer(grpcServer, domdebuggerserver.New(client))
+	webaudiopb.RegisterWebAudioServiceServer(grpcServer, webaudioserver.New(client))
+	inspectorpb.RegisterInspectorServiceServer(grpcServer, inspectorserver.New(client))
+	databasepb.RegisterDatabaseServiceServer(grpcServer, databaseserver.New(client))
+	backgroundservicepb.RegisterBackgroundServiceServiceServer(grpcServer, backgroundserviceserver.New(client))
+	deviceorientationpb.RegisterDeviceOrientationServiceServer(grpcServer, deviceorientationserver.New(client))
+	webauthnpb.RegisterWebAuthnServiceServer(grpcServer, webauthnserver.New(client))
+	performancetimelinepb.RegisterPerformanceTimelineServiceServer(grpcServer, performancetimelineserver.New(client))
+	preloadpb.RegisterPreloadServiceServer(grpcServer, preloadserver.New(client))
 
 	// Enable gRPC reflection for tools like grpcurl.
 	reflection.Register(grpcServer)

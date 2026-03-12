@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+package cdp.database;
+
+option go_package = "github.com/accretional/chromerpc/proto/cdp/database";
+
+// Database domain provides access to Web SQL database functionality.
+
+service DatabaseService {
+  // Enable database domain notifications.
+  rpc Enable(EnableRequest) returns (EnableResponse);
+
+  // Disable database domain notifications.
+  rpc Disable(DisableRequest) returns (DisableResponse);
+
+  // Returns the table names of a given database.
+  rpc GetDatabaseTableNames(GetDatabaseTableNamesRequest) returns (GetDatabaseTableNamesResponse);
+
+  // Executes a SQL query against a database.
+  rpc ExecuteSQL(ExecuteSQLRequest) returns (ExecuteSQLResponse);
+}
+
+// ==================== Types ====================
+
+message SqlError {
+  string message = 1;
+  int32 code = 2;
+}
+
+// ==================== Requests / Responses ====================
+
+message EnableRequest {}
+message EnableResponse {}
+
+message DisableRequest {}
+message DisableResponse {}
+
+message GetDatabaseTableNamesRequest {
+  string database_id = 1;
+}
+message GetDatabaseTableNamesResponse {
+  repeated string table_names = 1;
+}
+
+message ExecuteSQLRequest {
+  string database_id = 1;
+  string query = 2;
+}
+message ExecuteSQLResponse {
+  repeated string column_names = 1;
+  repeated string values = 2;
+  SqlError sql_error = 3;
+}

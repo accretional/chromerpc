@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package cdp.deviceorientation;
+
+option go_package = "github.com/accretional/chromerpc/proto/cdp/deviceorientation";
+
+service DeviceOrientationService {
+  rpc ClearDeviceOrientationOverride(ClearDeviceOrientationOverrideRequest) returns (ClearDeviceOrientationOverrideResponse);
+  rpc SetDeviceOrientationOverride(SetDeviceOrientationOverrideRequest) returns (SetDeviceOrientationOverrideResponse);
+}
+
+message ClearDeviceOrientationOverrideRequest {}
+message ClearDeviceOrientationOverrideResponse {}
+
+message SetDeviceOrientationOverrideRequest {
+  double alpha = 1;
+  double beta = 2;
+  double gamma = 3;
+}
+message SetDeviceOrientationOverrideResponse {}

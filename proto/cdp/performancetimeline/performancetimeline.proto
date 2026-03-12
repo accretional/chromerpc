@@ -1,0 +1,12 @@
+syntax = "proto3";
+package cdp.performancetimeline;
+option go_package = "github.com/accretional/chromerpc/proto/cdp/performancetimeline";
+
+service PerformanceTimelineService {
+  rpc Enable(EnableRequest) returns (EnableResponse);
+}
+
+message EnableRequest {
+  repeated string event_types = 1;
+}
+message EnableResponse {}

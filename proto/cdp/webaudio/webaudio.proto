@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+package cdp.webaudio;
+
+option go_package = "github.com/accretional/chromerpc/proto/cdp/webaudio";
+
+// WebAudio domain provides access to Web Audio API-related functionality.
+
+service WebAudioService {
+  // Enable WebAudio domain notifications.
+  rpc Enable(EnableRequest) returns (EnableResponse);
+
+  // Disable WebAudio domain notifications.
+  rpc Disable(DisableRequest) returns (DisableResponse);
+
+  // Gets the realtime data for the given audio context.
+  rpc GetRealtimeData(GetRealtimeDataRequest) returns (GetRealtimeDataResponse);
+}
+
+// ==================== Types ====================
+
+message ContextRealtimeData {
+  double current_time = 1;
+  double render_capacity = 2;
+  double callback_interval_mean = 3;
+  double callback_interval_variance = 4;
+}
+
+// ==================== Requests / Responses ====================
+
+message EnableRequest {}
+message EnableResponse {}
+
+message DisableRequest {}
+message DisableResponse {}
+
+message GetRealtimeDataRequest {
+  string context_id = 1;
+}
+message GetRealtimeDataResponse {
+  ContextRealtimeData realtime_data = 1;
+}

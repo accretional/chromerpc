@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package cdp.preload;
+
+option go_package = "github.com/accretional/chromerpc/proto/cdp/preload";
+
+service PreloadService {
+  rpc Enable(EnableRequest) returns (EnableResponse);
+  rpc Disable(DisableRequest) returns (DisableResponse);
+}
+
+message EnableRequest {}
+message EnableResponse {}
+message DisableRequest {}
+message DisableResponse {}

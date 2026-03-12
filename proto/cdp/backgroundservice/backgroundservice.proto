@@ -1,0 +1,56 @@
+syntax = "proto3";
+
+package cdp.backgroundservice;
+
+option go_package = "github.com/accretional/chromerpc/proto/cdp/backgroundservice";
+
+// BackgroundService domain provides access to background service events.
+
+service BackgroundServiceService {
+  // Start observing events for a service.
+  rpc StartObserving(StartObservingRequest) returns (StartObservingResponse);
+
+  // Stop observing events for a service.
+  rpc StopObserving(StopObservingRequest) returns (StopObservingResponse);
+
+  // Set the recording state for a service.
+  rpc SetRecording(SetRecordingRequest) returns (SetRecordingResponse);
+
+  // Clear all stored events for a service.
+  rpc ClearEvents(ClearEventsRequest) returns (ClearEventsResponse);
+}
+
+// ==================== Types ====================
+
+enum ServiceName {
+  SERVICE_NAME_UNSPECIFIED = 0;
+  BACKGROUND_FETCH = 1;
+  BACKGROUND_SYNC = 2;
+  PUSH_MESSAGING = 3;
+  NOTIFICATIONS = 4;
+  PAYMENT_HANDLER = 5;
+  PERIODIC_BACKGROUND_SYNC = 6;
+}
+
+// ==================== Requests / Responses ====================
+
+message StartObservingRequest {
+  ServiceName service = 1;
+}
+message StartObservingResponse {}
+
+message StopObservingRequest {
+  ServiceName service = 1;
+}
+message StopObservingResponse {}
+
+message SetRecordingRequest {
+  bool should_record = 1;
+  ServiceName service = 2;
+}
+message SetRecordingResponse {}
+
+message ClearEventsRequest {
+  ServiceName service = 1;
+}
+message ClearEventsResponse {}

@@ -43,7 +43,17 @@ proto:
 		proto/cdp/audits/audits.proto \
 		proto/cdp/layertree/layertree.proto \
 		proto/cdp/animation/animation.proto \
-		proto/cdp/media/media.proto
+		proto/cdp/media/media.proto \
+		proto/cdp/memory/memory.proto \
+		proto/cdp/domdebugger/domdebugger.proto \
+		proto/cdp/webaudio/webaudio.proto \
+		proto/cdp/inspector/inspector.proto \
+		proto/cdp/database/database.proto \
+		proto/cdp/backgroundservice/backgroundservice.proto \
+		proto/cdp/deviceorientation/deviceorientation.proto \
+		proto/cdp/webauthn/webauthn.proto \
+		proto/cdp/performancetimeline/performancetimeline.proto \
+		proto/cdp/preload/preload.proto
 
 # Build Docker image
 docker:

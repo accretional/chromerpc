@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package cdp.inspector;
+
+option go_package = "github.com/accretional/chromerpc/proto/cdp/inspector";
+
+// Inspector domain provides access to inspector-related functionality.
+
+service InspectorService {
+  // Enable inspector domain notifications.
+  rpc Enable(EnableRequest) returns (EnableResponse);
+
+  // Disable inspector domain notifications.
+  rpc Disable(DisableRequest) returns (DisableResponse);
+}
+
+// ==================== Requests / Responses ====================
+
+message EnableRequest {}
+message EnableResponse {}
+
+message DisableRequest {}
+message DisableResponse {}

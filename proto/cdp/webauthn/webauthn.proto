@@ -1,0 +1,172 @@
+syntax = "proto3";
+
+package cdp.webauthn;
+
+option go_package = "github.com/accretional/chromerpc/proto/cdp/webauthn";
+
+// WebAuthn domain allows managing virtual authenticators.
+
+service WebAuthnService {
+  // Enable the WebAuthn domain.
+  rpc Enable(EnableRequest) returns (EnableResponse);
+
+  // Disable the WebAuthn domain.
+  rpc Disable(DisableRequest) returns (DisableResponse);
+
+  // Add a virtual authenticator.
+  rpc AddVirtualAuthenticator(AddVirtualAuthenticatorRequest) returns (AddVirtualAuthenticatorResponse);
+
+  // Remove a virtual authenticator.
+  rpc RemoveVirtualAuthenticator(RemoveVirtualAuthenticatorRequest) returns (RemoveVirtualAuthenticatorResponse);
+
+  // Add a credential to an authenticator.
+  rpc AddCredential(AddCredentialRequest) returns (AddCredentialResponse);
+
+  // Get a credential from an authenticator.
+  rpc GetCredential(GetCredentialRequest) returns (GetCredentialResponse);
+
+  // Get all credentials from an authenticator.
+  rpc GetCredentials(GetCredentialsRequest) returns (GetCredentialsResponse);
+
+  // Remove a credential from an authenticator.
+  rpc RemoveCredential(RemoveCredentialRequest) returns (RemoveCredentialResponse);
+
+  // Clear all credentials from an authenticator.
+  rpc ClearCredentials(ClearCredentialsRequest) returns (ClearCredentialsResponse);
+
+  // Set whether the user is verified on an authenticator.
+  rpc SetUserVerified(SetUserVerifiedRequest) returns (SetUserVerifiedResponse);
+
+  // Set automatic presence simulation on an authenticator.
+  rpc SetAutomaticPresenceSimulation(SetAutomaticPresenceSimulationRequest) returns (SetAutomaticPresenceSimulationResponse);
+
+  // Set response override bits on an authenticator.
+  rpc SetResponseOverrideBits(SetResponseOverrideBitsRequest) returns (SetResponseOverrideBitsResponse);
+}
+
+// ==================== Enums ====================
+
+enum AuthenticatorProtocol {
+  AUTHENTICATOR_PROTOCOL_UNSPECIFIED = 0;
+  U2F = 1;
+  CTAP2 = 2;
+}
+
+enum AuthenticatorTransport {
+  AUTHENTICATOR_TRANSPORT_UNSPECIFIED = 0;
+  USB = 1;
+  NFC = 2;
+  BLE = 3;
+  CABLE = 4;
+  INTERNAL = 5;
+}
+
+enum Ctap2Version {
+  CTAP2_VERSION_UNSPECIFIED = 0;
+  CTAP2_0 = 1;
+  CTAP2_1 = 2;
+}
+
+// ==================== Types ====================
+
+message VirtualAuthenticatorOptions {
+  AuthenticatorProtocol protocol = 1;
+  Ctap2Version ctap2_version = 2;
+  AuthenticatorTransport transport = 3;
+  bool has_resident_key = 4;
+  bool has_user_verification = 5;
+  bool has_large_blob = 6;
+  bool has_cred_blob = 7;
+  bool has_min_pin_length = 8;
+  bool has_prf = 9;
+  bool automatic_presence_simulation = 10;
+  bool is_user_verified = 11;
+  bool default_backup_eligibility = 12;
+  bool default_backup_state = 13;
+}
+
+message Credential {
+  string credential_id = 1;
+  bool is_resident_credential = 2;
+  string rp_id = 3;
+  string private_key = 4;
+  string user_handle = 5;
+  int32 sign_count = 6;
+  string large_blob = 7;
+  bool backup_eligibility = 8;
+  bool backup_state = 9;
+}
+
+// ==================== Requests / Responses ====================
+
+message EnableRequest {
+  bool enable_ui = 1;
+}
+message EnableResponse {}
+
+message DisableRequest {}
+message DisableResponse {}
+
+message AddVirtualAuthenticatorRequest {
+  VirtualAuthenticatorOptions options = 1;
+}
+message AddVirtualAuthenticatorResponse {
+  string authenticator_id = 1;
+}
+
+message RemoveVirtualAuthenticatorRequest {
+  string authenticator_id = 1;
+}
+message RemoveVirtualAuthenticatorResponse {}
+
+message AddCredentialRequest {
+  string authenticator_id = 1;
+  Credential credential = 2;
+}
+message AddCredentialResponse {}
+
+message GetCredentialRequest {
+  string authenticator_id = 1;
+  string credential_id = 2;
+}
+message GetCredentialResponse {
+  Credential credential = 1;
+}
+
+message GetCredentialsRequest {
+  string authenticator_id = 1;
+}
+message GetCredentialsResponse {
+  repeated Credential credentials = 1;
+}
+
+message RemoveCredentialRequest {
+  string authenticator_id = 1;
+  string credential_id = 2;
+}
+message RemoveCredentialResponse {}
+
+message ClearCredentialsRequest {
+  string authenticator_id = 1;
+}
+message ClearCredentialsResponse {}
+
+message SetUserVerifiedRequest {
+  string authenticator_id = 1;
+  bool is_user_verified = 2;
+}
+message SetUserVerifiedResponse {}
+
+message SetAutomaticPresenceSimulationRequest {
+  string authenticator_id = 1;
+  bool enabled = 2;
+}
+message SetAutomaticPresenceSimulationResponse {}
+
+message SetResponseOverrideBitsRequest {
+  string authenticator_id = 1;
+  bool is_bogus_signature = 2;
+  bool is_bad_uv = 3;
+  bool is_bad_up = 4;
+}
+message SetResponseOverrideBitsResponse {}
