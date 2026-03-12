@@ -605,6 +605,368 @@ func (*ResetCooldownResponse) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_fedcm_fedcm_proto_rawDescGZIP(), []int{13}
 }
 
+type SubscribeFedCmEventsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,1,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SubscribeFedCmEventsRequest) Reset() {
+	*x = SubscribeFedCmEventsRequest{}
+	mi := &file_proto_cdp_fedcm_fedcm_proto_msgTypes[14]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SubscribeFedCmEventsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SubscribeFedCmEventsRequest) ProtoMessage() {}
+
+func (x *SubscribeFedCmEventsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_fedcm_fedcm_proto_msgTypes[14]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SubscribeFedCmEventsRequest.ProtoReflect.Descriptor instead.
+func (*SubscribeFedCmEventsRequest) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_fedcm_fedcm_proto_rawDescGZIP(), []int{14}
+}
+
+func (x *SubscribeFedCmEventsRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
+type FedCmEvent struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Types that are valid to be assigned to Event:
+	//
+	//	*FedCmEvent_DialogShown
+	//	*FedCmEvent_DialogClosed
+	Event         isFedCmEvent_Event `protobuf_oneof:"event"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *FedCmEvent) Reset() {
+	*x = FedCmEvent{}
+	mi := &file_proto_cdp_fedcm_fedcm_proto_msgTypes[15]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *FedCmEvent) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*FedCmEvent) ProtoMessage() {}
+
+func (x *FedCmEvent) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_fedcm_fedcm_proto_msgTypes[15]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use FedCmEvent.ProtoReflect.Descriptor instead.
+func (*FedCmEvent) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_fedcm_fedcm_proto_rawDescGZIP(), []int{15}
+}
+
+func (x *FedCmEvent) GetEvent() isFedCmEvent_Event {
+	if x != nil {
+		return x.Event
+	}
+	return nil
+}
+
+func (x *FedCmEvent) GetDialogShown() *DialogShownEvent {
+	if x != nil {
+		if x, ok := x.Event.(*FedCmEvent_DialogShown); ok {
+			return x.DialogShown
+		}
+	}
+	return nil
+}
+
+func (x *FedCmEvent) GetDialogClosed() *DialogClosedEvent {
+	if x != nil {
+		if x, ok := x.Event.(*FedCmEvent_DialogClosed); ok {
+			return x.DialogClosed
+		}
+	}
+	return nil
+}
+
+type isFedCmEvent_Event interface {
+	isFedCmEvent_Event()
+}
+
+type FedCmEvent_DialogShown struct {
+	DialogShown *DialogShownEvent `protobuf:"bytes,1,opt,name=dialog_shown,json=dialogShown,proto3,oneof"`
+}
+
+type FedCmEvent_DialogClosed struct {
+	DialogClosed *DialogClosedEvent `protobuf:"bytes,2,opt,name=dialog_closed,json=dialogClosed,proto3,oneof"`
+}
+
+func (*FedCmEvent_DialogShown) isFedCmEvent_Event() {}
+
+func (*FedCmEvent_DialogClosed) isFedCmEvent_Event() {}
+
+type DialogShownEvent struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	DialogId      string                 `protobuf:"bytes,1,opt,name=dialog_id,json=dialogId,proto3" json:"dialog_id,omitempty"`
+	DialogType    string                 `protobuf:"bytes,2,opt,name=dialog_type,json=dialogType,proto3" json:"dialog_type,omitempty"`
+	Accounts      []*Account             `protobuf:"bytes,3,rep,name=accounts,proto3" json:"accounts,omitempty"`
+	Title         string                 `protobuf:"bytes,4,opt,name=title,proto3" json:"title,omitempty"`
+	Subtitle      string                 `protobuf:"bytes,5,opt,name=subtitle,proto3" json:"subtitle,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DialogShownEvent) Reset() {
+	*x = DialogShownEvent{}
+	mi := &file_proto_cdp_fedcm_fedcm_proto_msgTypes[16]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DialogShownEvent) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DialogShownEvent) ProtoMessage() {}
+
+func (x *DialogShownEvent) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_fedcm_fedcm_proto_msgTypes[16]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DialogShownEvent.ProtoReflect.Descriptor instead.
+func (*DialogShownEvent) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_fedcm_fedcm_proto_rawDescGZIP(), []int{16}
+}
+
+func (x *DialogShownEvent) GetDialogId() string {
+	if x != nil {
+		return x.DialogId
+	}
+	return ""
+}
+
+func (x *DialogShownEvent) GetDialogType() string {
+	if x != nil {
+		return x.DialogType
+	}
+	return ""
+}
+
+func (x *DialogShownEvent) GetAccounts() []*Account {
+	if x != nil {
+		return x.Accounts
+	}
+	return nil
+}
+
+func (x *DialogShownEvent) GetTitle() string {
+	if x != nil {
+		return x.Title
+	}
+	return ""
+}
+
+func (x *DialogShownEvent) GetSubtitle() string {
+	if x != nil {
+		return x.Subtitle
+	}
+	return ""
+}
+
+type DialogClosedEvent struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	DialogId      string                 `protobuf:"bytes,1,opt,name=dialog_id,json=dialogId,proto3" json:"dialog_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DialogClosedEvent) Reset() {
+	*x = DialogClosedEvent{}
+	mi := &file_proto_cdp_fedcm_fedcm_proto_msgTypes[17]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DialogClosedEvent) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DialogClosedEvent) ProtoMessage() {}
+
+func (x *DialogClosedEvent) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_fedcm_fedcm_proto_msgTypes[17]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DialogClosedEvent.ProtoReflect.Descriptor instead.
+func (*DialogClosedEvent) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_fedcm_fedcm_proto_rawDescGZIP(), []int{17}
+}
+
+func (x *DialogClosedEvent) GetDialogId() string {
+	if x != nil {
+		return x.DialogId
+	}
+	return ""
+}
+
+type Account struct {
+	state             protoimpl.MessageState `protogen:"open.v1"`
+	AccountId         string                 `protobuf:"bytes,1,opt,name=account_id,json=accountId,proto3" json:"account_id,omitempty"`
+	Email             string                 `protobuf:"bytes,2,opt,name=email,proto3" json:"email,omitempty"`
+	Name              string                 `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
+	GivenName         string                 `protobuf:"bytes,4,opt,name=given_name,json=givenName,proto3" json:"given_name,omitempty"`
+	PictureUrl        string                 `protobuf:"bytes,5,opt,name=picture_url,json=pictureUrl,proto3" json:"picture_url,omitempty"`
+	IdpConfigUrl      string                 `protobuf:"bytes,6,opt,name=idp_config_url,json=idpConfigUrl,proto3" json:"idp_config_url,omitempty"`
+	IdpLoginUrl       string                 `protobuf:"bytes,7,opt,name=idp_login_url,json=idpLoginUrl,proto3" json:"idp_login_url,omitempty"`
+	LoginState        string                 `protobuf:"bytes,8,opt,name=login_state,json=loginState,proto3" json:"login_state,omitempty"`
+	TermsOfServiceUrl string                 `protobuf:"bytes,9,opt,name=terms_of_service_url,json=termsOfServiceUrl,proto3" json:"terms_of_service_url,omitempty"`
+	PrivacyPolicyUrl  string                 `protobuf:"bytes,10,opt,name=privacy_policy_url,json=privacyPolicyUrl,proto3" json:"privacy_policy_url,omitempty"`
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
+}
+
+func (x *Account) Reset() {
+	*x = Account{}
+	mi := &file_proto_cdp_fedcm_fedcm_proto_msgTypes[18]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Account) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Account) ProtoMessage() {}
+
+func (x *Account) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_fedcm_fedcm_proto_msgTypes[18]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Account.ProtoReflect.Descriptor instead.
+func (*Account) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_fedcm_fedcm_proto_rawDescGZIP(), []int{18}
+}
+
+func (x *Account) GetAccountId() string {
+	if x != nil {
+		return x.AccountId
+	}
+	return ""
+}
+
+func (x *Account) GetEmail() string {
+	if x != nil {
+		return x.Email
+	}
+	return ""
+}
+
+func (x *Account) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *Account) GetGivenName() string {
+	if x != nil {
+		return x.GivenName
+	}
+	return ""
+}
+
+func (x *Account) GetPictureUrl() string {
+	if x != nil {
+		return x.PictureUrl
+	}
+	return ""
+}
+
+func (x *Account) GetIdpConfigUrl() string {
+	if x != nil {
+		return x.IdpConfigUrl
+	}
+	return ""
+}
+
+func (x *Account) GetIdpLoginUrl() string {
+	if x != nil {
+		return x.IdpLoginUrl
+	}
+	return ""
+}
+
+func (x *Account) GetLoginState() string {
+	if x != nil {
+		return x.LoginState
+	}
+	return ""
+}
+
+func (x *Account) GetTermsOfServiceUrl() string {
+	if x != nil {
+		return x.TermsOfServiceUrl
+	}
+	return ""
+}
+
+func (x *Account) GetPrivacyPolicyUrl() string {
+	if x != nil {
+		return x.PrivacyPolicyUrl
+	}
+	return ""
+}
+
 var File_proto_cdp_fedcm_fedcm_proto protoreflect.FileDescriptor
 
 const file_proto_cdp_fedcm_fedcm_proto_rawDesc = "" +
@@ -635,7 +997,40 @@ const file_proto_cdp_fedcm_fedcm_proto_rawDesc = "" +
 	"\x11_trigger_cooldown\"\x17\n" +
 	"\x15DismissDialogResponse\"\x16\n" +
 	"\x14ResetCooldownRequest\"\x17\n" +
-	"\x15ResetCooldownResponse2\xad\x04\n" +
+	"\x15ResetCooldownResponse\"<\n" +
+	"\x1bSubscribeFedCmEventsRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18\x01 \x01(\tR\tsessionId\"\x9c\x01\n" +
+	"\n" +
+	"FedCmEvent\x12@\n" +
+	"\fdialog_shown\x18\x01 \x01(\v2\x1b.cdp.fedcm.DialogShownEventH\x00R\vdialogShown\x12C\n" +
+	"\rdialog_closed\x18\x02 \x01(\v2\x1c.cdp.fedcm.DialogClosedEventH\x00R\fdialogClosedB\a\n" +
+	"\x05event\"\xb2\x01\n" +
+	"\x10DialogShownEvent\x12\x1b\n" +
+	"\tdialog_id\x18\x01 \x01(\tR\bdialogId\x12\x1f\n" +
+	"\vdialog_type\x18\x02 \x01(\tR\n" +
+	"dialogType\x12.\n" +
+	"\baccounts\x18\x03 \x03(\v2\x12.cdp.fedcm.AccountR\baccounts\x12\x14\n" +
+	"\x05title\x18\x04 \x01(\tR\x05title\x12\x1a\n" +
+	"\bsubtitle\x18\x05 \x01(\tR\bsubtitle\"0\n" +
+	"\x11DialogClosedEvent\x12\x1b\n" +
+	"\tdialog_id\x18\x01 \x01(\tR\bdialogId\"\xdc\x02\n" +
+	"\aAccount\x12\x1d\n" +
+	"\n" +
+	"account_id\x18\x01 \x01(\tR\taccountId\x12\x14\n" +
+	"\x05email\x18\x02 \x01(\tR\x05email\x12\x12\n" +
+	"\x04name\x18\x03 \x01(\tR\x04name\x12\x1d\n" +
+	"\n" +
+	"given_name\x18\x04 \x01(\tR\tgivenName\x12\x1f\n" +
+	"\vpicture_url\x18\x05 \x01(\tR\n" +
+	"pictureUrl\x12$\n" +
+	"\x0eidp_config_url\x18\x06 \x01(\tR\fidpConfigUrl\x12\"\n" +
+	"\ridp_login_url\x18\a \x01(\tR\vidpLoginUrl\x12\x1f\n" +
+	"\vlogin_state\x18\b \x01(\tR\n" +
+	"loginState\x12/\n" +
+	"\x14terms_of_service_url\x18\t \x01(\tR\x11termsOfServiceUrl\x12,\n" +
+	"\x12privacy_policy_url\x18\n" +
+	" \x01(\tR\x10privacyPolicyUrl2\x81\x05\n" +
 	"\fFedCmService\x12=\n" +
 	"\x06Enable\x12\x18.cdp.fedcm.EnableRequest\x1a\x19.cdp.fedcm.EnableResponse\x12@\n" +
 	"\aDisable\x12\x19.cdp.fedcm.DisableRequest\x1a\x1a.cdp.fedcm.DisableResponse\x12R\n" +
@@ -643,7 +1038,8 @@ const file_proto_cdp_fedcm_fedcm_proto_rawDesc = "" +
 	"\x11ClickDialogButton\x12#.cdp.fedcm.ClickDialogButtonRequest\x1a$.cdp.fedcm.ClickDialogButtonResponse\x12@\n" +
 	"\aOpenUrl\x12\x19.cdp.fedcm.OpenUrlRequest\x1a\x1a.cdp.fedcm.OpenUrlResponse\x12R\n" +
 	"\rDismissDialog\x12\x1f.cdp.fedcm.DismissDialogRequest\x1a .cdp.fedcm.DismissDialogResponse\x12R\n" +
-	"\rResetCooldown\x12\x1f.cdp.fedcm.ResetCooldownRequest\x1a .cdp.fedcm.ResetCooldownResponseB2Z0github.com/accretional/chromerpc/proto/cdp/fedcmb\x06proto3"
+	"\rResetCooldown\x12\x1f.cdp.fedcm.ResetCooldownRequest\x1a .cdp.fedcm.ResetCooldownResponse\x12R\n" +
+	"\x0fSubscribeEvents\x12&.cdp.fedcm.SubscribeFedCmEventsRequest\x1a\x15.cdp.fedcm.FedCmEvent0\x01B2Z0github.com/accretional/chromerpc/proto/cdp/fedcmb\x06proto3"
 
 var (
 	file_proto_cdp_fedcm_fedcm_proto_rawDescOnce sync.Once
@@ -657,43 +1053,53 @@ func file_proto_cdp_fedcm_fedcm_proto_rawDescGZIP() []byte {
 	return file_proto_cdp_fedcm_fedcm_proto_rawDescData
 }
 
-var file_proto_cdp_fedcm_fedcm_proto_msgTypes = make([]protoimpl.MessageInfo, 14)
+var file_proto_cdp_fedcm_fedcm_proto_msgTypes = make([]protoimpl.MessageInfo, 19)
 var file_proto_cdp_fedcm_fedcm_proto_goTypes = []any{
-	(*EnableRequest)(nil),             // 0: cdp.fedcm.EnableRequest
-	(*EnableResponse)(nil),            // 1: cdp.fedcm.EnableResponse
-	(*DisableRequest)(nil),            // 2: cdp.fedcm.DisableRequest
-	(*DisableResponse)(nil),           // 3: cdp.fedcm.DisableResponse
-	(*SelectAccountRequest)(nil),      // 4: cdp.fedcm.SelectAccountRequest
-	(*SelectAccountResponse)(nil),     // 5: cdp.fedcm.SelectAccountResponse
-	(*ClickDialogButtonRequest)(nil),  // 6: cdp.fedcm.ClickDialogButtonRequest
-	(*ClickDialogButtonResponse)(nil), // 7: cdp.fedcm.ClickDialogButtonResponse
-	(*OpenUrlRequest)(nil),            // 8: cdp.fedcm.OpenUrlRequest
-	(*OpenUrlResponse)(nil),           // 9: cdp.fedcm.OpenUrlResponse
-	(*DismissDialogRequest)(nil),      // 10: cdp.fedcm.DismissDialogRequest
-	(*DismissDialogResponse)(nil),     // 11: cdp.fedcm.DismissDialogResponse
-	(*ResetCooldownRequest)(nil),      // 12: cdp.fedcm.ResetCooldownRequest
-	(*ResetCooldownResponse)(nil),     // 13: cdp.fedcm.ResetCooldownResponse
+	(*EnableRequest)(nil),               // 0: cdp.fedcm.EnableRequest
+	(*EnableResponse)(nil),              // 1: cdp.fedcm.EnableResponse
+	(*DisableRequest)(nil),              // 2: cdp.fedcm.DisableRequest
+	(*DisableResponse)(nil),             // 3: cdp.fedcm.DisableResponse
+	(*SelectAccountRequest)(nil),        // 4: cdp.fedcm.SelectAccountRequest
+	(*SelectAccountResponse)(nil),       // 5: cdp.fedcm.SelectAccountResponse
+	(*ClickDialogButtonRequest)(nil),    // 6: cdp.fedcm.ClickDialogButtonRequest
+	(*ClickDialogButtonResponse)(nil),   // 7: cdp.fedcm.ClickDialogButtonResponse
+	(*OpenUrlRequest)(nil),              // 8: cdp.fedcm.OpenUrlRequest
+	(*OpenUrlResponse)(nil),             // 9: cdp.fedcm.OpenUrlResponse
+	(*DismissDialogRequest)(nil),        // 10: cdp.fedcm.DismissDialogRequest
+	(*DismissDialogResponse)(nil),       // 11: cdp.fedcm.DismissDialogResponse
+	(*ResetCooldownRequest)(nil),        // 12: cdp.fedcm.ResetCooldownRequest
+	(*ResetCooldownResponse)(nil),       // 13: cdp.fedcm.ResetCooldownResponse
+	(*SubscribeFedCmEventsRequest)(nil), // 14: cdp.fedcm.SubscribeFedCmEventsRequest
+	(*FedCmEvent)(nil),                  // 15: cdp.fedcm.FedCmEvent
+	(*DialogShownEvent)(nil),            // 16: cdp.fedcm.DialogShownEvent
+	(*DialogClosedEvent)(nil),           // 17: cdp.fedcm.DialogClosedEvent
+	(*Account)(nil),                     // 18: cdp.fedcm.Account
 }
 var file_proto_cdp_fedcm_fedcm_proto_depIdxs = []int32{
-	0,  // 0: cdp.fedcm.FedCmService.Enable:input_type -> cdp.fedcm.EnableRequest
-	2,  // 1: cdp.fedcm.FedCmService.Disable:input_type -> cdp.fedcm.DisableRequest
-	4,  // 2: cdp.fedcm.FedCmService.SelectAccount:input_type -> cdp.fedcm.SelectAccountRequest
-	6,  // 3: cdp.fedcm.FedCmService.ClickDialogButton:input_type -> cdp.fedcm.ClickDialogButtonRequest
-	8,  // 4: cdp.fedcm.FedCmService.OpenUrl:input_type -> cdp.fedcm.OpenUrlRequest
-	10, // 5: cdp.fedcm.FedCmService.DismissDialog:input_type -> cdp.fedcm.DismissDialogRequest
-	12, // 6: cdp.fedcm.FedCmService.ResetCooldown:input_type -> cdp.fedcm.ResetCooldownRequest
-	1,  // 7: cdp.fedcm.FedCmService.Enable:output_type -> cdp.fedcm.EnableResponse
-	3,  // 8: cdp.fedcm.FedCmService.Disable:output_type -> cdp.fedcm.DisableResponse
-	5,  // 9: cdp.fedcm.FedCmService.SelectAccount:output_type -> cdp.fedcm.SelectAccountResponse
-	7,  // 10: cdp.fedcm.FedCmService.ClickDialogButton:output_type -> cdp.fedcm.ClickDialogButtonResponse
-	9,  // 11: cdp.fedcm.FedCmService.OpenUrl:output_type -> cdp.fedcm.OpenUrlResponse
-	11, // 12: cdp.fedcm.FedCmService.DismissDialog:output_type -> cdp.fedcm.DismissDialogResponse
-	13, // 13: cdp.fedcm.FedCmService.ResetCooldown:output_type -> cdp.fedcm.ResetCooldownResponse
-	7,  // [7:14] is the sub-list for method output_type
-	0,  // [0:7] is the sub-list for method input_type
-	0,  // [0:0] is the sub-list for extension type_name
-	0,  // [0:0] is the sub-list for extension extendee
-	0,  // [0:0] is the sub-list for field type_name
+	16, // 0: cdp.fedcm.FedCmEvent.dialog_shown:type_name -> cdp.fedcm.DialogShownEvent
+	17, // 1: cdp.fedcm.FedCmEvent.dialog_closed:type_name -> cdp.fedcm.DialogClosedEvent
+	18, // 2: cdp.fedcm.DialogShownEvent.accounts:type_name -> cdp.fedcm.Account
+	0,  // 3: cdp.fedcm.FedCmService.Enable:input_type -> cdp.fedcm.EnableRequest
+	2,  // 4: cdp.fedcm.FedCmService.Disable:input_type -> cdp.fedcm.DisableRequest
+	4,  // 5: cdp.fedcm.FedCmService.SelectAccount:input_type -> cdp.fedcm.SelectAccountRequest
+	6,  // 6: cdp.fedcm.FedCmService.ClickDialogButton:input_type -> cdp.fedcm.ClickDialogButtonRequest
+	8,  // 7: cdp.fedcm.FedCmService.OpenUrl:input_type -> cdp.fedcm.OpenUrlRequest
+	10, // 8: cdp.fedcm.FedCmService.DismissDialog:input_type -> cdp.fedcm.DismissDialogRequest
+	12, // 9: cdp.fedcm.FedCmService.ResetCooldown:input_type -> cdp.fedcm.ResetCooldownRequest
+	14, // 10: cdp.fedcm.FedCmService.SubscribeEvents:input_type -> cdp.fedcm.SubscribeFedCmEventsRequest
+	1,  // 11: cdp.fedcm.FedCmService.Enable:output_type -> cdp.fedcm.EnableResponse
+	3,  // 12: cdp.fedcm.FedCmService.Disable:output_type -> cdp.fedcm.DisableResponse
+	5,  // 13: cdp.fedcm.FedCmService.SelectAccount:output_type -> cdp.fedcm.SelectAccountResponse
+	7,  // 14: cdp.fedcm.FedCmService.ClickDialogButton:output_type -> cdp.fedcm.ClickDialogButtonResponse
+	9,  // 15: cdp.fedcm.FedCmService.OpenUrl:output_type -> cdp.fedcm.OpenUrlResponse
+	11, // 16: cdp.fedcm.FedCmService.DismissDialog:output_type -> cdp.fedcm.DismissDialogResponse
+	13, // 17: cdp.fedcm.FedCmService.ResetCooldown:output_type -> cdp.fedcm.ResetCooldownResponse
+	15, // 18: cdp.fedcm.FedCmService.SubscribeEvents:output_type -> cdp.fedcm.FedCmEvent
+	11, // [11:19] is the sub-list for method output_type
+	3,  // [3:11] is the sub-list for method input_type
+	3,  // [3:3] is the sub-list for extension type_name
+	3,  // [3:3] is the sub-list for extension extendee
+	0,  // [0:3] is the sub-list for field type_name
 }
 
 func init() { file_proto_cdp_fedcm_fedcm_proto_init() }
@@ -703,13 +1109,17 @@ func file_proto_cdp_fedcm_fedcm_proto_init() {
 	}
 	file_proto_cdp_fedcm_fedcm_proto_msgTypes[0].OneofWrappers = []any{}
 	file_proto_cdp_fedcm_fedcm_proto_msgTypes[10].OneofWrappers = []any{}
+	file_proto_cdp_fedcm_fedcm_proto_msgTypes[15].OneofWrappers = []any{
+		(*FedCmEvent_DialogShown)(nil),
+		(*FedCmEvent_DialogClosed)(nil),
+	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_cdp_fedcm_fedcm_proto_rawDesc), len(file_proto_cdp_fedcm_fedcm_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   14,
+			NumMessages:   19,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

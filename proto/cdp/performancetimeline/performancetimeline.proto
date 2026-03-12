@@ -4,9 +4,54 @@ option go_package = "github.com/accretional/chromerpc/proto/cdp/performancetimel
 
 service PerformanceTimelineService {
   rpc Enable(EnableRequest) returns (EnableResponse);
+  rpc SubscribeEvents(SubscribePerformanceTimelineEventsRequest) returns (stream PerformanceTimelineEvent);
 }
 
 message EnableRequest {
   repeated string event_types = 1;
 }
 message EnableResponse {}
+
+message SubscribePerformanceTimelineEventsRequest {
+  string session_id = 1;
+}
+
+message PerformanceTimelineEvent {
+  oneof event {
+    TimelineEventAddedEvent timeline_event_added = 1;
+  }
+}
+
+message TimelineEventAddedEvent {
+  TimelineEvent event = 1;
+}
+
+message TimelineEvent {
+  string frame_id = 1;
+  string type = 2;
+  string name = 3;
+  double time = 4;
+  double duration = 5;
+  LargestContentfulPaint lcp_details = 6;
+  LayoutShift layout_shift_details = 7;
+}
+
+message LargestContentfulPaint {
+  double render_time = 1;
+  double load_time = 2;
+  double size = 3;
+  string element_id = 4;
+  string url = 5;
+  int32 node_id = 6;
+}
+
+message LayoutShift {
+  double value = 1;
+  bool had_recent_input = 2;
+  double last_input_time = 3;
+  repeated LayoutShiftAttribution sources = 4;
+}
+
+message LayoutShiftAttribution {
+  int32 node_id = 1;
+}

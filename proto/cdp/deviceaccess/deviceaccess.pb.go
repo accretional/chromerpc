@@ -333,6 +333,220 @@ func (*CancelPromptResponse) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_deviceaccess_deviceaccess_proto_rawDescGZIP(), []int{7}
 }
 
+type SubscribeDeviceAccessEventsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,1,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SubscribeDeviceAccessEventsRequest) Reset() {
+	*x = SubscribeDeviceAccessEventsRequest{}
+	mi := &file_proto_cdp_deviceaccess_deviceaccess_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SubscribeDeviceAccessEventsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SubscribeDeviceAccessEventsRequest) ProtoMessage() {}
+
+func (x *SubscribeDeviceAccessEventsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_deviceaccess_deviceaccess_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SubscribeDeviceAccessEventsRequest.ProtoReflect.Descriptor instead.
+func (*SubscribeDeviceAccessEventsRequest) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_deviceaccess_deviceaccess_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *SubscribeDeviceAccessEventsRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
+type DeviceAccessEvent struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Types that are valid to be assigned to Event:
+	//
+	//	*DeviceAccessEvent_DeviceRequestPrompted
+	Event         isDeviceAccessEvent_Event `protobuf_oneof:"event"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DeviceAccessEvent) Reset() {
+	*x = DeviceAccessEvent{}
+	mi := &file_proto_cdp_deviceaccess_deviceaccess_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeviceAccessEvent) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeviceAccessEvent) ProtoMessage() {}
+
+func (x *DeviceAccessEvent) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_deviceaccess_deviceaccess_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeviceAccessEvent.ProtoReflect.Descriptor instead.
+func (*DeviceAccessEvent) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_deviceaccess_deviceaccess_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *DeviceAccessEvent) GetEvent() isDeviceAccessEvent_Event {
+	if x != nil {
+		return x.Event
+	}
+	return nil
+}
+
+func (x *DeviceAccessEvent) GetDeviceRequestPrompted() *DeviceRequestPromptedEvent {
+	if x != nil {
+		if x, ok := x.Event.(*DeviceAccessEvent_DeviceRequestPrompted); ok {
+			return x.DeviceRequestPrompted
+		}
+	}
+	return nil
+}
+
+type isDeviceAccessEvent_Event interface {
+	isDeviceAccessEvent_Event()
+}
+
+type DeviceAccessEvent_DeviceRequestPrompted struct {
+	DeviceRequestPrompted *DeviceRequestPromptedEvent `protobuf:"bytes,1,opt,name=device_request_prompted,json=deviceRequestPrompted,proto3,oneof"`
+}
+
+func (*DeviceAccessEvent_DeviceRequestPrompted) isDeviceAccessEvent_Event() {}
+
+type DeviceRequestPromptedEvent struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Devices       []*PromptDevice        `protobuf:"bytes,2,rep,name=devices,proto3" json:"devices,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DeviceRequestPromptedEvent) Reset() {
+	*x = DeviceRequestPromptedEvent{}
+	mi := &file_proto_cdp_deviceaccess_deviceaccess_proto_msgTypes[10]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeviceRequestPromptedEvent) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeviceRequestPromptedEvent) ProtoMessage() {}
+
+func (x *DeviceRequestPromptedEvent) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_deviceaccess_deviceaccess_proto_msgTypes[10]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeviceRequestPromptedEvent.ProtoReflect.Descriptor instead.
+func (*DeviceRequestPromptedEvent) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_deviceaccess_deviceaccess_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *DeviceRequestPromptedEvent) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *DeviceRequestPromptedEvent) GetDevices() []*PromptDevice {
+	if x != nil {
+		return x.Devices
+	}
+	return nil
+}
+
+type PromptDevice struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *PromptDevice) Reset() {
+	*x = PromptDevice{}
+	mi := &file_proto_cdp_deviceaccess_deviceaccess_proto_msgTypes[11]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PromptDevice) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PromptDevice) ProtoMessage() {}
+
+func (x *PromptDevice) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_deviceaccess_deviceaccess_proto_msgTypes[11]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PromptDevice.ProtoReflect.Descriptor instead.
+func (*PromptDevice) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_deviceaccess_deviceaccess_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *PromptDevice) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *PromptDevice) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
 var File_proto_cdp_deviceaccess_deviceaccess_proto protoreflect.FileDescriptor
 
 const file_proto_cdp_deviceaccess_deviceaccess_proto_rawDesc = "" +
@@ -348,12 +562,25 @@ const file_proto_cdp_deviceaccess_deviceaccess_proto_rawDesc = "" +
 	"\x14SelectPromptResponse\"%\n" +
 	"\x13CancelPromptRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\"\x16\n" +
-	"\x14CancelPromptResponse2\xf0\x02\n" +
+	"\x14CancelPromptResponse\"C\n" +
+	"\"SubscribeDeviceAccessEventsRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18\x01 \x01(\tR\tsessionId\"\x84\x01\n" +
+	"\x11DeviceAccessEvent\x12f\n" +
+	"\x17device_request_prompted\x18\x01 \x01(\v2,.cdp.deviceaccess.DeviceRequestPromptedEventH\x00R\x15deviceRequestPromptedB\a\n" +
+	"\x05event\"f\n" +
+	"\x1aDeviceRequestPromptedEvent\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x128\n" +
+	"\adevices\x18\x02 \x03(\v2\x1e.cdp.deviceaccess.PromptDeviceR\adevices\"2\n" +
+	"\fPromptDevice\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name2\xe0\x03\n" +
 	"\x13DeviceAccessService\x12K\n" +
 	"\x06Enable\x12\x1f.cdp.deviceaccess.EnableRequest\x1a .cdp.deviceaccess.EnableResponse\x12N\n" +
 	"\aDisable\x12 .cdp.deviceaccess.DisableRequest\x1a!.cdp.deviceaccess.DisableResponse\x12]\n" +
 	"\fSelectPrompt\x12%.cdp.deviceaccess.SelectPromptRequest\x1a&.cdp.deviceaccess.SelectPromptResponse\x12]\n" +
-	"\fCancelPrompt\x12%.cdp.deviceaccess.CancelPromptRequest\x1a&.cdp.deviceaccess.CancelPromptResponseB9Z7github.com/accretional/chromerpc/proto/cdp/deviceaccessb\x06proto3"
+	"\fCancelPrompt\x12%.cdp.deviceaccess.CancelPromptRequest\x1a&.cdp.deviceaccess.CancelPromptResponse\x12n\n" +
+	"\x0fSubscribeEvents\x124.cdp.deviceaccess.SubscribeDeviceAccessEventsRequest\x1a#.cdp.deviceaccess.DeviceAccessEvent0\x01B9Z7github.com/accretional/chromerpc/proto/cdp/deviceaccessb\x06proto3"
 
 var (
 	file_proto_cdp_deviceaccess_deviceaccess_proto_rawDescOnce sync.Once
@@ -367,31 +594,39 @@ func file_proto_cdp_deviceaccess_deviceaccess_proto_rawDescGZIP() []byte {
 	return file_proto_cdp_deviceaccess_deviceaccess_proto_rawDescData
 }
 
-var file_proto_cdp_deviceaccess_deviceaccess_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
+var file_proto_cdp_deviceaccess_deviceaccess_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
 var file_proto_cdp_deviceaccess_deviceaccess_proto_goTypes = []any{
-	(*EnableRequest)(nil),        // 0: cdp.deviceaccess.EnableRequest
-	(*EnableResponse)(nil),       // 1: cdp.deviceaccess.EnableResponse
-	(*DisableRequest)(nil),       // 2: cdp.deviceaccess.DisableRequest
-	(*DisableResponse)(nil),      // 3: cdp.deviceaccess.DisableResponse
-	(*SelectPromptRequest)(nil),  // 4: cdp.deviceaccess.SelectPromptRequest
-	(*SelectPromptResponse)(nil), // 5: cdp.deviceaccess.SelectPromptResponse
-	(*CancelPromptRequest)(nil),  // 6: cdp.deviceaccess.CancelPromptRequest
-	(*CancelPromptResponse)(nil), // 7: cdp.deviceaccess.CancelPromptResponse
+	(*EnableRequest)(nil),                      // 0: cdp.deviceaccess.EnableRequest
+	(*EnableResponse)(nil),                     // 1: cdp.deviceaccess.EnableResponse
+	(*DisableRequest)(nil),                     // 2: cdp.deviceaccess.DisableRequest
+	(*DisableResponse)(nil),                    // 3: cdp.deviceaccess.DisableResponse
+	(*SelectPromptRequest)(nil),                // 4: cdp.deviceaccess.SelectPromptRequest
+	(*SelectPromptResponse)(nil),               // 5: cdp.deviceaccess.SelectPromptResponse
+	(*CancelPromptRequest)(nil),                // 6: cdp.deviceaccess.CancelPromptRequest
+	(*CancelPromptResponse)(nil),               // 7: cdp.deviceaccess.CancelPromptResponse
+	(*SubscribeDeviceAccessEventsRequest)(nil), // 8: cdp.deviceaccess.SubscribeDeviceAccessEventsRequest
+	(*DeviceAccessEvent)(nil),                  // 9: cdp.deviceaccess.DeviceAccessEvent
+	(*DeviceRequestPromptedEvent)(nil),         // 10: cdp.deviceaccess.DeviceRequestPromptedEvent
+	(*PromptDevice)(nil),                       // 11: cdp.deviceaccess.PromptDevice
 }
 var file_proto_cdp_deviceaccess_deviceaccess_proto_depIdxs = []int32{
-	0, // 0: cdp.deviceaccess.DeviceAccessService.Enable:input_type -> cdp.deviceaccess.EnableRequest
-	2, // 1: cdp.deviceaccess.DeviceAccessService.Disable:input_type -> cdp.deviceaccess.DisableRequest
-	4, // 2: cdp.deviceaccess.DeviceAccessService.SelectPrompt:input_type -> cdp.deviceaccess.SelectPromptRequest
-	6, // 3: cdp.deviceaccess.DeviceAccessService.CancelPrompt:input_type -> cdp.deviceaccess.CancelPromptRequest
-	1, // 4: cdp.deviceaccess.DeviceAccessService.Enable:output_type -> cdp.deviceaccess.EnableResponse
-	3, // 5: cdp.deviceaccess.DeviceAccessService.Disable:output_type -> cdp.deviceaccess.DisableResponse
-	5, // 6: cdp.deviceaccess.DeviceAccessService.SelectPrompt:output_type -> cdp.deviceaccess.SelectPromptResponse
-	7, // 7: cdp.deviceaccess.DeviceAccessService.CancelPrompt:output_type -> cdp.deviceaccess.CancelPromptResponse
-	4, // [4:8] is the sub-list for method output_type
-	0, // [0:4] is the sub-list for method input_type
-	0, // [0:0] is the sub-list for extension type_name
-	0, // [0:0] is the sub-list for extension extendee
-	0, // [0:0] is the sub-list for field type_name
+	10, // 0: cdp.deviceaccess.DeviceAccessEvent.device_request_prompted:type_name -> cdp.deviceaccess.DeviceRequestPromptedEvent
+	11, // 1: cdp.deviceaccess.DeviceRequestPromptedEvent.devices:type_name -> cdp.deviceaccess.PromptDevice
+	0,  // 2: cdp.deviceaccess.DeviceAccessService.Enable:input_type -> cdp.deviceaccess.EnableRequest
+	2,  // 3: cdp.deviceaccess.DeviceAccessService.Disable:input_type -> cdp.deviceaccess.DisableRequest
+	4,  // 4: cdp.deviceaccess.DeviceAccessService.SelectPrompt:input_type -> cdp.deviceaccess.SelectPromptRequest
+	6,  // 5: cdp.deviceaccess.DeviceAccessService.CancelPrompt:input_type -> cdp.deviceaccess.CancelPromptRequest
+	8,  // 6: cdp.deviceaccess.DeviceAccessService.SubscribeEvents:input_type -> cdp.deviceaccess.SubscribeDeviceAccessEventsRequest
+	1,  // 7: cdp.deviceaccess.DeviceAccessService.Enable:output_type -> cdp.deviceaccess.EnableResponse
+	3,  // 8: cdp.deviceaccess.DeviceAccessService.Disable:output_type -> cdp.deviceaccess.DisableResponse
+	5,  // 9: cdp.deviceaccess.DeviceAccessService.SelectPrompt:output_type -> cdp.deviceaccess.SelectPromptResponse
+	7,  // 10: cdp.deviceaccess.DeviceAccessService.CancelPrompt:output_type -> cdp.deviceaccess.CancelPromptResponse
+	9,  // 11: cdp.deviceaccess.DeviceAccessService.SubscribeEvents:output_type -> cdp.deviceaccess.DeviceAccessEvent
+	7,  // [7:12] is the sub-list for method output_type
+	2,  // [2:7] is the sub-list for method input_type
+	2,  // [2:2] is the sub-list for extension type_name
+	2,  // [2:2] is the sub-list for extension extendee
+	0,  // [0:2] is the sub-list for field type_name
 }
 
 func init() { file_proto_cdp_deviceaccess_deviceaccess_proto_init() }
@@ -399,13 +634,16 @@ func file_proto_cdp_deviceaccess_deviceaccess_proto_init() {
 	if File_proto_cdp_deviceaccess_deviceaccess_proto != nil {
 		return
 	}
+	file_proto_cdp_deviceaccess_deviceaccess_proto_msgTypes[9].OneofWrappers = []any{
+		(*DeviceAccessEvent_DeviceRequestPrompted)(nil),
+	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_cdp_deviceaccess_deviceaccess_proto_rawDesc), len(file_proto_cdp_deviceaccess_deviceaccess_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   8,
+			NumMessages:   12,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

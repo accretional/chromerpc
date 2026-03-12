@@ -3,6 +3,7 @@ package autofill
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 
 	"github.com/accretional/chromerpc/internal/cdpclient"
@@ -75,4 +76,120 @@ func (s *Server) SetAddresses(ctx context.Context, req *pb.SetAddressesRequest) 
 		return nil, fmt.Errorf("Autofill.setAddresses: %w", err)
 	}
 	return &pb.SetAddressesResponse{}, nil
+}
+
+func (s *Server) SubscribeEvents(req *pb.SubscribeAutofillEventsRequest, stream pb.AutofillService_SubscribeEventsServer) error {
+	eventCh := make(chan *pb.AutofillEvent, 128)
+	ctx := stream.Context()
+
+	// Register a wildcard handler for all Autofill.* events.
+	unregister := s.client.On("Autofill.", func(method string, params json.RawMessage, sessionID string) {
+		if req.SessionId != "" && sessionID != req.SessionId {
+			return
+		}
+		evt := convertAutofillEvent(method, params)
+		if evt != nil {
+			select {
+			case eventCh <- evt:
+			default:
+			}
+		}
+	})
+
+	// Also register specific events since the On() matching is exact.
+	autofillEvents := []string{
+		"Autofill.addressFormFilled",
+	}
+	unregisters := make([]func(), 0, len(autofillEvents)+1)
+	unregisters = append(unregisters, unregister)
+	for _, method := range autofillEvents {
+		method := method
+		unreg := s.client.On(method, func(m string, params json.RawMessage, sessionID string) {
+			if req.SessionId != "" && sessionID != req.SessionId {
+				return
+			}
+			evt := convertAutofillEvent(method, params)
+			if evt != nil {
+				select {
+				case eventCh <- evt:
+				default:
+				}
+			}
+		})
+		unregisters = append(unregisters, unreg)
+	}
+	defer func() {
+		for _, unreg := range unregisters {
+			unreg()
+		}
+	}()
+
+	for {
+		select {
+		case evt := <-eventCh:
+			if err := stream.Send(evt); err != nil {
+				return err
+			}
+		case <-ctx.Done():
+			return ctx.Err()
+		case <-s.client.Done():
+			return fmt.Errorf("CDP connection closed")
+		}
+	}
+}
+
+func convertAutofillEvent(method string, params json.RawMessage) *pb.AutofillEvent {
+	switch method {
+	case "Autofill.addressFormFilled":
+		var d struct {
+			FilledFields []struct {
+				HtmlType        string `json:"htmlType"`
+				ID              string `json:"id"`
+				Name            string `json:"name"`
+				Value           string `json:"value"`
+				AutofillType    string `json:"autofillType"`
+				FillingStrategy string `json:"fillingStrategy"`
+				FrameID         string `json:"frameId"`
+				FieldID         int32  `json:"fieldId"`
+			} `json:"filledFields"`
+			AddressUI struct {
+				AddressFields []struct {
+					Name  string `json:"name"`
+					Value string `json:"value"`
+				} `json:"addressFields"`
+			} `json:"addressUi"`
+		}
+		if json.Unmarshal(params, &d) != nil {
+			return nil
+		}
+		filledFields := make([]*pb.FilledField, len(d.FilledFields))
+		for i, f := range d.FilledFields {
+			filledFields[i] = &pb.FilledField{
+				HtmlType:        f.HtmlType,
+				Id:              f.ID,
+				Name:            f.Name,
+				Value:           f.Value,
+				AutofillType:    f.AutofillType,
+				FillingStrategy: f.FillingStrategy,
+				FrameId:         f.FrameID,
+				FieldId:         f.FieldID,
+			}
+		}
+		addressFields := make([]*pb.AddressField, len(d.AddressUI.AddressFields))
+		for i, af := range d.AddressUI.AddressFields {
+			addressFields[i] = &pb.AddressField{
+				Name:  af.Name,
+				Value: af.Value,
+			}
+		}
+		return &pb.AutofillEvent{Event: &pb.AutofillEvent_AddressFormFilled{
+			AddressFormFilled: &pb.AddressFormFilledEvent{
+				FilledFields: filledFields,
+				AddressUi:    &pb.AddressUI{AddressFields: addressFields},
+			},
+		}}
+
+	default:
+		return nil
+	}
 }

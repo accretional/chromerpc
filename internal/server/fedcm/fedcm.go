@@ -3,6 +3,7 @@ package fedcm
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 
 	"github.com/accretional/chromerpc/internal/cdpclient"
@@ -88,4 +89,130 @@ func (s *Server) ResetCooldown(ctx context.Context, req *pb.ResetCooldownRequest
 		return nil, fmt.Errorf("FedCm.resetCooldown: %w", err)
 	}
 	return &pb.ResetCooldownResponse{}, nil
+}
+
+func (s *Server) SubscribeEvents(req *pb.SubscribeFedCmEventsRequest, stream pb.FedCmService_SubscribeEventsServer) error {
+	eventCh := make(chan *pb.FedCmEvent, 128)
+	ctx := stream.Context()
+
+	// Register a wildcard handler for all FedCm.* events.
+	unregister := s.client.On("FedCm.", func(method string, params json.RawMessage, sessionID string) {
+		// Only forward events for the requested session (or all if empty).
+		if req.SessionId != "" && sessionID != req.SessionId {
+			return
+		}
+		evt := convertFedCmEvent(method, params)
+		if evt != nil {
+			select {
+			case eventCh <- evt:
+			default:
+			}
+		}
+	})
+
+	// Also register specific events since the On() matching is exact.
+	fedCmEvents := []string{
+		"FedCm.dialogShown", "FedCm.dialogClosed",
+	}
+	unregisters := make([]func(), 0, len(fedCmEvents)+1)
+	unregisters = append(unregisters, unregister)
+	for _, method := range fedCmEvents {
+		method := method
+		unreg := s.client.On(method, func(m string, params json.RawMessage, sessionID string) {
+			if req.SessionId != "" && sessionID != req.SessionId {
+				return
+			}
+			evt := convertFedCmEvent(method, params)
+			if evt != nil {
+				select {
+				case eventCh <- evt:
+				default:
+				}
+			}
+		})
+		unregisters = append(unregisters, unreg)
+	}
+	defer func() {
+		for _, unreg := range unregisters {
+			unreg()
+		}
+	}()
+
+	for {
+		select {
+		case evt := <-eventCh:
+			if err := stream.Send(evt); err != nil {
+				return err
+			}
+		case <-ctx.Done():
+			return ctx.Err()
+		case <-s.client.Done():
+			return fmt.Errorf("CDP connection closed")
+		}
+	}
+}
+
+func convertFedCmEvent(method string, params json.RawMessage) *pb.FedCmEvent {
+	switch method {
+	case "FedCm.dialogShown":
+		var d struct {
+			DialogID   string `json:"dialogId"`
+			DialogType string `json:"dialogType"`
+			Accounts   []struct {
+				AccountID        string `json:"accountId"`
+				Email            string `json:"email"`
+				Name             string `json:"name"`
+				GivenName        string `json:"givenName"`
+				PictureURL       string `json:"pictureUrl"`
+				IdpConfigURL     string `json:"idpConfigUrl"`
+				IdpLoginURL      string `json:"idpLoginUrl"`
+				LoginState       string `json:"loginState"`
+				TermsOfServiceURL string `json:"termsOfServiceUrl"`
+				PrivacyPolicyURL string `json:"privacyPolicyUrl"`
+			} `json:"accounts"`
+			Title    string `json:"title"`
+			Subtitle string `json:"subtitle"`
+		}
+		if json.Unmarshal(params, &d) != nil {
+			return nil
+		}
+		accounts := make([]*pb.Account, len(d.Accounts))
+		for i, a := range d.Accounts {
+			accounts[i] = &pb.Account{
+				AccountId:        a.AccountID,
+				Email:            a.Email,
+				Name:             a.Name,
+				GivenName:        a.GivenName,
+				PictureUrl:       a.PictureURL,
+				IdpConfigUrl:     a.IdpConfigURL,
+				IdpLoginUrl:      a.IdpLoginURL,
+				LoginState:       a.LoginState,
+				TermsOfServiceUrl: a.TermsOfServiceURL,
+				PrivacyPolicyUrl: a.PrivacyPolicyURL,
+			}
+		}
+		return &pb.FedCmEvent{Event: &pb.FedCmEvent_DialogShown{
+			DialogShown: &pb.DialogShownEvent{
+				DialogId:   d.DialogID,
+				DialogType: d.DialogType,
+				Accounts:   accounts,
+				Title:      d.Title,
+				Subtitle:   d.Subtitle,
+			},
+		}}
+
+	case "FedCm.dialogClosed":
+		var d struct {
+			DialogID string `json:"dialogId"`
+		}
+		if json.Unmarshal(params, &d) != nil {
+			return nil
+		}
+		return &pb.FedCmEvent{Event: &pb.FedCmEvent_DialogClosed{
+			DialogClosed: &pb.DialogClosedEvent{
+				DialogId: d.DialogID,
+			},
+		}}
+	}
+	return nil
 }

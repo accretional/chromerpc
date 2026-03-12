@@ -15,6 +15,9 @@ service WebAudioService {
 
   // Gets the realtime data for the given audio context.
   rpc GetRealtimeData(GetRealtimeDataRequest) returns (GetRealtimeDataResponse);
+
+  // Subscribe to WebAudio domain events.
+  rpc SubscribeEvents(SubscribeWebAudioEventsRequest) returns (stream WebAudioEvent);
 }
 
 // ==================== Types ====================
@@ -39,4 +42,103 @@ message GetRealtimeDataRequest {
 }
 message GetRealtimeDataResponse {
   ContextRealtimeData realtime_data = 1;
+}
+
+// ==================== Types for Events ====================
+
+message BaseAudioContext {
+  string context_id = 1;
+  string context_type = 2;
+  string context_state = 3;
+  float sample_rate = 4;
+  float callback_buffer_size = 5;
+  float max_output_channel_count = 6;
+  ContextRealtimeData realtime_data = 7;
+}
+
+message AudioListener {
+  string listener_id = 1;
+  string context_id = 2;
+}
+
+message AudioNode {
+  string node_id = 1;
+  string context_id = 2;
+  string node_type = 3;
+  float number_of_inputs = 4;
+  float number_of_outputs = 5;
+  float channel_count = 6;
+  string channel_count_mode = 7;
+  string channel_interpretation = 8;
+}
+
+message AudioParam {
+  string param_id = 1;
+  string node_id = 2;
+  string context_id = 3;
+  string param_type = 4;
+  string automation_rate = 5;
+  float default_value = 6;
+  float min_value = 7;
+  float max_value = 8;
+}
+
+// ==================== Event Streaming ====================
+
+message SubscribeWebAudioEventsRequest {
+  string session_id = 1;
+}
+
+message WebAudioEvent {
+  oneof event {
+    ContextCreatedEvent context_created = 1;
+    ContextWillBeDestroyedEvent context_will_be_destroyed = 2;
+    ContextChangedEvent context_changed = 3;
+    AudioListenerCreatedEvent audio_listener_created = 4;
+    AudioListenerWillBeDestroyedEvent audio_listener_will_be_destroyed = 5;
+    AudioNodeCreatedEvent audio_node_created = 6;
+    AudioNodeWillBeDestroyedEvent audio_node_will_be_destroyed = 7;
+    AudioParamCreatedEvent audio_param_created = 8;
+    AudioParamWillBeDestroyedEvent audio_param_will_be_destroyed = 9;
+  }
+}
+
+message ContextCreatedEvent {
+  BaseAudioContext context = 1;
+}
+
+message ContextWillBeDestroyedEvent {
+  string context_id = 1;
+}
+
+message ContextChangedEvent {
+  BaseAudioContext context = 1;
+}
+
+message AudioListenerCreatedEvent {
+  AudioListener listener = 1;
+}
+
+message AudioListenerWillBeDestroyedEvent {
+  string context_id = 1;
+  string listener_id = 2;
+}
+
+message AudioNodeCreatedEvent {
+  AudioNode node = 1;
+}
+
+message AudioNodeWillBeDestroyedEvent {
+  string context_id = 1;
+  string node_id = 2;
+}
+
+message AudioParamCreatedEvent {
+  AudioParam param = 1;
+}
+
+message AudioParamWillBeDestroyedEvent {
+  string context_id = 1;
+  string node_id = 2;
+  string param_id = 3;
 }

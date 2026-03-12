@@ -23,6 +23,7 @@ const (
 	DatabaseService_Disable_FullMethodName               = "/cdp.database.DatabaseService/Disable"
 	DatabaseService_GetDatabaseTableNames_FullMethodName = "/cdp.database.DatabaseService/GetDatabaseTableNames"
 	DatabaseService_ExecuteSQL_FullMethodName            = "/cdp.database.DatabaseService/ExecuteSQL"
+	DatabaseService_SubscribeEvents_FullMethodName       = "/cdp.database.DatabaseService/SubscribeEvents"
 )
 
 // DatabaseServiceClient is the client API for DatabaseService service.
@@ -37,6 +38,8 @@ type DatabaseServiceClient interface {
 	GetDatabaseTableNames(ctx context.Context, in *GetDatabaseTableNamesRequest, opts ...grpc.CallOption) (*GetDatabaseTableNamesResponse, error)
 	// Executes a SQL query against a database.
 	ExecuteSQL(ctx context.Context, in *ExecuteSQLRequest, opts ...grpc.CallOption) (*ExecuteSQLResponse, error)
+	// Subscribe to Database domain events.
+	SubscribeEvents(ctx context.Context, in *SubscribeDatabaseEventsRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[DatabaseEvent], error)
 }
 
 type databaseServiceClient struct {
@@ -87,6 +90,25 @@ func (c *databaseServiceClient) ExecuteSQL(ctx context.Context, in *ExecuteSQLRe
 	return out, nil
 }
 
+func (c *databaseServiceClient) SubscribeEvents(ctx context.Context, in *SubscribeDatabaseEventsRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[DatabaseEvent], error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	stream, err := c.cc.NewStream(ctx, &DatabaseService_ServiceDesc.Streams[0], DatabaseService_SubscribeEvents_FullMethodName, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &grpc.GenericClientStream[SubscribeDatabaseEventsRequest, DatabaseEvent]{ClientStream: stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type DatabaseService_SubscribeEventsClient = grpc.ServerStreamingClient[DatabaseEvent]
+
 // DatabaseServiceServer is the server API for DatabaseService service.
 // All implementations must embed UnimplementedDatabaseServiceServer
 // for forward compatibility.
@@ -99,6 +121,8 @@ type DatabaseServiceServer interface {
 	GetDatabaseTableNames(context.Context, *GetDatabaseTableNamesRequest) (*GetDatabaseTableNamesResponse, error)
 	// Executes a SQL query against a database.
 	ExecuteSQL(context.Context, *ExecuteSQLRequest) (*ExecuteSQLResponse, error)
+	// Subscribe to Database domain events.
+	SubscribeEvents(*SubscribeDatabaseEventsRequest, grpc.ServerStreamingServer[DatabaseEvent]) error
 	mustEmbedUnimplementedDatabaseServiceServer()
 }
 
@@ -120,6 +144,9 @@ func (UnimplementedDatabaseServiceServer) GetDatabaseTableNames(context.Context,
 }
 func (UnimplementedDatabaseServiceServer) ExecuteSQL(context.Context, *ExecuteSQLRequest) (*ExecuteSQLResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ExecuteSQL not implemented")
+}
+func (UnimplementedDatabaseServiceServer) SubscribeEvents(*SubscribeDatabaseEventsRequest, grpc.ServerStreamingServer[DatabaseEvent]) error {
+	return status.Errorf(codes.Unimplemented, "method SubscribeEvents not implemented")
 }
 func (UnimplementedDatabaseServiceServer) mustEmbedUnimplementedDatabaseServiceServer() {}
 func (UnimplementedDatabaseServiceServer) testEmbeddedByValue()                         {}
@@ -214,6 +241,17 @@ func _DatabaseService_ExecuteSQL_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _DatabaseService_SubscribeEvents_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(SubscribeDatabaseEventsRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(DatabaseServiceServer).SubscribeEvents(m, &grpc.GenericServerStream[SubscribeDatabaseEventsRequest, DatabaseEvent]{ServerStream: stream})
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type DatabaseService_SubscribeEventsServer = grpc.ServerStreamingServer[DatabaseEvent]
+
 // DatabaseService_ServiceDesc is the grpc.ServiceDesc for DatabaseService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -238,6 +276,12 @@ var DatabaseService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _DatabaseService_ExecuteSQL_Handler,
 		},
 	},
-	Streams:  []grpc.StreamDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "SubscribeEvents",
+			Handler:       _DatabaseService_SubscribeEvents_Handler,
+			ServerStreams: true,
+		},
+	},
 	Metadata: "proto/cdp/database/database.proto",
 }

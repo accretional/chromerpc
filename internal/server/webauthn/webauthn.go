@@ -324,3 +324,86 @@ func (s *Server) SetResponseOverrideBits(ctx context.Context, req *pb.SetRespons
 	}
 	return &pb.SetResponseOverrideBitsResponse{}, nil
 }
+
+func (s *Server) SubscribeEvents(req *pb.SubscribeWebAuthnEventsRequest, stream pb.WebAuthnService_SubscribeEventsServer) error {
+	eventCh := make(chan *pb.WebAuthnEvent, 128)
+	ctx := stream.Context()
+
+	events := []string{
+		"WebAuthn.credentialAdded",
+		"WebAuthn.credentialAsserted",
+	}
+
+	var unregisters []func()
+	for _, method := range events {
+		method := method
+		unreg := s.client.On(method, func(m string, params json.RawMessage, sessionID string) {
+			if req.SessionId != "" && sessionID != req.SessionId {
+				return
+			}
+			evt := convertWebAuthnEvent(method, params)
+			if evt != nil {
+				select {
+				case eventCh <- evt:
+				default:
+				}
+			}
+		})
+		unregisters = append(unregisters, unreg)
+	}
+	defer func() {
+		for _, unreg := range unregisters {
+			unreg()
+		}
+	}()
+
+	for {
+		select {
+		case evt := <-eventCh:
+			if err := stream.Send(evt); err != nil {
+				return err
+			}
+		case <-ctx.Done():
+			return ctx.Err()
+		case <-s.client.Done():
+			return fmt.Errorf("CDP connection closed")
+		}
+	}
+}
+
+func convertWebAuthnEvent(method string, params json.RawMessage) *pb.WebAuthnEvent {
+	var raw struct {
+		AuthenticatorId string          `json:"authenticatorId"`
+		Credential      json.RawMessage `json:"credential"`
+	}
+	if err := json.Unmarshal(params, &raw); err != nil {
+		return nil
+	}
+	cred, err := parseCredential(raw.Credential)
+	if err != nil {
+		return nil
+	}
+
+	switch method {
+	case "WebAuthn.credentialAdded":
+		return &pb.WebAuthnEvent{
+			Event: &pb.WebAuthnEvent_CredentialAdded{
+				CredentialAdded: &pb.CredentialAddedEvent{
+					AuthenticatorId: raw.AuthenticatorId,
+					Credential:      cred,
+				},
+			},
+		}
+	case "WebAuthn.credentialAsserted":
+		return &pb.WebAuthnEvent{
+			Event: &pb.WebAuthnEvent_CredentialAsserted{
+				CredentialAsserted: &pb.CredentialAssertedEvent{
+					AuthenticatorId: raw.AuthenticatorId,
+					Credential:      cred,
+				},
+			},
+		}
+	default:
+		return nil
+	}
+}

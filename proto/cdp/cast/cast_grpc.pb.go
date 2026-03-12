@@ -25,6 +25,7 @@ const (
 	CastService_StartDesktopMirroring_FullMethodName = "/cdp.cast.CastService/StartDesktopMirroring"
 	CastService_StartTabMirroring_FullMethodName     = "/cdp.cast.CastService/StartTabMirroring"
 	CastService_StopCasting_FullMethodName           = "/cdp.cast.CastService/StopCasting"
+	CastService_SubscribeEvents_FullMethodName       = "/cdp.cast.CastService/SubscribeEvents"
 )
 
 // CastServiceClient is the client API for CastService service.
@@ -45,6 +46,8 @@ type CastServiceClient interface {
 	StartTabMirroring(ctx context.Context, in *StartTabMirroringRequest, opts ...grpc.CallOption) (*StartTabMirroringResponse, error)
 	// Stops the active Cast session on the sink.
 	StopCasting(ctx context.Context, in *StopCastingRequest, opts ...grpc.CallOption) (*StopCastingResponse, error)
+	// Subscribes to Cast domain events (sinksUpdated, issueUpdated).
+	SubscribeEvents(ctx context.Context, in *SubscribeCastEventsRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[CastEvent], error)
 }
 
 type castServiceClient struct {
@@ -115,6 +118,25 @@ func (c *castServiceClient) StopCasting(ctx context.Context, in *StopCastingRequ
 	return out, nil
 }
 
+func (c *castServiceClient) SubscribeEvents(ctx context.Context, in *SubscribeCastEventsRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[CastEvent], error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	stream, err := c.cc.NewStream(ctx, &CastService_ServiceDesc.Streams[0], CastService_SubscribeEvents_FullMethodName, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &grpc.GenericClientStream[SubscribeCastEventsRequest, CastEvent]{ClientStream: stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type CastService_SubscribeEventsClient = grpc.ServerStreamingClient[CastEvent]
+
 // CastServiceServer is the server API for CastService service.
 // All implementations must embed UnimplementedCastServiceServer
 // for forward compatibility.
@@ -133,6 +155,8 @@ type CastServiceServer interface {
 	StartTabMirroring(context.Context, *StartTabMirroringRequest) (*StartTabMirroringResponse, error)
 	// Stops the active Cast session on the sink.
 	StopCasting(context.Context, *StopCastingRequest) (*StopCastingResponse, error)
+	// Subscribes to Cast domain events (sinksUpdated, issueUpdated).
+	SubscribeEvents(*SubscribeCastEventsRequest, grpc.ServerStreamingServer[CastEvent]) error
 	mustEmbedUnimplementedCastServiceServer()
 }
 
@@ -160,6 +184,9 @@ func (UnimplementedCastServiceServer) StartTabMirroring(context.Context, *StartT
 }
 func (UnimplementedCastServiceServer) StopCasting(context.Context, *StopCastingRequest) (*StopCastingResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method StopCasting not implemented")
+}
+func (UnimplementedCastServiceServer) SubscribeEvents(*SubscribeCastEventsRequest, grpc.ServerStreamingServer[CastEvent]) error {
+	return status.Errorf(codes.Unimplemented, "method SubscribeEvents not implemented")
 }
 func (UnimplementedCastServiceServer) mustEmbedUnimplementedCastServiceServer() {}
 func (UnimplementedCastServiceServer) testEmbeddedByValue()                     {}
@@ -290,6 +317,17 @@ func _CastService_StopCasting_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _CastService_SubscribeEvents_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(SubscribeCastEventsRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(CastServiceServer).SubscribeEvents(m, &grpc.GenericServerStream[SubscribeCastEventsRequest, CastEvent]{ServerStream: stream})
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type CastService_SubscribeEventsServer = grpc.ServerStreamingServer[CastEvent]
+
 // CastService_ServiceDesc is the grpc.ServiceDesc for CastService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -322,6 +360,12 @@ var CastService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _CastService_StopCasting_Handler,
 		},
 	},
-	Streams:  []grpc.StreamDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "SubscribeEvents",
+			Handler:       _CastService_SubscribeEvents_Handler,
+			ServerStreams: true,
+		},
+	},
 	Metadata: "proto/cdp/cast/cast.proto",
 }

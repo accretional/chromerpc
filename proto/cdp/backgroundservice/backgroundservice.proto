@@ -18,6 +18,9 @@ service BackgroundServiceService {
 
   // Clear all stored events for a service.
   rpc ClearEvents(ClearEventsRequest) returns (ClearEventsResponse);
+
+  // Subscribe to BackgroundService domain events.
+  rpc SubscribeEvents(SubscribeBackgroundServiceEventsRequest) returns (stream BackgroundServiceEvent);
 }
 
 // ==================== Types ====================
@@ -54,3 +57,41 @@ message ClearEventsRequest {
   ServiceName service = 1;
 }
 message ClearEventsResponse {}
+
+// ==================== Event Streaming ====================
+
+message SubscribeBackgroundServiceEventsRequest {
+  string session_id = 1;
+}
+
+message BackgroundServiceEvent {
+  oneof event {
+    RecordingStateChangedEvent recording_state_changed = 1;
+    BackgroundServiceEventReceivedEvent background_service_event_received = 2;
+  }
+}
+
+message RecordingStateChangedEvent {
+  bool is_recording = 1;
+  string service = 2;
+}
+
+message BackgroundServiceEventReceivedEvent {
+  BackgroundServiceEventDetail background_service_event = 1;
+}
+
+message BackgroundServiceEventDetail {
+  double timestamp = 1;
+  string origin = 2;
+  string service_worker_registration_id = 3;
+  string service = 4;
+  string event_name = 5;
+  string instance_id = 6;
+  repeated EventMetadata event_metadata = 7;
+  string storage_key = 8;
+}
+
+message EventMetadata {
+  string key = 1;
+  string value = 2;
+}

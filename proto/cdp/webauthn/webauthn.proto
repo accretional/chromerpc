@@ -42,6 +42,9 @@ service WebAuthnService {
 
   // Set response override bits on an authenticator.
   rpc SetResponseOverrideBits(SetResponseOverrideBitsRequest) returns (SetResponseOverrideBitsResponse);
+
+  // Subscribe to WebAuthn events.
+  rpc SubscribeEvents(SubscribeWebAuthnEventsRequest) returns (stream WebAuthnEvent);
 }
 
 // ==================== Enums ====================
@@ -170,3 +173,26 @@ message SetResponseOverrideBitsRequest {
   bool is_bad_up = 4;
 }
 message SetResponseOverrideBitsResponse {}
+
+// ==================== Event Streaming ====================
+
+message SubscribeWebAuthnEventsRequest {
+  string session_id = 1;
+}
+
+message WebAuthnEvent {
+  oneof event {
+    CredentialAddedEvent credential_added = 1;
+    CredentialAssertedEvent credential_asserted = 2;
+  }
+}
+
+message CredentialAddedEvent {
+  string authenticator_id = 1;
+  Credential credential = 2;
+}
+
+message CredentialAssertedEvent {
+  string authenticator_id = 1;
+  Credential credential = 2;
+}

@@ -26,6 +26,7 @@ const (
 	FedCmService_OpenUrl_FullMethodName           = "/cdp.fedcm.FedCmService/OpenUrl"
 	FedCmService_DismissDialog_FullMethodName     = "/cdp.fedcm.FedCmService/DismissDialog"
 	FedCmService_ResetCooldown_FullMethodName     = "/cdp.fedcm.FedCmService/ResetCooldown"
+	FedCmService_SubscribeEvents_FullMethodName   = "/cdp.fedcm.FedCmService/SubscribeEvents"
 )
 
 // FedCmServiceClient is the client API for FedCmService service.
@@ -46,6 +47,8 @@ type FedCmServiceClient interface {
 	DismissDialog(ctx context.Context, in *DismissDialogRequest, opts ...grpc.CallOption) (*DismissDialogResponse, error)
 	// Resets the cooldown for the FedCm dialog.
 	ResetCooldown(ctx context.Context, in *ResetCooldownRequest, opts ...grpc.CallOption) (*ResetCooldownResponse, error)
+	// Subscribes to FedCm domain events.
+	SubscribeEvents(ctx context.Context, in *SubscribeFedCmEventsRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[FedCmEvent], error)
 }
 
 type fedCmServiceClient struct {
@@ -126,6 +129,25 @@ func (c *fedCmServiceClient) ResetCooldown(ctx context.Context, in *ResetCooldow
 	return out, nil
 }
 
+func (c *fedCmServiceClient) SubscribeEvents(ctx context.Context, in *SubscribeFedCmEventsRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[FedCmEvent], error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	stream, err := c.cc.NewStream(ctx, &FedCmService_ServiceDesc.Streams[0], FedCmService_SubscribeEvents_FullMethodName, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &grpc.GenericClientStream[SubscribeFedCmEventsRequest, FedCmEvent]{ClientStream: stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type FedCmService_SubscribeEventsClient = grpc.ServerStreamingClient[FedCmEvent]
+
 // FedCmServiceServer is the server API for FedCmService service.
 // All implementations must embed UnimplementedFedCmServiceServer
 // for forward compatibility.
@@ -144,6 +166,8 @@ type FedCmServiceServer interface {
 	DismissDialog(context.Context, *DismissDialogRequest) (*DismissDialogResponse, error)
 	// Resets the cooldown for the FedCm dialog.
 	ResetCooldown(context.Context, *ResetCooldownRequest) (*ResetCooldownResponse, error)
+	// Subscribes to FedCm domain events.
+	SubscribeEvents(*SubscribeFedCmEventsRequest, grpc.ServerStreamingServer[FedCmEvent]) error
 	mustEmbedUnimplementedFedCmServiceServer()
 }
 
@@ -174,6 +198,9 @@ func (UnimplementedFedCmServiceServer) DismissDialog(context.Context, *DismissDi
 }
 func (UnimplementedFedCmServiceServer) ResetCooldown(context.Context, *ResetCooldownRequest) (*ResetCooldownResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ResetCooldown not implemented")
+}
+func (UnimplementedFedCmServiceServer) SubscribeEvents(*SubscribeFedCmEventsRequest, grpc.ServerStreamingServer[FedCmEvent]) error {
+	return status.Errorf(codes.Unimplemented, "method SubscribeEvents not implemented")
 }
 func (UnimplementedFedCmServiceServer) mustEmbedUnimplementedFedCmServiceServer() {}
 func (UnimplementedFedCmServiceServer) testEmbeddedByValue()                      {}
@@ -322,6 +349,17 @@ func _FedCmService_ResetCooldown_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _FedCmService_SubscribeEvents_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(SubscribeFedCmEventsRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(FedCmServiceServer).SubscribeEvents(m, &grpc.GenericServerStream[SubscribeFedCmEventsRequest, FedCmEvent]{ServerStream: stream})
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type FedCmService_SubscribeEventsServer = grpc.ServerStreamingServer[FedCmEvent]
+
 // FedCmService_ServiceDesc is the grpc.ServiceDesc for FedCmService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -358,6 +396,12 @@ var FedCmService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _FedCmService_ResetCooldown_Handler,
 		},
 	},
-	Streams:  []grpc.StreamDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "SubscribeEvents",
+			Handler:       _FedCmService_SubscribeEvents_Handler,
+			ServerStreams: true,
+		},
+	},
 	Metadata: "proto/cdp/fedcm/fedcm.proto",
 }

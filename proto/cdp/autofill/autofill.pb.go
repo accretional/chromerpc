@@ -516,6 +516,312 @@ func (*SetAddressesResponse) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_autofill_autofill_proto_rawDescGZIP(), []int{10}
 }
 
+type SubscribeAutofillEventsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,1,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SubscribeAutofillEventsRequest) Reset() {
+	*x = SubscribeAutofillEventsRequest{}
+	mi := &file_proto_cdp_autofill_autofill_proto_msgTypes[11]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SubscribeAutofillEventsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SubscribeAutofillEventsRequest) ProtoMessage() {}
+
+func (x *SubscribeAutofillEventsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_autofill_autofill_proto_msgTypes[11]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SubscribeAutofillEventsRequest.ProtoReflect.Descriptor instead.
+func (*SubscribeAutofillEventsRequest) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_autofill_autofill_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *SubscribeAutofillEventsRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
+type AutofillEvent struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Types that are valid to be assigned to Event:
+	//
+	//	*AutofillEvent_AddressFormFilled
+	Event         isAutofillEvent_Event `protobuf_oneof:"event"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AutofillEvent) Reset() {
+	*x = AutofillEvent{}
+	mi := &file_proto_cdp_autofill_autofill_proto_msgTypes[12]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AutofillEvent) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AutofillEvent) ProtoMessage() {}
+
+func (x *AutofillEvent) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_autofill_autofill_proto_msgTypes[12]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AutofillEvent.ProtoReflect.Descriptor instead.
+func (*AutofillEvent) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_autofill_autofill_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *AutofillEvent) GetEvent() isAutofillEvent_Event {
+	if x != nil {
+		return x.Event
+	}
+	return nil
+}
+
+func (x *AutofillEvent) GetAddressFormFilled() *AddressFormFilledEvent {
+	if x != nil {
+		if x, ok := x.Event.(*AutofillEvent_AddressFormFilled); ok {
+			return x.AddressFormFilled
+		}
+	}
+	return nil
+}
+
+type isAutofillEvent_Event interface {
+	isAutofillEvent_Event()
+}
+
+type AutofillEvent_AddressFormFilled struct {
+	AddressFormFilled *AddressFormFilledEvent `protobuf:"bytes,1,opt,name=address_form_filled,json=addressFormFilled,proto3,oneof"`
+}
+
+func (*AutofillEvent_AddressFormFilled) isAutofillEvent_Event() {}
+
+type AddressFormFilledEvent struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	FilledFields  []*FilledField         `protobuf:"bytes,1,rep,name=filled_fields,json=filledFields,proto3" json:"filled_fields,omitempty"`
+	AddressUi     *AddressUI             `protobuf:"bytes,2,opt,name=address_ui,json=addressUi,proto3" json:"address_ui,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AddressFormFilledEvent) Reset() {
+	*x = AddressFormFilledEvent{}
+	mi := &file_proto_cdp_autofill_autofill_proto_msgTypes[13]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AddressFormFilledEvent) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AddressFormFilledEvent) ProtoMessage() {}
+
+func (x *AddressFormFilledEvent) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_autofill_autofill_proto_msgTypes[13]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AddressFormFilledEvent.ProtoReflect.Descriptor instead.
+func (*AddressFormFilledEvent) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_autofill_autofill_proto_rawDescGZIP(), []int{13}
+}
+
+func (x *AddressFormFilledEvent) GetFilledFields() []*FilledField {
+	if x != nil {
+		return x.FilledFields
+	}
+	return nil
+}
+
+func (x *AddressFormFilledEvent) GetAddressUi() *AddressUI {
+	if x != nil {
+		return x.AddressUi
+	}
+	return nil
+}
+
+type FilledField struct {
+	state           protoimpl.MessageState `protogen:"open.v1"`
+	HtmlType        string                 `protobuf:"bytes,1,opt,name=html_type,json=htmlType,proto3" json:"html_type,omitempty"`
+	Id              string                 `protobuf:"bytes,2,opt,name=id,proto3" json:"id,omitempty"`
+	Name            string                 `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
+	Value           string                 `protobuf:"bytes,4,opt,name=value,proto3" json:"value,omitempty"`
+	AutofillType    string                 `protobuf:"bytes,5,opt,name=autofill_type,json=autofillType,proto3" json:"autofill_type,omitempty"`
+	FillingStrategy string                 `protobuf:"bytes,6,opt,name=filling_strategy,json=fillingStrategy,proto3" json:"filling_strategy,omitempty"`
+	FrameId         string                 `protobuf:"bytes,7,opt,name=frame_id,json=frameId,proto3" json:"frame_id,omitempty"`
+	FieldId         int32                  `protobuf:"varint,8,opt,name=field_id,json=fieldId,proto3" json:"field_id,omitempty"`
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
+}
+
+func (x *FilledField) Reset() {
+	*x = FilledField{}
+	mi := &file_proto_cdp_autofill_autofill_proto_msgTypes[14]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *FilledField) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*FilledField) ProtoMessage() {}
+
+func (x *FilledField) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_autofill_autofill_proto_msgTypes[14]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use FilledField.ProtoReflect.Descriptor instead.
+func (*FilledField) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_autofill_autofill_proto_rawDescGZIP(), []int{14}
+}
+
+func (x *FilledField) GetHtmlType() string {
+	if x != nil {
+		return x.HtmlType
+	}
+	return ""
+}
+
+func (x *FilledField) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *FilledField) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *FilledField) GetValue() string {
+	if x != nil {
+		return x.Value
+	}
+	return ""
+}
+
+func (x *FilledField) GetAutofillType() string {
+	if x != nil {
+		return x.AutofillType
+	}
+	return ""
+}
+
+func (x *FilledField) GetFillingStrategy() string {
+	if x != nil {
+		return x.FillingStrategy
+	}
+	return ""
+}
+
+func (x *FilledField) GetFrameId() string {
+	if x != nil {
+		return x.FrameId
+	}
+	return ""
+}
+
+func (x *FilledField) GetFieldId() int32 {
+	if x != nil {
+		return x.FieldId
+	}
+	return 0
+}
+
+type AddressUI struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	AddressFields []*AddressField        `protobuf:"bytes,1,rep,name=address_fields,json=addressFields,proto3" json:"address_fields,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AddressUI) Reset() {
+	*x = AddressUI{}
+	mi := &file_proto_cdp_autofill_autofill_proto_msgTypes[15]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AddressUI) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AddressUI) ProtoMessage() {}
+
+func (x *AddressUI) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_autofill_autofill_proto_msgTypes[15]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AddressUI.ProtoReflect.Descriptor instead.
+func (*AddressUI) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_autofill_autofill_proto_rawDescGZIP(), []int{15}
+}
+
+func (x *AddressUI) GetAddressFields() []*AddressField {
+	if x != nil {
+		return x.AddressFields
+	}
+	return nil
+}
+
 var File_proto_cdp_autofill_autofill_proto protoreflect.FileDescriptor
 
 const file_proto_cdp_autofill_autofill_proto_rawDesc = "" +
@@ -545,12 +851,34 @@ const file_proto_cdp_autofill_autofill_proto_rawDesc = "" +
 	"\x0fTriggerResponse\"J\n" +
 	"\x13SetAddressesRequest\x123\n" +
 	"\taddresses\x18\x01 \x03(\v2\x15.cdp.autofill.AddressR\taddresses\"\x16\n" +
-	"\x14SetAddressesResponse2\xbd\x02\n" +
+	"\x14SetAddressesResponse\"?\n" +
+	"\x1eSubscribeAutofillEventsRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18\x01 \x01(\tR\tsessionId\"p\n" +
+	"\rAutofillEvent\x12V\n" +
+	"\x13address_form_filled\x18\x01 \x01(\v2$.cdp.autofill.AddressFormFilledEventH\x00R\x11addressFormFilledB\a\n" +
+	"\x05event\"\x90\x01\n" +
+	"\x16AddressFormFilledEvent\x12>\n" +
+	"\rfilled_fields\x18\x01 \x03(\v2\x19.cdp.autofill.FilledFieldR\ffilledFields\x126\n" +
+	"\n" +
+	"address_ui\x18\x02 \x01(\v2\x17.cdp.autofill.AddressUIR\taddressUi\"\xea\x01\n" +
+	"\vFilledField\x12\x1b\n" +
+	"\thtml_type\x18\x01 \x01(\tR\bhtmlType\x12\x0e\n" +
+	"\x02id\x18\x02 \x01(\tR\x02id\x12\x12\n" +
+	"\x04name\x18\x03 \x01(\tR\x04name\x12\x14\n" +
+	"\x05value\x18\x04 \x01(\tR\x05value\x12#\n" +
+	"\rautofill_type\x18\x05 \x01(\tR\fautofillType\x12)\n" +
+	"\x10filling_strategy\x18\x06 \x01(\tR\x0ffillingStrategy\x12\x19\n" +
+	"\bframe_id\x18\a \x01(\tR\aframeId\x12\x19\n" +
+	"\bfield_id\x18\b \x01(\x05R\afieldId\"N\n" +
+	"\tAddressUI\x12A\n" +
+	"\x0eaddress_fields\x18\x01 \x03(\v2\x1a.cdp.autofill.AddressFieldR\raddressFields2\x9d\x03\n" +
 	"\x0fAutofillService\x12C\n" +
 	"\x06Enable\x12\x1b.cdp.autofill.EnableRequest\x1a\x1c.cdp.autofill.EnableResponse\x12F\n" +
 	"\aDisable\x12\x1c.cdp.autofill.DisableRequest\x1a\x1d.cdp.autofill.DisableResponse\x12F\n" +
 	"\aTrigger\x12\x1c.cdp.autofill.TriggerRequest\x1a\x1d.cdp.autofill.TriggerResponse\x12U\n" +
-	"\fSetAddresses\x12!.cdp.autofill.SetAddressesRequest\x1a\".cdp.autofill.SetAddressesResponseB5Z3github.com/accretional/chromerpc/proto/cdp/autofillb\x06proto3"
+	"\fSetAddresses\x12!.cdp.autofill.SetAddressesRequest\x1a\".cdp.autofill.SetAddressesResponse\x12^\n" +
+	"\x0fSubscribeEvents\x12,.cdp.autofill.SubscribeAutofillEventsRequest\x1a\x1b.cdp.autofill.AutofillEvent0\x01B5Z3github.com/accretional/chromerpc/proto/cdp/autofillb\x06proto3"
 
 var (
 	file_proto_cdp_autofill_autofill_proto_rawDescOnce sync.Once
@@ -564,37 +892,48 @@ func file_proto_cdp_autofill_autofill_proto_rawDescGZIP() []byte {
 	return file_proto_cdp_autofill_autofill_proto_rawDescData
 }
 
-var file_proto_cdp_autofill_autofill_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
+var file_proto_cdp_autofill_autofill_proto_msgTypes = make([]protoimpl.MessageInfo, 16)
 var file_proto_cdp_autofill_autofill_proto_goTypes = []any{
-	(*CreditCard)(nil),           // 0: cdp.autofill.CreditCard
-	(*AddressField)(nil),         // 1: cdp.autofill.AddressField
-	(*Address)(nil),              // 2: cdp.autofill.Address
-	(*EnableRequest)(nil),        // 3: cdp.autofill.EnableRequest
-	(*EnableResponse)(nil),       // 4: cdp.autofill.EnableResponse
-	(*DisableRequest)(nil),       // 5: cdp.autofill.DisableRequest
-	(*DisableResponse)(nil),      // 6: cdp.autofill.DisableResponse
-	(*TriggerRequest)(nil),       // 7: cdp.autofill.TriggerRequest
-	(*TriggerResponse)(nil),      // 8: cdp.autofill.TriggerResponse
-	(*SetAddressesRequest)(nil),  // 9: cdp.autofill.SetAddressesRequest
-	(*SetAddressesResponse)(nil), // 10: cdp.autofill.SetAddressesResponse
+	(*CreditCard)(nil),                     // 0: cdp.autofill.CreditCard
+	(*AddressField)(nil),                   // 1: cdp.autofill.AddressField
+	(*Address)(nil),                        // 2: cdp.autofill.Address
+	(*EnableRequest)(nil),                  // 3: cdp.autofill.EnableRequest
+	(*EnableResponse)(nil),                 // 4: cdp.autofill.EnableResponse
+	(*DisableRequest)(nil),                 // 5: cdp.autofill.DisableRequest
+	(*DisableResponse)(nil),                // 6: cdp.autofill.DisableResponse
+	(*TriggerRequest)(nil),                 // 7: cdp.autofill.TriggerRequest
+	(*TriggerResponse)(nil),                // 8: cdp.autofill.TriggerResponse
+	(*SetAddressesRequest)(nil),            // 9: cdp.autofill.SetAddressesRequest
+	(*SetAddressesResponse)(nil),           // 10: cdp.autofill.SetAddressesResponse
+	(*SubscribeAutofillEventsRequest)(nil), // 11: cdp.autofill.SubscribeAutofillEventsRequest
+	(*AutofillEvent)(nil),                  // 12: cdp.autofill.AutofillEvent
+	(*AddressFormFilledEvent)(nil),         // 13: cdp.autofill.AddressFormFilledEvent
+	(*FilledField)(nil),                    // 14: cdp.autofill.FilledField
+	(*AddressUI)(nil),                      // 15: cdp.autofill.AddressUI
 }
 var file_proto_cdp_autofill_autofill_proto_depIdxs = []int32{
 	1,  // 0: cdp.autofill.Address.fields:type_name -> cdp.autofill.AddressField
 	0,  // 1: cdp.autofill.TriggerRequest.card:type_name -> cdp.autofill.CreditCard
 	2,  // 2: cdp.autofill.SetAddressesRequest.addresses:type_name -> cdp.autofill.Address
-	3,  // 3: cdp.autofill.AutofillService.Enable:input_type -> cdp.autofill.EnableRequest
-	5,  // 4: cdp.autofill.AutofillService.Disable:input_type -> cdp.autofill.DisableRequest
-	7,  // 5: cdp.autofill.AutofillService.Trigger:input_type -> cdp.autofill.TriggerRequest
-	9,  // 6: cdp.autofill.AutofillService.SetAddresses:input_type -> cdp.autofill.SetAddressesRequest
-	4,  // 7: cdp.autofill.AutofillService.Enable:output_type -> cdp.autofill.EnableResponse
-	6,  // 8: cdp.autofill.AutofillService.Disable:output_type -> cdp.autofill.DisableResponse
-	8,  // 9: cdp.autofill.AutofillService.Trigger:output_type -> cdp.autofill.TriggerResponse
-	10, // 10: cdp.autofill.AutofillService.SetAddresses:output_type -> cdp.autofill.SetAddressesResponse
-	7,  // [7:11] is the sub-list for method output_type
-	3,  // [3:7] is the sub-list for method input_type
-	3,  // [3:3] is the sub-list for extension type_name
-	3,  // [3:3] is the sub-list for extension extendee
-	0,  // [0:3] is the sub-list for field type_name
+	13, // 3: cdp.autofill.AutofillEvent.address_form_filled:type_name -> cdp.autofill.AddressFormFilledEvent
+	14, // 4: cdp.autofill.AddressFormFilledEvent.filled_fields:type_name -> cdp.autofill.FilledField
+	15, // 5: cdp.autofill.AddressFormFilledEvent.address_ui:type_name -> cdp.autofill.AddressUI
+	1,  // 6: cdp.autofill.AddressUI.address_fields:type_name -> cdp.autofill.AddressField
+	3,  // 7: cdp.autofill.AutofillService.Enable:input_type -> cdp.autofill.EnableRequest
+	5,  // 8: cdp.autofill.AutofillService.Disable:input_type -> cdp.autofill.DisableRequest
+	7,  // 9: cdp.autofill.AutofillService.Trigger:input_type -> cdp.autofill.TriggerRequest
+	9,  // 10: cdp.autofill.AutofillService.SetAddresses:input_type -> cdp.autofill.SetAddressesRequest
+	11, // 11: cdp.autofill.AutofillService.SubscribeEvents:input_type -> cdp.autofill.SubscribeAutofillEventsRequest
+	4,  // 12: cdp.autofill.AutofillService.Enable:output_type -> cdp.autofill.EnableResponse
+	6,  // 13: cdp.autofill.AutofillService.Disable:output_type -> cdp.autofill.DisableResponse
+	8,  // 14: cdp.autofill.AutofillService.Trigger:output_type -> cdp.autofill.TriggerResponse
+	10, // 15: cdp.autofill.AutofillService.SetAddresses:output_type -> cdp.autofill.SetAddressesResponse
+	12, // 16: cdp.autofill.AutofillService.SubscribeEvents:output_type -> cdp.autofill.AutofillEvent
+	12, // [12:17] is the sub-list for method output_type
+	7,  // [7:12] is the sub-list for method input_type
+	7,  // [7:7] is the sub-list for extension type_name
+	7,  // [7:7] is the sub-list for extension extendee
+	0,  // [0:7] is the sub-list for field type_name
 }
 
 func init() { file_proto_cdp_autofill_autofill_proto_init() }
@@ -602,13 +941,16 @@ func file_proto_cdp_autofill_autofill_proto_init() {
 	if File_proto_cdp_autofill_autofill_proto != nil {
 		return
 	}
+	file_proto_cdp_autofill_autofill_proto_msgTypes[12].OneofWrappers = []any{
+		(*AutofillEvent_AddressFormFilled)(nil),
+	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_cdp_autofill_autofill_proto_rawDesc), len(file_proto_cdp_autofill_autofill_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   11,
+			NumMessages:   16,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

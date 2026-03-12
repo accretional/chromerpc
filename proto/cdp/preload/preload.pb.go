@@ -165,6 +165,633 @@ func (*DisableResponse) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_preload_preload_proto_rawDescGZIP(), []int{3}
 }
 
+type SubscribePreloadEventsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,1,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SubscribePreloadEventsRequest) Reset() {
+	*x = SubscribePreloadEventsRequest{}
+	mi := &file_proto_cdp_preload_preload_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SubscribePreloadEventsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SubscribePreloadEventsRequest) ProtoMessage() {}
+
+func (x *SubscribePreloadEventsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_preload_preload_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SubscribePreloadEventsRequest.ProtoReflect.Descriptor instead.
+func (*SubscribePreloadEventsRequest) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_preload_preload_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *SubscribePreloadEventsRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
+type PreloadEvent struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Types that are valid to be assigned to Event:
+	//
+	//	*PreloadEvent_RuleSetUpdated
+	//	*PreloadEvent_RuleSetRemoved
+	//	*PreloadEvent_PreloadingAttemptSourcesUpdated
+	//	*PreloadEvent_PrefetchStatusUpdated
+	//	*PreloadEvent_PrerenderStatusUpdated
+	//	*PreloadEvent_PreloadEnabledStateUpdated
+	Event         isPreloadEvent_Event `protobuf_oneof:"event"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *PreloadEvent) Reset() {
+	*x = PreloadEvent{}
+	mi := &file_proto_cdp_preload_preload_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PreloadEvent) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PreloadEvent) ProtoMessage() {}
+
+func (x *PreloadEvent) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_preload_preload_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PreloadEvent.ProtoReflect.Descriptor instead.
+func (*PreloadEvent) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_preload_preload_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *PreloadEvent) GetEvent() isPreloadEvent_Event {
+	if x != nil {
+		return x.Event
+	}
+	return nil
+}
+
+func (x *PreloadEvent) GetRuleSetUpdated() *RuleSetUpdatedEvent {
+	if x != nil {
+		if x, ok := x.Event.(*PreloadEvent_RuleSetUpdated); ok {
+			return x.RuleSetUpdated
+		}
+	}
+	return nil
+}
+
+func (x *PreloadEvent) GetRuleSetRemoved() *RuleSetRemovedEvent {
+	if x != nil {
+		if x, ok := x.Event.(*PreloadEvent_RuleSetRemoved); ok {
+			return x.RuleSetRemoved
+		}
+	}
+	return nil
+}
+
+func (x *PreloadEvent) GetPreloadingAttemptSourcesUpdated() *PreloadingAttemptSourcesUpdatedEvent {
+	if x != nil {
+		if x, ok := x.Event.(*PreloadEvent_PreloadingAttemptSourcesUpdated); ok {
+			return x.PreloadingAttemptSourcesUpdated
+		}
+	}
+	return nil
+}
+
+func (x *PreloadEvent) GetPrefetchStatusUpdated() *PrefetchStatusUpdatedEvent {
+	if x != nil {
+		if x, ok := x.Event.(*PreloadEvent_PrefetchStatusUpdated); ok {
+			return x.PrefetchStatusUpdated
+		}
+	}
+	return nil
+}
+
+func (x *PreloadEvent) GetPrerenderStatusUpdated() *PrerenderStatusUpdatedEvent {
+	if x != nil {
+		if x, ok := x.Event.(*PreloadEvent_PrerenderStatusUpdated); ok {
+			return x.PrerenderStatusUpdated
+		}
+	}
+	return nil
+}
+
+func (x *PreloadEvent) GetPreloadEnabledStateUpdated() *PreloadEnabledStateUpdatedEvent {
+	if x != nil {
+		if x, ok := x.Event.(*PreloadEvent_PreloadEnabledStateUpdated); ok {
+			return x.PreloadEnabledStateUpdated
+		}
+	}
+	return nil
+}
+
+type isPreloadEvent_Event interface {
+	isPreloadEvent_Event()
+}
+
+type PreloadEvent_RuleSetUpdated struct {
+	RuleSetUpdated *RuleSetUpdatedEvent `protobuf:"bytes,1,opt,name=rule_set_updated,json=ruleSetUpdated,proto3,oneof"`
+}
+
+type PreloadEvent_RuleSetRemoved struct {
+	RuleSetRemoved *RuleSetRemovedEvent `protobuf:"bytes,2,opt,name=rule_set_removed,json=ruleSetRemoved,proto3,oneof"`
+}
+
+type PreloadEvent_PreloadingAttemptSourcesUpdated struct {
+	PreloadingAttemptSourcesUpdated *PreloadingAttemptSourcesUpdatedEvent `protobuf:"bytes,3,opt,name=preloading_attempt_sources_updated,json=preloadingAttemptSourcesUpdated,proto3,oneof"`
+}
+
+type PreloadEvent_PrefetchStatusUpdated struct {
+	PrefetchStatusUpdated *PrefetchStatusUpdatedEvent `protobuf:"bytes,4,opt,name=prefetch_status_updated,json=prefetchStatusUpdated,proto3,oneof"`
+}
+
+type PreloadEvent_PrerenderStatusUpdated struct {
+	PrerenderStatusUpdated *PrerenderStatusUpdatedEvent `protobuf:"bytes,5,opt,name=prerender_status_updated,json=prerenderStatusUpdated,proto3,oneof"`
+}
+
+type PreloadEvent_PreloadEnabledStateUpdated struct {
+	PreloadEnabledStateUpdated *PreloadEnabledStateUpdatedEvent `protobuf:"bytes,6,opt,name=preload_enabled_state_updated,json=preloadEnabledStateUpdated,proto3,oneof"`
+}
+
+func (*PreloadEvent_RuleSetUpdated) isPreloadEvent_Event() {}
+
+func (*PreloadEvent_RuleSetRemoved) isPreloadEvent_Event() {}
+
+func (*PreloadEvent_PreloadingAttemptSourcesUpdated) isPreloadEvent_Event() {}
+
+func (*PreloadEvent_PrefetchStatusUpdated) isPreloadEvent_Event() {}
+
+func (*PreloadEvent_PrerenderStatusUpdated) isPreloadEvent_Event() {}
+
+func (*PreloadEvent_PreloadEnabledStateUpdated) isPreloadEvent_Event() {}
+
+type RuleSetUpdatedEvent struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	RuleSet       *RuleSet               `protobuf:"bytes,1,opt,name=rule_set,json=ruleSet,proto3" json:"rule_set,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *RuleSetUpdatedEvent) Reset() {
+	*x = RuleSetUpdatedEvent{}
+	mi := &file_proto_cdp_preload_preload_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RuleSetUpdatedEvent) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RuleSetUpdatedEvent) ProtoMessage() {}
+
+func (x *RuleSetUpdatedEvent) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_preload_preload_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RuleSetUpdatedEvent.ProtoReflect.Descriptor instead.
+func (*RuleSetUpdatedEvent) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_preload_preload_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *RuleSetUpdatedEvent) GetRuleSet() *RuleSet {
+	if x != nil {
+		return x.RuleSet
+	}
+	return nil
+}
+
+type RuleSetRemovedEvent struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *RuleSetRemovedEvent) Reset() {
+	*x = RuleSetRemovedEvent{}
+	mi := &file_proto_cdp_preload_preload_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RuleSetRemovedEvent) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RuleSetRemovedEvent) ProtoMessage() {}
+
+func (x *RuleSetRemovedEvent) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_preload_preload_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RuleSetRemovedEvent.ProtoReflect.Descriptor instead.
+func (*RuleSetRemovedEvent) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_preload_preload_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *RuleSetRemovedEvent) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+type PreloadingAttemptSourcesUpdatedEvent struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Complex type - use bytes for the JSON
+	LoadingSourceJson []byte `protobuf:"bytes,1,opt,name=loading_source_json,json=loadingSourceJson,proto3" json:"loading_source_json,omitempty"`
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
+}
+
+func (x *PreloadingAttemptSourcesUpdatedEvent) Reset() {
+	*x = PreloadingAttemptSourcesUpdatedEvent{}
+	mi := &file_proto_cdp_preload_preload_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PreloadingAttemptSourcesUpdatedEvent) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PreloadingAttemptSourcesUpdatedEvent) ProtoMessage() {}
+
+func (x *PreloadingAttemptSourcesUpdatedEvent) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_preload_preload_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PreloadingAttemptSourcesUpdatedEvent.ProtoReflect.Descriptor instead.
+func (*PreloadingAttemptSourcesUpdatedEvent) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_preload_preload_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *PreloadingAttemptSourcesUpdatedEvent) GetLoadingSourceJson() []byte {
+	if x != nil {
+		return x.LoadingSourceJson
+	}
+	return nil
+}
+
+type PrefetchStatusUpdatedEvent struct {
+	state          protoimpl.MessageState `protogen:"open.v1"`
+	KeyJson        string                 `protobuf:"bytes,1,opt,name=key_json,json=keyJson,proto3" json:"key_json,omitempty"`
+	Status         string                 `protobuf:"bytes,2,opt,name=status,proto3" json:"status,omitempty"`
+	PrefetchStatus string                 `protobuf:"bytes,3,opt,name=prefetch_status,json=prefetchStatus,proto3" json:"prefetch_status,omitempty"`
+	RequestId      string                 `protobuf:"bytes,4,opt,name=request_id,json=requestId,proto3" json:"request_id,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
+}
+
+func (x *PrefetchStatusUpdatedEvent) Reset() {
+	*x = PrefetchStatusUpdatedEvent{}
+	mi := &file_proto_cdp_preload_preload_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PrefetchStatusUpdatedEvent) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PrefetchStatusUpdatedEvent) ProtoMessage() {}
+
+func (x *PrefetchStatusUpdatedEvent) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_preload_preload_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PrefetchStatusUpdatedEvent.ProtoReflect.Descriptor instead.
+func (*PrefetchStatusUpdatedEvent) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_preload_preload_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *PrefetchStatusUpdatedEvent) GetKeyJson() string {
+	if x != nil {
+		return x.KeyJson
+	}
+	return ""
+}
+
+func (x *PrefetchStatusUpdatedEvent) GetStatus() string {
+	if x != nil {
+		return x.Status
+	}
+	return ""
+}
+
+func (x *PrefetchStatusUpdatedEvent) GetPrefetchStatus() string {
+	if x != nil {
+		return x.PrefetchStatus
+	}
+	return ""
+}
+
+func (x *PrefetchStatusUpdatedEvent) GetRequestId() string {
+	if x != nil {
+		return x.RequestId
+	}
+	return ""
+}
+
+type PrerenderStatusUpdatedEvent struct {
+	state           protoimpl.MessageState `protogen:"open.v1"`
+	KeyJson         string                 `protobuf:"bytes,1,opt,name=key_json,json=keyJson,proto3" json:"key_json,omitempty"`
+	Status          string                 `protobuf:"bytes,2,opt,name=status,proto3" json:"status,omitempty"`
+	PrerenderStatus string                 `protobuf:"bytes,3,opt,name=prerender_status,json=prerenderStatus,proto3" json:"prerender_status,omitempty"`
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
+}
+
+func (x *PrerenderStatusUpdatedEvent) Reset() {
+	*x = PrerenderStatusUpdatedEvent{}
+	mi := &file_proto_cdp_preload_preload_proto_msgTypes[10]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PrerenderStatusUpdatedEvent) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PrerenderStatusUpdatedEvent) ProtoMessage() {}
+
+func (x *PrerenderStatusUpdatedEvent) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_preload_preload_proto_msgTypes[10]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PrerenderStatusUpdatedEvent.ProtoReflect.Descriptor instead.
+func (*PrerenderStatusUpdatedEvent) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_preload_preload_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *PrerenderStatusUpdatedEvent) GetKeyJson() string {
+	if x != nil {
+		return x.KeyJson
+	}
+	return ""
+}
+
+func (x *PrerenderStatusUpdatedEvent) GetStatus() string {
+	if x != nil {
+		return x.Status
+	}
+	return ""
+}
+
+func (x *PrerenderStatusUpdatedEvent) GetPrerenderStatus() string {
+	if x != nil {
+		return x.PrerenderStatus
+	}
+	return ""
+}
+
+type PreloadEnabledStateUpdatedEvent struct {
+	state                                       protoimpl.MessageState `protogen:"open.v1"`
+	DisabledByPreference                        bool                   `protobuf:"varint,1,opt,name=disabled_by_preference,json=disabledByPreference,proto3" json:"disabled_by_preference,omitempty"`
+	DisabledByDataSaver                         bool                   `protobuf:"varint,2,opt,name=disabled_by_data_saver,json=disabledByDataSaver,proto3" json:"disabled_by_data_saver,omitempty"`
+	DisabledByBatterySaver                      bool                   `protobuf:"varint,3,opt,name=disabled_by_battery_saver,json=disabledByBatterySaver,proto3" json:"disabled_by_battery_saver,omitempty"`
+	DisabledByHoldbackPrefetchSpeculationRules  bool                   `protobuf:"varint,4,opt,name=disabled_by_holdback_prefetch_speculation_rules,json=disabledByHoldbackPrefetchSpeculationRules,proto3" json:"disabled_by_holdback_prefetch_speculation_rules,omitempty"`
+	DisabledByHoldbackPrerenderSpeculationRules bool                   `protobuf:"varint,5,opt,name=disabled_by_holdback_prerender_speculation_rules,json=disabledByHoldbackPrerenderSpeculationRules,proto3" json:"disabled_by_holdback_prerender_speculation_rules,omitempty"`
+	unknownFields                               protoimpl.UnknownFields
+	sizeCache                                   protoimpl.SizeCache
+}
+
+func (x *PreloadEnabledStateUpdatedEvent) Reset() {
+	*x = PreloadEnabledStateUpdatedEvent{}
+	mi := &file_proto_cdp_preload_preload_proto_msgTypes[11]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PreloadEnabledStateUpdatedEvent) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PreloadEnabledStateUpdatedEvent) ProtoMessage() {}
+
+func (x *PreloadEnabledStateUpdatedEvent) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_preload_preload_proto_msgTypes[11]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PreloadEnabledStateUpdatedEvent.ProtoReflect.Descriptor instead.
+func (*PreloadEnabledStateUpdatedEvent) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_preload_preload_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *PreloadEnabledStateUpdatedEvent) GetDisabledByPreference() bool {
+	if x != nil {
+		return x.DisabledByPreference
+	}
+	return false
+}
+
+func (x *PreloadEnabledStateUpdatedEvent) GetDisabledByDataSaver() bool {
+	if x != nil {
+		return x.DisabledByDataSaver
+	}
+	return false
+}
+
+func (x *PreloadEnabledStateUpdatedEvent) GetDisabledByBatterySaver() bool {
+	if x != nil {
+		return x.DisabledByBatterySaver
+	}
+	return false
+}
+
+func (x *PreloadEnabledStateUpdatedEvent) GetDisabledByHoldbackPrefetchSpeculationRules() bool {
+	if x != nil {
+		return x.DisabledByHoldbackPrefetchSpeculationRules
+	}
+	return false
+}
+
+func (x *PreloadEnabledStateUpdatedEvent) GetDisabledByHoldbackPrerenderSpeculationRules() bool {
+	if x != nil {
+		return x.DisabledByHoldbackPrerenderSpeculationRules
+	}
+	return false
+}
+
+type RuleSet struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	LoaderId      string                 `protobuf:"bytes,2,opt,name=loader_id,json=loaderId,proto3" json:"loader_id,omitempty"`
+	SourceText    string                 `protobuf:"bytes,3,opt,name=source_text,json=sourceText,proto3" json:"source_text,omitempty"`
+	BackendNodeId string                 `protobuf:"bytes,4,opt,name=backend_node_id,json=backendNodeId,proto3" json:"backend_node_id,omitempty"`
+	Url           string                 `protobuf:"bytes,5,opt,name=url,proto3" json:"url,omitempty"`
+	RequestId     string                 `protobuf:"bytes,6,opt,name=request_id,json=requestId,proto3" json:"request_id,omitempty"`
+	ErrorType     string                 `protobuf:"bytes,7,opt,name=error_type,json=errorType,proto3" json:"error_type,omitempty"`
+	ErrorMessage  string                 `protobuf:"bytes,8,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *RuleSet) Reset() {
+	*x = RuleSet{}
+	mi := &file_proto_cdp_preload_preload_proto_msgTypes[12]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RuleSet) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RuleSet) ProtoMessage() {}
+
+func (x *RuleSet) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_preload_preload_proto_msgTypes[12]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RuleSet.ProtoReflect.Descriptor instead.
+func (*RuleSet) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_preload_preload_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *RuleSet) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *RuleSet) GetLoaderId() string {
+	if x != nil {
+		return x.LoaderId
+	}
+	return ""
+}
+
+func (x *RuleSet) GetSourceText() string {
+	if x != nil {
+		return x.SourceText
+	}
+	return ""
+}
+
+func (x *RuleSet) GetBackendNodeId() string {
+	if x != nil {
+		return x.BackendNodeId
+	}
+	return ""
+}
+
+func (x *RuleSet) GetUrl() string {
+	if x != nil {
+		return x.Url
+	}
+	return ""
+}
+
+func (x *RuleSet) GetRequestId() string {
+	if x != nil {
+		return x.RequestId
+	}
+	return ""
+}
+
+func (x *RuleSet) GetErrorType() string {
+	if x != nil {
+		return x.ErrorType
+	}
+	return ""
+}
+
+func (x *RuleSet) GetErrorMessage() string {
+	if x != nil {
+		return x.ErrorMessage
+	}
+	return ""
+}
+
 var File_proto_cdp_preload_preload_proto protoreflect.FileDescriptor
 
 const file_proto_cdp_preload_preload_proto_rawDesc = "" +
@@ -173,10 +800,56 @@ const file_proto_cdp_preload_preload_proto_rawDesc = "" +
 	"\rEnableRequest\"\x10\n" +
 	"\x0eEnableResponse\"\x10\n" +
 	"\x0eDisableRequest\"\x11\n" +
-	"\x0fDisableResponse2\x99\x01\n" +
+	"\x0fDisableResponse\">\n" +
+	"\x1dSubscribePreloadEventsRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18\x01 \x01(\tR\tsessionId\"\xf2\x04\n" +
+	"\fPreloadEvent\x12L\n" +
+	"\x10rule_set_updated\x18\x01 \x01(\v2 .cdp.preload.RuleSetUpdatedEventH\x00R\x0eruleSetUpdated\x12L\n" +
+	"\x10rule_set_removed\x18\x02 \x01(\v2 .cdp.preload.RuleSetRemovedEventH\x00R\x0eruleSetRemoved\x12\x80\x01\n" +
+	"\"preloading_attempt_sources_updated\x18\x03 \x01(\v21.cdp.preload.PreloadingAttemptSourcesUpdatedEventH\x00R\x1fpreloadingAttemptSourcesUpdated\x12a\n" +
+	"\x17prefetch_status_updated\x18\x04 \x01(\v2'.cdp.preload.PrefetchStatusUpdatedEventH\x00R\x15prefetchStatusUpdated\x12d\n" +
+	"\x18prerender_status_updated\x18\x05 \x01(\v2(.cdp.preload.PrerenderStatusUpdatedEventH\x00R\x16prerenderStatusUpdated\x12q\n" +
+	"\x1dpreload_enabled_state_updated\x18\x06 \x01(\v2,.cdp.preload.PreloadEnabledStateUpdatedEventH\x00R\x1apreloadEnabledStateUpdatedB\a\n" +
+	"\x05event\"F\n" +
+	"\x13RuleSetUpdatedEvent\x12/\n" +
+	"\brule_set\x18\x01 \x01(\v2\x14.cdp.preload.RuleSetR\aruleSet\"%\n" +
+	"\x13RuleSetRemovedEvent\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\"V\n" +
+	"$PreloadingAttemptSourcesUpdatedEvent\x12.\n" +
+	"\x13loading_source_json\x18\x01 \x01(\fR\x11loadingSourceJson\"\x97\x01\n" +
+	"\x1aPrefetchStatusUpdatedEvent\x12\x19\n" +
+	"\bkey_json\x18\x01 \x01(\tR\akeyJson\x12\x16\n" +
+	"\x06status\x18\x02 \x01(\tR\x06status\x12'\n" +
+	"\x0fprefetch_status\x18\x03 \x01(\tR\x0eprefetchStatus\x12\x1d\n" +
+	"\n" +
+	"request_id\x18\x04 \x01(\tR\trequestId\"{\n" +
+	"\x1bPrerenderStatusUpdatedEvent\x12\x19\n" +
+	"\bkey_json\x18\x01 \x01(\tR\akeyJson\x12\x16\n" +
+	"\x06status\x18\x02 \x01(\tR\x06status\x12)\n" +
+	"\x10prerender_status\x18\x03 \x01(\tR\x0fprerenderStatus\"\x93\x03\n" +
+	"\x1fPreloadEnabledStateUpdatedEvent\x124\n" +
+	"\x16disabled_by_preference\x18\x01 \x01(\bR\x14disabledByPreference\x123\n" +
+	"\x16disabled_by_data_saver\x18\x02 \x01(\bR\x13disabledByDataSaver\x129\n" +
+	"\x19disabled_by_battery_saver\x18\x03 \x01(\bR\x16disabledByBatterySaver\x12c\n" +
+	"/disabled_by_holdback_prefetch_speculation_rules\x18\x04 \x01(\bR*disabledByHoldbackPrefetchSpeculationRules\x12e\n" +
+	"0disabled_by_holdback_prerender_speculation_rules\x18\x05 \x01(\bR+disabledByHoldbackPrerenderSpeculationRules\"\xf4\x01\n" +
+	"\aRuleSet\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12\x1b\n" +
+	"\tloader_id\x18\x02 \x01(\tR\bloaderId\x12\x1f\n" +
+	"\vsource_text\x18\x03 \x01(\tR\n" +
+	"sourceText\x12&\n" +
+	"\x0fbackend_node_id\x18\x04 \x01(\tR\rbackendNodeId\x12\x10\n" +
+	"\x03url\x18\x05 \x01(\tR\x03url\x12\x1d\n" +
+	"\n" +
+	"request_id\x18\x06 \x01(\tR\trequestId\x12\x1d\n" +
+	"\n" +
+	"error_type\x18\a \x01(\tR\terrorType\x12#\n" +
+	"\rerror_message\x18\b \x01(\tR\ferrorMessage2\xf5\x01\n" +
 	"\x0ePreloadService\x12A\n" +
 	"\x06Enable\x12\x1a.cdp.preload.EnableRequest\x1a\x1b.cdp.preload.EnableResponse\x12D\n" +
-	"\aDisable\x12\x1b.cdp.preload.DisableRequest\x1a\x1c.cdp.preload.DisableResponseB4Z2github.com/accretional/chromerpc/proto/cdp/preloadb\x06proto3"
+	"\aDisable\x12\x1b.cdp.preload.DisableRequest\x1a\x1c.cdp.preload.DisableResponse\x12Z\n" +
+	"\x0fSubscribeEvents\x12*.cdp.preload.SubscribePreloadEventsRequest\x1a\x19.cdp.preload.PreloadEvent0\x01B4Z2github.com/accretional/chromerpc/proto/cdp/preloadb\x06proto3"
 
 var (
 	file_proto_cdp_preload_preload_proto_rawDescOnce sync.Once
@@ -190,23 +863,41 @@ func file_proto_cdp_preload_preload_proto_rawDescGZIP() []byte {
 	return file_proto_cdp_preload_preload_proto_rawDescData
 }
 
-var file_proto_cdp_preload_preload_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
+var file_proto_cdp_preload_preload_proto_msgTypes = make([]protoimpl.MessageInfo, 13)
 var file_proto_cdp_preload_preload_proto_goTypes = []any{
-	(*EnableRequest)(nil),   // 0: cdp.preload.EnableRequest
-	(*EnableResponse)(nil),  // 1: cdp.preload.EnableResponse
-	(*DisableRequest)(nil),  // 2: cdp.preload.DisableRequest
-	(*DisableResponse)(nil), // 3: cdp.preload.DisableResponse
+	(*EnableRequest)(nil),                        // 0: cdp.preload.EnableRequest
+	(*EnableResponse)(nil),                       // 1: cdp.preload.EnableResponse
+	(*DisableRequest)(nil),                       // 2: cdp.preload.DisableRequest
+	(*DisableResponse)(nil),                      // 3: cdp.preload.DisableResponse
+	(*SubscribePreloadEventsRequest)(nil),        // 4: cdp.preload.SubscribePreloadEventsRequest
+	(*PreloadEvent)(nil),                         // 5: cdp.preload.PreloadEvent
+	(*RuleSetUpdatedEvent)(nil),                  // 6: cdp.preload.RuleSetUpdatedEvent
+	(*RuleSetRemovedEvent)(nil),                  // 7: cdp.preload.RuleSetRemovedEvent
+	(*PreloadingAttemptSourcesUpdatedEvent)(nil), // 8: cdp.preload.PreloadingAttemptSourcesUpdatedEvent
+	(*PrefetchStatusUpdatedEvent)(nil),           // 9: cdp.preload.PrefetchStatusUpdatedEvent
+	(*PrerenderStatusUpdatedEvent)(nil),          // 10: cdp.preload.PrerenderStatusUpdatedEvent
+	(*PreloadEnabledStateUpdatedEvent)(nil),      // 11: cdp.preload.PreloadEnabledStateUpdatedEvent
+	(*RuleSet)(nil),                              // 12: cdp.preload.RuleSet
 }
 var file_proto_cdp_preload_preload_proto_depIdxs = []int32{
-	0, // 0: cdp.preload.PreloadService.Enable:input_type -> cdp.preload.EnableRequest
-	2, // 1: cdp.preload.PreloadService.Disable:input_type -> cdp.preload.DisableRequest
-	1, // 2: cdp.preload.PreloadService.Enable:output_type -> cdp.preload.EnableResponse
-	3, // 3: cdp.preload.PreloadService.Disable:output_type -> cdp.preload.DisableResponse
-	2, // [2:4] is the sub-list for method output_type
-	0, // [0:2] is the sub-list for method input_type
-	0, // [0:0] is the sub-list for extension type_name
-	0, // [0:0] is the sub-list for extension extendee
-	0, // [0:0] is the sub-list for field type_name
+	6,  // 0: cdp.preload.PreloadEvent.rule_set_updated:type_name -> cdp.preload.RuleSetUpdatedEvent
+	7,  // 1: cdp.preload.PreloadEvent.rule_set_removed:type_name -> cdp.preload.RuleSetRemovedEvent
+	8,  // 2: cdp.preload.PreloadEvent.preloading_attempt_sources_updated:type_name -> cdp.preload.PreloadingAttemptSourcesUpdatedEvent
+	9,  // 3: cdp.preload.PreloadEvent.prefetch_status_updated:type_name -> cdp.preload.PrefetchStatusUpdatedEvent
+	10, // 4: cdp.preload.PreloadEvent.prerender_status_updated:type_name -> cdp.preload.PrerenderStatusUpdatedEvent
+	11, // 5: cdp.preload.PreloadEvent.preload_enabled_state_updated:type_name -> cdp.preload.PreloadEnabledStateUpdatedEvent
+	12, // 6: cdp.preload.RuleSetUpdatedEvent.rule_set:type_name -> cdp.preload.RuleSet
+	0,  // 7: cdp.preload.PreloadService.Enable:input_type -> cdp.preload.EnableRequest
+	2,  // 8: cdp.preload.PreloadService.Disable:input_type -> cdp.preload.DisableRequest
+	4,  // 9: cdp.preload.PreloadService.SubscribeEvents:input_type -> cdp.preload.SubscribePreloadEventsRequest
+	1,  // 10: cdp.preload.PreloadService.Enable:output_type -> cdp.preload.EnableResponse
+	3,  // 11: cdp.preload.PreloadService.Disable:output_type -> cdp.preload.DisableResponse
+	5,  // 12: cdp.preload.PreloadService.SubscribeEvents:output_type -> cdp.preload.PreloadEvent
+	10, // [10:13] is the sub-list for method output_type
+	7,  // [7:10] is the sub-list for method input_type
+	7,  // [7:7] is the sub-list for extension type_name
+	7,  // [7:7] is the sub-list for extension extendee
+	0,  // [0:7] is the sub-list for field type_name
 }
 
 func init() { file_proto_cdp_preload_preload_proto_init() }
@@ -214,13 +905,21 @@ func file_proto_cdp_preload_preload_proto_init() {
 	if File_proto_cdp_preload_preload_proto != nil {
 		return
 	}
+	file_proto_cdp_preload_preload_proto_msgTypes[5].OneofWrappers = []any{
+		(*PreloadEvent_RuleSetUpdated)(nil),
+		(*PreloadEvent_RuleSetRemoved)(nil),
+		(*PreloadEvent_PreloadingAttemptSourcesUpdated)(nil),
+		(*PreloadEvent_PrefetchStatusUpdated)(nil),
+		(*PreloadEvent_PrerenderStatusUpdated)(nil),
+		(*PreloadEvent_PreloadEnabledStateUpdated)(nil),
+	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_cdp_preload_preload_proto_rawDesc), len(file_proto_cdp_preload_preload_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   4,
+			NumMessages:   13,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

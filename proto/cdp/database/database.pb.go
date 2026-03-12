@@ -21,6 +21,74 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+type Database struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Domain        string                 `protobuf:"bytes,2,opt,name=domain,proto3" json:"domain,omitempty"`
+	Name          string                 `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
+	Version       string                 `protobuf:"bytes,4,opt,name=version,proto3" json:"version,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Database) Reset() {
+	*x = Database{}
+	mi := &file_proto_cdp_database_database_proto_msgTypes[0]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Database) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Database) ProtoMessage() {}
+
+func (x *Database) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_database_database_proto_msgTypes[0]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Database.ProtoReflect.Descriptor instead.
+func (*Database) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_database_database_proto_rawDescGZIP(), []int{0}
+}
+
+func (x *Database) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *Database) GetDomain() string {
+	if x != nil {
+		return x.Domain
+	}
+	return ""
+}
+
+func (x *Database) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *Database) GetVersion() string {
+	if x != nil {
+		return x.Version
+	}
+	return ""
+}
+
 type SqlError struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Message       string                 `protobuf:"bytes,1,opt,name=message,proto3" json:"message,omitempty"`
@@ -31,7 +99,7 @@ type SqlError struct {
 
 func (x *SqlError) Reset() {
 	*x = SqlError{}
-	mi := &file_proto_cdp_database_database_proto_msgTypes[0]
+	mi := &file_proto_cdp_database_database_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -43,7 +111,7 @@ func (x *SqlError) String() string {
 func (*SqlError) ProtoMessage() {}
 
 func (x *SqlError) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_cdp_database_database_proto_msgTypes[0]
+	mi := &file_proto_cdp_database_database_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -56,7 +124,7 @@ func (x *SqlError) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SqlError.ProtoReflect.Descriptor instead.
 func (*SqlError) Descriptor() ([]byte, []int) {
-	return file_proto_cdp_database_database_proto_rawDescGZIP(), []int{0}
+	return file_proto_cdp_database_database_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *SqlError) GetMessage() string {
@@ -81,7 +149,7 @@ type EnableRequest struct {
 
 func (x *EnableRequest) Reset() {
 	*x = EnableRequest{}
-	mi := &file_proto_cdp_database_database_proto_msgTypes[1]
+	mi := &file_proto_cdp_database_database_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -93,7 +161,7 @@ func (x *EnableRequest) String() string {
 func (*EnableRequest) ProtoMessage() {}
 
 func (x *EnableRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_cdp_database_database_proto_msgTypes[1]
+	mi := &file_proto_cdp_database_database_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -106,7 +174,7 @@ func (x *EnableRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EnableRequest.ProtoReflect.Descriptor instead.
 func (*EnableRequest) Descriptor() ([]byte, []int) {
-	return file_proto_cdp_database_database_proto_rawDescGZIP(), []int{1}
+	return file_proto_cdp_database_database_proto_rawDescGZIP(), []int{2}
 }
 
 type EnableResponse struct {
@@ -117,7 +185,7 @@ type EnableResponse struct {
 
 func (x *EnableResponse) Reset() {
 	*x = EnableResponse{}
-	mi := &file_proto_cdp_database_database_proto_msgTypes[2]
+	mi := &file_proto_cdp_database_database_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -129,7 +197,7 @@ func (x *EnableResponse) String() string {
 func (*EnableResponse) ProtoMessage() {}
 
 func (x *EnableResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_cdp_database_database_proto_msgTypes[2]
+	mi := &file_proto_cdp_database_database_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -142,7 +210,7 @@ func (x *EnableResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EnableResponse.ProtoReflect.Descriptor instead.
 func (*EnableResponse) Descriptor() ([]byte, []int) {
-	return file_proto_cdp_database_database_proto_rawDescGZIP(), []int{2}
+	return file_proto_cdp_database_database_proto_rawDescGZIP(), []int{3}
 }
 
 type DisableRequest struct {
@@ -153,7 +221,7 @@ type DisableRequest struct {
 
 func (x *DisableRequest) Reset() {
 	*x = DisableRequest{}
-	mi := &file_proto_cdp_database_database_proto_msgTypes[3]
+	mi := &file_proto_cdp_database_database_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -165,7 +233,7 @@ func (x *DisableRequest) String() string {
 func (*DisableRequest) ProtoMessage() {}
 
 func (x *DisableRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_cdp_database_database_proto_msgTypes[3]
+	mi := &file_proto_cdp_database_database_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -178,7 +246,7 @@ func (x *DisableRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DisableRequest.ProtoReflect.Descriptor instead.
 func (*DisableRequest) Descriptor() ([]byte, []int) {
-	return file_proto_cdp_database_database_proto_rawDescGZIP(), []int{3}
+	return file_proto_cdp_database_database_proto_rawDescGZIP(), []int{4}
 }
 
 type DisableResponse struct {
@@ -189,7 +257,7 @@ type DisableResponse struct {
 
 func (x *DisableResponse) Reset() {
 	*x = DisableResponse{}
-	mi := &file_proto_cdp_database_database_proto_msgTypes[4]
+	mi := &file_proto_cdp_database_database_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -201,7 +269,7 @@ func (x *DisableResponse) String() string {
 func (*DisableResponse) ProtoMessage() {}
 
 func (x *DisableResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_cdp_database_database_proto_msgTypes[4]
+	mi := &file_proto_cdp_database_database_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -214,7 +282,7 @@ func (x *DisableResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DisableResponse.ProtoReflect.Descriptor instead.
 func (*DisableResponse) Descriptor() ([]byte, []int) {
-	return file_proto_cdp_database_database_proto_rawDescGZIP(), []int{4}
+	return file_proto_cdp_database_database_proto_rawDescGZIP(), []int{5}
 }
 
 type GetDatabaseTableNamesRequest struct {
@@ -226,7 +294,7 @@ type GetDatabaseTableNamesRequest struct {
 
 func (x *GetDatabaseTableNamesRequest) Reset() {
 	*x = GetDatabaseTableNamesRequest{}
-	mi := &file_proto_cdp_database_database_proto_msgTypes[5]
+	mi := &file_proto_cdp_database_database_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -238,7 +306,7 @@ func (x *GetDatabaseTableNamesRequest) String() string {
 func (*GetDatabaseTableNamesRequest) ProtoMessage() {}
 
 func (x *GetDatabaseTableNamesRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_cdp_database_database_proto_msgTypes[5]
+	mi := &file_proto_cdp_database_database_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -251,7 +319,7 @@ func (x *GetDatabaseTableNamesRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetDatabaseTableNamesRequest.ProtoReflect.Descriptor instead.
 func (*GetDatabaseTableNamesRequest) Descriptor() ([]byte, []int) {
-	return file_proto_cdp_database_database_proto_rawDescGZIP(), []int{5}
+	return file_proto_cdp_database_database_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *GetDatabaseTableNamesRequest) GetDatabaseId() string {
@@ -270,7 +338,7 @@ type GetDatabaseTableNamesResponse struct {
 
 func (x *GetDatabaseTableNamesResponse) Reset() {
 	*x = GetDatabaseTableNamesResponse{}
-	mi := &file_proto_cdp_database_database_proto_msgTypes[6]
+	mi := &file_proto_cdp_database_database_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -282,7 +350,7 @@ func (x *GetDatabaseTableNamesResponse) String() string {
 func (*GetDatabaseTableNamesResponse) ProtoMessage() {}
 
 func (x *GetDatabaseTableNamesResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_cdp_database_database_proto_msgTypes[6]
+	mi := &file_proto_cdp_database_database_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -295,7 +363,7 @@ func (x *GetDatabaseTableNamesResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetDatabaseTableNamesResponse.ProtoReflect.Descriptor instead.
 func (*GetDatabaseTableNamesResponse) Descriptor() ([]byte, []int) {
-	return file_proto_cdp_database_database_proto_rawDescGZIP(), []int{6}
+	return file_proto_cdp_database_database_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *GetDatabaseTableNamesResponse) GetTableNames() []string {
@@ -315,7 +383,7 @@ type ExecuteSQLRequest struct {
 
 func (x *ExecuteSQLRequest) Reset() {
 	*x = ExecuteSQLRequest{}
-	mi := &file_proto_cdp_database_database_proto_msgTypes[7]
+	mi := &file_proto_cdp_database_database_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -327,7 +395,7 @@ func (x *ExecuteSQLRequest) String() string {
 func (*ExecuteSQLRequest) ProtoMessage() {}
 
 func (x *ExecuteSQLRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_cdp_database_database_proto_msgTypes[7]
+	mi := &file_proto_cdp_database_database_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -340,7 +408,7 @@ func (x *ExecuteSQLRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ExecuteSQLRequest.ProtoReflect.Descriptor instead.
 func (*ExecuteSQLRequest) Descriptor() ([]byte, []int) {
-	return file_proto_cdp_database_database_proto_rawDescGZIP(), []int{7}
+	return file_proto_cdp_database_database_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *ExecuteSQLRequest) GetDatabaseId() string {
@@ -368,7 +436,7 @@ type ExecuteSQLResponse struct {
 
 func (x *ExecuteSQLResponse) Reset() {
 	*x = ExecuteSQLResponse{}
-	mi := &file_proto_cdp_database_database_proto_msgTypes[8]
+	mi := &file_proto_cdp_database_database_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -380,7 +448,7 @@ func (x *ExecuteSQLResponse) String() string {
 func (*ExecuteSQLResponse) ProtoMessage() {}
 
 func (x *ExecuteSQLResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_cdp_database_database_proto_msgTypes[8]
+	mi := &file_proto_cdp_database_database_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -393,7 +461,7 @@ func (x *ExecuteSQLResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ExecuteSQLResponse.ProtoReflect.Descriptor instead.
 func (*ExecuteSQLResponse) Descriptor() ([]byte, []int) {
-	return file_proto_cdp_database_database_proto_rawDescGZIP(), []int{8}
+	return file_proto_cdp_database_database_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *ExecuteSQLResponse) GetColumnNames() []string {
@@ -417,11 +485,170 @@ func (x *ExecuteSQLResponse) GetSqlError() *SqlError {
 	return nil
 }
 
+type SubscribeDatabaseEventsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,1,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SubscribeDatabaseEventsRequest) Reset() {
+	*x = SubscribeDatabaseEventsRequest{}
+	mi := &file_proto_cdp_database_database_proto_msgTypes[10]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SubscribeDatabaseEventsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SubscribeDatabaseEventsRequest) ProtoMessage() {}
+
+func (x *SubscribeDatabaseEventsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_database_database_proto_msgTypes[10]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SubscribeDatabaseEventsRequest.ProtoReflect.Descriptor instead.
+func (*SubscribeDatabaseEventsRequest) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_database_database_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *SubscribeDatabaseEventsRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
+type DatabaseEvent struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Types that are valid to be assigned to Event:
+	//
+	//	*DatabaseEvent_AddDatabase
+	Event         isDatabaseEvent_Event `protobuf_oneof:"event"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DatabaseEvent) Reset() {
+	*x = DatabaseEvent{}
+	mi := &file_proto_cdp_database_database_proto_msgTypes[11]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DatabaseEvent) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DatabaseEvent) ProtoMessage() {}
+
+func (x *DatabaseEvent) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_database_database_proto_msgTypes[11]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DatabaseEvent.ProtoReflect.Descriptor instead.
+func (*DatabaseEvent) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_database_database_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *DatabaseEvent) GetEvent() isDatabaseEvent_Event {
+	if x != nil {
+		return x.Event
+	}
+	return nil
+}
+
+func (x *DatabaseEvent) GetAddDatabase() *AddDatabaseEvent {
+	if x != nil {
+		if x, ok := x.Event.(*DatabaseEvent_AddDatabase); ok {
+			return x.AddDatabase
+		}
+	}
+	return nil
+}
+
+type isDatabaseEvent_Event interface {
+	isDatabaseEvent_Event()
+}
+
+type DatabaseEvent_AddDatabase struct {
+	AddDatabase *AddDatabaseEvent `protobuf:"bytes,1,opt,name=add_database,json=addDatabase,proto3,oneof"`
+}
+
+func (*DatabaseEvent_AddDatabase) isDatabaseEvent_Event() {}
+
+type AddDatabaseEvent struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Database      *Database              `protobuf:"bytes,1,opt,name=database,proto3" json:"database,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AddDatabaseEvent) Reset() {
+	*x = AddDatabaseEvent{}
+	mi := &file_proto_cdp_database_database_proto_msgTypes[12]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AddDatabaseEvent) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AddDatabaseEvent) ProtoMessage() {}
+
+func (x *AddDatabaseEvent) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_database_database_proto_msgTypes[12]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AddDatabaseEvent.ProtoReflect.Descriptor instead.
+func (*AddDatabaseEvent) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_database_database_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *AddDatabaseEvent) GetDatabase() *Database {
+	if x != nil {
+		return x.Database
+	}
+	return nil
+}
+
 var File_proto_cdp_database_database_proto protoreflect.FileDescriptor
 
 const file_proto_cdp_database_database_proto_rawDesc = "" +
 	"\n" +
-	"!proto/cdp/database/database.proto\x12\fcdp.database\"8\n" +
+	"!proto/cdp/database/database.proto\x12\fcdp.database\"`\n" +
+	"\bDatabase\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12\x16\n" +
+	"\x06domain\x18\x02 \x01(\tR\x06domain\x12\x12\n" +
+	"\x04name\x18\x03 \x01(\tR\x04name\x12\x18\n" +
+	"\aversion\x18\x04 \x01(\tR\aversion\"8\n" +
 	"\bSqlError\x12\x18\n" +
 	"\amessage\x18\x01 \x01(\tR\amessage\x12\x12\n" +
 	"\x04code\x18\x02 \x01(\x05R\x04code\"\x0f\n" +
@@ -442,13 +669,22 @@ const file_proto_cdp_database_database_proto_rawDesc = "" +
 	"\x12ExecuteSQLResponse\x12!\n" +
 	"\fcolumn_names\x18\x01 \x03(\tR\vcolumnNames\x12\x16\n" +
 	"\x06values\x18\x02 \x03(\tR\x06values\x123\n" +
-	"\tsql_error\x18\x03 \x01(\v2\x16.cdp.database.SqlErrorR\bsqlError2\xe1\x02\n" +
+	"\tsql_error\x18\x03 \x01(\v2\x16.cdp.database.SqlErrorR\bsqlError\"?\n" +
+	"\x1eSubscribeDatabaseEventsRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18\x01 \x01(\tR\tsessionId\"]\n" +
+	"\rDatabaseEvent\x12C\n" +
+	"\fadd_database\x18\x01 \x01(\v2\x1e.cdp.database.AddDatabaseEventH\x00R\vaddDatabaseB\a\n" +
+	"\x05event\"F\n" +
+	"\x10AddDatabaseEvent\x122\n" +
+	"\bdatabase\x18\x01 \x01(\v2\x16.cdp.database.DatabaseR\bdatabase2\xc1\x03\n" +
 	"\x0fDatabaseService\x12C\n" +
 	"\x06Enable\x12\x1b.cdp.database.EnableRequest\x1a\x1c.cdp.database.EnableResponse\x12F\n" +
 	"\aDisable\x12\x1c.cdp.database.DisableRequest\x1a\x1d.cdp.database.DisableResponse\x12p\n" +
 	"\x15GetDatabaseTableNames\x12*.cdp.database.GetDatabaseTableNamesRequest\x1a+.cdp.database.GetDatabaseTableNamesResponse\x12O\n" +
 	"\n" +
-	"ExecuteSQL\x12\x1f.cdp.database.ExecuteSQLRequest\x1a .cdp.database.ExecuteSQLResponseB5Z3github.com/accretional/chromerpc/proto/cdp/databaseb\x06proto3"
+	"ExecuteSQL\x12\x1f.cdp.database.ExecuteSQLRequest\x1a .cdp.database.ExecuteSQLResponse\x12^\n" +
+	"\x0fSubscribeEvents\x12,.cdp.database.SubscribeDatabaseEventsRequest\x1a\x1b.cdp.database.DatabaseEvent0\x01B5Z3github.com/accretional/chromerpc/proto/cdp/databaseb\x06proto3"
 
 var (
 	file_proto_cdp_database_database_proto_rawDescOnce sync.Once
@@ -462,33 +698,41 @@ func file_proto_cdp_database_database_proto_rawDescGZIP() []byte {
 	return file_proto_cdp_database_database_proto_rawDescData
 }
 
-var file_proto_cdp_database_database_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
+var file_proto_cdp_database_database_proto_msgTypes = make([]protoimpl.MessageInfo, 13)
 var file_proto_cdp_database_database_proto_goTypes = []any{
-	(*SqlError)(nil),                      // 0: cdp.database.SqlError
-	(*EnableRequest)(nil),                 // 1: cdp.database.EnableRequest
-	(*EnableResponse)(nil),                // 2: cdp.database.EnableResponse
-	(*DisableRequest)(nil),                // 3: cdp.database.DisableRequest
-	(*DisableResponse)(nil),               // 4: cdp.database.DisableResponse
-	(*GetDatabaseTableNamesRequest)(nil),  // 5: cdp.database.GetDatabaseTableNamesRequest
-	(*GetDatabaseTableNamesResponse)(nil), // 6: cdp.database.GetDatabaseTableNamesResponse
-	(*ExecuteSQLRequest)(nil),             // 7: cdp.database.ExecuteSQLRequest
-	(*ExecuteSQLResponse)(nil),            // 8: cdp.database.ExecuteSQLResponse
+	(*Database)(nil),                       // 0: cdp.database.Database
+	(*SqlError)(nil),                       // 1: cdp.database.SqlError
+	(*EnableRequest)(nil),                  // 2: cdp.database.EnableRequest
+	(*EnableResponse)(nil),                 // 3: cdp.database.EnableResponse
+	(*DisableRequest)(nil),                 // 4: cdp.database.DisableRequest
+	(*DisableResponse)(nil),                // 5: cdp.database.DisableResponse
+	(*GetDatabaseTableNamesRequest)(nil),   // 6: cdp.database.GetDatabaseTableNamesRequest
+	(*GetDatabaseTableNamesResponse)(nil),  // 7: cdp.database.GetDatabaseTableNamesResponse
+	(*ExecuteSQLRequest)(nil),              // 8: cdp.database.ExecuteSQLRequest
+	(*ExecuteSQLResponse)(nil),             // 9: cdp.database.ExecuteSQLResponse
+	(*SubscribeDatabaseEventsRequest)(nil), // 10: cdp.database.SubscribeDatabaseEventsRequest
+	(*DatabaseEvent)(nil),                  // 11: cdp.database.DatabaseEvent
+	(*AddDatabaseEvent)(nil),               // 12: cdp.database.AddDatabaseEvent
 }
 var file_proto_cdp_database_database_proto_depIdxs = []int32{
-	0, // 0: cdp.database.ExecuteSQLResponse.sql_error:type_name -> cdp.database.SqlError
-	1, // 1: cdp.database.DatabaseService.Enable:input_type -> cdp.database.EnableRequest
-	3, // 2: cdp.database.DatabaseService.Disable:input_type -> cdp.database.DisableRequest
-	5, // 3: cdp.database.DatabaseService.GetDatabaseTableNames:input_type -> cdp.database.GetDatabaseTableNamesRequest
-	7, // 4: cdp.database.DatabaseService.ExecuteSQL:input_type -> cdp.database.ExecuteSQLRequest
-	2, // 5: cdp.database.DatabaseService.Enable:output_type -> cdp.database.EnableResponse
-	4, // 6: cdp.database.DatabaseService.Disable:output_type -> cdp.database.DisableResponse
-	6, // 7: cdp.database.DatabaseService.GetDatabaseTableNames:output_type -> cdp.database.GetDatabaseTableNamesResponse
-	8, // 8: cdp.database.DatabaseService.ExecuteSQL:output_type -> cdp.database.ExecuteSQLResponse
-	5, // [5:9] is the sub-list for method output_type
-	1, // [1:5] is the sub-list for method input_type
-	1, // [1:1] is the sub-list for extension type_name
-	1, // [1:1] is the sub-list for extension extendee
-	0, // [0:1] is the sub-list for field type_name
+	1,  // 0: cdp.database.ExecuteSQLResponse.sql_error:type_name -> cdp.database.SqlError
+	12, // 1: cdp.database.DatabaseEvent.add_database:type_name -> cdp.database.AddDatabaseEvent
+	0,  // 2: cdp.database.AddDatabaseEvent.database:type_name -> cdp.database.Database
+	2,  // 3: cdp.database.DatabaseService.Enable:input_type -> cdp.database.EnableRequest
+	4,  // 4: cdp.database.DatabaseService.Disable:input_type -> cdp.database.DisableRequest
+	6,  // 5: cdp.database.DatabaseService.GetDatabaseTableNames:input_type -> cdp.database.GetDatabaseTableNamesRequest
+	8,  // 6: cdp.database.DatabaseService.ExecuteSQL:input_type -> cdp.database.ExecuteSQLRequest
+	10, // 7: cdp.database.DatabaseService.SubscribeEvents:input_type -> cdp.database.SubscribeDatabaseEventsRequest
+	3,  // 8: cdp.database.DatabaseService.Enable:output_type -> cdp.database.EnableResponse
+	5,  // 9: cdp.database.DatabaseService.Disable:output_type -> cdp.database.DisableResponse
+	7,  // 10: cdp.database.DatabaseService.GetDatabaseTableNames:output_type -> cdp.database.GetDatabaseTableNamesResponse
+	9,  // 11: cdp.database.DatabaseService.ExecuteSQL:output_type -> cdp.database.ExecuteSQLResponse
+	11, // 12: cdp.database.DatabaseService.SubscribeEvents:output_type -> cdp.database.DatabaseEvent
+	8,  // [8:13] is the sub-list for method output_type
+	3,  // [3:8] is the sub-list for method input_type
+	3,  // [3:3] is the sub-list for extension type_name
+	3,  // [3:3] is the sub-list for extension extendee
+	0,  // [0:3] is the sub-list for field type_name
 }
 
 func init() { file_proto_cdp_database_database_proto_init() }
@@ -496,13 +740,16 @@ func file_proto_cdp_database_database_proto_init() {
 	if File_proto_cdp_database_database_proto != nil {
 		return
 	}
+	file_proto_cdp_database_database_proto_msgTypes[11].OneofWrappers = []any{
+		(*DatabaseEvent_AddDatabase)(nil),
+	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_cdp_database_database_proto_rawDesc), len(file_proto_cdp_database_database_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   9,
+			NumMessages:   13,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

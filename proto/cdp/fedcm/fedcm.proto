@@ -27,6 +27,9 @@ service FedCmService {
 
   // Resets the cooldown for the FedCm dialog.
   rpc ResetCooldown(ResetCooldownRequest) returns (ResetCooldownResponse);
+
+  // Subscribes to FedCm domain events.
+  rpc SubscribeEvents(SubscribeFedCmEventsRequest) returns (stream FedCmEvent);
 }
 
 // ==================== Requests / Responses ====================
@@ -66,3 +69,41 @@ message DismissDialogResponse {}
 
 message ResetCooldownRequest {}
 message ResetCooldownResponse {}
+
+// ==================== Event Streaming ====================
+
+message SubscribeFedCmEventsRequest {
+  string session_id = 1;
+}
+
+message FedCmEvent {
+  oneof event {
+    DialogShownEvent dialog_shown = 1;
+    DialogClosedEvent dialog_closed = 2;
+  }
+}
+
+message DialogShownEvent {
+  string dialog_id = 1;
+  string dialog_type = 2;
+  repeated Account accounts = 3;
+  string title = 4;
+  string subtitle = 5;
+}
+
+message DialogClosedEvent {
+  string dialog_id = 1;
+}
+
+message Account {
+  string account_id = 1;
+  string email = 2;
+  string name = 3;
+  string given_name = 4;
+  string picture_url = 5;
+  string idp_config_url = 6;
+  string idp_login_url = 7;
+  string login_state = 8;
+  string terms_of_service_url = 9;
+  string privacy_policy_url = 10;
+}

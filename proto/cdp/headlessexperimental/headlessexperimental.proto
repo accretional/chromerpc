@@ -15,6 +15,9 @@ service HeadlessExperimentalService {
 
   // Sends a BeginFrame to the target and returns when the frame was completed.
   rpc BeginFrame(BeginFrameRequest) returns (BeginFrameResponse);
+
+  // Subscribe to HeadlessExperimental domain events.
+  rpc SubscribeEvents(SubscribeHeadlessExperimentalEventsRequest) returns (stream HeadlessExperimentalEvent);
 }
 
 // ==================== Types ====================
@@ -52,4 +55,20 @@ message BeginFrameResponse {
   bool has_damage = 1;
   // Base64-decoded screenshot data, captured if screenshot was requested.
   bytes screenshot_data = 2;
+}
+
+// ==================== Events ====================
+
+message SubscribeHeadlessExperimentalEventsRequest {
+  string session_id = 1;
+}
+
+message HeadlessExperimentalEvent {
+  oneof event {
+    NeedsBeginFramesChangedEvent needs_begin_frames_changed = 1;
+  }
+}
+
+message NeedsBeginFramesChangedEvent {
+  bool needs_begin_frames = 1;
 }

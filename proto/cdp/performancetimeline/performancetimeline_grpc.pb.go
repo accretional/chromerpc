@@ -19,7 +19,8 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	PerformanceTimelineService_Enable_FullMethodName = "/cdp.performancetimeline.PerformanceTimelineService/Enable"
+	PerformanceTimelineService_Enable_FullMethodName          = "/cdp.performancetimeline.PerformanceTimelineService/Enable"
+	PerformanceTimelineService_SubscribeEvents_FullMethodName = "/cdp.performancetimeline.PerformanceTimelineService/SubscribeEvents"
 )
 
 // PerformanceTimelineServiceClient is the client API for PerformanceTimelineService service.
@@ -27,6 +28,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type PerformanceTimelineServiceClient interface {
 	Enable(ctx context.Context, in *EnableRequest, opts ...grpc.CallOption) (*EnableResponse, error)
+	SubscribeEvents(ctx context.Context, in *SubscribePerformanceTimelineEventsRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[PerformanceTimelineEvent], error)
 }
 
 type performanceTimelineServiceClient struct {
@@ -47,11 +49,31 @@ func (c *performanceTimelineServiceClient) Enable(ctx context.Context, in *Enabl
 	return out, nil
 }
 
+func (c *performanceTimelineServiceClient) SubscribeEvents(ctx context.Context, in *SubscribePerformanceTimelineEventsRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[PerformanceTimelineEvent], error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	stream, err := c.cc.NewStream(ctx, &PerformanceTimelineService_ServiceDesc.Streams[0], PerformanceTimelineService_SubscribeEvents_FullMethodName, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &grpc.GenericClientStream[SubscribePerformanceTimelineEventsRequest, PerformanceTimelineEvent]{ClientStream: stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type PerformanceTimelineService_SubscribeEventsClient = grpc.ServerStreamingClient[PerformanceTimelineEvent]
+
 // PerformanceTimelineServiceServer is the server API for PerformanceTimelineService service.
 // All implementations must embed UnimplementedPerformanceTimelineServiceServer
 // for forward compatibility.
 type PerformanceTimelineServiceServer interface {
 	Enable(context.Context, *EnableRequest) (*EnableResponse, error)
+	SubscribeEvents(*SubscribePerformanceTimelineEventsRequest, grpc.ServerStreamingServer[PerformanceTimelineEvent]) error
 	mustEmbedUnimplementedPerformanceTimelineServiceServer()
 }
 
@@ -64,6 +86,9 @@ type UnimplementedPerformanceTimelineServiceServer struct{}
 
 func (UnimplementedPerformanceTimelineServiceServer) Enable(context.Context, *EnableRequest) (*EnableResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Enable not implemented")
+}
+func (UnimplementedPerformanceTimelineServiceServer) SubscribeEvents(*SubscribePerformanceTimelineEventsRequest, grpc.ServerStreamingServer[PerformanceTimelineEvent]) error {
+	return status.Errorf(codes.Unimplemented, "method SubscribeEvents not implemented")
 }
 func (UnimplementedPerformanceTimelineServiceServer) mustEmbedUnimplementedPerformanceTimelineServiceServer() {
 }
@@ -105,6 +130,17 @@ func _PerformanceTimelineService_Enable_Handler(srv interface{}, ctx context.Con
 	return interceptor(ctx, in, info, handler)
 }
 
+func _PerformanceTimelineService_SubscribeEvents_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(SubscribePerformanceTimelineEventsRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(PerformanceTimelineServiceServer).SubscribeEvents(m, &grpc.GenericServerStream[SubscribePerformanceTimelineEventsRequest, PerformanceTimelineEvent]{ServerStream: stream})
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type PerformanceTimelineService_SubscribeEventsServer = grpc.ServerStreamingServer[PerformanceTimelineEvent]
+
 // PerformanceTimelineService_ServiceDesc is the grpc.ServiceDesc for PerformanceTimelineService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -117,6 +153,12 @@ var PerformanceTimelineService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _PerformanceTimelineService_Enable_Handler,
 		},
 	},
-	Streams:  []grpc.StreamDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "SubscribeEvents",
+			Handler:       _PerformanceTimelineService_SubscribeEvents_Handler,
+			ServerStreams: true,
+		},
+	},
 	Metadata: "proto/cdp/performancetimeline/performancetimeline.proto",
 }

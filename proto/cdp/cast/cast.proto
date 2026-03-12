@@ -26,6 +26,9 @@ service CastService {
 
   // Stops the active Cast session on the sink.
   rpc StopCasting(StopCastingRequest) returns (StopCastingResponse);
+
+  // Subscribes to Cast domain events (sinksUpdated, issueUpdated).
+  rpc SubscribeEvents(SubscribeCastEventsRequest) returns (stream CastEvent);
 }
 
 // ==================== Requests / Responses ====================
@@ -57,3 +60,30 @@ message StopCastingRequest {
   string sink_name = 1;
 }
 message StopCastingResponse {}
+
+// ==================== Event Streaming ====================
+
+message SubscribeCastEventsRequest {
+  string session_id = 1;
+}
+
+message CastEvent {
+  oneof event {
+    SinksUpdatedEvent sinks_updated = 1;
+    IssueUpdatedEvent issue_updated = 2;
+  }
+}
+
+message SinksUpdatedEvent {
+  repeated Sink sinks = 1;
+}
+
+message IssueUpdatedEvent {
+  string issue_message = 1;
+}
+
+message Sink {
+  string name = 1;
+  string id = 2;
+  string session = 3;
+}

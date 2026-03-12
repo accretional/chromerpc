@@ -19,10 +19,11 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	AutofillService_Enable_FullMethodName       = "/cdp.autofill.AutofillService/Enable"
-	AutofillService_Disable_FullMethodName      = "/cdp.autofill.AutofillService/Disable"
-	AutofillService_Trigger_FullMethodName      = "/cdp.autofill.AutofillService/Trigger"
-	AutofillService_SetAddresses_FullMethodName = "/cdp.autofill.AutofillService/SetAddresses"
+	AutofillService_Enable_FullMethodName          = "/cdp.autofill.AutofillService/Enable"
+	AutofillService_Disable_FullMethodName         = "/cdp.autofill.AutofillService/Disable"
+	AutofillService_Trigger_FullMethodName         = "/cdp.autofill.AutofillService/Trigger"
+	AutofillService_SetAddresses_FullMethodName    = "/cdp.autofill.AutofillService/SetAddresses"
+	AutofillService_SubscribeEvents_FullMethodName = "/cdp.autofill.AutofillService/SubscribeEvents"
 )
 
 // AutofillServiceClient is the client API for AutofillService service.
@@ -37,6 +38,8 @@ type AutofillServiceClient interface {
 	Trigger(ctx context.Context, in *TriggerRequest, opts ...grpc.CallOption) (*TriggerResponse, error)
 	// Sets addresses for autofill.
 	SetAddresses(ctx context.Context, in *SetAddressesRequest, opts ...grpc.CallOption) (*SetAddressesResponse, error)
+	// Subscribes to Autofill domain events.
+	SubscribeEvents(ctx context.Context, in *SubscribeAutofillEventsRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[AutofillEvent], error)
 }
 
 type autofillServiceClient struct {
@@ -87,6 +90,25 @@ func (c *autofillServiceClient) SetAddresses(ctx context.Context, in *SetAddress
 	return out, nil
 }
 
+func (c *autofillServiceClient) SubscribeEvents(ctx context.Context, in *SubscribeAutofillEventsRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[AutofillEvent], error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	stream, err := c.cc.NewStream(ctx, &AutofillService_ServiceDesc.Streams[0], AutofillService_SubscribeEvents_FullMethodName, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &grpc.GenericClientStream[SubscribeAutofillEventsRequest, AutofillEvent]{ClientStream: stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type AutofillService_SubscribeEventsClient = grpc.ServerStreamingClient[AutofillEvent]
+
 // AutofillServiceServer is the server API for AutofillService service.
 // All implementations must embed UnimplementedAutofillServiceServer
 // for forward compatibility.
@@ -99,6 +121,8 @@ type AutofillServiceServer interface {
 	Trigger(context.Context, *TriggerRequest) (*TriggerResponse, error)
 	// Sets addresses for autofill.
 	SetAddresses(context.Context, *SetAddressesRequest) (*SetAddressesResponse, error)
+	// Subscribes to Autofill domain events.
+	SubscribeEvents(*SubscribeAutofillEventsRequest, grpc.ServerStreamingServer[AutofillEvent]) error
 	mustEmbedUnimplementedAutofillServiceServer()
 }
 
@@ -120,6 +144,9 @@ func (UnimplementedAutofillServiceServer) Trigger(context.Context, *TriggerReque
 }
 func (UnimplementedAutofillServiceServer) SetAddresses(context.Context, *SetAddressesRequest) (*SetAddressesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SetAddresses not implemented")
+}
+func (UnimplementedAutofillServiceServer) SubscribeEvents(*SubscribeAutofillEventsRequest, grpc.ServerStreamingServer[AutofillEvent]) error {
+	return status.Errorf(codes.Unimplemented, "method SubscribeEvents not implemented")
 }
 func (UnimplementedAutofillServiceServer) mustEmbedUnimplementedAutofillServiceServer() {}
 func (UnimplementedAutofillServiceServer) testEmbeddedByValue()                         {}
@@ -214,6 +241,17 @@ func _AutofillService_SetAddresses_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
+func _AutofillService_SubscribeEvents_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(SubscribeAutofillEventsRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(AutofillServiceServer).SubscribeEvents(m, &grpc.GenericServerStream[SubscribeAutofillEventsRequest, AutofillEvent]{ServerStream: stream})
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type AutofillService_SubscribeEventsServer = grpc.ServerStreamingServer[AutofillEvent]
+
 // AutofillService_ServiceDesc is the grpc.ServiceDesc for AutofillService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -238,6 +276,12 @@ var AutofillService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _AutofillService_SetAddresses_Handler,
 		},
 	},
-	Streams:  []grpc.StreamDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "SubscribeEvents",
+			Handler:       _AutofillService_SubscribeEvents_Handler,
+			ServerStreams: true,
+		},
+	},
 	Metadata: "proto/cdp/autofill/autofill.proto",
 }

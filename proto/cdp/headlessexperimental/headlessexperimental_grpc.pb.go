@@ -19,9 +19,10 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	HeadlessExperimentalService_Enable_FullMethodName     = "/cdp.headlessexperimental.HeadlessExperimentalService/Enable"
-	HeadlessExperimentalService_Disable_FullMethodName    = "/cdp.headlessexperimental.HeadlessExperimentalService/Disable"
-	HeadlessExperimentalService_BeginFrame_FullMethodName = "/cdp.headlessexperimental.HeadlessExperimentalService/BeginFrame"
+	HeadlessExperimentalService_Enable_FullMethodName          = "/cdp.headlessexperimental.HeadlessExperimentalService/Enable"
+	HeadlessExperimentalService_Disable_FullMethodName         = "/cdp.headlessexperimental.HeadlessExperimentalService/Disable"
+	HeadlessExperimentalService_BeginFrame_FullMethodName      = "/cdp.headlessexperimental.HeadlessExperimentalService/BeginFrame"
+	HeadlessExperimentalService_SubscribeEvents_FullMethodName = "/cdp.headlessexperimental.HeadlessExperimentalService/SubscribeEvents"
 )
 
 // HeadlessExperimentalServiceClient is the client API for HeadlessExperimentalService service.
@@ -34,6 +35,8 @@ type HeadlessExperimentalServiceClient interface {
 	Disable(ctx context.Context, in *DisableRequest, opts ...grpc.CallOption) (*DisableResponse, error)
 	// Sends a BeginFrame to the target and returns when the frame was completed.
 	BeginFrame(ctx context.Context, in *BeginFrameRequest, opts ...grpc.CallOption) (*BeginFrameResponse, error)
+	// Subscribe to HeadlessExperimental domain events.
+	SubscribeEvents(ctx context.Context, in *SubscribeHeadlessExperimentalEventsRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[HeadlessExperimentalEvent], error)
 }
 
 type headlessExperimentalServiceClient struct {
@@ -74,6 +77,25 @@ func (c *headlessExperimentalServiceClient) BeginFrame(ctx context.Context, in *
 	return out, nil
 }
 
+func (c *headlessExperimentalServiceClient) SubscribeEvents(ctx context.Context, in *SubscribeHeadlessExperimentalEventsRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[HeadlessExperimentalEvent], error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	stream, err := c.cc.NewStream(ctx, &HeadlessExperimentalService_ServiceDesc.Streams[0], HeadlessExperimentalService_SubscribeEvents_FullMethodName, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &grpc.GenericClientStream[SubscribeHeadlessExperimentalEventsRequest, HeadlessExperimentalEvent]{ClientStream: stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type HeadlessExperimentalService_SubscribeEventsClient = grpc.ServerStreamingClient[HeadlessExperimentalEvent]
+
 // HeadlessExperimentalServiceServer is the server API for HeadlessExperimentalService service.
 // All implementations must embed UnimplementedHeadlessExperimentalServiceServer
 // for forward compatibility.
@@ -84,6 +106,8 @@ type HeadlessExperimentalServiceServer interface {
 	Disable(context.Context, *DisableRequest) (*DisableResponse, error)
 	// Sends a BeginFrame to the target and returns when the frame was completed.
 	BeginFrame(context.Context, *BeginFrameRequest) (*BeginFrameResponse, error)
+	// Subscribe to HeadlessExperimental domain events.
+	SubscribeEvents(*SubscribeHeadlessExperimentalEventsRequest, grpc.ServerStreamingServer[HeadlessExperimentalEvent]) error
 	mustEmbedUnimplementedHeadlessExperimentalServiceServer()
 }
 
@@ -102,6 +126,9 @@ func (UnimplementedHeadlessExperimentalServiceServer) Disable(context.Context, *
 }
 func (UnimplementedHeadlessExperimentalServiceServer) BeginFrame(context.Context, *BeginFrameRequest) (*BeginFrameResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method BeginFrame not implemented")
+}
+func (UnimplementedHeadlessExperimentalServiceServer) SubscribeEvents(*SubscribeHeadlessExperimentalEventsRequest, grpc.ServerStreamingServer[HeadlessExperimentalEvent]) error {
+	return status.Errorf(codes.Unimplemented, "method SubscribeEvents not implemented")
 }
 func (UnimplementedHeadlessExperimentalServiceServer) mustEmbedUnimplementedHeadlessExperimentalServiceServer() {
 }
@@ -179,6 +206,17 @@ func _HeadlessExperimentalService_BeginFrame_Handler(srv interface{}, ctx contex
 	return interceptor(ctx, in, info, handler)
 }
 
+func _HeadlessExperimentalService_SubscribeEvents_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(SubscribeHeadlessExperimentalEventsRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(HeadlessExperimentalServiceServer).SubscribeEvents(m, &grpc.GenericServerStream[SubscribeHeadlessExperimentalEventsRequest, HeadlessExperimentalEvent]{ServerStream: stream})
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type HeadlessExperimentalService_SubscribeEventsServer = grpc.ServerStreamingServer[HeadlessExperimentalEvent]
+
 // HeadlessExperimentalService_ServiceDesc is the grpc.ServiceDesc for HeadlessExperimentalService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -199,6 +237,12 @@ var HeadlessExperimentalService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _HeadlessExperimentalService_BeginFrame_Handler,
 		},
 	},
-	Streams:  []grpc.StreamDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "SubscribeEvents",
+			Handler:       _HeadlessExperimentalService_SubscribeEvents_Handler,
+			ServerStreams: true,
+		},
+	},
 	Metadata: "proto/cdp/headlessexperimental/headlessexperimental.proto",
 }

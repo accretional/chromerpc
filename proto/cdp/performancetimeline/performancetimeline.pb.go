@@ -101,6 +101,448 @@ func (*EnableResponse) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_performancetimeline_performancetimeline_proto_rawDescGZIP(), []int{1}
 }
 
+type SubscribePerformanceTimelineEventsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,1,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SubscribePerformanceTimelineEventsRequest) Reset() {
+	*x = SubscribePerformanceTimelineEventsRequest{}
+	mi := &file_proto_cdp_performancetimeline_performancetimeline_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SubscribePerformanceTimelineEventsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SubscribePerformanceTimelineEventsRequest) ProtoMessage() {}
+
+func (x *SubscribePerformanceTimelineEventsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_performancetimeline_performancetimeline_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SubscribePerformanceTimelineEventsRequest.ProtoReflect.Descriptor instead.
+func (*SubscribePerformanceTimelineEventsRequest) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_performancetimeline_performancetimeline_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *SubscribePerformanceTimelineEventsRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
+type PerformanceTimelineEvent struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Types that are valid to be assigned to Event:
+	//
+	//	*PerformanceTimelineEvent_TimelineEventAdded
+	Event         isPerformanceTimelineEvent_Event `protobuf_oneof:"event"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *PerformanceTimelineEvent) Reset() {
+	*x = PerformanceTimelineEvent{}
+	mi := &file_proto_cdp_performancetimeline_performancetimeline_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PerformanceTimelineEvent) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PerformanceTimelineEvent) ProtoMessage() {}
+
+func (x *PerformanceTimelineEvent) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_performancetimeline_performancetimeline_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PerformanceTimelineEvent.ProtoReflect.Descriptor instead.
+func (*PerformanceTimelineEvent) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_performancetimeline_performancetimeline_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *PerformanceTimelineEvent) GetEvent() isPerformanceTimelineEvent_Event {
+	if x != nil {
+		return x.Event
+	}
+	return nil
+}
+
+func (x *PerformanceTimelineEvent) GetTimelineEventAdded() *TimelineEventAddedEvent {
+	if x != nil {
+		if x, ok := x.Event.(*PerformanceTimelineEvent_TimelineEventAdded); ok {
+			return x.TimelineEventAdded
+		}
+	}
+	return nil
+}
+
+type isPerformanceTimelineEvent_Event interface {
+	isPerformanceTimelineEvent_Event()
+}
+
+type PerformanceTimelineEvent_TimelineEventAdded struct {
+	TimelineEventAdded *TimelineEventAddedEvent `protobuf:"bytes,1,opt,name=timeline_event_added,json=timelineEventAdded,proto3,oneof"`
+}
+
+func (*PerformanceTimelineEvent_TimelineEventAdded) isPerformanceTimelineEvent_Event() {}
+
+type TimelineEventAddedEvent struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Event         *TimelineEvent         `protobuf:"bytes,1,opt,name=event,proto3" json:"event,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *TimelineEventAddedEvent) Reset() {
+	*x = TimelineEventAddedEvent{}
+	mi := &file_proto_cdp_performancetimeline_performancetimeline_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *TimelineEventAddedEvent) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*TimelineEventAddedEvent) ProtoMessage() {}
+
+func (x *TimelineEventAddedEvent) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_performancetimeline_performancetimeline_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use TimelineEventAddedEvent.ProtoReflect.Descriptor instead.
+func (*TimelineEventAddedEvent) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_performancetimeline_performancetimeline_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *TimelineEventAddedEvent) GetEvent() *TimelineEvent {
+	if x != nil {
+		return x.Event
+	}
+	return nil
+}
+
+type TimelineEvent struct {
+	state              protoimpl.MessageState  `protogen:"open.v1"`
+	FrameId            string                  `protobuf:"bytes,1,opt,name=frame_id,json=frameId,proto3" json:"frame_id,omitempty"`
+	Type               string                  `protobuf:"bytes,2,opt,name=type,proto3" json:"type,omitempty"`
+	Name               string                  `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
+	Time               float64                 `protobuf:"fixed64,4,opt,name=time,proto3" json:"time,omitempty"`
+	Duration           float64                 `protobuf:"fixed64,5,opt,name=duration,proto3" json:"duration,omitempty"`
+	LcpDetails         *LargestContentfulPaint `protobuf:"bytes,6,opt,name=lcp_details,json=lcpDetails,proto3" json:"lcp_details,omitempty"`
+	LayoutShiftDetails *LayoutShift            `protobuf:"bytes,7,opt,name=layout_shift_details,json=layoutShiftDetails,proto3" json:"layout_shift_details,omitempty"`
+	unknownFields      protoimpl.UnknownFields
+	sizeCache          protoimpl.SizeCache
+}
+
+func (x *TimelineEvent) Reset() {
+	*x = TimelineEvent{}
+	mi := &file_proto_cdp_performancetimeline_performancetimeline_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *TimelineEvent) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*TimelineEvent) ProtoMessage() {}
+
+func (x *TimelineEvent) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_performancetimeline_performancetimeline_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use TimelineEvent.ProtoReflect.Descriptor instead.
+func (*TimelineEvent) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_performancetimeline_performancetimeline_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *TimelineEvent) GetFrameId() string {
+	if x != nil {
+		return x.FrameId
+	}
+	return ""
+}
+
+func (x *TimelineEvent) GetType() string {
+	if x != nil {
+		return x.Type
+	}
+	return ""
+}
+
+func (x *TimelineEvent) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *TimelineEvent) GetTime() float64 {
+	if x != nil {
+		return x.Time
+	}
+	return 0
+}
+
+func (x *TimelineEvent) GetDuration() float64 {
+	if x != nil {
+		return x.Duration
+	}
+	return 0
+}
+
+func (x *TimelineEvent) GetLcpDetails() *LargestContentfulPaint {
+	if x != nil {
+		return x.LcpDetails
+	}
+	return nil
+}
+
+func (x *TimelineEvent) GetLayoutShiftDetails() *LayoutShift {
+	if x != nil {
+		return x.LayoutShiftDetails
+	}
+	return nil
+}
+
+type LargestContentfulPaint struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	RenderTime    float64                `protobuf:"fixed64,1,opt,name=render_time,json=renderTime,proto3" json:"render_time,omitempty"`
+	LoadTime      float64                `protobuf:"fixed64,2,opt,name=load_time,json=loadTime,proto3" json:"load_time,omitempty"`
+	Size          float64                `protobuf:"fixed64,3,opt,name=size,proto3" json:"size,omitempty"`
+	ElementId     string                 `protobuf:"bytes,4,opt,name=element_id,json=elementId,proto3" json:"element_id,omitempty"`
+	Url           string                 `protobuf:"bytes,5,opt,name=url,proto3" json:"url,omitempty"`
+	NodeId        int32                  `protobuf:"varint,6,opt,name=node_id,json=nodeId,proto3" json:"node_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *LargestContentfulPaint) Reset() {
+	*x = LargestContentfulPaint{}
+	mi := &file_proto_cdp_performancetimeline_performancetimeline_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *LargestContentfulPaint) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*LargestContentfulPaint) ProtoMessage() {}
+
+func (x *LargestContentfulPaint) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_performancetimeline_performancetimeline_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use LargestContentfulPaint.ProtoReflect.Descriptor instead.
+func (*LargestContentfulPaint) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_performancetimeline_performancetimeline_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *LargestContentfulPaint) GetRenderTime() float64 {
+	if x != nil {
+		return x.RenderTime
+	}
+	return 0
+}
+
+func (x *LargestContentfulPaint) GetLoadTime() float64 {
+	if x != nil {
+		return x.LoadTime
+	}
+	return 0
+}
+
+func (x *LargestContentfulPaint) GetSize() float64 {
+	if x != nil {
+		return x.Size
+	}
+	return 0
+}
+
+func (x *LargestContentfulPaint) GetElementId() string {
+	if x != nil {
+		return x.ElementId
+	}
+	return ""
+}
+
+func (x *LargestContentfulPaint) GetUrl() string {
+	if x != nil {
+		return x.Url
+	}
+	return ""
+}
+
+func (x *LargestContentfulPaint) GetNodeId() int32 {
+	if x != nil {
+		return x.NodeId
+	}
+	return 0
+}
+
+type LayoutShift struct {
+	state          protoimpl.MessageState    `protogen:"open.v1"`
+	Value          float64                   `protobuf:"fixed64,1,opt,name=value,proto3" json:"value,omitempty"`
+	HadRecentInput bool                      `protobuf:"varint,2,opt,name=had_recent_input,json=hadRecentInput,proto3" json:"had_recent_input,omitempty"`
+	LastInputTime  float64                   `protobuf:"fixed64,3,opt,name=last_input_time,json=lastInputTime,proto3" json:"last_input_time,omitempty"`
+	Sources        []*LayoutShiftAttribution `protobuf:"bytes,4,rep,name=sources,proto3" json:"sources,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
+}
+
+func (x *LayoutShift) Reset() {
+	*x = LayoutShift{}
+	mi := &file_proto_cdp_performancetimeline_performancetimeline_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *LayoutShift) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*LayoutShift) ProtoMessage() {}
+
+func (x *LayoutShift) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_performancetimeline_performancetimeline_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use LayoutShift.ProtoReflect.Descriptor instead.
+func (*LayoutShift) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_performancetimeline_performancetimeline_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *LayoutShift) GetValue() float64 {
+	if x != nil {
+		return x.Value
+	}
+	return 0
+}
+
+func (x *LayoutShift) GetHadRecentInput() bool {
+	if x != nil {
+		return x.HadRecentInput
+	}
+	return false
+}
+
+func (x *LayoutShift) GetLastInputTime() float64 {
+	if x != nil {
+		return x.LastInputTime
+	}
+	return 0
+}
+
+func (x *LayoutShift) GetSources() []*LayoutShiftAttribution {
+	if x != nil {
+		return x.Sources
+	}
+	return nil
+}
+
+type LayoutShiftAttribution struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	NodeId        int32                  `protobuf:"varint,1,opt,name=node_id,json=nodeId,proto3" json:"node_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *LayoutShiftAttribution) Reset() {
+	*x = LayoutShiftAttribution{}
+	mi := &file_proto_cdp_performancetimeline_performancetimeline_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *LayoutShiftAttribution) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*LayoutShiftAttribution) ProtoMessage() {}
+
+func (x *LayoutShiftAttribution) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_performancetimeline_performancetimeline_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use LayoutShiftAttribution.ProtoReflect.Descriptor instead.
+func (*LayoutShiftAttribution) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_performancetimeline_performancetimeline_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *LayoutShiftAttribution) GetNodeId() int32 {
+	if x != nil {
+		return x.NodeId
+	}
+	return 0
+}
+
 var File_proto_cdp_performancetimeline_performancetimeline_proto protoreflect.FileDescriptor
 
 const file_proto_cdp_performancetimeline_performancetimeline_proto_rawDesc = "" +
@@ -109,9 +551,43 @@ const file_proto_cdp_performancetimeline_performancetimeline_proto_rawDesc = "" 
 	"\rEnableRequest\x12\x1f\n" +
 	"\vevent_types\x18\x01 \x03(\tR\n" +
 	"eventTypes\"\x10\n" +
-	"\x0eEnableResponse2w\n" +
+	"\x0eEnableResponse\"J\n" +
+	")SubscribePerformanceTimelineEventsRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18\x01 \x01(\tR\tsessionId\"\x89\x01\n" +
+	"\x18PerformanceTimelineEvent\x12d\n" +
+	"\x14timeline_event_added\x18\x01 \x01(\v20.cdp.performancetimeline.TimelineEventAddedEventH\x00R\x12timelineEventAddedB\a\n" +
+	"\x05event\"W\n" +
+	"\x17TimelineEventAddedEvent\x12<\n" +
+	"\x05event\x18\x01 \x01(\v2&.cdp.performancetimeline.TimelineEventR\x05event\"\xac\x02\n" +
+	"\rTimelineEvent\x12\x19\n" +
+	"\bframe_id\x18\x01 \x01(\tR\aframeId\x12\x12\n" +
+	"\x04type\x18\x02 \x01(\tR\x04type\x12\x12\n" +
+	"\x04name\x18\x03 \x01(\tR\x04name\x12\x12\n" +
+	"\x04time\x18\x04 \x01(\x01R\x04time\x12\x1a\n" +
+	"\bduration\x18\x05 \x01(\x01R\bduration\x12P\n" +
+	"\vlcp_details\x18\x06 \x01(\v2/.cdp.performancetimeline.LargestContentfulPaintR\n" +
+	"lcpDetails\x12V\n" +
+	"\x14layout_shift_details\x18\a \x01(\v2$.cdp.performancetimeline.LayoutShiftR\x12layoutShiftDetails\"\xb4\x01\n" +
+	"\x16LargestContentfulPaint\x12\x1f\n" +
+	"\vrender_time\x18\x01 \x01(\x01R\n" +
+	"renderTime\x12\x1b\n" +
+	"\tload_time\x18\x02 \x01(\x01R\bloadTime\x12\x12\n" +
+	"\x04size\x18\x03 \x01(\x01R\x04size\x12\x1d\n" +
+	"\n" +
+	"element_id\x18\x04 \x01(\tR\telementId\x12\x10\n" +
+	"\x03url\x18\x05 \x01(\tR\x03url\x12\x17\n" +
+	"\anode_id\x18\x06 \x01(\x05R\x06nodeId\"\xc0\x01\n" +
+	"\vLayoutShift\x12\x14\n" +
+	"\x05value\x18\x01 \x01(\x01R\x05value\x12(\n" +
+	"\x10had_recent_input\x18\x02 \x01(\bR\x0ehadRecentInput\x12&\n" +
+	"\x0flast_input_time\x18\x03 \x01(\x01R\rlastInputTime\x12I\n" +
+	"\asources\x18\x04 \x03(\v2/.cdp.performancetimeline.LayoutShiftAttributionR\asources\"1\n" +
+	"\x16LayoutShiftAttribution\x12\x17\n" +
+	"\anode_id\x18\x01 \x01(\x05R\x06nodeId2\x84\x02\n" +
 	"\x1aPerformanceTimelineService\x12Y\n" +
-	"\x06Enable\x12&.cdp.performancetimeline.EnableRequest\x1a'.cdp.performancetimeline.EnableResponseB@Z>github.com/accretional/chromerpc/proto/cdp/performancetimelineb\x06proto3"
+	"\x06Enable\x12&.cdp.performancetimeline.EnableRequest\x1a'.cdp.performancetimeline.EnableResponse\x12\x8a\x01\n" +
+	"\x0fSubscribeEvents\x12B.cdp.performancetimeline.SubscribePerformanceTimelineEventsRequest\x1a1.cdp.performancetimeline.PerformanceTimelineEvent0\x01B@Z>github.com/accretional/chromerpc/proto/cdp/performancetimelineb\x06proto3"
 
 var (
 	file_proto_cdp_performancetimeline_performancetimeline_proto_rawDescOnce sync.Once
@@ -125,19 +601,33 @@ func file_proto_cdp_performancetimeline_performancetimeline_proto_rawDescGZIP() 
 	return file_proto_cdp_performancetimeline_performancetimeline_proto_rawDescData
 }
 
-var file_proto_cdp_performancetimeline_performancetimeline_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_proto_cdp_performancetimeline_performancetimeline_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
 var file_proto_cdp_performancetimeline_performancetimeline_proto_goTypes = []any{
-	(*EnableRequest)(nil),  // 0: cdp.performancetimeline.EnableRequest
-	(*EnableResponse)(nil), // 1: cdp.performancetimeline.EnableResponse
+	(*EnableRequest)(nil),                             // 0: cdp.performancetimeline.EnableRequest
+	(*EnableResponse)(nil),                            // 1: cdp.performancetimeline.EnableResponse
+	(*SubscribePerformanceTimelineEventsRequest)(nil), // 2: cdp.performancetimeline.SubscribePerformanceTimelineEventsRequest
+	(*PerformanceTimelineEvent)(nil),                  // 3: cdp.performancetimeline.PerformanceTimelineEvent
+	(*TimelineEventAddedEvent)(nil),                   // 4: cdp.performancetimeline.TimelineEventAddedEvent
+	(*TimelineEvent)(nil),                             // 5: cdp.performancetimeline.TimelineEvent
+	(*LargestContentfulPaint)(nil),                    // 6: cdp.performancetimeline.LargestContentfulPaint
+	(*LayoutShift)(nil),                               // 7: cdp.performancetimeline.LayoutShift
+	(*LayoutShiftAttribution)(nil),                    // 8: cdp.performancetimeline.LayoutShiftAttribution
 }
 var file_proto_cdp_performancetimeline_performancetimeline_proto_depIdxs = []int32{
-	0, // 0: cdp.performancetimeline.PerformanceTimelineService.Enable:input_type -> cdp.performancetimeline.EnableRequest
-	1, // 1: cdp.performancetimeline.PerformanceTimelineService.Enable:output_type -> cdp.performancetimeline.EnableResponse
-	1, // [1:2] is the sub-list for method output_type
-	0, // [0:1] is the sub-list for method input_type
-	0, // [0:0] is the sub-list for extension type_name
-	0, // [0:0] is the sub-list for extension extendee
-	0, // [0:0] is the sub-list for field type_name
+	4, // 0: cdp.performancetimeline.PerformanceTimelineEvent.timeline_event_added:type_name -> cdp.performancetimeline.TimelineEventAddedEvent
+	5, // 1: cdp.performancetimeline.TimelineEventAddedEvent.event:type_name -> cdp.performancetimeline.TimelineEvent
+	6, // 2: cdp.performancetimeline.TimelineEvent.lcp_details:type_name -> cdp.performancetimeline.LargestContentfulPaint
+	7, // 3: cdp.performancetimeline.TimelineEvent.layout_shift_details:type_name -> cdp.performancetimeline.LayoutShift
+	8, // 4: cdp.performancetimeline.LayoutShift.sources:type_name -> cdp.performancetimeline.LayoutShiftAttribution
+	0, // 5: cdp.performancetimeline.PerformanceTimelineService.Enable:input_type -> cdp.performancetimeline.EnableRequest
+	2, // 6: cdp.performancetimeline.PerformanceTimelineService.SubscribeEvents:input_type -> cdp.performancetimeline.SubscribePerformanceTimelineEventsRequest
+	1, // 7: cdp.performancetimeline.PerformanceTimelineService.Enable:output_type -> cdp.performancetimeline.EnableResponse
+	3, // 8: cdp.performancetimeline.PerformanceTimelineService.SubscribeEvents:output_type -> cdp.performancetimeline.PerformanceTimelineEvent
+	7, // [7:9] is the sub-list for method output_type
+	5, // [5:7] is the sub-list for method input_type
+	5, // [5:5] is the sub-list for extension type_name
+	5, // [5:5] is the sub-list for extension extendee
+	0, // [0:5] is the sub-list for field type_name
 }
 
 func init() { file_proto_cdp_performancetimeline_performancetimeline_proto_init() }
@@ -145,13 +635,16 @@ func file_proto_cdp_performancetimeline_performancetimeline_proto_init() {
 	if File_proto_cdp_performancetimeline_performancetimeline_proto != nil {
 		return
 	}
+	file_proto_cdp_performancetimeline_performancetimeline_proto_msgTypes[3].OneofWrappers = []any{
+		(*PerformanceTimelineEvent_TimelineEventAdded)(nil),
+	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_cdp_performancetimeline_performancetimeline_proto_rawDesc), len(file_proto_cdp_performancetimeline_performancetimeline_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   2,
+			NumMessages:   9,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

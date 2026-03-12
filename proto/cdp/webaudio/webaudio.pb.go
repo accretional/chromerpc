@@ -321,6 +321,1016 @@ func (x *GetRealtimeDataResponse) GetRealtimeData() *ContextRealtimeData {
 	return nil
 }
 
+type BaseAudioContext struct {
+	state                 protoimpl.MessageState `protogen:"open.v1"`
+	ContextId             string                 `protobuf:"bytes,1,opt,name=context_id,json=contextId,proto3" json:"context_id,omitempty"`
+	ContextType           string                 `protobuf:"bytes,2,opt,name=context_type,json=contextType,proto3" json:"context_type,omitempty"`
+	ContextState          string                 `protobuf:"bytes,3,opt,name=context_state,json=contextState,proto3" json:"context_state,omitempty"`
+	SampleRate            float32                `protobuf:"fixed32,4,opt,name=sample_rate,json=sampleRate,proto3" json:"sample_rate,omitempty"`
+	CallbackBufferSize    float32                `protobuf:"fixed32,5,opt,name=callback_buffer_size,json=callbackBufferSize,proto3" json:"callback_buffer_size,omitempty"`
+	MaxOutputChannelCount float32                `protobuf:"fixed32,6,opt,name=max_output_channel_count,json=maxOutputChannelCount,proto3" json:"max_output_channel_count,omitempty"`
+	RealtimeData          *ContextRealtimeData   `protobuf:"bytes,7,opt,name=realtime_data,json=realtimeData,proto3" json:"realtime_data,omitempty"`
+	unknownFields         protoimpl.UnknownFields
+	sizeCache             protoimpl.SizeCache
+}
+
+func (x *BaseAudioContext) Reset() {
+	*x = BaseAudioContext{}
+	mi := &file_proto_cdp_webaudio_webaudio_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *BaseAudioContext) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BaseAudioContext) ProtoMessage() {}
+
+func (x *BaseAudioContext) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_webaudio_webaudio_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BaseAudioContext.ProtoReflect.Descriptor instead.
+func (*BaseAudioContext) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_webaudio_webaudio_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *BaseAudioContext) GetContextId() string {
+	if x != nil {
+		return x.ContextId
+	}
+	return ""
+}
+
+func (x *BaseAudioContext) GetContextType() string {
+	if x != nil {
+		return x.ContextType
+	}
+	return ""
+}
+
+func (x *BaseAudioContext) GetContextState() string {
+	if x != nil {
+		return x.ContextState
+	}
+	return ""
+}
+
+func (x *BaseAudioContext) GetSampleRate() float32 {
+	if x != nil {
+		return x.SampleRate
+	}
+	return 0
+}
+
+func (x *BaseAudioContext) GetCallbackBufferSize() float32 {
+	if x != nil {
+		return x.CallbackBufferSize
+	}
+	return 0
+}
+
+func (x *BaseAudioContext) GetMaxOutputChannelCount() float32 {
+	if x != nil {
+		return x.MaxOutputChannelCount
+	}
+	return 0
+}
+
+func (x *BaseAudioContext) GetRealtimeData() *ContextRealtimeData {
+	if x != nil {
+		return x.RealtimeData
+	}
+	return nil
+}
+
+type AudioListener struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	ListenerId    string                 `protobuf:"bytes,1,opt,name=listener_id,json=listenerId,proto3" json:"listener_id,omitempty"`
+	ContextId     string                 `protobuf:"bytes,2,opt,name=context_id,json=contextId,proto3" json:"context_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AudioListener) Reset() {
+	*x = AudioListener{}
+	mi := &file_proto_cdp_webaudio_webaudio_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AudioListener) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AudioListener) ProtoMessage() {}
+
+func (x *AudioListener) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_webaudio_webaudio_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AudioListener.ProtoReflect.Descriptor instead.
+func (*AudioListener) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_webaudio_webaudio_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *AudioListener) GetListenerId() string {
+	if x != nil {
+		return x.ListenerId
+	}
+	return ""
+}
+
+func (x *AudioListener) GetContextId() string {
+	if x != nil {
+		return x.ContextId
+	}
+	return ""
+}
+
+type AudioNode struct {
+	state                 protoimpl.MessageState `protogen:"open.v1"`
+	NodeId                string                 `protobuf:"bytes,1,opt,name=node_id,json=nodeId,proto3" json:"node_id,omitempty"`
+	ContextId             string                 `protobuf:"bytes,2,opt,name=context_id,json=contextId,proto3" json:"context_id,omitempty"`
+	NodeType              string                 `protobuf:"bytes,3,opt,name=node_type,json=nodeType,proto3" json:"node_type,omitempty"`
+	NumberOfInputs        float32                `protobuf:"fixed32,4,opt,name=number_of_inputs,json=numberOfInputs,proto3" json:"number_of_inputs,omitempty"`
+	NumberOfOutputs       float32                `protobuf:"fixed32,5,opt,name=number_of_outputs,json=numberOfOutputs,proto3" json:"number_of_outputs,omitempty"`
+	ChannelCount          float32                `protobuf:"fixed32,6,opt,name=channel_count,json=channelCount,proto3" json:"channel_count,omitempty"`
+	ChannelCountMode      string                 `protobuf:"bytes,7,opt,name=channel_count_mode,json=channelCountMode,proto3" json:"channel_count_mode,omitempty"`
+	ChannelInterpretation string                 `protobuf:"bytes,8,opt,name=channel_interpretation,json=channelInterpretation,proto3" json:"channel_interpretation,omitempty"`
+	unknownFields         protoimpl.UnknownFields
+	sizeCache             protoimpl.SizeCache
+}
+
+func (x *AudioNode) Reset() {
+	*x = AudioNode{}
+	mi := &file_proto_cdp_webaudio_webaudio_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AudioNode) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AudioNode) ProtoMessage() {}
+
+func (x *AudioNode) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_webaudio_webaudio_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AudioNode.ProtoReflect.Descriptor instead.
+func (*AudioNode) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_webaudio_webaudio_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *AudioNode) GetNodeId() string {
+	if x != nil {
+		return x.NodeId
+	}
+	return ""
+}
+
+func (x *AudioNode) GetContextId() string {
+	if x != nil {
+		return x.ContextId
+	}
+	return ""
+}
+
+func (x *AudioNode) GetNodeType() string {
+	if x != nil {
+		return x.NodeType
+	}
+	return ""
+}
+
+func (x *AudioNode) GetNumberOfInputs() float32 {
+	if x != nil {
+		return x.NumberOfInputs
+	}
+	return 0
+}
+
+func (x *AudioNode) GetNumberOfOutputs() float32 {
+	if x != nil {
+		return x.NumberOfOutputs
+	}
+	return 0
+}
+
+func (x *AudioNode) GetChannelCount() float32 {
+	if x != nil {
+		return x.ChannelCount
+	}
+	return 0
+}
+
+func (x *AudioNode) GetChannelCountMode() string {
+	if x != nil {
+		return x.ChannelCountMode
+	}
+	return ""
+}
+
+func (x *AudioNode) GetChannelInterpretation() string {
+	if x != nil {
+		return x.ChannelInterpretation
+	}
+	return ""
+}
+
+type AudioParam struct {
+	state          protoimpl.MessageState `protogen:"open.v1"`
+	ParamId        string                 `protobuf:"bytes,1,opt,name=param_id,json=paramId,proto3" json:"param_id,omitempty"`
+	NodeId         string                 `protobuf:"bytes,2,opt,name=node_id,json=nodeId,proto3" json:"node_id,omitempty"`
+	ContextId      string                 `protobuf:"bytes,3,opt,name=context_id,json=contextId,proto3" json:"context_id,omitempty"`
+	ParamType      string                 `protobuf:"bytes,4,opt,name=param_type,json=paramType,proto3" json:"param_type,omitempty"`
+	AutomationRate string                 `protobuf:"bytes,5,opt,name=automation_rate,json=automationRate,proto3" json:"automation_rate,omitempty"`
+	DefaultValue   float32                `protobuf:"fixed32,6,opt,name=default_value,json=defaultValue,proto3" json:"default_value,omitempty"`
+	MinValue       float32                `protobuf:"fixed32,7,opt,name=min_value,json=minValue,proto3" json:"min_value,omitempty"`
+	MaxValue       float32                `protobuf:"fixed32,8,opt,name=max_value,json=maxValue,proto3" json:"max_value,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
+}
+
+func (x *AudioParam) Reset() {
+	*x = AudioParam{}
+	mi := &file_proto_cdp_webaudio_webaudio_proto_msgTypes[10]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AudioParam) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AudioParam) ProtoMessage() {}
+
+func (x *AudioParam) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_webaudio_webaudio_proto_msgTypes[10]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AudioParam.ProtoReflect.Descriptor instead.
+func (*AudioParam) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_webaudio_webaudio_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *AudioParam) GetParamId() string {
+	if x != nil {
+		return x.ParamId
+	}
+	return ""
+}
+
+func (x *AudioParam) GetNodeId() string {
+	if x != nil {
+		return x.NodeId
+	}
+	return ""
+}
+
+func (x *AudioParam) GetContextId() string {
+	if x != nil {
+		return x.ContextId
+	}
+	return ""
+}
+
+func (x *AudioParam) GetParamType() string {
+	if x != nil {
+		return x.ParamType
+	}
+	return ""
+}
+
+func (x *AudioParam) GetAutomationRate() string {
+	if x != nil {
+		return x.AutomationRate
+	}
+	return ""
+}
+
+func (x *AudioParam) GetDefaultValue() float32 {
+	if x != nil {
+		return x.DefaultValue
+	}
+	return 0
+}
+
+func (x *AudioParam) GetMinValue() float32 {
+	if x != nil {
+		return x.MinValue
+	}
+	return 0
+}
+
+func (x *AudioParam) GetMaxValue() float32 {
+	if x != nil {
+		return x.MaxValue
+	}
+	return 0
+}
+
+type SubscribeWebAudioEventsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,1,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SubscribeWebAudioEventsRequest) Reset() {
+	*x = SubscribeWebAudioEventsRequest{}
+	mi := &file_proto_cdp_webaudio_webaudio_proto_msgTypes[11]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SubscribeWebAudioEventsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SubscribeWebAudioEventsRequest) ProtoMessage() {}
+
+func (x *SubscribeWebAudioEventsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_webaudio_webaudio_proto_msgTypes[11]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SubscribeWebAudioEventsRequest.ProtoReflect.Descriptor instead.
+func (*SubscribeWebAudioEventsRequest) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_webaudio_webaudio_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *SubscribeWebAudioEventsRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
+type WebAudioEvent struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Types that are valid to be assigned to Event:
+	//
+	//	*WebAudioEvent_ContextCreated
+	//	*WebAudioEvent_ContextWillBeDestroyed
+	//	*WebAudioEvent_ContextChanged
+	//	*WebAudioEvent_AudioListenerCreated
+	//	*WebAudioEvent_AudioListenerWillBeDestroyed
+	//	*WebAudioEvent_AudioNodeCreated
+	//	*WebAudioEvent_AudioNodeWillBeDestroyed
+	//	*WebAudioEvent_AudioParamCreated
+	//	*WebAudioEvent_AudioParamWillBeDestroyed
+	Event         isWebAudioEvent_Event `protobuf_oneof:"event"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *WebAudioEvent) Reset() {
+	*x = WebAudioEvent{}
+	mi := &file_proto_cdp_webaudio_webaudio_proto_msgTypes[12]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *WebAudioEvent) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*WebAudioEvent) ProtoMessage() {}
+
+func (x *WebAudioEvent) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_webaudio_webaudio_proto_msgTypes[12]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use WebAudioEvent.ProtoReflect.Descriptor instead.
+func (*WebAudioEvent) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_webaudio_webaudio_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *WebAudioEvent) GetEvent() isWebAudioEvent_Event {
+	if x != nil {
+		return x.Event
+	}
+	return nil
+}
+
+func (x *WebAudioEvent) GetContextCreated() *ContextCreatedEvent {
+	if x != nil {
+		if x, ok := x.Event.(*WebAudioEvent_ContextCreated); ok {
+			return x.ContextCreated
+		}
+	}
+	return nil
+}
+
+func (x *WebAudioEvent) GetContextWillBeDestroyed() *ContextWillBeDestroyedEvent {
+	if x != nil {
+		if x, ok := x.Event.(*WebAudioEvent_ContextWillBeDestroyed); ok {
+			return x.ContextWillBeDestroyed
+		}
+	}
+	return nil
+}
+
+func (x *WebAudioEvent) GetContextChanged() *ContextChangedEvent {
+	if x != nil {
+		if x, ok := x.Event.(*WebAudioEvent_ContextChanged); ok {
+			return x.ContextChanged
+		}
+	}
+	return nil
+}
+
+func (x *WebAudioEvent) GetAudioListenerCreated() *AudioListenerCreatedEvent {
+	if x != nil {
+		if x, ok := x.Event.(*WebAudioEvent_AudioListenerCreated); ok {
+			return x.AudioListenerCreated
+		}
+	}
+	return nil
+}
+
+func (x *WebAudioEvent) GetAudioListenerWillBeDestroyed() *AudioListenerWillBeDestroyedEvent {
+	if x != nil {
+		if x, ok := x.Event.(*WebAudioEvent_AudioListenerWillBeDestroyed); ok {
+			return x.AudioListenerWillBeDestroyed
+		}
+	}
+	return nil
+}
+
+func (x *WebAudioEvent) GetAudioNodeCreated() *AudioNodeCreatedEvent {
+	if x != nil {
+		if x, ok := x.Event.(*WebAudioEvent_AudioNodeCreated); ok {
+			return x.AudioNodeCreated
+		}
+	}
+	return nil
+}
+
+func (x *WebAudioEvent) GetAudioNodeWillBeDestroyed() *AudioNodeWillBeDestroyedEvent {
+	if x != nil {
+		if x, ok := x.Event.(*WebAudioEvent_AudioNodeWillBeDestroyed); ok {
+			return x.AudioNodeWillBeDestroyed
+		}
+	}
+	return nil
+}
+
+func (x *WebAudioEvent) GetAudioParamCreated() *AudioParamCreatedEvent {
+	if x != nil {
+		if x, ok := x.Event.(*WebAudioEvent_AudioParamCreated); ok {
+			return x.AudioParamCreated
+		}
+	}
+	return nil
+}
+
+func (x *WebAudioEvent) GetAudioParamWillBeDestroyed() *AudioParamWillBeDestroyedEvent {
+	if x != nil {
+		if x, ok := x.Event.(*WebAudioEvent_AudioParamWillBeDestroyed); ok {
+			return x.AudioParamWillBeDestroyed
+		}
+	}
+	return nil
+}
+
+type isWebAudioEvent_Event interface {
+	isWebAudioEvent_Event()
+}
+
+type WebAudioEvent_ContextCreated struct {
+	ContextCreated *ContextCreatedEvent `protobuf:"bytes,1,opt,name=context_created,json=contextCreated,proto3,oneof"`
+}
+
+type WebAudioEvent_ContextWillBeDestroyed struct {
+	ContextWillBeDestroyed *ContextWillBeDestroyedEvent `protobuf:"bytes,2,opt,name=context_will_be_destroyed,json=contextWillBeDestroyed,proto3,oneof"`
+}
+
+type WebAudioEvent_ContextChanged struct {
+	ContextChanged *ContextChangedEvent `protobuf:"bytes,3,opt,name=context_changed,json=contextChanged,proto3,oneof"`
+}
+
+type WebAudioEvent_AudioListenerCreated struct {
+	AudioListenerCreated *AudioListenerCreatedEvent `protobuf:"bytes,4,opt,name=audio_listener_created,json=audioListenerCreated,proto3,oneof"`
+}
+
+type WebAudioEvent_AudioListenerWillBeDestroyed struct {
+	AudioListenerWillBeDestroyed *AudioListenerWillBeDestroyedEvent `protobuf:"bytes,5,opt,name=audio_listener_will_be_destroyed,json=audioListenerWillBeDestroyed,proto3,oneof"`
+}
+
+type WebAudioEvent_AudioNodeCreated struct {
+	AudioNodeCreated *AudioNodeCreatedEvent `protobuf:"bytes,6,opt,name=audio_node_created,json=audioNodeCreated,proto3,oneof"`
+}
+
+type WebAudioEvent_AudioNodeWillBeDestroyed struct {
+	AudioNodeWillBeDestroyed *AudioNodeWillBeDestroyedEvent `protobuf:"bytes,7,opt,name=audio_node_will_be_destroyed,json=audioNodeWillBeDestroyed,proto3,oneof"`
+}
+
+type WebAudioEvent_AudioParamCreated struct {
+	AudioParamCreated *AudioParamCreatedEvent `protobuf:"bytes,8,opt,name=audio_param_created,json=audioParamCreated,proto3,oneof"`
+}
+
+type WebAudioEvent_AudioParamWillBeDestroyed struct {
+	AudioParamWillBeDestroyed *AudioParamWillBeDestroyedEvent `protobuf:"bytes,9,opt,name=audio_param_will_be_destroyed,json=audioParamWillBeDestroyed,proto3,oneof"`
+}
+
+func (*WebAudioEvent_ContextCreated) isWebAudioEvent_Event() {}
+
+func (*WebAudioEvent_ContextWillBeDestroyed) isWebAudioEvent_Event() {}
+
+func (*WebAudioEvent_ContextChanged) isWebAudioEvent_Event() {}
+
+func (*WebAudioEvent_AudioListenerCreated) isWebAudioEvent_Event() {}
+
+func (*WebAudioEvent_AudioListenerWillBeDestroyed) isWebAudioEvent_Event() {}
+
+func (*WebAudioEvent_AudioNodeCreated) isWebAudioEvent_Event() {}
+
+func (*WebAudioEvent_AudioNodeWillBeDestroyed) isWebAudioEvent_Event() {}
+
+func (*WebAudioEvent_AudioParamCreated) isWebAudioEvent_Event() {}
+
+func (*WebAudioEvent_AudioParamWillBeDestroyed) isWebAudioEvent_Event() {}
+
+type ContextCreatedEvent struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Context       *BaseAudioContext      `protobuf:"bytes,1,opt,name=context,proto3" json:"context,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ContextCreatedEvent) Reset() {
+	*x = ContextCreatedEvent{}
+	mi := &file_proto_cdp_webaudio_webaudio_proto_msgTypes[13]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ContextCreatedEvent) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ContextCreatedEvent) ProtoMessage() {}
+
+func (x *ContextCreatedEvent) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_webaudio_webaudio_proto_msgTypes[13]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ContextCreatedEvent.ProtoReflect.Descriptor instead.
+func (*ContextCreatedEvent) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_webaudio_webaudio_proto_rawDescGZIP(), []int{13}
+}
+
+func (x *ContextCreatedEvent) GetContext() *BaseAudioContext {
+	if x != nil {
+		return x.Context
+	}
+	return nil
+}
+
+type ContextWillBeDestroyedEvent struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	ContextId     string                 `protobuf:"bytes,1,opt,name=context_id,json=contextId,proto3" json:"context_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ContextWillBeDestroyedEvent) Reset() {
+	*x = ContextWillBeDestroyedEvent{}
+	mi := &file_proto_cdp_webaudio_webaudio_proto_msgTypes[14]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ContextWillBeDestroyedEvent) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ContextWillBeDestroyedEvent) ProtoMessage() {}
+
+func (x *ContextWillBeDestroyedEvent) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_webaudio_webaudio_proto_msgTypes[14]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ContextWillBeDestroyedEvent.ProtoReflect.Descriptor instead.
+func (*ContextWillBeDestroyedEvent) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_webaudio_webaudio_proto_rawDescGZIP(), []int{14}
+}
+
+func (x *ContextWillBeDestroyedEvent) GetContextId() string {
+	if x != nil {
+		return x.ContextId
+	}
+	return ""
+}
+
+type ContextChangedEvent struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Context       *BaseAudioContext      `protobuf:"bytes,1,opt,name=context,proto3" json:"context,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ContextChangedEvent) Reset() {
+	*x = ContextChangedEvent{}
+	mi := &file_proto_cdp_webaudio_webaudio_proto_msgTypes[15]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ContextChangedEvent) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ContextChangedEvent) ProtoMessage() {}
+
+func (x *ContextChangedEvent) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_webaudio_webaudio_proto_msgTypes[15]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ContextChangedEvent.ProtoReflect.Descriptor instead.
+func (*ContextChangedEvent) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_webaudio_webaudio_proto_rawDescGZIP(), []int{15}
+}
+
+func (x *ContextChangedEvent) GetContext() *BaseAudioContext {
+	if x != nil {
+		return x.Context
+	}
+	return nil
+}
+
+type AudioListenerCreatedEvent struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Listener      *AudioListener         `protobuf:"bytes,1,opt,name=listener,proto3" json:"listener,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AudioListenerCreatedEvent) Reset() {
+	*x = AudioListenerCreatedEvent{}
+	mi := &file_proto_cdp_webaudio_webaudio_proto_msgTypes[16]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AudioListenerCreatedEvent) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AudioListenerCreatedEvent) ProtoMessage() {}
+
+func (x *AudioListenerCreatedEvent) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_webaudio_webaudio_proto_msgTypes[16]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AudioListenerCreatedEvent.ProtoReflect.Descriptor instead.
+func (*AudioListenerCreatedEvent) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_webaudio_webaudio_proto_rawDescGZIP(), []int{16}
+}
+
+func (x *AudioListenerCreatedEvent) GetListener() *AudioListener {
+	if x != nil {
+		return x.Listener
+	}
+	return nil
+}
+
+type AudioListenerWillBeDestroyedEvent struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	ContextId     string                 `protobuf:"bytes,1,opt,name=context_id,json=contextId,proto3" json:"context_id,omitempty"`
+	ListenerId    string                 `protobuf:"bytes,2,opt,name=listener_id,json=listenerId,proto3" json:"listener_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AudioListenerWillBeDestroyedEvent) Reset() {
+	*x = AudioListenerWillBeDestroyedEvent{}
+	mi := &file_proto_cdp_webaudio_webaudio_proto_msgTypes[17]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AudioListenerWillBeDestroyedEvent) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AudioListenerWillBeDestroyedEvent) ProtoMessage() {}
+
+func (x *AudioListenerWillBeDestroyedEvent) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_webaudio_webaudio_proto_msgTypes[17]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AudioListenerWillBeDestroyedEvent.ProtoReflect.Descriptor instead.
+func (*AudioListenerWillBeDestroyedEvent) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_webaudio_webaudio_proto_rawDescGZIP(), []int{17}
+}
+
+func (x *AudioListenerWillBeDestroyedEvent) GetContextId() string {
+	if x != nil {
+		return x.ContextId
+	}
+	return ""
+}
+
+func (x *AudioListenerWillBeDestroyedEvent) GetListenerId() string {
+	if x != nil {
+		return x.ListenerId
+	}
+	return ""
+}
+
+type AudioNodeCreatedEvent struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Node          *AudioNode             `protobuf:"bytes,1,opt,name=node,proto3" json:"node,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AudioNodeCreatedEvent) Reset() {
+	*x = AudioNodeCreatedEvent{}
+	mi := &file_proto_cdp_webaudio_webaudio_proto_msgTypes[18]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AudioNodeCreatedEvent) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AudioNodeCreatedEvent) ProtoMessage() {}
+
+func (x *AudioNodeCreatedEvent) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_webaudio_webaudio_proto_msgTypes[18]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AudioNodeCreatedEvent.ProtoReflect.Descriptor instead.
+func (*AudioNodeCreatedEvent) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_webaudio_webaudio_proto_rawDescGZIP(), []int{18}
+}
+
+func (x *AudioNodeCreatedEvent) GetNode() *AudioNode {
+	if x != nil {
+		return x.Node
+	}
+	return nil
+}
+
+type AudioNodeWillBeDestroyedEvent struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	ContextId     string                 `protobuf:"bytes,1,opt,name=context_id,json=contextId,proto3" json:"context_id,omitempty"`
+	NodeId        string                 `protobuf:"bytes,2,opt,name=node_id,json=nodeId,proto3" json:"node_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AudioNodeWillBeDestroyedEvent) Reset() {
+	*x = AudioNodeWillBeDestroyedEvent{}
+	mi := &file_proto_cdp_webaudio_webaudio_proto_msgTypes[19]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AudioNodeWillBeDestroyedEvent) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AudioNodeWillBeDestroyedEvent) ProtoMessage() {}
+
+func (x *AudioNodeWillBeDestroyedEvent) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_webaudio_webaudio_proto_msgTypes[19]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AudioNodeWillBeDestroyedEvent.ProtoReflect.Descriptor instead.
+func (*AudioNodeWillBeDestroyedEvent) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_webaudio_webaudio_proto_rawDescGZIP(), []int{19}
+}
+
+func (x *AudioNodeWillBeDestroyedEvent) GetContextId() string {
+	if x != nil {
+		return x.ContextId
+	}
+	return ""
+}
+
+func (x *AudioNodeWillBeDestroyedEvent) GetNodeId() string {
+	if x != nil {
+		return x.NodeId
+	}
+	return ""
+}
+
+type AudioParamCreatedEvent struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Param         *AudioParam            `protobuf:"bytes,1,opt,name=param,proto3" json:"param,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AudioParamCreatedEvent) Reset() {
+	*x = AudioParamCreatedEvent{}
+	mi := &file_proto_cdp_webaudio_webaudio_proto_msgTypes[20]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AudioParamCreatedEvent) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AudioParamCreatedEvent) ProtoMessage() {}
+
+func (x *AudioParamCreatedEvent) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_webaudio_webaudio_proto_msgTypes[20]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AudioParamCreatedEvent.ProtoReflect.Descriptor instead.
+func (*AudioParamCreatedEvent) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_webaudio_webaudio_proto_rawDescGZIP(), []int{20}
+}
+
+func (x *AudioParamCreatedEvent) GetParam() *AudioParam {
+	if x != nil {
+		return x.Param
+	}
+	return nil
+}
+
+type AudioParamWillBeDestroyedEvent struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	ContextId     string                 `protobuf:"bytes,1,opt,name=context_id,json=contextId,proto3" json:"context_id,omitempty"`
+	NodeId        string                 `protobuf:"bytes,2,opt,name=node_id,json=nodeId,proto3" json:"node_id,omitempty"`
+	ParamId       string                 `protobuf:"bytes,3,opt,name=param_id,json=paramId,proto3" json:"param_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AudioParamWillBeDestroyedEvent) Reset() {
+	*x = AudioParamWillBeDestroyedEvent{}
+	mi := &file_proto_cdp_webaudio_webaudio_proto_msgTypes[21]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AudioParamWillBeDestroyedEvent) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AudioParamWillBeDestroyedEvent) ProtoMessage() {}
+
+func (x *AudioParamWillBeDestroyedEvent) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_webaudio_webaudio_proto_msgTypes[21]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AudioParamWillBeDestroyedEvent.ProtoReflect.Descriptor instead.
+func (*AudioParamWillBeDestroyedEvent) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_webaudio_webaudio_proto_rawDescGZIP(), []int{21}
+}
+
+func (x *AudioParamWillBeDestroyedEvent) GetContextId() string {
+	if x != nil {
+		return x.ContextId
+	}
+	return ""
+}
+
+func (x *AudioParamWillBeDestroyedEvent) GetNodeId() string {
+	if x != nil {
+		return x.NodeId
+	}
+	return ""
+}
+
+func (x *AudioParamWillBeDestroyedEvent) GetParamId() string {
+	if x != nil {
+		return x.ParamId
+	}
+	return ""
+}
+
 var File_proto_cdp_webaudio_webaudio_proto protoreflect.FileDescriptor
 
 const file_proto_cdp_webaudio_webaudio_proto_rawDesc = "" +
@@ -339,11 +1349,90 @@ const file_proto_cdp_webaudio_webaudio_proto_rawDesc = "" +
 	"\n" +
 	"context_id\x18\x01 \x01(\tR\tcontextId\"a\n" +
 	"\x17GetRealtimeDataResponse\x12F\n" +
-	"\rrealtime_data\x18\x01 \x01(\v2!.cdp.webaudio.ContextRealtimeDataR\frealtimeData2\xfe\x01\n" +
+	"\rrealtime_data\x18\x01 \x01(\v2!.cdp.webaudio.ContextRealtimeDataR\frealtimeData\"\xcd\x02\n" +
+	"\x10BaseAudioContext\x12\x1d\n" +
+	"\n" +
+	"context_id\x18\x01 \x01(\tR\tcontextId\x12!\n" +
+	"\fcontext_type\x18\x02 \x01(\tR\vcontextType\x12#\n" +
+	"\rcontext_state\x18\x03 \x01(\tR\fcontextState\x12\x1f\n" +
+	"\vsample_rate\x18\x04 \x01(\x02R\n" +
+	"sampleRate\x120\n" +
+	"\x14callback_buffer_size\x18\x05 \x01(\x02R\x12callbackBufferSize\x127\n" +
+	"\x18max_output_channel_count\x18\x06 \x01(\x02R\x15maxOutputChannelCount\x12F\n" +
+	"\rrealtime_data\x18\a \x01(\v2!.cdp.webaudio.ContextRealtimeDataR\frealtimeData\"O\n" +
+	"\rAudioListener\x12\x1f\n" +
+	"\vlistener_id\x18\x01 \x01(\tR\n" +
+	"listenerId\x12\x1d\n" +
+	"\n" +
+	"context_id\x18\x02 \x01(\tR\tcontextId\"\xc0\x02\n" +
+	"\tAudioNode\x12\x17\n" +
+	"\anode_id\x18\x01 \x01(\tR\x06nodeId\x12\x1d\n" +
+	"\n" +
+	"context_id\x18\x02 \x01(\tR\tcontextId\x12\x1b\n" +
+	"\tnode_type\x18\x03 \x01(\tR\bnodeType\x12(\n" +
+	"\x10number_of_inputs\x18\x04 \x01(\x02R\x0enumberOfInputs\x12*\n" +
+	"\x11number_of_outputs\x18\x05 \x01(\x02R\x0fnumberOfOutputs\x12#\n" +
+	"\rchannel_count\x18\x06 \x01(\x02R\fchannelCount\x12,\n" +
+	"\x12channel_count_mode\x18\a \x01(\tR\x10channelCountMode\x125\n" +
+	"\x16channel_interpretation\x18\b \x01(\tR\x15channelInterpretation\"\x86\x02\n" +
+	"\n" +
+	"AudioParam\x12\x19\n" +
+	"\bparam_id\x18\x01 \x01(\tR\aparamId\x12\x17\n" +
+	"\anode_id\x18\x02 \x01(\tR\x06nodeId\x12\x1d\n" +
+	"\n" +
+	"context_id\x18\x03 \x01(\tR\tcontextId\x12\x1d\n" +
+	"\n" +
+	"param_type\x18\x04 \x01(\tR\tparamType\x12'\n" +
+	"\x0fautomation_rate\x18\x05 \x01(\tR\x0eautomationRate\x12#\n" +
+	"\rdefault_value\x18\x06 \x01(\x02R\fdefaultValue\x12\x1b\n" +
+	"\tmin_value\x18\a \x01(\x02R\bminValue\x12\x1b\n" +
+	"\tmax_value\x18\b \x01(\x02R\bmaxValue\"?\n" +
+	"\x1eSubscribeWebAudioEventsRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18\x01 \x01(\tR\tsessionId\"\x86\a\n" +
+	"\rWebAudioEvent\x12L\n" +
+	"\x0fcontext_created\x18\x01 \x01(\v2!.cdp.webaudio.ContextCreatedEventH\x00R\x0econtextCreated\x12f\n" +
+	"\x19context_will_be_destroyed\x18\x02 \x01(\v2).cdp.webaudio.ContextWillBeDestroyedEventH\x00R\x16contextWillBeDestroyed\x12L\n" +
+	"\x0fcontext_changed\x18\x03 \x01(\v2!.cdp.webaudio.ContextChangedEventH\x00R\x0econtextChanged\x12_\n" +
+	"\x16audio_listener_created\x18\x04 \x01(\v2'.cdp.webaudio.AudioListenerCreatedEventH\x00R\x14audioListenerCreated\x12y\n" +
+	" audio_listener_will_be_destroyed\x18\x05 \x01(\v2/.cdp.webaudio.AudioListenerWillBeDestroyedEventH\x00R\x1caudioListenerWillBeDestroyed\x12S\n" +
+	"\x12audio_node_created\x18\x06 \x01(\v2#.cdp.webaudio.AudioNodeCreatedEventH\x00R\x10audioNodeCreated\x12m\n" +
+	"\x1caudio_node_will_be_destroyed\x18\a \x01(\v2+.cdp.webaudio.AudioNodeWillBeDestroyedEventH\x00R\x18audioNodeWillBeDestroyed\x12V\n" +
+	"\x13audio_param_created\x18\b \x01(\v2$.cdp.webaudio.AudioParamCreatedEventH\x00R\x11audioParamCreated\x12p\n" +
+	"\x1daudio_param_will_be_destroyed\x18\t \x01(\v2,.cdp.webaudio.AudioParamWillBeDestroyedEventH\x00R\x19audioParamWillBeDestroyedB\a\n" +
+	"\x05event\"O\n" +
+	"\x13ContextCreatedEvent\x128\n" +
+	"\acontext\x18\x01 \x01(\v2\x1e.cdp.webaudio.BaseAudioContextR\acontext\"<\n" +
+	"\x1bContextWillBeDestroyedEvent\x12\x1d\n" +
+	"\n" +
+	"context_id\x18\x01 \x01(\tR\tcontextId\"O\n" +
+	"\x13ContextChangedEvent\x128\n" +
+	"\acontext\x18\x01 \x01(\v2\x1e.cdp.webaudio.BaseAudioContextR\acontext\"T\n" +
+	"\x19AudioListenerCreatedEvent\x127\n" +
+	"\blistener\x18\x01 \x01(\v2\x1b.cdp.webaudio.AudioListenerR\blistener\"c\n" +
+	"!AudioListenerWillBeDestroyedEvent\x12\x1d\n" +
+	"\n" +
+	"context_id\x18\x01 \x01(\tR\tcontextId\x12\x1f\n" +
+	"\vlistener_id\x18\x02 \x01(\tR\n" +
+	"listenerId\"D\n" +
+	"\x15AudioNodeCreatedEvent\x12+\n" +
+	"\x04node\x18\x01 \x01(\v2\x17.cdp.webaudio.AudioNodeR\x04node\"W\n" +
+	"\x1dAudioNodeWillBeDestroyedEvent\x12\x1d\n" +
+	"\n" +
+	"context_id\x18\x01 \x01(\tR\tcontextId\x12\x17\n" +
+	"\anode_id\x18\x02 \x01(\tR\x06nodeId\"H\n" +
+	"\x16AudioParamCreatedEvent\x12.\n" +
+	"\x05param\x18\x01 \x01(\v2\x18.cdp.webaudio.AudioParamR\x05param\"s\n" +
+	"\x1eAudioParamWillBeDestroyedEvent\x12\x1d\n" +
+	"\n" +
+	"context_id\x18\x01 \x01(\tR\tcontextId\x12\x17\n" +
+	"\anode_id\x18\x02 \x01(\tR\x06nodeId\x12\x19\n" +
+	"\bparam_id\x18\x03 \x01(\tR\aparamId2\xde\x02\n" +
 	"\x0fWebAudioService\x12C\n" +
 	"\x06Enable\x12\x1b.cdp.webaudio.EnableRequest\x1a\x1c.cdp.webaudio.EnableResponse\x12F\n" +
 	"\aDisable\x12\x1c.cdp.webaudio.DisableRequest\x1a\x1d.cdp.webaudio.DisableResponse\x12^\n" +
-	"\x0fGetRealtimeData\x12$.cdp.webaudio.GetRealtimeDataRequest\x1a%.cdp.webaudio.GetRealtimeDataResponseB5Z3github.com/accretional/chromerpc/proto/cdp/webaudiob\x06proto3"
+	"\x0fGetRealtimeData\x12$.cdp.webaudio.GetRealtimeDataRequest\x1a%.cdp.webaudio.GetRealtimeDataResponse\x12^\n" +
+	"\x0fSubscribeEvents\x12,.cdp.webaudio.SubscribeWebAudioEventsRequest\x1a\x1b.cdp.webaudio.WebAudioEvent0\x01B5Z3github.com/accretional/chromerpc/proto/cdp/webaudiob\x06proto3"
 
 var (
 	file_proto_cdp_webaudio_webaudio_proto_rawDescOnce sync.Once
@@ -357,29 +1446,61 @@ func file_proto_cdp_webaudio_webaudio_proto_rawDescGZIP() []byte {
 	return file_proto_cdp_webaudio_webaudio_proto_rawDescData
 }
 
-var file_proto_cdp_webaudio_webaudio_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
+var file_proto_cdp_webaudio_webaudio_proto_msgTypes = make([]protoimpl.MessageInfo, 22)
 var file_proto_cdp_webaudio_webaudio_proto_goTypes = []any{
-	(*ContextRealtimeData)(nil),     // 0: cdp.webaudio.ContextRealtimeData
-	(*EnableRequest)(nil),           // 1: cdp.webaudio.EnableRequest
-	(*EnableResponse)(nil),          // 2: cdp.webaudio.EnableResponse
-	(*DisableRequest)(nil),          // 3: cdp.webaudio.DisableRequest
-	(*DisableResponse)(nil),         // 4: cdp.webaudio.DisableResponse
-	(*GetRealtimeDataRequest)(nil),  // 5: cdp.webaudio.GetRealtimeDataRequest
-	(*GetRealtimeDataResponse)(nil), // 6: cdp.webaudio.GetRealtimeDataResponse
+	(*ContextRealtimeData)(nil),               // 0: cdp.webaudio.ContextRealtimeData
+	(*EnableRequest)(nil),                     // 1: cdp.webaudio.EnableRequest
+	(*EnableResponse)(nil),                    // 2: cdp.webaudio.EnableResponse
+	(*DisableRequest)(nil),                    // 3: cdp.webaudio.DisableRequest
+	(*DisableResponse)(nil),                   // 4: cdp.webaudio.DisableResponse
+	(*GetRealtimeDataRequest)(nil),            // 5: cdp.webaudio.GetRealtimeDataRequest
+	(*GetRealtimeDataResponse)(nil),           // 6: cdp.webaudio.GetRealtimeDataResponse
+	(*BaseAudioContext)(nil),                  // 7: cdp.webaudio.BaseAudioContext
+	(*AudioListener)(nil),                     // 8: cdp.webaudio.AudioListener
+	(*AudioNode)(nil),                         // 9: cdp.webaudio.AudioNode
+	(*AudioParam)(nil),                        // 10: cdp.webaudio.AudioParam
+	(*SubscribeWebAudioEventsRequest)(nil),    // 11: cdp.webaudio.SubscribeWebAudioEventsRequest
+	(*WebAudioEvent)(nil),                     // 12: cdp.webaudio.WebAudioEvent
+	(*ContextCreatedEvent)(nil),               // 13: cdp.webaudio.ContextCreatedEvent
+	(*ContextWillBeDestroyedEvent)(nil),       // 14: cdp.webaudio.ContextWillBeDestroyedEvent
+	(*ContextChangedEvent)(nil),               // 15: cdp.webaudio.ContextChangedEvent
+	(*AudioListenerCreatedEvent)(nil),         // 16: cdp.webaudio.AudioListenerCreatedEvent
+	(*AudioListenerWillBeDestroyedEvent)(nil), // 17: cdp.webaudio.AudioListenerWillBeDestroyedEvent
+	(*AudioNodeCreatedEvent)(nil),             // 18: cdp.webaudio.AudioNodeCreatedEvent
+	(*AudioNodeWillBeDestroyedEvent)(nil),     // 19: cdp.webaudio.AudioNodeWillBeDestroyedEvent
+	(*AudioParamCreatedEvent)(nil),            // 20: cdp.webaudio.AudioParamCreatedEvent
+	(*AudioParamWillBeDestroyedEvent)(nil),    // 21: cdp.webaudio.AudioParamWillBeDestroyedEvent
 }
 var file_proto_cdp_webaudio_webaudio_proto_depIdxs = []int32{
-	0, // 0: cdp.webaudio.GetRealtimeDataResponse.realtime_data:type_name -> cdp.webaudio.ContextRealtimeData
-	1, // 1: cdp.webaudio.WebAudioService.Enable:input_type -> cdp.webaudio.EnableRequest
-	3, // 2: cdp.webaudio.WebAudioService.Disable:input_type -> cdp.webaudio.DisableRequest
-	5, // 3: cdp.webaudio.WebAudioService.GetRealtimeData:input_type -> cdp.webaudio.GetRealtimeDataRequest
-	2, // 4: cdp.webaudio.WebAudioService.Enable:output_type -> cdp.webaudio.EnableResponse
-	4, // 5: cdp.webaudio.WebAudioService.Disable:output_type -> cdp.webaudio.DisableResponse
-	6, // 6: cdp.webaudio.WebAudioService.GetRealtimeData:output_type -> cdp.webaudio.GetRealtimeDataResponse
-	4, // [4:7] is the sub-list for method output_type
-	1, // [1:4] is the sub-list for method input_type
-	1, // [1:1] is the sub-list for extension type_name
-	1, // [1:1] is the sub-list for extension extendee
-	0, // [0:1] is the sub-list for field type_name
+	0,  // 0: cdp.webaudio.GetRealtimeDataResponse.realtime_data:type_name -> cdp.webaudio.ContextRealtimeData
+	0,  // 1: cdp.webaudio.BaseAudioContext.realtime_data:type_name -> cdp.webaudio.ContextRealtimeData
+	13, // 2: cdp.webaudio.WebAudioEvent.context_created:type_name -> cdp.webaudio.ContextCreatedEvent
+	14, // 3: cdp.webaudio.WebAudioEvent.context_will_be_destroyed:type_name -> cdp.webaudio.ContextWillBeDestroyedEvent
+	15, // 4: cdp.webaudio.WebAudioEvent.context_changed:type_name -> cdp.webaudio.ContextChangedEvent
+	16, // 5: cdp.webaudio.WebAudioEvent.audio_listener_created:type_name -> cdp.webaudio.AudioListenerCreatedEvent
+	17, // 6: cdp.webaudio.WebAudioEvent.audio_listener_will_be_destroyed:type_name -> cdp.webaudio.AudioListenerWillBeDestroyedEvent
+	18, // 7: cdp.webaudio.WebAudioEvent.audio_node_created:type_name -> cdp.webaudio.AudioNodeCreatedEvent
+	19, // 8: cdp.webaudio.WebAudioEvent.audio_node_will_be_destroyed:type_name -> cdp.webaudio.AudioNodeWillBeDestroyedEvent
+	20, // 9: cdp.webaudio.WebAudioEvent.audio_param_created:type_name -> cdp.webaudio.AudioParamCreatedEvent
+	21, // 10: cdp.webaudio.WebAudioEvent.audio_param_will_be_destroyed:type_name -> cdp.webaudio.AudioParamWillBeDestroyedEvent
+	7,  // 11: cdp.webaudio.ContextCreatedEvent.context:type_name -> cdp.webaudio.BaseAudioContext
+	7,  // 12: cdp.webaudio.ContextChangedEvent.context:type_name -> cdp.webaudio.BaseAudioContext
+	8,  // 13: cdp.webaudio.AudioListenerCreatedEvent.listener:type_name -> cdp.webaudio.AudioListener
+	9,  // 14: cdp.webaudio.AudioNodeCreatedEvent.node:type_name -> cdp.webaudio.AudioNode
+	10, // 15: cdp.webaudio.AudioParamCreatedEvent.param:type_name -> cdp.webaudio.AudioParam
+	1,  // 16: cdp.webaudio.WebAudioService.Enable:input_type -> cdp.webaudio.EnableRequest
+	3,  // 17: cdp.webaudio.WebAudioService.Disable:input_type -> cdp.webaudio.DisableRequest
+	5,  // 18: cdp.webaudio.WebAudioService.GetRealtimeData:input_type -> cdp.webaudio.GetRealtimeDataRequest
+	11, // 19: cdp.webaudio.WebAudioService.SubscribeEvents:input_type -> cdp.webaudio.SubscribeWebAudioEventsRequest
+	2,  // 20: cdp.webaudio.WebAudioService.Enable:output_type -> cdp.webaudio.EnableResponse
+	4,  // 21: cdp.webaudio.WebAudioService.Disable:output_type -> cdp.webaudio.DisableResponse
+	6,  // 22: cdp.webaudio.WebAudioService.GetRealtimeData:output_type -> cdp.webaudio.GetRealtimeDataResponse
+	12, // 23: cdp.webaudio.WebAudioService.SubscribeEvents:output_type -> cdp.webaudio.WebAudioEvent
+	20, // [20:24] is the sub-list for method output_type
+	16, // [16:20] is the sub-list for method input_type
+	16, // [16:16] is the sub-list for extension type_name
+	16, // [16:16] is the sub-list for extension extendee
+	0,  // [0:16] is the sub-list for field type_name
 }
 
 func init() { file_proto_cdp_webaudio_webaudio_proto_init() }
@@ -387,13 +1508,24 @@ func file_proto_cdp_webaudio_webaudio_proto_init() {
 	if File_proto_cdp_webaudio_webaudio_proto != nil {
 		return
 	}
+	file_proto_cdp_webaudio_webaudio_proto_msgTypes[12].OneofWrappers = []any{
+		(*WebAudioEvent_ContextCreated)(nil),
+		(*WebAudioEvent_ContextWillBeDestroyed)(nil),
+		(*WebAudioEvent_ContextChanged)(nil),
+		(*WebAudioEvent_AudioListenerCreated)(nil),
+		(*WebAudioEvent_AudioListenerWillBeDestroyed)(nil),
+		(*WebAudioEvent_AudioNodeCreated)(nil),
+		(*WebAudioEvent_AudioNodeWillBeDestroyed)(nil),
+		(*WebAudioEvent_AudioParamCreated)(nil),
+		(*WebAudioEvent_AudioParamWillBeDestroyed)(nil),
+	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_cdp_webaudio_webaudio_proto_rawDesc), len(file_proto_cdp_webaudio_webaudio_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   7,
+			NumMessages:   22,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

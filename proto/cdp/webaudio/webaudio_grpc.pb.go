@@ -22,6 +22,7 @@ const (
 	WebAudioService_Enable_FullMethodName          = "/cdp.webaudio.WebAudioService/Enable"
 	WebAudioService_Disable_FullMethodName         = "/cdp.webaudio.WebAudioService/Disable"
 	WebAudioService_GetRealtimeData_FullMethodName = "/cdp.webaudio.WebAudioService/GetRealtimeData"
+	WebAudioService_SubscribeEvents_FullMethodName = "/cdp.webaudio.WebAudioService/SubscribeEvents"
 )
 
 // WebAudioServiceClient is the client API for WebAudioService service.
@@ -34,6 +35,8 @@ type WebAudioServiceClient interface {
 	Disable(ctx context.Context, in *DisableRequest, opts ...grpc.CallOption) (*DisableResponse, error)
 	// Gets the realtime data for the given audio context.
 	GetRealtimeData(ctx context.Context, in *GetRealtimeDataRequest, opts ...grpc.CallOption) (*GetRealtimeDataResponse, error)
+	// Subscribe to WebAudio domain events.
+	SubscribeEvents(ctx context.Context, in *SubscribeWebAudioEventsRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[WebAudioEvent], error)
 }
 
 type webAudioServiceClient struct {
@@ -74,6 +77,25 @@ func (c *webAudioServiceClient) GetRealtimeData(ctx context.Context, in *GetReal
 	return out, nil
 }
 
+func (c *webAudioServiceClient) SubscribeEvents(ctx context.Context, in *SubscribeWebAudioEventsRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[WebAudioEvent], error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	stream, err := c.cc.NewStream(ctx, &WebAudioService_ServiceDesc.Streams[0], WebAudioService_SubscribeEvents_FullMethodName, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &grpc.GenericClientStream[SubscribeWebAudioEventsRequest, WebAudioEvent]{ClientStream: stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type WebAudioService_SubscribeEventsClient = grpc.ServerStreamingClient[WebAudioEvent]
+
 // WebAudioServiceServer is the server API for WebAudioService service.
 // All implementations must embed UnimplementedWebAudioServiceServer
 // for forward compatibility.
@@ -84,6 +106,8 @@ type WebAudioServiceServer interface {
 	Disable(context.Context, *DisableRequest) (*DisableResponse, error)
 	// Gets the realtime data for the given audio context.
 	GetRealtimeData(context.Context, *GetRealtimeDataRequest) (*GetRealtimeDataResponse, error)
+	// Subscribe to WebAudio domain events.
+	SubscribeEvents(*SubscribeWebAudioEventsRequest, grpc.ServerStreamingServer[WebAudioEvent]) error
 	mustEmbedUnimplementedWebAudioServiceServer()
 }
 
@@ -102,6 +126,9 @@ func (UnimplementedWebAudioServiceServer) Disable(context.Context, *DisableReque
 }
 func (UnimplementedWebAudioServiceServer) GetRealtimeData(context.Context, *GetRealtimeDataRequest) (*GetRealtimeDataResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetRealtimeData not implemented")
+}
+func (UnimplementedWebAudioServiceServer) SubscribeEvents(*SubscribeWebAudioEventsRequest, grpc.ServerStreamingServer[WebAudioEvent]) error {
+	return status.Errorf(codes.Unimplemented, "method SubscribeEvents not implemented")
 }
 func (UnimplementedWebAudioServiceServer) mustEmbedUnimplementedWebAudioServiceServer() {}
 func (UnimplementedWebAudioServiceServer) testEmbeddedByValue()                         {}
@@ -178,6 +205,17 @@ func _WebAudioService_GetRealtimeData_Handler(srv interface{}, ctx context.Conte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _WebAudioService_SubscribeEvents_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(SubscribeWebAudioEventsRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(WebAudioServiceServer).SubscribeEvents(m, &grpc.GenericServerStream[SubscribeWebAudioEventsRequest, WebAudioEvent]{ServerStream: stream})
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type WebAudioService_SubscribeEventsServer = grpc.ServerStreamingServer[WebAudioEvent]
+
 // WebAudioService_ServiceDesc is the grpc.ServiceDesc for WebAudioService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -198,6 +236,12 @@ var WebAudioService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _WebAudioService_GetRealtimeData_Handler,
 		},
 	},
-	Streams:  []grpc.StreamDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "SubscribeEvents",
+			Handler:       _WebAudioService_SubscribeEvents_Handler,
+			ServerStreams: true,
+		},
+	},
 	Metadata: "proto/cdp/webaudio/webaudio.proto",
 }

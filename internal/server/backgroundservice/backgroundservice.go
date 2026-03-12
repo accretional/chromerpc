@@ -3,6 +3,7 @@ package backgroundservice
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 
 	"github.com/accretional/chromerpc/internal/cdpclient"
@@ -77,4 +78,111 @@ func (s *Server) ClearEvents(ctx context.Context, req *pb.ClearEventsRequest) (*
 		return nil, fmt.Errorf("BackgroundService.clearEvents: %w", err)
 	}
 	return &pb.ClearEventsResponse{}, nil
+}
+
+func (s *Server) SubscribeEvents(req *pb.SubscribeBackgroundServiceEventsRequest, stream pb.BackgroundServiceService_SubscribeEventsServer) error {
+	eventCh := make(chan *pb.BackgroundServiceEvent, 128)
+	ctx := stream.Context()
+
+	events := []string{
+		"BackgroundService.recordingStateChanged",
+		"BackgroundService.backgroundServiceEventReceived",
+	}
+
+	var unregisters []func()
+	for _, method := range events {
+		method := method
+		unreg := s.client.On(method, func(m string, params json.RawMessage, sessionID string) {
+			if req.SessionId != "" && sessionID != req.SessionId {
+				return
+			}
+			evt := convertBackgroundServiceEvent(method, params)
+			if evt != nil {
+				select {
+				case eventCh <- evt:
+				default:
+				}
+			}
+		})
+		unregisters = append(unregisters, unreg)
+	}
+	defer func() {
+		for _, unreg := range unregisters {
+			unreg()
+		}
+	}()
+
+	for {
+		select {
+		case evt := <-eventCh:
+			if err := stream.Send(evt); err != nil {
+				return err
+			}
+		case <-ctx.Done():
+			return ctx.Err()
+		case <-s.client.Done():
+			return fmt.Errorf("CDP connection closed")
+		}
+	}
+}
+
+func convertBackgroundServiceEvent(method string, params json.RawMessage) *pb.BackgroundServiceEvent {
+	switch method {
+	case "BackgroundService.recordingStateChanged":
+		var d struct {
+			IsRecording bool   `json:"isRecording"`
+			Service     string `json:"service"`
+		}
+		if json.Unmarshal(params, &d) != nil {
+			return nil
+		}
+		return &pb.BackgroundServiceEvent{Event: &pb.BackgroundServiceEvent_RecordingStateChanged{
+			RecordingStateChanged: &pb.RecordingStateChangedEvent{
+				IsRecording: d.IsRecording,
+				Service:     d.Service,
+			},
+		}}
+
+	case "BackgroundService.backgroundServiceEventReceived":
+		var d struct {
+			BackgroundServiceEvent struct {
+				Timestamp                  float64 `json:"timestamp"`
+				Origin                     string  `json:"origin"`
+				ServiceWorkerRegistrationID string `json:"serviceWorkerRegistrationId"`
+				Service                    string  `json:"service"`
+				EventName                  string  `json:"eventName"`
+				InstanceID                 string  `json:"instanceId"`
+				EventMetadata              []struct {
+					Key   string `json:"key"`
+					Value string `json:"value"`
+				} `json:"eventMetadata"`
+				StorageKey string `json:"storageKey"`
+			} `json:"backgroundServiceEvent"`
+		}
+		if json.Unmarshal(params, &d) != nil {
+			return nil
+		}
+		evt := d.BackgroundServiceEvent
+		metadata := make([]*pb.EventMetadata, len(evt.EventMetadata))
+		for i, m := range evt.EventMetadata {
+			metadata[i] = &pb.EventMetadata{Key: m.Key, Value: m.Value}
+		}
+		return &pb.BackgroundServiceEvent{Event: &pb.BackgroundServiceEvent_BackgroundServiceEventReceived{
+			BackgroundServiceEventReceived: &pb.BackgroundServiceEventReceivedEvent{
+				BackgroundServiceEvent: &pb.BackgroundServiceEventDetail{
+					Timestamp:                   evt.Timestamp,
+					Origin:                      evt.Origin,
+					ServiceWorkerRegistrationId: evt.ServiceWorkerRegistrationID,
+					Service:                     evt.Service,
+					EventName:                   evt.EventName,
+					InstanceId:                  evt.InstanceID,
+					EventMetadata:               metadata,
+					StorageKey:                  evt.StorageKey,
+				},
+			},
+		}}
+
+	default:
+		return nil
+	}
 }

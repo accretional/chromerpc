@@ -19,8 +19,9 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	PreloadService_Enable_FullMethodName  = "/cdp.preload.PreloadService/Enable"
-	PreloadService_Disable_FullMethodName = "/cdp.preload.PreloadService/Disable"
+	PreloadService_Enable_FullMethodName          = "/cdp.preload.PreloadService/Enable"
+	PreloadService_Disable_FullMethodName         = "/cdp.preload.PreloadService/Disable"
+	PreloadService_SubscribeEvents_FullMethodName = "/cdp.preload.PreloadService/SubscribeEvents"
 )
 
 // PreloadServiceClient is the client API for PreloadService service.
@@ -29,6 +30,7 @@ const (
 type PreloadServiceClient interface {
 	Enable(ctx context.Context, in *EnableRequest, opts ...grpc.CallOption) (*EnableResponse, error)
 	Disable(ctx context.Context, in *DisableRequest, opts ...grpc.CallOption) (*DisableResponse, error)
+	SubscribeEvents(ctx context.Context, in *SubscribePreloadEventsRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[PreloadEvent], error)
 }
 
 type preloadServiceClient struct {
@@ -59,12 +61,32 @@ func (c *preloadServiceClient) Disable(ctx context.Context, in *DisableRequest, 
 	return out, nil
 }
 
+func (c *preloadServiceClient) SubscribeEvents(ctx context.Context, in *SubscribePreloadEventsRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[PreloadEvent], error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	stream, err := c.cc.NewStream(ctx, &PreloadService_ServiceDesc.Streams[0], PreloadService_SubscribeEvents_FullMethodName, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &grpc.GenericClientStream[SubscribePreloadEventsRequest, PreloadEvent]{ClientStream: stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type PreloadService_SubscribeEventsClient = grpc.ServerStreamingClient[PreloadEvent]
+
 // PreloadServiceServer is the server API for PreloadService service.
 // All implementations must embed UnimplementedPreloadServiceServer
 // for forward compatibility.
 type PreloadServiceServer interface {
 	Enable(context.Context, *EnableRequest) (*EnableResponse, error)
 	Disable(context.Context, *DisableRequest) (*DisableResponse, error)
+	SubscribeEvents(*SubscribePreloadEventsRequest, grpc.ServerStreamingServer[PreloadEvent]) error
 	mustEmbedUnimplementedPreloadServiceServer()
 }
 
@@ -80,6 +102,9 @@ func (UnimplementedPreloadServiceServer) Enable(context.Context, *EnableRequest)
 }
 func (UnimplementedPreloadServiceServer) Disable(context.Context, *DisableRequest) (*DisableResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Disable not implemented")
+}
+func (UnimplementedPreloadServiceServer) SubscribeEvents(*SubscribePreloadEventsRequest, grpc.ServerStreamingServer[PreloadEvent]) error {
+	return status.Errorf(codes.Unimplemented, "method SubscribeEvents not implemented")
 }
 func (UnimplementedPreloadServiceServer) mustEmbedUnimplementedPreloadServiceServer() {}
 func (UnimplementedPreloadServiceServer) testEmbeddedByValue()                        {}
@@ -138,6 +163,17 @@ func _PreloadService_Disable_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _PreloadService_SubscribeEvents_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(SubscribePreloadEventsRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(PreloadServiceServer).SubscribeEvents(m, &grpc.GenericServerStream[SubscribePreloadEventsRequest, PreloadEvent]{ServerStream: stream})
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type PreloadService_SubscribeEventsServer = grpc.ServerStreamingServer[PreloadEvent]
+
 // PreloadService_ServiceDesc is the grpc.ServiceDesc for PreloadService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -154,6 +190,12 @@ var PreloadService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _PreloadService_Disable_Handler,
 		},
 	},
-	Streams:  []grpc.StreamDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "SubscribeEvents",
+			Handler:       _PreloadService_SubscribeEvents_Handler,
+			ServerStreams: true,
+		},
+	},
 	Metadata: "proto/cdp/preload/preload.proto",
 }

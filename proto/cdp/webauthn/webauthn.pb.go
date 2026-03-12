@@ -1465,6 +1465,236 @@ func (*SetResponseOverrideBitsResponse) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_webauthn_webauthn_proto_rawDescGZIP(), []int{25}
 }
 
+type SubscribeWebAuthnEventsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,1,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SubscribeWebAuthnEventsRequest) Reset() {
+	*x = SubscribeWebAuthnEventsRequest{}
+	mi := &file_proto_cdp_webauthn_webauthn_proto_msgTypes[26]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SubscribeWebAuthnEventsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SubscribeWebAuthnEventsRequest) ProtoMessage() {}
+
+func (x *SubscribeWebAuthnEventsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_webauthn_webauthn_proto_msgTypes[26]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SubscribeWebAuthnEventsRequest.ProtoReflect.Descriptor instead.
+func (*SubscribeWebAuthnEventsRequest) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_webauthn_webauthn_proto_rawDescGZIP(), []int{26}
+}
+
+func (x *SubscribeWebAuthnEventsRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
+type WebAuthnEvent struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Types that are valid to be assigned to Event:
+	//
+	//	*WebAuthnEvent_CredentialAdded
+	//	*WebAuthnEvent_CredentialAsserted
+	Event         isWebAuthnEvent_Event `protobuf_oneof:"event"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *WebAuthnEvent) Reset() {
+	*x = WebAuthnEvent{}
+	mi := &file_proto_cdp_webauthn_webauthn_proto_msgTypes[27]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *WebAuthnEvent) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*WebAuthnEvent) ProtoMessage() {}
+
+func (x *WebAuthnEvent) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_webauthn_webauthn_proto_msgTypes[27]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use WebAuthnEvent.ProtoReflect.Descriptor instead.
+func (*WebAuthnEvent) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_webauthn_webauthn_proto_rawDescGZIP(), []int{27}
+}
+
+func (x *WebAuthnEvent) GetEvent() isWebAuthnEvent_Event {
+	if x != nil {
+		return x.Event
+	}
+	return nil
+}
+
+func (x *WebAuthnEvent) GetCredentialAdded() *CredentialAddedEvent {
+	if x != nil {
+		if x, ok := x.Event.(*WebAuthnEvent_CredentialAdded); ok {
+			return x.CredentialAdded
+		}
+	}
+	return nil
+}
+
+func (x *WebAuthnEvent) GetCredentialAsserted() *CredentialAssertedEvent {
+	if x != nil {
+		if x, ok := x.Event.(*WebAuthnEvent_CredentialAsserted); ok {
+			return x.CredentialAsserted
+		}
+	}
+	return nil
+}
+
+type isWebAuthnEvent_Event interface {
+	isWebAuthnEvent_Event()
+}
+
+type WebAuthnEvent_CredentialAdded struct {
+	CredentialAdded *CredentialAddedEvent `protobuf:"bytes,1,opt,name=credential_added,json=credentialAdded,proto3,oneof"`
+}
+
+type WebAuthnEvent_CredentialAsserted struct {
+	CredentialAsserted *CredentialAssertedEvent `protobuf:"bytes,2,opt,name=credential_asserted,json=credentialAsserted,proto3,oneof"`
+}
+
+func (*WebAuthnEvent_CredentialAdded) isWebAuthnEvent_Event() {}
+
+func (*WebAuthnEvent_CredentialAsserted) isWebAuthnEvent_Event() {}
+
+type CredentialAddedEvent struct {
+	state           protoimpl.MessageState `protogen:"open.v1"`
+	AuthenticatorId string                 `protobuf:"bytes,1,opt,name=authenticator_id,json=authenticatorId,proto3" json:"authenticator_id,omitempty"`
+	Credential      *Credential            `protobuf:"bytes,2,opt,name=credential,proto3" json:"credential,omitempty"`
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
+}
+
+func (x *CredentialAddedEvent) Reset() {
+	*x = CredentialAddedEvent{}
+	mi := &file_proto_cdp_webauthn_webauthn_proto_msgTypes[28]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CredentialAddedEvent) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CredentialAddedEvent) ProtoMessage() {}
+
+func (x *CredentialAddedEvent) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_webauthn_webauthn_proto_msgTypes[28]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CredentialAddedEvent.ProtoReflect.Descriptor instead.
+func (*CredentialAddedEvent) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_webauthn_webauthn_proto_rawDescGZIP(), []int{28}
+}
+
+func (x *CredentialAddedEvent) GetAuthenticatorId() string {
+	if x != nil {
+		return x.AuthenticatorId
+	}
+	return ""
+}
+
+func (x *CredentialAddedEvent) GetCredential() *Credential {
+	if x != nil {
+		return x.Credential
+	}
+	return nil
+}
+
+type CredentialAssertedEvent struct {
+	state           protoimpl.MessageState `protogen:"open.v1"`
+	AuthenticatorId string                 `protobuf:"bytes,1,opt,name=authenticator_id,json=authenticatorId,proto3" json:"authenticator_id,omitempty"`
+	Credential      *Credential            `protobuf:"bytes,2,opt,name=credential,proto3" json:"credential,omitempty"`
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
+}
+
+func (x *CredentialAssertedEvent) Reset() {
+	*x = CredentialAssertedEvent{}
+	mi := &file_proto_cdp_webauthn_webauthn_proto_msgTypes[29]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CredentialAssertedEvent) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CredentialAssertedEvent) ProtoMessage() {}
+
+func (x *CredentialAssertedEvent) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_webauthn_webauthn_proto_msgTypes[29]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CredentialAssertedEvent.ProtoReflect.Descriptor instead.
+func (*CredentialAssertedEvent) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_webauthn_webauthn_proto_rawDescGZIP(), []int{29}
+}
+
+func (x *CredentialAssertedEvent) GetAuthenticatorId() string {
+	if x != nil {
+		return x.AuthenticatorId
+	}
+	return ""
+}
+
+func (x *CredentialAssertedEvent) GetCredential() *Credential {
+	if x != nil {
+		return x.Credential
+	}
+	return nil
+}
+
 var File_proto_cdp_webauthn_webauthn_proto protoreflect.FileDescriptor
 
 const file_proto_cdp_webauthn_webauthn_proto_rawDesc = "" +
@@ -1549,7 +1779,24 @@ const file_proto_cdp_webauthn_webauthn_proto_rawDesc = "" +
 	"\x12is_bogus_signature\x18\x02 \x01(\bR\x10isBogusSignature\x12\x1a\n" +
 	"\tis_bad_uv\x18\x03 \x01(\bR\aisBadUv\x12\x1a\n" +
 	"\tis_bad_up\x18\x04 \x01(\bR\aisBadUp\"!\n" +
-	"\x1fSetResponseOverrideBitsResponse*S\n" +
+	"\x1fSetResponseOverrideBitsResponse\"?\n" +
+	"\x1eSubscribeWebAuthnEventsRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18\x01 \x01(\tR\tsessionId\"\xc3\x01\n" +
+	"\rWebAuthnEvent\x12O\n" +
+	"\x10credential_added\x18\x01 \x01(\v2\".cdp.webauthn.CredentialAddedEventH\x00R\x0fcredentialAdded\x12X\n" +
+	"\x13credential_asserted\x18\x02 \x01(\v2%.cdp.webauthn.CredentialAssertedEventH\x00R\x12credentialAssertedB\a\n" +
+	"\x05event\"{\n" +
+	"\x14CredentialAddedEvent\x12)\n" +
+	"\x10authenticator_id\x18\x01 \x01(\tR\x0fauthenticatorId\x128\n" +
+	"\n" +
+	"credential\x18\x02 \x01(\v2\x18.cdp.webauthn.CredentialR\n" +
+	"credential\"~\n" +
+	"\x17CredentialAssertedEvent\x12)\n" +
+	"\x10authenticator_id\x18\x01 \x01(\tR\x0fauthenticatorId\x128\n" +
+	"\n" +
+	"credential\x18\x02 \x01(\v2\x18.cdp.webauthn.CredentialR\n" +
+	"credential*S\n" +
 	"\x15AuthenticatorProtocol\x12&\n" +
 	"\"AUTHENTICATOR_PROTOCOL_UNSPECIFIED\x10\x00\x12\a\n" +
 	"\x03U2F\x10\x01\x12\t\n" +
@@ -1564,7 +1811,8 @@ const file_proto_cdp_webauthn_webauthn_proto_rawDesc = "" +
 	"\fCtap2Version\x12\x1d\n" +
 	"\x19CTAP2_VERSION_UNSPECIFIED\x10\x00\x12\v\n" +
 	"\aCTAP2_0\x10\x01\x12\v\n" +
-	"\aCTAP2_1\x10\x022\xd4\t\n" +
+	"\aCTAP2_1\x10\x022\xb4\n" +
+	"\n" +
 	"\x0fWebAuthnService\x12C\n" +
 	"\x06Enable\x12\x1b.cdp.webauthn.EnableRequest\x1a\x1c.cdp.webauthn.EnableResponse\x12F\n" +
 	"\aDisable\x12\x1c.cdp.webauthn.DisableRequest\x1a\x1d.cdp.webauthn.DisableResponse\x12v\n" +
@@ -1577,7 +1825,8 @@ const file_proto_cdp_webauthn_webauthn_proto_rawDesc = "" +
 	"\x10ClearCredentials\x12%.cdp.webauthn.ClearCredentialsRequest\x1a&.cdp.webauthn.ClearCredentialsResponse\x12^\n" +
 	"\x0fSetUserVerified\x12$.cdp.webauthn.SetUserVerifiedRequest\x1a%.cdp.webauthn.SetUserVerifiedResponse\x12\x8b\x01\n" +
 	"\x1eSetAutomaticPresenceSimulation\x123.cdp.webauthn.SetAutomaticPresenceSimulationRequest\x1a4.cdp.webauthn.SetAutomaticPresenceSimulationResponse\x12v\n" +
-	"\x17SetResponseOverrideBits\x12,.cdp.webauthn.SetResponseOverrideBitsRequest\x1a-.cdp.webauthn.SetResponseOverrideBitsResponseB5Z3github.com/accretional/chromerpc/proto/cdp/webauthnb\x06proto3"
+	"\x17SetResponseOverrideBits\x12,.cdp.webauthn.SetResponseOverrideBitsRequest\x1a-.cdp.webauthn.SetResponseOverrideBitsResponse\x12^\n" +
+	"\x0fSubscribeEvents\x12,.cdp.webauthn.SubscribeWebAuthnEventsRequest\x1a\x1b.cdp.webauthn.WebAuthnEvent0\x01B5Z3github.com/accretional/chromerpc/proto/cdp/webauthnb\x06proto3"
 
 var (
 	file_proto_cdp_webauthn_webauthn_proto_rawDescOnce sync.Once
@@ -1592,7 +1841,7 @@ func file_proto_cdp_webauthn_webauthn_proto_rawDescGZIP() []byte {
 }
 
 var file_proto_cdp_webauthn_webauthn_proto_enumTypes = make([]protoimpl.EnumInfo, 3)
-var file_proto_cdp_webauthn_webauthn_proto_msgTypes = make([]protoimpl.MessageInfo, 26)
+var file_proto_cdp_webauthn_webauthn_proto_msgTypes = make([]protoimpl.MessageInfo, 30)
 var file_proto_cdp_webauthn_webauthn_proto_goTypes = []any{
 	(AuthenticatorProtocol)(0),                     // 0: cdp.webauthn.AuthenticatorProtocol
 	(AuthenticatorTransport)(0),                    // 1: cdp.webauthn.AuthenticatorTransport
@@ -1623,6 +1872,10 @@ var file_proto_cdp_webauthn_webauthn_proto_goTypes = []any{
 	(*SetAutomaticPresenceSimulationResponse)(nil), // 26: cdp.webauthn.SetAutomaticPresenceSimulationResponse
 	(*SetResponseOverrideBitsRequest)(nil),         // 27: cdp.webauthn.SetResponseOverrideBitsRequest
 	(*SetResponseOverrideBitsResponse)(nil),        // 28: cdp.webauthn.SetResponseOverrideBitsResponse
+	(*SubscribeWebAuthnEventsRequest)(nil),         // 29: cdp.webauthn.SubscribeWebAuthnEventsRequest
+	(*WebAuthnEvent)(nil),                          // 30: cdp.webauthn.WebAuthnEvent
+	(*CredentialAddedEvent)(nil),                   // 31: cdp.webauthn.CredentialAddedEvent
+	(*CredentialAssertedEvent)(nil),                // 32: cdp.webauthn.CredentialAssertedEvent
 }
 var file_proto_cdp_webauthn_webauthn_proto_depIdxs = []int32{
 	0,  // 0: cdp.webauthn.VirtualAuthenticatorOptions.protocol:type_name -> cdp.webauthn.AuthenticatorProtocol
@@ -1632,35 +1885,41 @@ var file_proto_cdp_webauthn_webauthn_proto_depIdxs = []int32{
 	4,  // 4: cdp.webauthn.AddCredentialRequest.credential:type_name -> cdp.webauthn.Credential
 	4,  // 5: cdp.webauthn.GetCredentialResponse.credential:type_name -> cdp.webauthn.Credential
 	4,  // 6: cdp.webauthn.GetCredentialsResponse.credentials:type_name -> cdp.webauthn.Credential
-	5,  // 7: cdp.webauthn.WebAuthnService.Enable:input_type -> cdp.webauthn.EnableRequest
-	7,  // 8: cdp.webauthn.WebAuthnService.Disable:input_type -> cdp.webauthn.DisableRequest
-	9,  // 9: cdp.webauthn.WebAuthnService.AddVirtualAuthenticator:input_type -> cdp.webauthn.AddVirtualAuthenticatorRequest
-	11, // 10: cdp.webauthn.WebAuthnService.RemoveVirtualAuthenticator:input_type -> cdp.webauthn.RemoveVirtualAuthenticatorRequest
-	13, // 11: cdp.webauthn.WebAuthnService.AddCredential:input_type -> cdp.webauthn.AddCredentialRequest
-	15, // 12: cdp.webauthn.WebAuthnService.GetCredential:input_type -> cdp.webauthn.GetCredentialRequest
-	17, // 13: cdp.webauthn.WebAuthnService.GetCredentials:input_type -> cdp.webauthn.GetCredentialsRequest
-	19, // 14: cdp.webauthn.WebAuthnService.RemoveCredential:input_type -> cdp.webauthn.RemoveCredentialRequest
-	21, // 15: cdp.webauthn.WebAuthnService.ClearCredentials:input_type -> cdp.webauthn.ClearCredentialsRequest
-	23, // 16: cdp.webauthn.WebAuthnService.SetUserVerified:input_type -> cdp.webauthn.SetUserVerifiedRequest
-	25, // 17: cdp.webauthn.WebAuthnService.SetAutomaticPresenceSimulation:input_type -> cdp.webauthn.SetAutomaticPresenceSimulationRequest
-	27, // 18: cdp.webauthn.WebAuthnService.SetResponseOverrideBits:input_type -> cdp.webauthn.SetResponseOverrideBitsRequest
-	6,  // 19: cdp.webauthn.WebAuthnService.Enable:output_type -> cdp.webauthn.EnableResponse
-	8,  // 20: cdp.webauthn.WebAuthnService.Disable:output_type -> cdp.webauthn.DisableResponse
-	10, // 21: cdp.webauthn.WebAuthnService.AddVirtualAuthenticator:output_type -> cdp.webauthn.AddVirtualAuthenticatorResponse
-	12, // 22: cdp.webauthn.WebAuthnService.RemoveVirtualAuthenticator:output_type -> cdp.webauthn.RemoveVirtualAuthenticatorResponse
-	14, // 23: cdp.webauthn.WebAuthnService.AddCredential:output_type -> cdp.webauthn.AddCredentialResponse
-	16, // 24: cdp.webauthn.WebAuthnService.GetCredential:output_type -> cdp.webauthn.GetCredentialResponse
-	18, // 25: cdp.webauthn.WebAuthnService.GetCredentials:output_type -> cdp.webauthn.GetCredentialsResponse
-	20, // 26: cdp.webauthn.WebAuthnService.RemoveCredential:output_type -> cdp.webauthn.RemoveCredentialResponse
-	22, // 27: cdp.webauthn.WebAuthnService.ClearCredentials:output_type -> cdp.webauthn.ClearCredentialsResponse
-	24, // 28: cdp.webauthn.WebAuthnService.SetUserVerified:output_type -> cdp.webauthn.SetUserVerifiedResponse
-	26, // 29: cdp.webauthn.WebAuthnService.SetAutomaticPresenceSimulation:output_type -> cdp.webauthn.SetAutomaticPresenceSimulationResponse
-	28, // 30: cdp.webauthn.WebAuthnService.SetResponseOverrideBits:output_type -> cdp.webauthn.SetResponseOverrideBitsResponse
-	19, // [19:31] is the sub-list for method output_type
-	7,  // [7:19] is the sub-list for method input_type
-	7,  // [7:7] is the sub-list for extension type_name
-	7,  // [7:7] is the sub-list for extension extendee
-	0,  // [0:7] is the sub-list for field type_name
+	31, // 7: cdp.webauthn.WebAuthnEvent.credential_added:type_name -> cdp.webauthn.CredentialAddedEvent
+	32, // 8: cdp.webauthn.WebAuthnEvent.credential_asserted:type_name -> cdp.webauthn.CredentialAssertedEvent
+	4,  // 9: cdp.webauthn.CredentialAddedEvent.credential:type_name -> cdp.webauthn.Credential
+	4,  // 10: cdp.webauthn.CredentialAssertedEvent.credential:type_name -> cdp.webauthn.Credential
+	5,  // 11: cdp.webauthn.WebAuthnService.Enable:input_type -> cdp.webauthn.EnableRequest
+	7,  // 12: cdp.webauthn.WebAuthnService.Disable:input_type -> cdp.webauthn.DisableRequest
+	9,  // 13: cdp.webauthn.WebAuthnService.AddVirtualAuthenticator:input_type -> cdp.webauthn.AddVirtualAuthenticatorRequest
+	11, // 14: cdp.webauthn.WebAuthnService.RemoveVirtualAuthenticator:input_type -> cdp.webauthn.RemoveVirtualAuthenticatorRequest
+	13, // 15: cdp.webauthn.WebAuthnService.AddCredential:input_type -> cdp.webauthn.AddCredentialRequest
+	15, // 16: cdp.webauthn.WebAuthnService.GetCredential:input_type -> cdp.webauthn.GetCredentialRequest
+	17, // 17: cdp.webauthn.WebAuthnService.GetCredentials:input_type -> cdp.webauthn.GetCredentialsRequest
+	19, // 18: cdp.webauthn.WebAuthnService.RemoveCredential:input_type -> cdp.webauthn.RemoveCredentialRequest
+	21, // 19: cdp.webauthn.WebAuthnService.ClearCredentials:input_type -> cdp.webauthn.ClearCredentialsRequest
+	23, // 20: cdp.webauthn.WebAuthnService.SetUserVerified:input_type -> cdp.webauthn.SetUserVerifiedRequest
+	25, // 21: cdp.webauthn.WebAuthnService.SetAutomaticPresenceSimulation:input_type -> cdp.webauthn.SetAutomaticPresenceSimulationRequest
+	27, // 22: cdp.webauthn.WebAuthnService.SetResponseOverrideBits:input_type -> cdp.webauthn.SetResponseOverrideBitsRequest
+	29, // 23: cdp.webauthn.WebAuthnService.SubscribeEvents:input_type -> cdp.webauthn.SubscribeWebAuthnEventsRequest
+	6,  // 24: cdp.webauthn.WebAuthnService.Enable:output_type -> cdp.webauthn.EnableResponse
+	8,  // 25: cdp.webauthn.WebAuthnService.Disable:output_type -> cdp.webauthn.DisableResponse
+	10, // 26: cdp.webauthn.WebAuthnService.AddVirtualAuthenticator:output_type -> cdp.webauthn.AddVirtualAuthenticatorResponse
+	12, // 27: cdp.webauthn.WebAuthnService.RemoveVirtualAuthenticator:output_type -> cdp.webauthn.RemoveVirtualAuthenticatorResponse
+	14, // 28: cdp.webauthn.WebAuthnService.AddCredential:output_type -> cdp.webauthn.AddCredentialResponse
+	16, // 29: cdp.webauthn.WebAuthnService.GetCredential:output_type -> cdp.webauthn.GetCredentialResponse
+	18, // 30: cdp.webauthn.WebAuthnService.GetCredentials:output_type -> cdp.webauthn.GetCredentialsResponse
+	20, // 31: cdp.webauthn.WebAuthnService.RemoveCredential:output_type -> cdp.webauthn.RemoveCredentialResponse
+	22, // 32: cdp.webauthn.WebAuthnService.ClearCredentials:output_type -> cdp.webauthn.ClearCredentialsResponse
+	24, // 33: cdp.webauthn.WebAuthnService.SetUserVerified:output_type -> cdp.webauthn.SetUserVerifiedResponse
+	26, // 34: cdp.webauthn.WebAuthnService.SetAutomaticPresenceSimulation:output_type -> cdp.webauthn.SetAutomaticPresenceSimulationResponse
+	28, // 35: cdp.webauthn.WebAuthnService.SetResponseOverrideBits:output_type -> cdp.webauthn.SetResponseOverrideBitsResponse
+	30, // 36: cdp.webauthn.WebAuthnService.SubscribeEvents:output_type -> cdp.webauthn.WebAuthnEvent
+	24, // [24:37] is the sub-list for method output_type
+	11, // [11:24] is the sub-list for method input_type
+	11, // [11:11] is the sub-list for extension type_name
+	11, // [11:11] is the sub-list for extension extendee
+	0,  // [0:11] is the sub-list for field type_name
 }
 
 func init() { file_proto_cdp_webauthn_webauthn_proto_init() }
@@ -1668,13 +1927,17 @@ func file_proto_cdp_webauthn_webauthn_proto_init() {
 	if File_proto_cdp_webauthn_webauthn_proto != nil {
 		return
 	}
+	file_proto_cdp_webauthn_webauthn_proto_msgTypes[27].OneofWrappers = []any{
+		(*WebAuthnEvent_CredentialAdded)(nil),
+		(*WebAuthnEvent_CredentialAsserted)(nil),
+	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_cdp_webauthn_webauthn_proto_rawDesc), len(file_proto_cdp_webauthn_webauthn_proto_rawDesc)),
 			NumEnums:      3,
-			NumMessages:   26,
+			NumMessages:   30,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

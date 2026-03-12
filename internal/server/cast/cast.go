@@ -3,6 +3,7 @@ package cast
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 
 	"github.com/accretional/chromerpc/internal/cdpclient"
@@ -76,4 +77,104 @@ func (s *Server) StopCasting(ctx context.Context, req *pb.StopCastingRequest) (*
 		return nil, fmt.Errorf("Cast.stopCasting: %w", err)
 	}
 	return &pb.StopCastingResponse{}, nil
+}
+
+func (s *Server) SubscribeEvents(req *pb.SubscribeCastEventsRequest, stream pb.CastService_SubscribeEventsServer) error {
+	eventCh := make(chan *pb.CastEvent, 128)
+	ctx := stream.Context()
+
+	// Register a wildcard handler for all Cast.* events.
+	unregister := s.client.On("Cast.", func(method string, params json.RawMessage, sessionID string) {
+		// Only forward events for the requested session (or all if empty).
+		if req.SessionId != "" && sessionID != req.SessionId {
+			return
+		}
+		evt := convertCastEvent(method, params)
+		if evt != nil {
+			select {
+			case eventCh <- evt:
+			default:
+			}
+		}
+	})
+
+	// Also register specific events since the On() matching is exact.
+	castEvents := []string{
+		"Cast.sinksUpdated", "Cast.issueUpdated",
+	}
+	unregisters := make([]func(), 0, len(castEvents)+1)
+	unregisters = append(unregisters, unregister)
+	for _, method := range castEvents {
+		method := method
+		unreg := s.client.On(method, func(m string, params json.RawMessage, sessionID string) {
+			if req.SessionId != "" && sessionID != req.SessionId {
+				return
+			}
+			evt := convertCastEvent(method, params)
+			if evt != nil {
+				select {
+				case eventCh <- evt:
+				default:
+				}
+			}
+		})
+		unregisters = append(unregisters, unreg)
+	}
+	defer func() {
+		for _, unreg := range unregisters {
+			unreg()
+		}
+	}()
+
+	for {
+		select {
+		case evt := <-eventCh:
+			if err := stream.Send(evt); err != nil {
+				return err
+			}
+		case <-ctx.Done():
+			return ctx.Err()
+		case <-s.client.Done():
+			return fmt.Errorf("CDP connection closed")
+		}
+	}
+}
+
+func convertCastEvent(method string, params json.RawMessage) *pb.CastEvent {
+	switch method {
+	case "Cast.sinksUpdated":
+		var d struct {
+			Sinks []struct {
+				Name    string `json:"name"`
+				ID      string `json:"id"`
+				Session string `json:"session"`
+			} `json:"sinks"`
+		}
+		if json.Unmarshal(params, &d) != nil {
+			return nil
+		}
+		sinks := make([]*pb.Sink, len(d.Sinks))
+		for i, s := range d.Sinks {
+			sinks[i] = &pb.Sink{
+				Name:    s.Name,
+				Id:      s.ID,
+				Session: s.Session,
+			}
+		}
+		return &pb.CastEvent{Event: &pb.CastEvent_SinksUpdated{
+			SinksUpdated: &pb.SinksUpdatedEvent{Sinks: sinks},
+		}}
+
+	case "Cast.issueUpdated":
+		var d struct {
+			IssueMessage string `json:"issueMessage"`
+		}
+		if json.Unmarshal(params, &d) != nil {
+			return nil
+		}
+		return &pb.CastEvent{Event: &pb.CastEvent_IssueUpdated{
+			IssueUpdated: &pb.IssueUpdatedEvent{IssueMessage: d.IssueMessage},
+		}}
+	}
+	return nil
 }

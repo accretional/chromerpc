@@ -19,10 +19,11 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	DeviceAccessService_Enable_FullMethodName       = "/cdp.deviceaccess.DeviceAccessService/Enable"
-	DeviceAccessService_Disable_FullMethodName      = "/cdp.deviceaccess.DeviceAccessService/Disable"
-	DeviceAccessService_SelectPrompt_FullMethodName = "/cdp.deviceaccess.DeviceAccessService/SelectPrompt"
-	DeviceAccessService_CancelPrompt_FullMethodName = "/cdp.deviceaccess.DeviceAccessService/CancelPrompt"
+	DeviceAccessService_Enable_FullMethodName          = "/cdp.deviceaccess.DeviceAccessService/Enable"
+	DeviceAccessService_Disable_FullMethodName         = "/cdp.deviceaccess.DeviceAccessService/Disable"
+	DeviceAccessService_SelectPrompt_FullMethodName    = "/cdp.deviceaccess.DeviceAccessService/SelectPrompt"
+	DeviceAccessService_CancelPrompt_FullMethodName    = "/cdp.deviceaccess.DeviceAccessService/CancelPrompt"
+	DeviceAccessService_SubscribeEvents_FullMethodName = "/cdp.deviceaccess.DeviceAccessService/SubscribeEvents"
 )
 
 // DeviceAccessServiceClient is the client API for DeviceAccessService service.
@@ -33,6 +34,7 @@ type DeviceAccessServiceClient interface {
 	Disable(ctx context.Context, in *DisableRequest, opts ...grpc.CallOption) (*DisableResponse, error)
 	SelectPrompt(ctx context.Context, in *SelectPromptRequest, opts ...grpc.CallOption) (*SelectPromptResponse, error)
 	CancelPrompt(ctx context.Context, in *CancelPromptRequest, opts ...grpc.CallOption) (*CancelPromptResponse, error)
+	SubscribeEvents(ctx context.Context, in *SubscribeDeviceAccessEventsRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[DeviceAccessEvent], error)
 }
 
 type deviceAccessServiceClient struct {
@@ -83,6 +85,25 @@ func (c *deviceAccessServiceClient) CancelPrompt(ctx context.Context, in *Cancel
 	return out, nil
 }
 
+func (c *deviceAccessServiceClient) SubscribeEvents(ctx context.Context, in *SubscribeDeviceAccessEventsRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[DeviceAccessEvent], error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	stream, err := c.cc.NewStream(ctx, &DeviceAccessService_ServiceDesc.Streams[0], DeviceAccessService_SubscribeEvents_FullMethodName, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &grpc.GenericClientStream[SubscribeDeviceAccessEventsRequest, DeviceAccessEvent]{ClientStream: stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type DeviceAccessService_SubscribeEventsClient = grpc.ServerStreamingClient[DeviceAccessEvent]
+
 // DeviceAccessServiceServer is the server API for DeviceAccessService service.
 // All implementations must embed UnimplementedDeviceAccessServiceServer
 // for forward compatibility.
@@ -91,6 +112,7 @@ type DeviceAccessServiceServer interface {
 	Disable(context.Context, *DisableRequest) (*DisableResponse, error)
 	SelectPrompt(context.Context, *SelectPromptRequest) (*SelectPromptResponse, error)
 	CancelPrompt(context.Context, *CancelPromptRequest) (*CancelPromptResponse, error)
+	SubscribeEvents(*SubscribeDeviceAccessEventsRequest, grpc.ServerStreamingServer[DeviceAccessEvent]) error
 	mustEmbedUnimplementedDeviceAccessServiceServer()
 }
 
@@ -112,6 +134,9 @@ func (UnimplementedDeviceAccessServiceServer) SelectPrompt(context.Context, *Sel
 }
 func (UnimplementedDeviceAccessServiceServer) CancelPrompt(context.Context, *CancelPromptRequest) (*CancelPromptResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CancelPrompt not implemented")
+}
+func (UnimplementedDeviceAccessServiceServer) SubscribeEvents(*SubscribeDeviceAccessEventsRequest, grpc.ServerStreamingServer[DeviceAccessEvent]) error {
+	return status.Errorf(codes.Unimplemented, "method SubscribeEvents not implemented")
 }
 func (UnimplementedDeviceAccessServiceServer) mustEmbedUnimplementedDeviceAccessServiceServer() {}
 func (UnimplementedDeviceAccessServiceServer) testEmbeddedByValue()                             {}
@@ -206,6 +231,17 @@ func _DeviceAccessService_CancelPrompt_Handler(srv interface{}, ctx context.Cont
 	return interceptor(ctx, in, info, handler)
 }
 
+func _DeviceAccessService_SubscribeEvents_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(SubscribeDeviceAccessEventsRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(DeviceAccessServiceServer).SubscribeEvents(m, &grpc.GenericServerStream[SubscribeDeviceAccessEventsRequest, DeviceAccessEvent]{ServerStream: stream})
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type DeviceAccessService_SubscribeEventsServer = grpc.ServerStreamingServer[DeviceAccessEvent]
+
 // DeviceAccessService_ServiceDesc is the grpc.ServiceDesc for DeviceAccessService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -230,6 +266,12 @@ var DeviceAccessService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _DeviceAccessService_CancelPrompt_Handler,
 		},
 	},
-	Streams:  []grpc.StreamDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "SubscribeEvents",
+			Handler:       _DeviceAccessService_SubscribeEvents_Handler,
+			ServerStreams: true,
+		},
+	},
 	Metadata: "proto/cdp/deviceaccess/deviceaccess.proto",
 }

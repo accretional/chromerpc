@@ -19,10 +19,11 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	BackgroundServiceService_StartObserving_FullMethodName = "/cdp.backgroundservice.BackgroundServiceService/StartObserving"
-	BackgroundServiceService_StopObserving_FullMethodName  = "/cdp.backgroundservice.BackgroundServiceService/StopObserving"
-	BackgroundServiceService_SetRecording_FullMethodName   = "/cdp.backgroundservice.BackgroundServiceService/SetRecording"
-	BackgroundServiceService_ClearEvents_FullMethodName    = "/cdp.backgroundservice.BackgroundServiceService/ClearEvents"
+	BackgroundServiceService_StartObserving_FullMethodName  = "/cdp.backgroundservice.BackgroundServiceService/StartObserving"
+	BackgroundServiceService_StopObserving_FullMethodName   = "/cdp.backgroundservice.BackgroundServiceService/StopObserving"
+	BackgroundServiceService_SetRecording_FullMethodName    = "/cdp.backgroundservice.BackgroundServiceService/SetRecording"
+	BackgroundServiceService_ClearEvents_FullMethodName     = "/cdp.backgroundservice.BackgroundServiceService/ClearEvents"
+	BackgroundServiceService_SubscribeEvents_FullMethodName = "/cdp.backgroundservice.BackgroundServiceService/SubscribeEvents"
 )
 
 // BackgroundServiceServiceClient is the client API for BackgroundServiceService service.
@@ -37,6 +38,8 @@ type BackgroundServiceServiceClient interface {
 	SetRecording(ctx context.Context, in *SetRecordingRequest, opts ...grpc.CallOption) (*SetRecordingResponse, error)
 	// Clear all stored events for a service.
 	ClearEvents(ctx context.Context, in *ClearEventsRequest, opts ...grpc.CallOption) (*ClearEventsResponse, error)
+	// Subscribe to BackgroundService domain events.
+	SubscribeEvents(ctx context.Context, in *SubscribeBackgroundServiceEventsRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[BackgroundServiceEvent], error)
 }
 
 type backgroundServiceServiceClient struct {
@@ -87,6 +90,25 @@ func (c *backgroundServiceServiceClient) ClearEvents(ctx context.Context, in *Cl
 	return out, nil
 }
 
+func (c *backgroundServiceServiceClient) SubscribeEvents(ctx context.Context, in *SubscribeBackgroundServiceEventsRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[BackgroundServiceEvent], error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	stream, err := c.cc.NewStream(ctx, &BackgroundServiceService_ServiceDesc.Streams[0], BackgroundServiceService_SubscribeEvents_FullMethodName, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &grpc.GenericClientStream[SubscribeBackgroundServiceEventsRequest, BackgroundServiceEvent]{ClientStream: stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type BackgroundServiceService_SubscribeEventsClient = grpc.ServerStreamingClient[BackgroundServiceEvent]
+
 // BackgroundServiceServiceServer is the server API for BackgroundServiceService service.
 // All implementations must embed UnimplementedBackgroundServiceServiceServer
 // for forward compatibility.
@@ -99,6 +121,8 @@ type BackgroundServiceServiceServer interface {
 	SetRecording(context.Context, *SetRecordingRequest) (*SetRecordingResponse, error)
 	// Clear all stored events for a service.
 	ClearEvents(context.Context, *ClearEventsRequest) (*ClearEventsResponse, error)
+	// Subscribe to BackgroundService domain events.
+	SubscribeEvents(*SubscribeBackgroundServiceEventsRequest, grpc.ServerStreamingServer[BackgroundServiceEvent]) error
 	mustEmbedUnimplementedBackgroundServiceServiceServer()
 }
 
@@ -120,6 +144,9 @@ func (UnimplementedBackgroundServiceServiceServer) SetRecording(context.Context,
 }
 func (UnimplementedBackgroundServiceServiceServer) ClearEvents(context.Context, *ClearEventsRequest) (*ClearEventsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ClearEvents not implemented")
+}
+func (UnimplementedBackgroundServiceServiceServer) SubscribeEvents(*SubscribeBackgroundServiceEventsRequest, grpc.ServerStreamingServer[BackgroundServiceEvent]) error {
+	return status.Errorf(codes.Unimplemented, "method SubscribeEvents not implemented")
 }
 func (UnimplementedBackgroundServiceServiceServer) mustEmbedUnimplementedBackgroundServiceServiceServer() {
 }
@@ -215,6 +242,17 @@ func _BackgroundServiceService_ClearEvents_Handler(srv interface{}, ctx context.
 	return interceptor(ctx, in, info, handler)
 }
 
+func _BackgroundServiceService_SubscribeEvents_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(SubscribeBackgroundServiceEventsRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(BackgroundServiceServiceServer).SubscribeEvents(m, &grpc.GenericServerStream[SubscribeBackgroundServiceEventsRequest, BackgroundServiceEvent]{ServerStream: stream})
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type BackgroundServiceService_SubscribeEventsServer = grpc.ServerStreamingServer[BackgroundServiceEvent]
+
 // BackgroundServiceService_ServiceDesc is the grpc.ServiceDesc for BackgroundServiceService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -239,6 +277,12 @@ var BackgroundServiceService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _BackgroundServiceService_ClearEvents_Handler,
 		},
 	},
-	Streams:  []grpc.StreamDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "SubscribeEvents",
+			Handler:       _BackgroundServiceService_SubscribeEvents_Handler,
+			ServerStreams: true,
+		},
+	},
 	Metadata: "proto/cdp/backgroundservice/backgroundservice.proto",
 }

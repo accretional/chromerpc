@@ -354,6 +354,160 @@ func (x *BeginFrameResponse) GetScreenshotData() []byte {
 	return nil
 }
 
+type SubscribeHeadlessExperimentalEventsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,1,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SubscribeHeadlessExperimentalEventsRequest) Reset() {
+	*x = SubscribeHeadlessExperimentalEventsRequest{}
+	mi := &file_proto_cdp_headlessexperimental_headlessexperimental_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SubscribeHeadlessExperimentalEventsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SubscribeHeadlessExperimentalEventsRequest) ProtoMessage() {}
+
+func (x *SubscribeHeadlessExperimentalEventsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_headlessexperimental_headlessexperimental_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SubscribeHeadlessExperimentalEventsRequest.ProtoReflect.Descriptor instead.
+func (*SubscribeHeadlessExperimentalEventsRequest) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_headlessexperimental_headlessexperimental_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *SubscribeHeadlessExperimentalEventsRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
+type HeadlessExperimentalEvent struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Types that are valid to be assigned to Event:
+	//
+	//	*HeadlessExperimentalEvent_NeedsBeginFramesChanged
+	Event         isHeadlessExperimentalEvent_Event `protobuf_oneof:"event"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *HeadlessExperimentalEvent) Reset() {
+	*x = HeadlessExperimentalEvent{}
+	mi := &file_proto_cdp_headlessexperimental_headlessexperimental_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *HeadlessExperimentalEvent) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*HeadlessExperimentalEvent) ProtoMessage() {}
+
+func (x *HeadlessExperimentalEvent) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_headlessexperimental_headlessexperimental_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use HeadlessExperimentalEvent.ProtoReflect.Descriptor instead.
+func (*HeadlessExperimentalEvent) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_headlessexperimental_headlessexperimental_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *HeadlessExperimentalEvent) GetEvent() isHeadlessExperimentalEvent_Event {
+	if x != nil {
+		return x.Event
+	}
+	return nil
+}
+
+func (x *HeadlessExperimentalEvent) GetNeedsBeginFramesChanged() *NeedsBeginFramesChangedEvent {
+	if x != nil {
+		if x, ok := x.Event.(*HeadlessExperimentalEvent_NeedsBeginFramesChanged); ok {
+			return x.NeedsBeginFramesChanged
+		}
+	}
+	return nil
+}
+
+type isHeadlessExperimentalEvent_Event interface {
+	isHeadlessExperimentalEvent_Event()
+}
+
+type HeadlessExperimentalEvent_NeedsBeginFramesChanged struct {
+	NeedsBeginFramesChanged *NeedsBeginFramesChangedEvent `protobuf:"bytes,1,opt,name=needs_begin_frames_changed,json=needsBeginFramesChanged,proto3,oneof"`
+}
+
+func (*HeadlessExperimentalEvent_NeedsBeginFramesChanged) isHeadlessExperimentalEvent_Event() {}
+
+type NeedsBeginFramesChangedEvent struct {
+	state            protoimpl.MessageState `protogen:"open.v1"`
+	NeedsBeginFrames bool                   `protobuf:"varint,1,opt,name=needs_begin_frames,json=needsBeginFrames,proto3" json:"needs_begin_frames,omitempty"`
+	unknownFields    protoimpl.UnknownFields
+	sizeCache        protoimpl.SizeCache
+}
+
+func (x *NeedsBeginFramesChangedEvent) Reset() {
+	*x = NeedsBeginFramesChangedEvent{}
+	mi := &file_proto_cdp_headlessexperimental_headlessexperimental_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *NeedsBeginFramesChangedEvent) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*NeedsBeginFramesChangedEvent) ProtoMessage() {}
+
+func (x *NeedsBeginFramesChangedEvent) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_headlessexperimental_headlessexperimental_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use NeedsBeginFramesChangedEvent.ProtoReflect.Descriptor instead.
+func (*NeedsBeginFramesChangedEvent) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_headlessexperimental_headlessexperimental_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *NeedsBeginFramesChangedEvent) GetNeedsBeginFrames() bool {
+	if x != nil {
+		return x.NeedsBeginFrames
+	}
+	return false
+}
+
 var File_proto_cdp_headlessexperimental_headlessexperimental_proto protoreflect.FileDescriptor
 
 const file_proto_cdp_headlessexperimental_headlessexperimental_proto_rawDesc = "" +
@@ -379,12 +533,21 @@ const file_proto_cdp_headlessexperimental_headlessexperimental_proto_rawDesc = "
 	"\x12BeginFrameResponse\x12\x1d\n" +
 	"\n" +
 	"has_damage\x18\x01 \x01(\bR\thasDamage\x12'\n" +
-	"\x0fscreenshot_data\x18\x02 \x01(\fR\x0escreenshotData2\xc3\x02\n" +
+	"\x0fscreenshot_data\x18\x02 \x01(\fR\x0escreenshotData\"K\n" +
+	"*SubscribeHeadlessExperimentalEventsRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18\x01 \x01(\tR\tsessionId\"\x9b\x01\n" +
+	"\x19HeadlessExperimentalEvent\x12u\n" +
+	"\x1aneeds_begin_frames_changed\x18\x01 \x01(\v26.cdp.headlessexperimental.NeedsBeginFramesChangedEventH\x00R\x17needsBeginFramesChangedB\a\n" +
+	"\x05event\"L\n" +
+	"\x1cNeedsBeginFramesChangedEvent\x12,\n" +
+	"\x12needs_begin_frames\x18\x01 \x01(\bR\x10needsBeginFrames2\xd4\x03\n" +
 	"\x1bHeadlessExperimentalService\x12[\n" +
 	"\x06Enable\x12'.cdp.headlessexperimental.EnableRequest\x1a(.cdp.headlessexperimental.EnableResponse\x12^\n" +
 	"\aDisable\x12(.cdp.headlessexperimental.DisableRequest\x1a).cdp.headlessexperimental.DisableResponse\x12g\n" +
 	"\n" +
-	"BeginFrame\x12+.cdp.headlessexperimental.BeginFrameRequest\x1a,.cdp.headlessexperimental.BeginFrameResponseBAZ?github.com/accretional/chromerpc/proto/cdp/headlessexperimentalb\x06proto3"
+	"BeginFrame\x12+.cdp.headlessexperimental.BeginFrameRequest\x1a,.cdp.headlessexperimental.BeginFrameResponse\x12\x8e\x01\n" +
+	"\x0fSubscribeEvents\x12D.cdp.headlessexperimental.SubscribeHeadlessExperimentalEventsRequest\x1a3.cdp.headlessexperimental.HeadlessExperimentalEvent0\x01BAZ?github.com/accretional/chromerpc/proto/cdp/headlessexperimentalb\x06proto3"
 
 var (
 	file_proto_cdp_headlessexperimental_headlessexperimental_proto_rawDescOnce sync.Once
@@ -398,29 +561,35 @@ func file_proto_cdp_headlessexperimental_headlessexperimental_proto_rawDescGZIP(
 	return file_proto_cdp_headlessexperimental_headlessexperimental_proto_rawDescData
 }
 
-var file_proto_cdp_headlessexperimental_headlessexperimental_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
+var file_proto_cdp_headlessexperimental_headlessexperimental_proto_msgTypes = make([]protoimpl.MessageInfo, 10)
 var file_proto_cdp_headlessexperimental_headlessexperimental_proto_goTypes = []any{
-	(*ScreenshotParams)(nil),   // 0: cdp.headlessexperimental.ScreenshotParams
-	(*EnableRequest)(nil),      // 1: cdp.headlessexperimental.EnableRequest
-	(*EnableResponse)(nil),     // 2: cdp.headlessexperimental.EnableResponse
-	(*DisableRequest)(nil),     // 3: cdp.headlessexperimental.DisableRequest
-	(*DisableResponse)(nil),    // 4: cdp.headlessexperimental.DisableResponse
-	(*BeginFrameRequest)(nil),  // 5: cdp.headlessexperimental.BeginFrameRequest
-	(*BeginFrameResponse)(nil), // 6: cdp.headlessexperimental.BeginFrameResponse
+	(*ScreenshotParams)(nil),                           // 0: cdp.headlessexperimental.ScreenshotParams
+	(*EnableRequest)(nil),                              // 1: cdp.headlessexperimental.EnableRequest
+	(*EnableResponse)(nil),                             // 2: cdp.headlessexperimental.EnableResponse
+	(*DisableRequest)(nil),                             // 3: cdp.headlessexperimental.DisableRequest
+	(*DisableResponse)(nil),                            // 4: cdp.headlessexperimental.DisableResponse
+	(*BeginFrameRequest)(nil),                          // 5: cdp.headlessexperimental.BeginFrameRequest
+	(*BeginFrameResponse)(nil),                         // 6: cdp.headlessexperimental.BeginFrameResponse
+	(*SubscribeHeadlessExperimentalEventsRequest)(nil), // 7: cdp.headlessexperimental.SubscribeHeadlessExperimentalEventsRequest
+	(*HeadlessExperimentalEvent)(nil),                  // 8: cdp.headlessexperimental.HeadlessExperimentalEvent
+	(*NeedsBeginFramesChangedEvent)(nil),               // 9: cdp.headlessexperimental.NeedsBeginFramesChangedEvent
 }
 var file_proto_cdp_headlessexperimental_headlessexperimental_proto_depIdxs = []int32{
 	0, // 0: cdp.headlessexperimental.BeginFrameRequest.screenshot:type_name -> cdp.headlessexperimental.ScreenshotParams
-	1, // 1: cdp.headlessexperimental.HeadlessExperimentalService.Enable:input_type -> cdp.headlessexperimental.EnableRequest
-	3, // 2: cdp.headlessexperimental.HeadlessExperimentalService.Disable:input_type -> cdp.headlessexperimental.DisableRequest
-	5, // 3: cdp.headlessexperimental.HeadlessExperimentalService.BeginFrame:input_type -> cdp.headlessexperimental.BeginFrameRequest
-	2, // 4: cdp.headlessexperimental.HeadlessExperimentalService.Enable:output_type -> cdp.headlessexperimental.EnableResponse
-	4, // 5: cdp.headlessexperimental.HeadlessExperimentalService.Disable:output_type -> cdp.headlessexperimental.DisableResponse
-	6, // 6: cdp.headlessexperimental.HeadlessExperimentalService.BeginFrame:output_type -> cdp.headlessexperimental.BeginFrameResponse
-	4, // [4:7] is the sub-list for method output_type
-	1, // [1:4] is the sub-list for method input_type
-	1, // [1:1] is the sub-list for extension type_name
-	1, // [1:1] is the sub-list for extension extendee
-	0, // [0:1] is the sub-list for field type_name
+	9, // 1: cdp.headlessexperimental.HeadlessExperimentalEvent.needs_begin_frames_changed:type_name -> cdp.headlessexperimental.NeedsBeginFramesChangedEvent
+	1, // 2: cdp.headlessexperimental.HeadlessExperimentalService.Enable:input_type -> cdp.headlessexperimental.EnableRequest
+	3, // 3: cdp.headlessexperimental.HeadlessExperimentalService.Disable:input_type -> cdp.headlessexperimental.DisableRequest
+	5, // 4: cdp.headlessexperimental.HeadlessExperimentalService.BeginFrame:input_type -> cdp.headlessexperimental.BeginFrameRequest
+	7, // 5: cdp.headlessexperimental.HeadlessExperimentalService.SubscribeEvents:input_type -> cdp.headlessexperimental.SubscribeHeadlessExperimentalEventsRequest
+	2, // 6: cdp.headlessexperimental.HeadlessExperimentalService.Enable:output_type -> cdp.headlessexperimental.EnableResponse
+	4, // 7: cdp.headlessexperimental.HeadlessExperimentalService.Disable:output_type -> cdp.headlessexperimental.DisableResponse
+	6, // 8: cdp.headlessexperimental.HeadlessExperimentalService.BeginFrame:output_type -> cdp.headlessexperimental.BeginFrameResponse
+	8, // 9: cdp.headlessexperimental.HeadlessExperimentalService.SubscribeEvents:output_type -> cdp.headlessexperimental.HeadlessExperimentalEvent
+	6, // [6:10] is the sub-list for method output_type
+	2, // [2:6] is the sub-list for method input_type
+	2, // [2:2] is the sub-list for extension type_name
+	2, // [2:2] is the sub-list for extension extendee
+	0, // [0:2] is the sub-list for field type_name
 }
 
 func init() { file_proto_cdp_headlessexperimental_headlessexperimental_proto_init() }
@@ -429,13 +598,16 @@ func file_proto_cdp_headlessexperimental_headlessexperimental_proto_init() {
 		return
 	}
 	file_proto_cdp_headlessexperimental_headlessexperimental_proto_msgTypes[5].OneofWrappers = []any{}
+	file_proto_cdp_headlessexperimental_headlessexperimental_proto_msgTypes[8].OneofWrappers = []any{
+		(*HeadlessExperimentalEvent_NeedsBeginFramesChanged)(nil),
+	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_cdp_headlessexperimental_headlessexperimental_proto_rawDesc), len(file_proto_cdp_headlessexperimental_headlessexperimental_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   7,
+			NumMessages:   10,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

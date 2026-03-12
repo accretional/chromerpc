@@ -18,6 +18,9 @@ service AutofillService {
 
   // Sets addresses for autofill.
   rpc SetAddresses(SetAddressesRequest) returns (SetAddressesResponse);
+
+  // Subscribes to Autofill domain events.
+  rpc SubscribeEvents(SubscribeAutofillEventsRequest) returns (stream AutofillEvent);
 }
 
 // ==================== Types ====================
@@ -61,3 +64,35 @@ message SetAddressesRequest {
   repeated Address addresses = 1;
 }
 message SetAddressesResponse {}
+
+// ==================== Event Streaming ====================
+
+message SubscribeAutofillEventsRequest {
+  string session_id = 1;
+}
+
+message AutofillEvent {
+  oneof event {
+    AddressFormFilledEvent address_form_filled = 1;
+  }
+}
+
+message AddressFormFilledEvent {
+  repeated FilledField filled_fields = 1;
+  AddressUI address_ui = 2;
+}
+
+message FilledField {
+  string html_type = 1;
+  string id = 2;
+  string name = 3;
+  string value = 4;
+  string autofill_type = 5;
+  string filling_strategy = 6;
+  string frame_id = 7;
+  int32 field_id = 8;
+}
+
+message AddressUI {
+  repeated AddressField address_fields = 1;
+}

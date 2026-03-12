@@ -165,6 +165,264 @@ func (*DisableResponse) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_inspector_inspector_proto_rawDescGZIP(), []int{3}
 }
 
+type SubscribeInspectorEventsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,1,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SubscribeInspectorEventsRequest) Reset() {
+	*x = SubscribeInspectorEventsRequest{}
+	mi := &file_proto_cdp_inspector_inspector_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SubscribeInspectorEventsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SubscribeInspectorEventsRequest) ProtoMessage() {}
+
+func (x *SubscribeInspectorEventsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_inspector_inspector_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SubscribeInspectorEventsRequest.ProtoReflect.Descriptor instead.
+func (*SubscribeInspectorEventsRequest) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_inspector_inspector_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *SubscribeInspectorEventsRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
+type InspectorEvent struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Types that are valid to be assigned to Event:
+	//
+	//	*InspectorEvent_Detached
+	//	*InspectorEvent_TargetCrashed
+	//	*InspectorEvent_TargetReloadedAfterCrash
+	Event         isInspectorEvent_Event `protobuf_oneof:"event"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *InspectorEvent) Reset() {
+	*x = InspectorEvent{}
+	mi := &file_proto_cdp_inspector_inspector_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *InspectorEvent) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*InspectorEvent) ProtoMessage() {}
+
+func (x *InspectorEvent) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_inspector_inspector_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use InspectorEvent.ProtoReflect.Descriptor instead.
+func (*InspectorEvent) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_inspector_inspector_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *InspectorEvent) GetEvent() isInspectorEvent_Event {
+	if x != nil {
+		return x.Event
+	}
+	return nil
+}
+
+func (x *InspectorEvent) GetDetached() *DetachedEvent {
+	if x != nil {
+		if x, ok := x.Event.(*InspectorEvent_Detached); ok {
+			return x.Detached
+		}
+	}
+	return nil
+}
+
+func (x *InspectorEvent) GetTargetCrashed() *TargetCrashedEvent {
+	if x != nil {
+		if x, ok := x.Event.(*InspectorEvent_TargetCrashed); ok {
+			return x.TargetCrashed
+		}
+	}
+	return nil
+}
+
+func (x *InspectorEvent) GetTargetReloadedAfterCrash() *TargetReloadedAfterCrashEvent {
+	if x != nil {
+		if x, ok := x.Event.(*InspectorEvent_TargetReloadedAfterCrash); ok {
+			return x.TargetReloadedAfterCrash
+		}
+	}
+	return nil
+}
+
+type isInspectorEvent_Event interface {
+	isInspectorEvent_Event()
+}
+
+type InspectorEvent_Detached struct {
+	Detached *DetachedEvent `protobuf:"bytes,1,opt,name=detached,proto3,oneof"`
+}
+
+type InspectorEvent_TargetCrashed struct {
+	TargetCrashed *TargetCrashedEvent `protobuf:"bytes,2,opt,name=target_crashed,json=targetCrashed,proto3,oneof"`
+}
+
+type InspectorEvent_TargetReloadedAfterCrash struct {
+	TargetReloadedAfterCrash *TargetReloadedAfterCrashEvent `protobuf:"bytes,3,opt,name=target_reloaded_after_crash,json=targetReloadedAfterCrash,proto3,oneof"`
+}
+
+func (*InspectorEvent_Detached) isInspectorEvent_Event() {}
+
+func (*InspectorEvent_TargetCrashed) isInspectorEvent_Event() {}
+
+func (*InspectorEvent_TargetReloadedAfterCrash) isInspectorEvent_Event() {}
+
+type DetachedEvent struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Reason        string                 `protobuf:"bytes,1,opt,name=reason,proto3" json:"reason,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DetachedEvent) Reset() {
+	*x = DetachedEvent{}
+	mi := &file_proto_cdp_inspector_inspector_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DetachedEvent) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DetachedEvent) ProtoMessage() {}
+
+func (x *DetachedEvent) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_inspector_inspector_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DetachedEvent.ProtoReflect.Descriptor instead.
+func (*DetachedEvent) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_inspector_inspector_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *DetachedEvent) GetReason() string {
+	if x != nil {
+		return x.Reason
+	}
+	return ""
+}
+
+type TargetCrashedEvent struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *TargetCrashedEvent) Reset() {
+	*x = TargetCrashedEvent{}
+	mi := &file_proto_cdp_inspector_inspector_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *TargetCrashedEvent) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*TargetCrashedEvent) ProtoMessage() {}
+
+func (x *TargetCrashedEvent) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_inspector_inspector_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use TargetCrashedEvent.ProtoReflect.Descriptor instead.
+func (*TargetCrashedEvent) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_inspector_inspector_proto_rawDescGZIP(), []int{7}
+}
+
+type TargetReloadedAfterCrashEvent struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *TargetReloadedAfterCrashEvent) Reset() {
+	*x = TargetReloadedAfterCrashEvent{}
+	mi := &file_proto_cdp_inspector_inspector_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *TargetReloadedAfterCrashEvent) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*TargetReloadedAfterCrashEvent) ProtoMessage() {}
+
+func (x *TargetReloadedAfterCrashEvent) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_inspector_inspector_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use TargetReloadedAfterCrashEvent.ProtoReflect.Descriptor instead.
+func (*TargetReloadedAfterCrashEvent) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_inspector_inspector_proto_rawDescGZIP(), []int{8}
+}
+
 var File_proto_cdp_inspector_inspector_proto protoreflect.FileDescriptor
 
 const file_proto_cdp_inspector_inspector_proto_rawDesc = "" +
@@ -173,10 +431,23 @@ const file_proto_cdp_inspector_inspector_proto_rawDesc = "" +
 	"\rEnableRequest\"\x10\n" +
 	"\x0eEnableResponse\"\x10\n" +
 	"\x0eDisableRequest\"\x11\n" +
-	"\x0fDisableResponse2\xa3\x01\n" +
+	"\x0fDisableResponse\"@\n" +
+	"\x1fSubscribeInspectorEventsRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18\x01 \x01(\tR\tsessionId\"\x90\x02\n" +
+	"\x0eInspectorEvent\x12:\n" +
+	"\bdetached\x18\x01 \x01(\v2\x1c.cdp.inspector.DetachedEventH\x00R\bdetached\x12J\n" +
+	"\x0etarget_crashed\x18\x02 \x01(\v2!.cdp.inspector.TargetCrashedEventH\x00R\rtargetCrashed\x12m\n" +
+	"\x1btarget_reloaded_after_crash\x18\x03 \x01(\v2,.cdp.inspector.TargetReloadedAfterCrashEventH\x00R\x18targetReloadedAfterCrashB\a\n" +
+	"\x05event\"'\n" +
+	"\rDetachedEvent\x12\x16\n" +
+	"\x06reason\x18\x01 \x01(\tR\x06reason\"\x14\n" +
+	"\x12TargetCrashedEvent\"\x1f\n" +
+	"\x1dTargetReloadedAfterCrashEvent2\x87\x02\n" +
 	"\x10InspectorService\x12E\n" +
 	"\x06Enable\x12\x1c.cdp.inspector.EnableRequest\x1a\x1d.cdp.inspector.EnableResponse\x12H\n" +
-	"\aDisable\x12\x1d.cdp.inspector.DisableRequest\x1a\x1e.cdp.inspector.DisableResponseB6Z4github.com/accretional/chromerpc/proto/cdp/inspectorb\x06proto3"
+	"\aDisable\x12\x1d.cdp.inspector.DisableRequest\x1a\x1e.cdp.inspector.DisableResponse\x12b\n" +
+	"\x0fSubscribeEvents\x12..cdp.inspector.SubscribeInspectorEventsRequest\x1a\x1d.cdp.inspector.InspectorEvent0\x01B6Z4github.com/accretional/chromerpc/proto/cdp/inspectorb\x06proto3"
 
 var (
 	file_proto_cdp_inspector_inspector_proto_rawDescOnce sync.Once
@@ -190,23 +461,33 @@ func file_proto_cdp_inspector_inspector_proto_rawDescGZIP() []byte {
 	return file_proto_cdp_inspector_inspector_proto_rawDescData
 }
 
-var file_proto_cdp_inspector_inspector_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
+var file_proto_cdp_inspector_inspector_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
 var file_proto_cdp_inspector_inspector_proto_goTypes = []any{
-	(*EnableRequest)(nil),   // 0: cdp.inspector.EnableRequest
-	(*EnableResponse)(nil),  // 1: cdp.inspector.EnableResponse
-	(*DisableRequest)(nil),  // 2: cdp.inspector.DisableRequest
-	(*DisableResponse)(nil), // 3: cdp.inspector.DisableResponse
+	(*EnableRequest)(nil),                   // 0: cdp.inspector.EnableRequest
+	(*EnableResponse)(nil),                  // 1: cdp.inspector.EnableResponse
+	(*DisableRequest)(nil),                  // 2: cdp.inspector.DisableRequest
+	(*DisableResponse)(nil),                 // 3: cdp.inspector.DisableResponse
+	(*SubscribeInspectorEventsRequest)(nil), // 4: cdp.inspector.SubscribeInspectorEventsRequest
+	(*InspectorEvent)(nil),                  // 5: cdp.inspector.InspectorEvent
+	(*DetachedEvent)(nil),                   // 6: cdp.inspector.DetachedEvent
+	(*TargetCrashedEvent)(nil),              // 7: cdp.inspector.TargetCrashedEvent
+	(*TargetReloadedAfterCrashEvent)(nil),   // 8: cdp.inspector.TargetReloadedAfterCrashEvent
 }
 var file_proto_cdp_inspector_inspector_proto_depIdxs = []int32{
-	0, // 0: cdp.inspector.InspectorService.Enable:input_type -> cdp.inspector.EnableRequest
-	2, // 1: cdp.inspector.InspectorService.Disable:input_type -> cdp.inspector.DisableRequest
-	1, // 2: cdp.inspector.InspectorService.Enable:output_type -> cdp.inspector.EnableResponse
-	3, // 3: cdp.inspector.InspectorService.Disable:output_type -> cdp.inspector.DisableResponse
-	2, // [2:4] is the sub-list for method output_type
-	0, // [0:2] is the sub-list for method input_type
-	0, // [0:0] is the sub-list for extension type_name
-	0, // [0:0] is the sub-list for extension extendee
-	0, // [0:0] is the sub-list for field type_name
+	6, // 0: cdp.inspector.InspectorEvent.detached:type_name -> cdp.inspector.DetachedEvent
+	7, // 1: cdp.inspector.InspectorEvent.target_crashed:type_name -> cdp.inspector.TargetCrashedEvent
+	8, // 2: cdp.inspector.InspectorEvent.target_reloaded_after_crash:type_name -> cdp.inspector.TargetReloadedAfterCrashEvent
+	0, // 3: cdp.inspector.InspectorService.Enable:input_type -> cdp.inspector.EnableRequest
+	2, // 4: cdp.inspector.InspectorService.Disable:input_type -> cdp.inspector.DisableRequest
+	4, // 5: cdp.inspector.InspectorService.SubscribeEvents:input_type -> cdp.inspector.SubscribeInspectorEventsRequest
+	1, // 6: cdp.inspector.InspectorService.Enable:output_type -> cdp.inspector.EnableResponse
+	3, // 7: cdp.inspector.InspectorService.Disable:output_type -> cdp.inspector.DisableResponse
+	5, // 8: cdp.inspector.InspectorService.SubscribeEvents:output_type -> cdp.inspector.InspectorEvent
+	6, // [6:9] is the sub-list for method output_type
+	3, // [3:6] is the sub-list for method input_type
+	3, // [3:3] is the sub-list for extension type_name
+	3, // [3:3] is the sub-list for extension extendee
+	0, // [0:3] is the sub-list for field type_name
 }
 
 func init() { file_proto_cdp_inspector_inspector_proto_init() }
@@ -214,13 +495,18 @@ func file_proto_cdp_inspector_inspector_proto_init() {
 	if File_proto_cdp_inspector_inspector_proto != nil {
 		return
 	}
+	file_proto_cdp_inspector_inspector_proto_msgTypes[5].OneofWrappers = []any{
+		(*InspectorEvent_Detached)(nil),
+		(*InspectorEvent_TargetCrashed)(nil),
+		(*InspectorEvent_TargetReloadedAfterCrash)(nil),
+	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_cdp_inspector_inspector_proto_rawDesc), len(file_proto_cdp_inspector_inspector_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   4,
+			NumMessages:   9,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

@@ -91,3 +91,81 @@ func (s *Server) BeginFrame(ctx context.Context, req *pb.BeginFrameRequest) (*pb
 
 	return out, nil
 }
+
+func (s *Server) SubscribeEvents(req *pb.SubscribeHeadlessExperimentalEventsRequest, stream pb.HeadlessExperimentalService_SubscribeEventsServer) error {
+	eventCh := make(chan *pb.HeadlessExperimentalEvent, 128)
+	ctx := stream.Context()
+
+	// Register a wildcard handler for all HeadlessExperimental.* events.
+	unregister := s.client.On("HeadlessExperimental.", func(method string, params json.RawMessage, sessionID string) {
+		if req.SessionId != "" && sessionID != req.SessionId {
+			return
+		}
+		evt := convertHeadlessExperimentalEvent(method, params)
+		if evt != nil {
+			select {
+			case eventCh <- evt:
+			default:
+			}
+		}
+	})
+
+	// Also register specific events since the On() matching is exact.
+	heEvents := []string{
+		"HeadlessExperimental.needsBeginFramesChanged",
+	}
+	unregisters := make([]func(), 0, len(heEvents)+1)
+	unregisters = append(unregisters, unregister)
+	for _, method := range heEvents {
+		method := method
+		unreg := s.client.On(method, func(m string, params json.RawMessage, sessionID string) {
+			if req.SessionId != "" && sessionID != req.SessionId {
+				return
+			}
+			evt := convertHeadlessExperimentalEvent(method, params)
+			if evt != nil {
+				select {
+				case eventCh <- evt:
+				default:
+				}
+			}
+		})
+		unregisters = append(unregisters, unreg)
+	}
+	defer func() {
+		for _, unreg := range unregisters {
+			unreg()
+		}
+	}()
+
+	for {
+		select {
+		case evt := <-eventCh:
+			if err := stream.Send(evt); err != nil {
+				return err
+			}
+		case <-ctx.Done():
+			return ctx.Err()
+		case <-s.client.Done():
+			return fmt.Errorf("CDP connection closed")
+		}
+	}
+}
+
+func convertHeadlessExperimentalEvent(method string, params json.RawMessage) *pb.HeadlessExperimentalEvent {
+	switch method {
+	case "HeadlessExperimental.needsBeginFramesChanged":
+		var d struct {
+			NeedsBeginFrames bool `json:"needsBeginFrames"`
+		}
+		if json.Unmarshal(params, &d) != nil {
+			return nil
+		}
+		return &pb.HeadlessExperimentalEvent{Event: &pb.HeadlessExperimentalEvent_NeedsBeginFramesChanged{
+			NeedsBeginFramesChanged: &pb.NeedsBeginFramesChangedEvent{
+				NeedsBeginFrames: d.NeedsBeginFrames,
+			},
+		}}
+	}
+	return nil
+}

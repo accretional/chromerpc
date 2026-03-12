@@ -3,6 +3,7 @@ package deviceaccess
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 
 	"github.com/accretional/chromerpc/internal/cdpclient"
@@ -51,4 +52,96 @@ func (s *Server) CancelPrompt(ctx context.Context, req *pb.CancelPromptRequest) 
 		return nil, fmt.Errorf("DeviceAccess.cancelPrompt: %w", err)
 	}
 	return &pb.CancelPromptResponse{}, nil
+}
+
+func (s *Server) SubscribeEvents(req *pb.SubscribeDeviceAccessEventsRequest, stream pb.DeviceAccessService_SubscribeEventsServer) error {
+	eventCh := make(chan *pb.DeviceAccessEvent, 128)
+	ctx := stream.Context()
+
+	// Register a wildcard handler for all DeviceAccess.* events.
+	unregister := s.client.On("DeviceAccess.", func(method string, params json.RawMessage, sessionID string) {
+		if req.SessionId != "" && sessionID != req.SessionId {
+			return
+		}
+		evt := convertDeviceAccessEvent(method, params)
+		if evt != nil {
+			select {
+			case eventCh <- evt:
+			default:
+			}
+		}
+	})
+
+	// Also register specific events since the On() matching is exact.
+	deviceAccessEvents := []string{
+		"DeviceAccess.deviceRequestPrompted",
+	}
+	unregisters := make([]func(), 0, len(deviceAccessEvents)+1)
+	unregisters = append(unregisters, unregister)
+	for _, method := range deviceAccessEvents {
+		method := method
+		unreg := s.client.On(method, func(m string, params json.RawMessage, sessionID string) {
+			if req.SessionId != "" && sessionID != req.SessionId {
+				return
+			}
+			evt := convertDeviceAccessEvent(method, params)
+			if evt != nil {
+				select {
+				case eventCh <- evt:
+				default:
+				}
+			}
+		})
+		unregisters = append(unregisters, unreg)
+	}
+	defer func() {
+		for _, unreg := range unregisters {
+			unreg()
+		}
+	}()
+
+	for {
+		select {
+		case evt := <-eventCh:
+			if err := stream.Send(evt); err != nil {
+				return err
+			}
+		case <-ctx.Done():
+			return ctx.Err()
+		case <-s.client.Done():
+			return fmt.Errorf("CDP connection closed")
+		}
+	}
+}
+
+func convertDeviceAccessEvent(method string, params json.RawMessage) *pb.DeviceAccessEvent {
+	switch method {
+	case "DeviceAccess.deviceRequestPrompted":
+		var d struct {
+			ID      string `json:"id"`
+			Devices []struct {
+				ID   string `json:"id"`
+				Name string `json:"name"`
+			} `json:"devices"`
+		}
+		if json.Unmarshal(params, &d) != nil {
+			return nil
+		}
+		devices := make([]*pb.PromptDevice, len(d.Devices))
+		for i, dev := range d.Devices {
+			devices[i] = &pb.PromptDevice{
+				Id:   dev.ID,
+				Name: dev.Name,
+			}
+		}
+		return &pb.DeviceAccessEvent{Event: &pb.DeviceAccessEvent_DeviceRequestPrompted{
+			DeviceRequestPrompted: &pb.DeviceRequestPromptedEvent{
+				Id:      d.ID,
+				Devices: devices,
+			},
+		}}
+
+	default:
+		return nil
+	}
 }

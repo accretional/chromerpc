@@ -12,6 +12,9 @@ service InspectorService {
 
   // Disable inspector domain notifications.
   rpc Disable(DisableRequest) returns (DisableResponse);
+
+  // Subscribe to Inspector domain events.
+  rpc SubscribeEvents(SubscribeInspectorEventsRequest) returns (stream InspectorEvent);
 }
 
 // ==================== Requests / Responses ====================
@@ -21,3 +24,25 @@ message EnableResponse {}
 
 message DisableRequest {}
 message DisableResponse {}
+
+// ==================== Event Streaming ====================
+
+message SubscribeInspectorEventsRequest {
+  string session_id = 1;
+}
+
+message InspectorEvent {
+  oneof event {
+    DetachedEvent detached = 1;
+    TargetCrashedEvent target_crashed = 2;
+    TargetReloadedAfterCrashEvent target_reloaded_after_crash = 3;
+  }
+}
+
+message DetachedEvent {
+  string reason = 1;
+}
+
+message TargetCrashedEvent {}
+
+message TargetReloadedAfterCrashEvent {}

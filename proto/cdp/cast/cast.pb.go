@@ -493,6 +493,280 @@ func (*StopCastingResponse) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_cast_cast_proto_rawDescGZIP(), []int{11}
 }
 
+type SubscribeCastEventsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,1,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SubscribeCastEventsRequest) Reset() {
+	*x = SubscribeCastEventsRequest{}
+	mi := &file_proto_cdp_cast_cast_proto_msgTypes[12]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SubscribeCastEventsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SubscribeCastEventsRequest) ProtoMessage() {}
+
+func (x *SubscribeCastEventsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_cast_cast_proto_msgTypes[12]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SubscribeCastEventsRequest.ProtoReflect.Descriptor instead.
+func (*SubscribeCastEventsRequest) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_cast_cast_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *SubscribeCastEventsRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
+type CastEvent struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Types that are valid to be assigned to Event:
+	//
+	//	*CastEvent_SinksUpdated
+	//	*CastEvent_IssueUpdated
+	Event         isCastEvent_Event `protobuf_oneof:"event"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CastEvent) Reset() {
+	*x = CastEvent{}
+	mi := &file_proto_cdp_cast_cast_proto_msgTypes[13]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CastEvent) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CastEvent) ProtoMessage() {}
+
+func (x *CastEvent) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_cast_cast_proto_msgTypes[13]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CastEvent.ProtoReflect.Descriptor instead.
+func (*CastEvent) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_cast_cast_proto_rawDescGZIP(), []int{13}
+}
+
+func (x *CastEvent) GetEvent() isCastEvent_Event {
+	if x != nil {
+		return x.Event
+	}
+	return nil
+}
+
+func (x *CastEvent) GetSinksUpdated() *SinksUpdatedEvent {
+	if x != nil {
+		if x, ok := x.Event.(*CastEvent_SinksUpdated); ok {
+			return x.SinksUpdated
+		}
+	}
+	return nil
+}
+
+func (x *CastEvent) GetIssueUpdated() *IssueUpdatedEvent {
+	if x != nil {
+		if x, ok := x.Event.(*CastEvent_IssueUpdated); ok {
+			return x.IssueUpdated
+		}
+	}
+	return nil
+}
+
+type isCastEvent_Event interface {
+	isCastEvent_Event()
+}
+
+type CastEvent_SinksUpdated struct {
+	SinksUpdated *SinksUpdatedEvent `protobuf:"bytes,1,opt,name=sinks_updated,json=sinksUpdated,proto3,oneof"`
+}
+
+type CastEvent_IssueUpdated struct {
+	IssueUpdated *IssueUpdatedEvent `protobuf:"bytes,2,opt,name=issue_updated,json=issueUpdated,proto3,oneof"`
+}
+
+func (*CastEvent_SinksUpdated) isCastEvent_Event() {}
+
+func (*CastEvent_IssueUpdated) isCastEvent_Event() {}
+
+type SinksUpdatedEvent struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Sinks         []*Sink                `protobuf:"bytes,1,rep,name=sinks,proto3" json:"sinks,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SinksUpdatedEvent) Reset() {
+	*x = SinksUpdatedEvent{}
+	mi := &file_proto_cdp_cast_cast_proto_msgTypes[14]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SinksUpdatedEvent) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SinksUpdatedEvent) ProtoMessage() {}
+
+func (x *SinksUpdatedEvent) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_cast_cast_proto_msgTypes[14]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SinksUpdatedEvent.ProtoReflect.Descriptor instead.
+func (*SinksUpdatedEvent) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_cast_cast_proto_rawDescGZIP(), []int{14}
+}
+
+func (x *SinksUpdatedEvent) GetSinks() []*Sink {
+	if x != nil {
+		return x.Sinks
+	}
+	return nil
+}
+
+type IssueUpdatedEvent struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	IssueMessage  string                 `protobuf:"bytes,1,opt,name=issue_message,json=issueMessage,proto3" json:"issue_message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *IssueUpdatedEvent) Reset() {
+	*x = IssueUpdatedEvent{}
+	mi := &file_proto_cdp_cast_cast_proto_msgTypes[15]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *IssueUpdatedEvent) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*IssueUpdatedEvent) ProtoMessage() {}
+
+func (x *IssueUpdatedEvent) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_cast_cast_proto_msgTypes[15]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use IssueUpdatedEvent.ProtoReflect.Descriptor instead.
+func (*IssueUpdatedEvent) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_cast_cast_proto_rawDescGZIP(), []int{15}
+}
+
+func (x *IssueUpdatedEvent) GetIssueMessage() string {
+	if x != nil {
+		return x.IssueMessage
+	}
+	return ""
+}
+
+type Sink struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	Id            string                 `protobuf:"bytes,2,opt,name=id,proto3" json:"id,omitempty"`
+	Session       string                 `protobuf:"bytes,3,opt,name=session,proto3" json:"session,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Sink) Reset() {
+	*x = Sink{}
+	mi := &file_proto_cdp_cast_cast_proto_msgTypes[16]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Sink) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Sink) ProtoMessage() {}
+
+func (x *Sink) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_cast_cast_proto_msgTypes[16]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Sink.ProtoReflect.Descriptor instead.
+func (*Sink) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_cast_cast_proto_rawDescGZIP(), []int{16}
+}
+
+func (x *Sink) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *Sink) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *Sink) GetSession() string {
+	if x != nil {
+		return x.Session
+	}
+	return ""
+}
+
 var File_proto_cdp_cast_cast_proto protoreflect.FileDescriptor
 
 const file_proto_cdp_cast_cast_proto_rawDesc = "" +
@@ -515,14 +789,30 @@ const file_proto_cdp_cast_cast_proto_rawDesc = "" +
 	"\x19StartTabMirroringResponse\"1\n" +
 	"\x12StopCastingRequest\x12\x1b\n" +
 	"\tsink_name\x18\x01 \x01(\tR\bsinkName\"\x15\n" +
-	"\x13StopCastingResponse2\xed\x03\n" +
+	"\x13StopCastingResponse\";\n" +
+	"\x1aSubscribeCastEventsRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18\x01 \x01(\tR\tsessionId\"\x9c\x01\n" +
+	"\tCastEvent\x12B\n" +
+	"\rsinks_updated\x18\x01 \x01(\v2\x1b.cdp.cast.SinksUpdatedEventH\x00R\fsinksUpdated\x12B\n" +
+	"\rissue_updated\x18\x02 \x01(\v2\x1b.cdp.cast.IssueUpdatedEventH\x00R\fissueUpdatedB\a\n" +
+	"\x05event\"9\n" +
+	"\x11SinksUpdatedEvent\x12$\n" +
+	"\x05sinks\x18\x01 \x03(\v2\x0e.cdp.cast.SinkR\x05sinks\"8\n" +
+	"\x11IssueUpdatedEvent\x12#\n" +
+	"\rissue_message\x18\x01 \x01(\tR\fissueMessage\"D\n" +
+	"\x04Sink\x12\x12\n" +
+	"\x04name\x18\x01 \x01(\tR\x04name\x12\x0e\n" +
+	"\x02id\x18\x02 \x01(\tR\x02id\x12\x18\n" +
+	"\asession\x18\x03 \x01(\tR\asession2\xbd\x04\n" +
 	"\vCastService\x12;\n" +
 	"\x06Enable\x12\x17.cdp.cast.EnableRequest\x1a\x18.cdp.cast.EnableResponse\x12>\n" +
 	"\aDisable\x12\x18.cdp.cast.DisableRequest\x1a\x19.cdp.cast.DisableResponse\x12M\n" +
 	"\fSetSinkToUse\x12\x1d.cdp.cast.SetSinkToUseRequest\x1a\x1e.cdp.cast.SetSinkToUseResponse\x12h\n" +
 	"\x15StartDesktopMirroring\x12&.cdp.cast.StartDesktopMirroringRequest\x1a'.cdp.cast.StartDesktopMirroringResponse\x12\\\n" +
 	"\x11StartTabMirroring\x12\".cdp.cast.StartTabMirroringRequest\x1a#.cdp.cast.StartTabMirroringResponse\x12J\n" +
-	"\vStopCasting\x12\x1c.cdp.cast.StopCastingRequest\x1a\x1d.cdp.cast.StopCastingResponseB1Z/github.com/accretional/chromerpc/proto/cdp/castb\x06proto3"
+	"\vStopCasting\x12\x1c.cdp.cast.StopCastingRequest\x1a\x1d.cdp.cast.StopCastingResponse\x12N\n" +
+	"\x0fSubscribeEvents\x12$.cdp.cast.SubscribeCastEventsRequest\x1a\x13.cdp.cast.CastEvent0\x01B1Z/github.com/accretional/chromerpc/proto/cdp/castb\x06proto3"
 
 var (
 	file_proto_cdp_cast_cast_proto_rawDescOnce sync.Once
@@ -536,7 +826,7 @@ func file_proto_cdp_cast_cast_proto_rawDescGZIP() []byte {
 	return file_proto_cdp_cast_cast_proto_rawDescData
 }
 
-var file_proto_cdp_cast_cast_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
+var file_proto_cdp_cast_cast_proto_msgTypes = make([]protoimpl.MessageInfo, 17)
 var file_proto_cdp_cast_cast_proto_goTypes = []any{
 	(*EnableRequest)(nil),                 // 0: cdp.cast.EnableRequest
 	(*EnableResponse)(nil),                // 1: cdp.cast.EnableResponse
@@ -550,25 +840,35 @@ var file_proto_cdp_cast_cast_proto_goTypes = []any{
 	(*StartTabMirroringResponse)(nil),     // 9: cdp.cast.StartTabMirroringResponse
 	(*StopCastingRequest)(nil),            // 10: cdp.cast.StopCastingRequest
 	(*StopCastingResponse)(nil),           // 11: cdp.cast.StopCastingResponse
+	(*SubscribeCastEventsRequest)(nil),    // 12: cdp.cast.SubscribeCastEventsRequest
+	(*CastEvent)(nil),                     // 13: cdp.cast.CastEvent
+	(*SinksUpdatedEvent)(nil),             // 14: cdp.cast.SinksUpdatedEvent
+	(*IssueUpdatedEvent)(nil),             // 15: cdp.cast.IssueUpdatedEvent
+	(*Sink)(nil),                          // 16: cdp.cast.Sink
 }
 var file_proto_cdp_cast_cast_proto_depIdxs = []int32{
-	0,  // 0: cdp.cast.CastService.Enable:input_type -> cdp.cast.EnableRequest
-	2,  // 1: cdp.cast.CastService.Disable:input_type -> cdp.cast.DisableRequest
-	4,  // 2: cdp.cast.CastService.SetSinkToUse:input_type -> cdp.cast.SetSinkToUseRequest
-	6,  // 3: cdp.cast.CastService.StartDesktopMirroring:input_type -> cdp.cast.StartDesktopMirroringRequest
-	8,  // 4: cdp.cast.CastService.StartTabMirroring:input_type -> cdp.cast.StartTabMirroringRequest
-	10, // 5: cdp.cast.CastService.StopCasting:input_type -> cdp.cast.StopCastingRequest
-	1,  // 6: cdp.cast.CastService.Enable:output_type -> cdp.cast.EnableResponse
-	3,  // 7: cdp.cast.CastService.Disable:output_type -> cdp.cast.DisableResponse
-	5,  // 8: cdp.cast.CastService.SetSinkToUse:output_type -> cdp.cast.SetSinkToUseResponse
-	7,  // 9: cdp.cast.CastService.StartDesktopMirroring:output_type -> cdp.cast.StartDesktopMirroringResponse
-	9,  // 10: cdp.cast.CastService.StartTabMirroring:output_type -> cdp.cast.StartTabMirroringResponse
-	11, // 11: cdp.cast.CastService.StopCasting:output_type -> cdp.cast.StopCastingResponse
-	6,  // [6:12] is the sub-list for method output_type
-	0,  // [0:6] is the sub-list for method input_type
-	0,  // [0:0] is the sub-list for extension type_name
-	0,  // [0:0] is the sub-list for extension extendee
-	0,  // [0:0] is the sub-list for field type_name
+	14, // 0: cdp.cast.CastEvent.sinks_updated:type_name -> cdp.cast.SinksUpdatedEvent
+	15, // 1: cdp.cast.CastEvent.issue_updated:type_name -> cdp.cast.IssueUpdatedEvent
+	16, // 2: cdp.cast.SinksUpdatedEvent.sinks:type_name -> cdp.cast.Sink
+	0,  // 3: cdp.cast.CastService.Enable:input_type -> cdp.cast.EnableRequest
+	2,  // 4: cdp.cast.CastService.Disable:input_type -> cdp.cast.DisableRequest
+	4,  // 5: cdp.cast.CastService.SetSinkToUse:input_type -> cdp.cast.SetSinkToUseRequest
+	6,  // 6: cdp.cast.CastService.StartDesktopMirroring:input_type -> cdp.cast.StartDesktopMirroringRequest
+	8,  // 7: cdp.cast.CastService.StartTabMirroring:input_type -> cdp.cast.StartTabMirroringRequest
+	10, // 8: cdp.cast.CastService.StopCasting:input_type -> cdp.cast.StopCastingRequest
+	12, // 9: cdp.cast.CastService.SubscribeEvents:input_type -> cdp.cast.SubscribeCastEventsRequest
+	1,  // 10: cdp.cast.CastService.Enable:output_type -> cdp.cast.EnableResponse
+	3,  // 11: cdp.cast.CastService.Disable:output_type -> cdp.cast.DisableResponse
+	5,  // 12: cdp.cast.CastService.SetSinkToUse:output_type -> cdp.cast.SetSinkToUseResponse
+	7,  // 13: cdp.cast.CastService.StartDesktopMirroring:output_type -> cdp.cast.StartDesktopMirroringResponse
+	9,  // 14: cdp.cast.CastService.StartTabMirroring:output_type -> cdp.cast.StartTabMirroringResponse
+	11, // 15: cdp.cast.CastService.StopCasting:output_type -> cdp.cast.StopCastingResponse
+	13, // 16: cdp.cast.CastService.SubscribeEvents:output_type -> cdp.cast.CastEvent
+	10, // [10:17] is the sub-list for method output_type
+	3,  // [3:10] is the sub-list for method input_type
+	3,  // [3:3] is the sub-list for extension type_name
+	3,  // [3:3] is the sub-list for extension extendee
+	0,  // [0:3] is the sub-list for field type_name
 }
 
 func init() { file_proto_cdp_cast_cast_proto_init() }
@@ -577,13 +877,17 @@ func file_proto_cdp_cast_cast_proto_init() {
 		return
 	}
 	file_proto_cdp_cast_cast_proto_msgTypes[0].OneofWrappers = []any{}
+	file_proto_cdp_cast_cast_proto_msgTypes[13].OneofWrappers = []any{
+		(*CastEvent_SinksUpdated)(nil),
+		(*CastEvent_IssueUpdated)(nil),
+	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_cdp_cast_cast_proto_rawDesc), len(file_proto_cdp_cast_cast_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   12,
+			NumMessages:   17,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

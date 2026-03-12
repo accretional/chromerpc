@@ -410,6 +410,380 @@ func (*ClearEventsResponse) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_backgroundservice_backgroundservice_proto_rawDescGZIP(), []int{7}
 }
 
+type SubscribeBackgroundServiceEventsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	SessionId     string                 `protobuf:"bytes,1,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SubscribeBackgroundServiceEventsRequest) Reset() {
+	*x = SubscribeBackgroundServiceEventsRequest{}
+	mi := &file_proto_cdp_backgroundservice_backgroundservice_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SubscribeBackgroundServiceEventsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SubscribeBackgroundServiceEventsRequest) ProtoMessage() {}
+
+func (x *SubscribeBackgroundServiceEventsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_backgroundservice_backgroundservice_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SubscribeBackgroundServiceEventsRequest.ProtoReflect.Descriptor instead.
+func (*SubscribeBackgroundServiceEventsRequest) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_backgroundservice_backgroundservice_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *SubscribeBackgroundServiceEventsRequest) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
+type BackgroundServiceEvent struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Types that are valid to be assigned to Event:
+	//
+	//	*BackgroundServiceEvent_RecordingStateChanged
+	//	*BackgroundServiceEvent_BackgroundServiceEventReceived
+	Event         isBackgroundServiceEvent_Event `protobuf_oneof:"event"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *BackgroundServiceEvent) Reset() {
+	*x = BackgroundServiceEvent{}
+	mi := &file_proto_cdp_backgroundservice_backgroundservice_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *BackgroundServiceEvent) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BackgroundServiceEvent) ProtoMessage() {}
+
+func (x *BackgroundServiceEvent) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_backgroundservice_backgroundservice_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BackgroundServiceEvent.ProtoReflect.Descriptor instead.
+func (*BackgroundServiceEvent) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_backgroundservice_backgroundservice_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *BackgroundServiceEvent) GetEvent() isBackgroundServiceEvent_Event {
+	if x != nil {
+		return x.Event
+	}
+	return nil
+}
+
+func (x *BackgroundServiceEvent) GetRecordingStateChanged() *RecordingStateChangedEvent {
+	if x != nil {
+		if x, ok := x.Event.(*BackgroundServiceEvent_RecordingStateChanged); ok {
+			return x.RecordingStateChanged
+		}
+	}
+	return nil
+}
+
+func (x *BackgroundServiceEvent) GetBackgroundServiceEventReceived() *BackgroundServiceEventReceivedEvent {
+	if x != nil {
+		if x, ok := x.Event.(*BackgroundServiceEvent_BackgroundServiceEventReceived); ok {
+			return x.BackgroundServiceEventReceived
+		}
+	}
+	return nil
+}
+
+type isBackgroundServiceEvent_Event interface {
+	isBackgroundServiceEvent_Event()
+}
+
+type BackgroundServiceEvent_RecordingStateChanged struct {
+	RecordingStateChanged *RecordingStateChangedEvent `protobuf:"bytes,1,opt,name=recording_state_changed,json=recordingStateChanged,proto3,oneof"`
+}
+
+type BackgroundServiceEvent_BackgroundServiceEventReceived struct {
+	BackgroundServiceEventReceived *BackgroundServiceEventReceivedEvent `protobuf:"bytes,2,opt,name=background_service_event_received,json=backgroundServiceEventReceived,proto3,oneof"`
+}
+
+func (*BackgroundServiceEvent_RecordingStateChanged) isBackgroundServiceEvent_Event() {}
+
+func (*BackgroundServiceEvent_BackgroundServiceEventReceived) isBackgroundServiceEvent_Event() {}
+
+type RecordingStateChangedEvent struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	IsRecording   bool                   `protobuf:"varint,1,opt,name=is_recording,json=isRecording,proto3" json:"is_recording,omitempty"`
+	Service       string                 `protobuf:"bytes,2,opt,name=service,proto3" json:"service,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *RecordingStateChangedEvent) Reset() {
+	*x = RecordingStateChangedEvent{}
+	mi := &file_proto_cdp_backgroundservice_backgroundservice_proto_msgTypes[10]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RecordingStateChangedEvent) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RecordingStateChangedEvent) ProtoMessage() {}
+
+func (x *RecordingStateChangedEvent) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_backgroundservice_backgroundservice_proto_msgTypes[10]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RecordingStateChangedEvent.ProtoReflect.Descriptor instead.
+func (*RecordingStateChangedEvent) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_backgroundservice_backgroundservice_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *RecordingStateChangedEvent) GetIsRecording() bool {
+	if x != nil {
+		return x.IsRecording
+	}
+	return false
+}
+
+func (x *RecordingStateChangedEvent) GetService() string {
+	if x != nil {
+		return x.Service
+	}
+	return ""
+}
+
+type BackgroundServiceEventReceivedEvent struct {
+	state                  protoimpl.MessageState        `protogen:"open.v1"`
+	BackgroundServiceEvent *BackgroundServiceEventDetail `protobuf:"bytes,1,opt,name=background_service_event,json=backgroundServiceEvent,proto3" json:"background_service_event,omitempty"`
+	unknownFields          protoimpl.UnknownFields
+	sizeCache              protoimpl.SizeCache
+}
+
+func (x *BackgroundServiceEventReceivedEvent) Reset() {
+	*x = BackgroundServiceEventReceivedEvent{}
+	mi := &file_proto_cdp_backgroundservice_backgroundservice_proto_msgTypes[11]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *BackgroundServiceEventReceivedEvent) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BackgroundServiceEventReceivedEvent) ProtoMessage() {}
+
+func (x *BackgroundServiceEventReceivedEvent) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_backgroundservice_backgroundservice_proto_msgTypes[11]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BackgroundServiceEventReceivedEvent.ProtoReflect.Descriptor instead.
+func (*BackgroundServiceEventReceivedEvent) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_backgroundservice_backgroundservice_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *BackgroundServiceEventReceivedEvent) GetBackgroundServiceEvent() *BackgroundServiceEventDetail {
+	if x != nil {
+		return x.BackgroundServiceEvent
+	}
+	return nil
+}
+
+type BackgroundServiceEventDetail struct {
+	state                       protoimpl.MessageState `protogen:"open.v1"`
+	Timestamp                   float64                `protobuf:"fixed64,1,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
+	Origin                      string                 `protobuf:"bytes,2,opt,name=origin,proto3" json:"origin,omitempty"`
+	ServiceWorkerRegistrationId string                 `protobuf:"bytes,3,opt,name=service_worker_registration_id,json=serviceWorkerRegistrationId,proto3" json:"service_worker_registration_id,omitempty"`
+	Service                     string                 `protobuf:"bytes,4,opt,name=service,proto3" json:"service,omitempty"`
+	EventName                   string                 `protobuf:"bytes,5,opt,name=event_name,json=eventName,proto3" json:"event_name,omitempty"`
+	InstanceId                  string                 `protobuf:"bytes,6,opt,name=instance_id,json=instanceId,proto3" json:"instance_id,omitempty"`
+	EventMetadata               []*EventMetadata       `protobuf:"bytes,7,rep,name=event_metadata,json=eventMetadata,proto3" json:"event_metadata,omitempty"`
+	StorageKey                  string                 `protobuf:"bytes,8,opt,name=storage_key,json=storageKey,proto3" json:"storage_key,omitempty"`
+	unknownFields               protoimpl.UnknownFields
+	sizeCache                   protoimpl.SizeCache
+}
+
+func (x *BackgroundServiceEventDetail) Reset() {
+	*x = BackgroundServiceEventDetail{}
+	mi := &file_proto_cdp_backgroundservice_backgroundservice_proto_msgTypes[12]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *BackgroundServiceEventDetail) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BackgroundServiceEventDetail) ProtoMessage() {}
+
+func (x *BackgroundServiceEventDetail) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_backgroundservice_backgroundservice_proto_msgTypes[12]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BackgroundServiceEventDetail.ProtoReflect.Descriptor instead.
+func (*BackgroundServiceEventDetail) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_backgroundservice_backgroundservice_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *BackgroundServiceEventDetail) GetTimestamp() float64 {
+	if x != nil {
+		return x.Timestamp
+	}
+	return 0
+}
+
+func (x *BackgroundServiceEventDetail) GetOrigin() string {
+	if x != nil {
+		return x.Origin
+	}
+	return ""
+}
+
+func (x *BackgroundServiceEventDetail) GetServiceWorkerRegistrationId() string {
+	if x != nil {
+		return x.ServiceWorkerRegistrationId
+	}
+	return ""
+}
+
+func (x *BackgroundServiceEventDetail) GetService() string {
+	if x != nil {
+		return x.Service
+	}
+	return ""
+}
+
+func (x *BackgroundServiceEventDetail) GetEventName() string {
+	if x != nil {
+		return x.EventName
+	}
+	return ""
+}
+
+func (x *BackgroundServiceEventDetail) GetInstanceId() string {
+	if x != nil {
+		return x.InstanceId
+	}
+	return ""
+}
+
+func (x *BackgroundServiceEventDetail) GetEventMetadata() []*EventMetadata {
+	if x != nil {
+		return x.EventMetadata
+	}
+	return nil
+}
+
+func (x *BackgroundServiceEventDetail) GetStorageKey() string {
+	if x != nil {
+		return x.StorageKey
+	}
+	return ""
+}
+
+type EventMetadata struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Key           string                 `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"`
+	Value         string                 `protobuf:"bytes,2,opt,name=value,proto3" json:"value,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *EventMetadata) Reset() {
+	*x = EventMetadata{}
+	mi := &file_proto_cdp_backgroundservice_backgroundservice_proto_msgTypes[13]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *EventMetadata) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*EventMetadata) ProtoMessage() {}
+
+func (x *EventMetadata) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_backgroundservice_backgroundservice_proto_msgTypes[13]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use EventMetadata.ProtoReflect.Descriptor instead.
+func (*EventMetadata) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_backgroundservice_backgroundservice_proto_rawDescGZIP(), []int{13}
+}
+
+func (x *EventMetadata) GetKey() string {
+	if x != nil {
+		return x.Key
+	}
+	return ""
+}
+
+func (x *EventMetadata) GetValue() string {
+	if x != nil {
+		return x.Value
+	}
+	return ""
+}
+
 var File_proto_cdp_backgroundservice_backgroundservice_proto protoreflect.FileDescriptor
 
 const file_proto_cdp_backgroundservice_backgroundservice_proto_rawDesc = "" +
@@ -427,7 +801,34 @@ const file_proto_cdp_backgroundservice_backgroundservice_proto_rawDesc = "" +
 	"\x14SetRecordingResponse\"R\n" +
 	"\x12ClearEventsRequest\x12<\n" +
 	"\aservice\x18\x01 \x01(\x0e2\".cdp.backgroundservice.ServiceNameR\aservice\"\x15\n" +
-	"\x13ClearEventsResponse*\xb0\x01\n" +
+	"\x13ClearEventsResponse\"H\n" +
+	"'SubscribeBackgroundServiceEventsRequest\x12\x1d\n" +
+	"\n" +
+	"session_id\x18\x01 \x01(\tR\tsessionId\"\x98\x02\n" +
+	"\x16BackgroundServiceEvent\x12k\n" +
+	"\x17recording_state_changed\x18\x01 \x01(\v21.cdp.backgroundservice.RecordingStateChangedEventH\x00R\x15recordingStateChanged\x12\x87\x01\n" +
+	"!background_service_event_received\x18\x02 \x01(\v2:.cdp.backgroundservice.BackgroundServiceEventReceivedEventH\x00R\x1ebackgroundServiceEventReceivedB\a\n" +
+	"\x05event\"Y\n" +
+	"\x1aRecordingStateChangedEvent\x12!\n" +
+	"\fis_recording\x18\x01 \x01(\bR\visRecording\x12\x18\n" +
+	"\aservice\x18\x02 \x01(\tR\aservice\"\x94\x01\n" +
+	"#BackgroundServiceEventReceivedEvent\x12m\n" +
+	"\x18background_service_event\x18\x01 \x01(\v23.cdp.backgroundservice.BackgroundServiceEventDetailR\x16backgroundServiceEvent\"\xe1\x02\n" +
+	"\x1cBackgroundServiceEventDetail\x12\x1c\n" +
+	"\ttimestamp\x18\x01 \x01(\x01R\ttimestamp\x12\x16\n" +
+	"\x06origin\x18\x02 \x01(\tR\x06origin\x12C\n" +
+	"\x1eservice_worker_registration_id\x18\x03 \x01(\tR\x1bserviceWorkerRegistrationId\x12\x18\n" +
+	"\aservice\x18\x04 \x01(\tR\aservice\x12\x1d\n" +
+	"\n" +
+	"event_name\x18\x05 \x01(\tR\teventName\x12\x1f\n" +
+	"\vinstance_id\x18\x06 \x01(\tR\n" +
+	"instanceId\x12K\n" +
+	"\x0eevent_metadata\x18\a \x03(\v2$.cdp.backgroundservice.EventMetadataR\reventMetadata\x12\x1f\n" +
+	"\vstorage_key\x18\b \x01(\tR\n" +
+	"storageKey\"7\n" +
+	"\rEventMetadata\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value*\xb0\x01\n" +
 	"\vServiceName\x12\x1c\n" +
 	"\x18SERVICE_NAME_UNSPECIFIED\x10\x00\x12\x14\n" +
 	"\x10BACKGROUND_FETCH\x10\x01\x12\x13\n" +
@@ -435,12 +836,13 @@ const file_proto_cdp_backgroundservice_backgroundservice_proto_rawDesc = "" +
 	"\x0ePUSH_MESSAGING\x10\x03\x12\x11\n" +
 	"\rNOTIFICATIONS\x10\x04\x12\x13\n" +
 	"\x0fPAYMENT_HANDLER\x10\x05\x12\x1c\n" +
-	"\x18PERIODIC_BACKGROUND_SYNC\x10\x062\xc4\x03\n" +
+	"\x18PERIODIC_BACKGROUND_SYNC\x10\x062\xc9\x04\n" +
 	"\x18BackgroundServiceService\x12m\n" +
 	"\x0eStartObserving\x12,.cdp.backgroundservice.StartObservingRequest\x1a-.cdp.backgroundservice.StartObservingResponse\x12j\n" +
 	"\rStopObserving\x12+.cdp.backgroundservice.StopObservingRequest\x1a,.cdp.backgroundservice.StopObservingResponse\x12g\n" +
 	"\fSetRecording\x12*.cdp.backgroundservice.SetRecordingRequest\x1a+.cdp.backgroundservice.SetRecordingResponse\x12d\n" +
-	"\vClearEvents\x12).cdp.backgroundservice.ClearEventsRequest\x1a*.cdp.backgroundservice.ClearEventsResponseB>Z<github.com/accretional/chromerpc/proto/cdp/backgroundserviceb\x06proto3"
+	"\vClearEvents\x12).cdp.backgroundservice.ClearEventsRequest\x1a*.cdp.backgroundservice.ClearEventsResponse\x12\x82\x01\n" +
+	"\x0fSubscribeEvents\x12>.cdp.backgroundservice.SubscribeBackgroundServiceEventsRequest\x1a-.cdp.backgroundservice.BackgroundServiceEvent0\x01B>Z<github.com/accretional/chromerpc/proto/cdp/backgroundserviceb\x06proto3"
 
 var (
 	file_proto_cdp_backgroundservice_backgroundservice_proto_rawDescOnce sync.Once
@@ -455,36 +857,48 @@ func file_proto_cdp_backgroundservice_backgroundservice_proto_rawDescGZIP() []by
 }
 
 var file_proto_cdp_backgroundservice_backgroundservice_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_proto_cdp_backgroundservice_backgroundservice_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
+var file_proto_cdp_backgroundservice_backgroundservice_proto_msgTypes = make([]protoimpl.MessageInfo, 14)
 var file_proto_cdp_backgroundservice_backgroundservice_proto_goTypes = []any{
-	(ServiceName)(0),               // 0: cdp.backgroundservice.ServiceName
-	(*StartObservingRequest)(nil),  // 1: cdp.backgroundservice.StartObservingRequest
-	(*StartObservingResponse)(nil), // 2: cdp.backgroundservice.StartObservingResponse
-	(*StopObservingRequest)(nil),   // 3: cdp.backgroundservice.StopObservingRequest
-	(*StopObservingResponse)(nil),  // 4: cdp.backgroundservice.StopObservingResponse
-	(*SetRecordingRequest)(nil),    // 5: cdp.backgroundservice.SetRecordingRequest
-	(*SetRecordingResponse)(nil),   // 6: cdp.backgroundservice.SetRecordingResponse
-	(*ClearEventsRequest)(nil),     // 7: cdp.backgroundservice.ClearEventsRequest
-	(*ClearEventsResponse)(nil),    // 8: cdp.backgroundservice.ClearEventsResponse
+	(ServiceName)(0),                                // 0: cdp.backgroundservice.ServiceName
+	(*StartObservingRequest)(nil),                   // 1: cdp.backgroundservice.StartObservingRequest
+	(*StartObservingResponse)(nil),                  // 2: cdp.backgroundservice.StartObservingResponse
+	(*StopObservingRequest)(nil),                    // 3: cdp.backgroundservice.StopObservingRequest
+	(*StopObservingResponse)(nil),                   // 4: cdp.backgroundservice.StopObservingResponse
+	(*SetRecordingRequest)(nil),                     // 5: cdp.backgroundservice.SetRecordingRequest
+	(*SetRecordingResponse)(nil),                    // 6: cdp.backgroundservice.SetRecordingResponse
+	(*ClearEventsRequest)(nil),                      // 7: cdp.backgroundservice.ClearEventsRequest
+	(*ClearEventsResponse)(nil),                     // 8: cdp.backgroundservice.ClearEventsResponse
+	(*SubscribeBackgroundServiceEventsRequest)(nil), // 9: cdp.backgroundservice.SubscribeBackgroundServiceEventsRequest
+	(*BackgroundServiceEvent)(nil),                  // 10: cdp.backgroundservice.BackgroundServiceEvent
+	(*RecordingStateChangedEvent)(nil),              // 11: cdp.backgroundservice.RecordingStateChangedEvent
+	(*BackgroundServiceEventReceivedEvent)(nil),     // 12: cdp.backgroundservice.BackgroundServiceEventReceivedEvent
+	(*BackgroundServiceEventDetail)(nil),            // 13: cdp.backgroundservice.BackgroundServiceEventDetail
+	(*EventMetadata)(nil),                           // 14: cdp.backgroundservice.EventMetadata
 }
 var file_proto_cdp_backgroundservice_backgroundservice_proto_depIdxs = []int32{
-	0, // 0: cdp.backgroundservice.StartObservingRequest.service:type_name -> cdp.backgroundservice.ServiceName
-	0, // 1: cdp.backgroundservice.StopObservingRequest.service:type_name -> cdp.backgroundservice.ServiceName
-	0, // 2: cdp.backgroundservice.SetRecordingRequest.service:type_name -> cdp.backgroundservice.ServiceName
-	0, // 3: cdp.backgroundservice.ClearEventsRequest.service:type_name -> cdp.backgroundservice.ServiceName
-	1, // 4: cdp.backgroundservice.BackgroundServiceService.StartObserving:input_type -> cdp.backgroundservice.StartObservingRequest
-	3, // 5: cdp.backgroundservice.BackgroundServiceService.StopObserving:input_type -> cdp.backgroundservice.StopObservingRequest
-	5, // 6: cdp.backgroundservice.BackgroundServiceService.SetRecording:input_type -> cdp.backgroundservice.SetRecordingRequest
-	7, // 7: cdp.backgroundservice.BackgroundServiceService.ClearEvents:input_type -> cdp.backgroundservice.ClearEventsRequest
-	2, // 8: cdp.backgroundservice.BackgroundServiceService.StartObserving:output_type -> cdp.backgroundservice.StartObservingResponse
-	4, // 9: cdp.backgroundservice.BackgroundServiceService.StopObserving:output_type -> cdp.backgroundservice.StopObservingResponse
-	6, // 10: cdp.backgroundservice.BackgroundServiceService.SetRecording:output_type -> cdp.backgroundservice.SetRecordingResponse
-	8, // 11: cdp.backgroundservice.BackgroundServiceService.ClearEvents:output_type -> cdp.backgroundservice.ClearEventsResponse
-	8, // [8:12] is the sub-list for method output_type
-	4, // [4:8] is the sub-list for method input_type
-	4, // [4:4] is the sub-list for extension type_name
-	4, // [4:4] is the sub-list for extension extendee
-	0, // [0:4] is the sub-list for field type_name
+	0,  // 0: cdp.backgroundservice.StartObservingRequest.service:type_name -> cdp.backgroundservice.ServiceName
+	0,  // 1: cdp.backgroundservice.StopObservingRequest.service:type_name -> cdp.backgroundservice.ServiceName
+	0,  // 2: cdp.backgroundservice.SetRecordingRequest.service:type_name -> cdp.backgroundservice.ServiceName
+	0,  // 3: cdp.backgroundservice.ClearEventsRequest.service:type_name -> cdp.backgroundservice.ServiceName
+	11, // 4: cdp.backgroundservice.BackgroundServiceEvent.recording_state_changed:type_name -> cdp.backgroundservice.RecordingStateChangedEvent
+	12, // 5: cdp.backgroundservice.BackgroundServiceEvent.background_service_event_received:type_name -> cdp.backgroundservice.BackgroundServiceEventReceivedEvent
+	13, // 6: cdp.backgroundservice.BackgroundServiceEventReceivedEvent.background_service_event:type_name -> cdp.backgroundservice.BackgroundServiceEventDetail
+	14, // 7: cdp.backgroundservice.BackgroundServiceEventDetail.event_metadata:type_name -> cdp.backgroundservice.EventMetadata
+	1,  // 8: cdp.backgroundservice.BackgroundServiceService.StartObserving:input_type -> cdp.backgroundservice.StartObservingRequest
+	3,  // 9: cdp.backgroundservice.BackgroundServiceService.StopObserving:input_type -> cdp.backgroundservice.StopObservingRequest
+	5,  // 10: cdp.backgroundservice.BackgroundServiceService.SetRecording:input_type -> cdp.backgroundservice.SetRecordingRequest
+	7,  // 11: cdp.backgroundservice.BackgroundServiceService.ClearEvents:input_type -> cdp.backgroundservice.ClearEventsRequest
+	9,  // 12: cdp.backgroundservice.BackgroundServiceService.SubscribeEvents:input_type -> cdp.backgroundservice.SubscribeBackgroundServiceEventsRequest
+	2,  // 13: cdp.backgroundservice.BackgroundServiceService.StartObserving:output_type -> cdp.backgroundservice.StartObservingResponse
+	4,  // 14: cdp.backgroundservice.BackgroundServiceService.StopObserving:output_type -> cdp.backgroundservice.StopObservingResponse
+	6,  // 15: cdp.backgroundservice.BackgroundServiceService.SetRecording:output_type -> cdp.backgroundservice.SetRecordingResponse
+	8,  // 16: cdp.backgroundservice.BackgroundServiceService.ClearEvents:output_type -> cdp.backgroundservice.ClearEventsResponse
+	10, // 17: cdp.backgroundservice.BackgroundServiceService.SubscribeEvents:output_type -> cdp.backgroundservice.BackgroundServiceEvent
+	13, // [13:18] is the sub-list for method output_type
+	8,  // [8:13] is the sub-list for method input_type
+	8,  // [8:8] is the sub-list for extension type_name
+	8,  // [8:8] is the sub-list for extension extendee
+	0,  // [0:8] is the sub-list for field type_name
 }
 
 func init() { file_proto_cdp_backgroundservice_backgroundservice_proto_init() }
@@ -492,13 +906,17 @@ func file_proto_cdp_backgroundservice_backgroundservice_proto_init() {
 	if File_proto_cdp_backgroundservice_backgroundservice_proto != nil {
 		return
 	}
+	file_proto_cdp_backgroundservice_backgroundservice_proto_msgTypes[9].OneofWrappers = []any{
+		(*BackgroundServiceEvent_RecordingStateChanged)(nil),
+		(*BackgroundServiceEvent_BackgroundServiceEventReceived)(nil),
+	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_cdp_backgroundservice_backgroundservice_proto_rawDesc), len(file_proto_cdp_backgroundservice_backgroundservice_proto_rawDesc)),
 			NumEnums:      1,
-			NumMessages:   8,
+			NumMessages:   14,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

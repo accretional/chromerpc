@@ -84,3 +84,76 @@ func (s *Server) ExecuteSQL(ctx context.Context, req *pb.ExecuteSQLRequest) (*pb
 	}
 	return out, nil
 }
+
+func (s *Server) SubscribeEvents(req *pb.SubscribeDatabaseEventsRequest, stream pb.DatabaseService_SubscribeEventsServer) error {
+	eventCh := make(chan *pb.DatabaseEvent, 128)
+	ctx := stream.Context()
+
+	events := []string{"Database.addDatabase"}
+
+	var unregisters []func()
+	for _, method := range events {
+		method := method
+		unreg := s.client.On(method, func(m string, params json.RawMessage, sessionID string) {
+			if req.SessionId != "" && sessionID != req.SessionId {
+				return
+			}
+			evt := convertDatabaseEvent(method, params)
+			if evt != nil {
+				select {
+				case eventCh <- evt:
+				default:
+				}
+			}
+		})
+		unregisters = append(unregisters, unreg)
+	}
+	defer func() {
+		for _, unreg := range unregisters {
+			unreg()
+		}
+	}()
+
+	for {
+		select {
+		case evt := <-eventCh:
+			if err := stream.Send(evt); err != nil {
+				return err
+			}
+		case <-ctx.Done():
+			return ctx.Err()
+		case <-s.client.Done():
+			return fmt.Errorf("CDP connection closed")
+		}
+	}
+}
+
+func convertDatabaseEvent(method string, params json.RawMessage) *pb.DatabaseEvent {
+	switch method {
+	case "Database.addDatabase":
+		var p struct {
+			Database struct {
+				ID      string `json:"id"`
+				Domain  string `json:"domain"`
+				Name    string `json:"name"`
+				Version string `json:"version"`
+			} `json:"database"`
+		}
+		if err := json.Unmarshal(params, &p); err != nil {
+			return nil
+		}
+		return &pb.DatabaseEvent{
+			Event: &pb.DatabaseEvent_AddDatabase{
+				AddDatabase: &pb.AddDatabaseEvent{
+					Database: &pb.Database{
+						Id:      p.Database.ID,
+						Domain:  p.Database.Domain,
+						Name:    p.Database.Name,
+						Version: p.Database.Version,
+					},
+				},
+			},
+		}
+	}
+	return nil
+}

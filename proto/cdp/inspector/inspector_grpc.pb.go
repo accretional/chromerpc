@@ -19,8 +19,9 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	InspectorService_Enable_FullMethodName  = "/cdp.inspector.InspectorService/Enable"
-	InspectorService_Disable_FullMethodName = "/cdp.inspector.InspectorService/Disable"
+	InspectorService_Enable_FullMethodName          = "/cdp.inspector.InspectorService/Enable"
+	InspectorService_Disable_FullMethodName         = "/cdp.inspector.InspectorService/Disable"
+	InspectorService_SubscribeEvents_FullMethodName = "/cdp.inspector.InspectorService/SubscribeEvents"
 )
 
 // InspectorServiceClient is the client API for InspectorService service.
@@ -31,6 +32,8 @@ type InspectorServiceClient interface {
 	Enable(ctx context.Context, in *EnableRequest, opts ...grpc.CallOption) (*EnableResponse, error)
 	// Disable inspector domain notifications.
 	Disable(ctx context.Context, in *DisableRequest, opts ...grpc.CallOption) (*DisableResponse, error)
+	// Subscribe to Inspector domain events.
+	SubscribeEvents(ctx context.Context, in *SubscribeInspectorEventsRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[InspectorEvent], error)
 }
 
 type inspectorServiceClient struct {
@@ -61,6 +64,25 @@ func (c *inspectorServiceClient) Disable(ctx context.Context, in *DisableRequest
 	return out, nil
 }
 
+func (c *inspectorServiceClient) SubscribeEvents(ctx context.Context, in *SubscribeInspectorEventsRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[InspectorEvent], error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	stream, err := c.cc.NewStream(ctx, &InspectorService_ServiceDesc.Streams[0], InspectorService_SubscribeEvents_FullMethodName, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &grpc.GenericClientStream[SubscribeInspectorEventsRequest, InspectorEvent]{ClientStream: stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type InspectorService_SubscribeEventsClient = grpc.ServerStreamingClient[InspectorEvent]
+
 // InspectorServiceServer is the server API for InspectorService service.
 // All implementations must embed UnimplementedInspectorServiceServer
 // for forward compatibility.
@@ -69,6 +91,8 @@ type InspectorServiceServer interface {
 	Enable(context.Context, *EnableRequest) (*EnableResponse, error)
 	// Disable inspector domain notifications.
 	Disable(context.Context, *DisableRequest) (*DisableResponse, error)
+	// Subscribe to Inspector domain events.
+	SubscribeEvents(*SubscribeInspectorEventsRequest, grpc.ServerStreamingServer[InspectorEvent]) error
 	mustEmbedUnimplementedInspectorServiceServer()
 }
 
@@ -84,6 +108,9 @@ func (UnimplementedInspectorServiceServer) Enable(context.Context, *EnableReques
 }
 func (UnimplementedInspectorServiceServer) Disable(context.Context, *DisableRequest) (*DisableResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Disable not implemented")
+}
+func (UnimplementedInspectorServiceServer) SubscribeEvents(*SubscribeInspectorEventsRequest, grpc.ServerStreamingServer[InspectorEvent]) error {
+	return status.Errorf(codes.Unimplemented, "method SubscribeEvents not implemented")
 }
 func (UnimplementedInspectorServiceServer) mustEmbedUnimplementedInspectorServiceServer() {}
 func (UnimplementedInspectorServiceServer) testEmbeddedByValue()                          {}
@@ -142,6 +169,17 @@ func _InspectorService_Disable_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
+func _InspectorService_SubscribeEvents_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(SubscribeInspectorEventsRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(InspectorServiceServer).SubscribeEvents(m, &grpc.GenericServerStream[SubscribeInspectorEventsRequest, InspectorEvent]{ServerStream: stream})
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type InspectorService_SubscribeEventsServer = grpc.ServerStreamingServer[InspectorEvent]
+
 // InspectorService_ServiceDesc is the grpc.ServiceDesc for InspectorService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -158,6 +196,12 @@ var InspectorService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _InspectorService_Disable_Handler,
 		},
 	},
-	Streams:  []grpc.StreamDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "SubscribeEvents",
+			Handler:       _InspectorService_SubscribeEvents_Handler,
+			ServerStreams: true,
+		},
+	},
 	Metadata: "proto/cdp/inspector/inspector.proto",
 }

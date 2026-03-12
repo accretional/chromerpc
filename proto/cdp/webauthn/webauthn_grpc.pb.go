@@ -31,6 +31,7 @@ const (
 	WebAuthnService_SetUserVerified_FullMethodName                = "/cdp.webauthn.WebAuthnService/SetUserVerified"
 	WebAuthnService_SetAutomaticPresenceSimulation_FullMethodName = "/cdp.webauthn.WebAuthnService/SetAutomaticPresenceSimulation"
 	WebAuthnService_SetResponseOverrideBits_FullMethodName        = "/cdp.webauthn.WebAuthnService/SetResponseOverrideBits"
+	WebAuthnService_SubscribeEvents_FullMethodName                = "/cdp.webauthn.WebAuthnService/SubscribeEvents"
 )
 
 // WebAuthnServiceClient is the client API for WebAuthnService service.
@@ -61,6 +62,8 @@ type WebAuthnServiceClient interface {
 	SetAutomaticPresenceSimulation(ctx context.Context, in *SetAutomaticPresenceSimulationRequest, opts ...grpc.CallOption) (*SetAutomaticPresenceSimulationResponse, error)
 	// Set response override bits on an authenticator.
 	SetResponseOverrideBits(ctx context.Context, in *SetResponseOverrideBitsRequest, opts ...grpc.CallOption) (*SetResponseOverrideBitsResponse, error)
+	// Subscribe to WebAuthn events.
+	SubscribeEvents(ctx context.Context, in *SubscribeWebAuthnEventsRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[WebAuthnEvent], error)
 }
 
 type webAuthnServiceClient struct {
@@ -191,6 +194,25 @@ func (c *webAuthnServiceClient) SetResponseOverrideBits(ctx context.Context, in 
 	return out, nil
 }
 
+func (c *webAuthnServiceClient) SubscribeEvents(ctx context.Context, in *SubscribeWebAuthnEventsRequest, opts ...grpc.CallOption) (grpc.ServerStreamingClient[WebAuthnEvent], error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	stream, err := c.cc.NewStream(ctx, &WebAuthnService_ServiceDesc.Streams[0], WebAuthnService_SubscribeEvents_FullMethodName, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &grpc.GenericClientStream[SubscribeWebAuthnEventsRequest, WebAuthnEvent]{ClientStream: stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type WebAuthnService_SubscribeEventsClient = grpc.ServerStreamingClient[WebAuthnEvent]
+
 // WebAuthnServiceServer is the server API for WebAuthnService service.
 // All implementations must embed UnimplementedWebAuthnServiceServer
 // for forward compatibility.
@@ -219,6 +241,8 @@ type WebAuthnServiceServer interface {
 	SetAutomaticPresenceSimulation(context.Context, *SetAutomaticPresenceSimulationRequest) (*SetAutomaticPresenceSimulationResponse, error)
 	// Set response override bits on an authenticator.
 	SetResponseOverrideBits(context.Context, *SetResponseOverrideBitsRequest) (*SetResponseOverrideBitsResponse, error)
+	// Subscribe to WebAuthn events.
+	SubscribeEvents(*SubscribeWebAuthnEventsRequest, grpc.ServerStreamingServer[WebAuthnEvent]) error
 	mustEmbedUnimplementedWebAuthnServiceServer()
 }
 
@@ -264,6 +288,9 @@ func (UnimplementedWebAuthnServiceServer) SetAutomaticPresenceSimulation(context
 }
 func (UnimplementedWebAuthnServiceServer) SetResponseOverrideBits(context.Context, *SetResponseOverrideBitsRequest) (*SetResponseOverrideBitsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SetResponseOverrideBits not implemented")
+}
+func (UnimplementedWebAuthnServiceServer) SubscribeEvents(*SubscribeWebAuthnEventsRequest, grpc.ServerStreamingServer[WebAuthnEvent]) error {
+	return status.Errorf(codes.Unimplemented, "method SubscribeEvents not implemented")
 }
 func (UnimplementedWebAuthnServiceServer) mustEmbedUnimplementedWebAuthnServiceServer() {}
 func (UnimplementedWebAuthnServiceServer) testEmbeddedByValue()                         {}
@@ -502,6 +529,17 @@ func _WebAuthnService_SetResponseOverrideBits_Handler(srv interface{}, ctx conte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _WebAuthnService_SubscribeEvents_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(SubscribeWebAuthnEventsRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(WebAuthnServiceServer).SubscribeEvents(m, &grpc.GenericServerStream[SubscribeWebAuthnEventsRequest, WebAuthnEvent]{ServerStream: stream})
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type WebAuthnService_SubscribeEventsServer = grpc.ServerStreamingServer[WebAuthnEvent]
+
 // WebAuthnService_ServiceDesc is the grpc.ServiceDesc for WebAuthnService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -558,6 +596,12 @@ var WebAuthnService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _WebAuthnService_SetResponseOverrideBits_Handler,
 		},
 	},
-	Streams:  []grpc.StreamDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "SubscribeEvents",
+			Handler:       _WebAuthnService_SubscribeEvents_Handler,
+			ServerStreams: true,
+		},
+	},
 	Metadata: "proto/cdp/webauthn/webauthn.proto",
 }

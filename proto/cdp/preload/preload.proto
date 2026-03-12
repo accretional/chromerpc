@@ -7,9 +7,70 @@ option go_package = "github.com/accretional/chromerpc/proto/cdp/preload";
 service PreloadService {
   rpc Enable(EnableRequest) returns (EnableResponse);
   rpc Disable(DisableRequest) returns (DisableResponse);
+  rpc SubscribeEvents(SubscribePreloadEventsRequest) returns (stream PreloadEvent);
 }
 
 message EnableRequest {}
 message EnableResponse {}
 message DisableRequest {}
 message DisableResponse {}
+
+message SubscribePreloadEventsRequest {
+  string session_id = 1;
+}
+
+message PreloadEvent {
+  oneof event {
+    RuleSetUpdatedEvent rule_set_updated = 1;
+    RuleSetRemovedEvent rule_set_removed = 2;
+    PreloadingAttemptSourcesUpdatedEvent preloading_attempt_sources_updated = 3;
+    PrefetchStatusUpdatedEvent prefetch_status_updated = 4;
+    PrerenderStatusUpdatedEvent prerender_status_updated = 5;
+    PreloadEnabledStateUpdatedEvent preload_enabled_state_updated = 6;
+  }
+}
+
+message RuleSetUpdatedEvent {
+  RuleSet rule_set = 1;
+}
+
+message RuleSetRemovedEvent {
+  string id = 1;
+}
+
+message PreloadingAttemptSourcesUpdatedEvent {
+  // Complex type - use bytes for the JSON
+  bytes loading_source_json = 1;
+}
+
+message PrefetchStatusUpdatedEvent {
+  string key_json = 1;
+  string status = 2;
+  string prefetch_status = 3;
+  string request_id = 4;
+}
+
+message PrerenderStatusUpdatedEvent {
+  string key_json = 1;
+  string status = 2;
+  string prerender_status = 3;
+}
+
+message PreloadEnabledStateUpdatedEvent {
+  bool disabled_by_preference = 1;
+  bool disabled_by_data_saver = 2;
+  bool disabled_by_battery_saver = 3;
+  bool disabled_by_holdback_prefetch_speculation_rules = 4;
+  bool disabled_by_holdback_prerender_speculation_rules = 5;
+}
+
+message RuleSet {
+  string id = 1;
+  string loader_id = 2;
+  string source_text = 3;
+  string backend_node_id = 4;
+  string url = 5;
+  string request_id = 6;
+  string error_type = 7;
+  string error_message = 8;
+}
