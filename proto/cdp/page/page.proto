@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package cdp.page;
 
-option go_package = "github.com/anthropics/chromerpc/proto/cdp/page";
+option go_package = "github.com/accretional/chromerpc/proto/cdp/page";
 
 // Page domain — actions and events related to the inspected page.
 // Modeled from the Chrome DevTools Protocol Page domain.

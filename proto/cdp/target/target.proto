@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package cdp.target;
 
-option go_package = "github.com/anthropics/chromerpc/proto/cdp/target";
+option go_package = "github.com/accretional/chromerpc/proto/cdp/target";
 
 // Target domain — supports discovering available inspection targets, attaching
 // to them, and routing CDP messages through sessions.

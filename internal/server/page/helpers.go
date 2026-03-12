@@ -4,7 +4,7 @@ import (
 	"encoding/base64"
 	"encoding/json"
 
-	pb "github.com/anthropics/chromerpc/proto/cdp/page"
+	pb "github.com/accretional/chromerpc/proto/cdp/page"
 )
 
 // --- enum string conversions ---

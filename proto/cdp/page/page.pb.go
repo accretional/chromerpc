@@ -8884,7 +8884,7 @@ const file_proto_cdp_page_page_proto_rawDesc = "" +
 	"\x13AddCompilationCache\x12$.cdp.page.AddCompilationCacheRequest\x1a%.cdp.page.AddCompilationCacheResponse\x12h\n" +
 	"\x15ClearCompilationCache\x12&.cdp.page.ClearCompilationCacheRequest\x1a'.cdp.page.ClearCompilationCacheResponse\x12k\n" +
 	"\x16SetPrerenderingAllowed\x12'.cdp.page.SetPrerenderingAllowedRequest\x1a(.cdp.page.SetPrerenderingAllowedResponse\x12N\n" +
-	"\x0fSubscribeEvents\x12$.cdp.page.SubscribePageEventsRequest\x1a\x13.cdp.page.PageEvent0\x01B0Z.github.com/anthropics/chromerpc/proto/cdp/pageb\x06proto3"
+	"\x0fSubscribeEvents\x12$.cdp.page.SubscribePageEventsRequest\x1a\x13.cdp.page.PageEvent0\x01B1Z/github.com/accretional/chromerpc/proto/cdp/pageb\x06proto3"
 
 var (
 	file_proto_cdp_page_page_proto_rawDescOnce sync.Once

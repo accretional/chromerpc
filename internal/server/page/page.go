@@ -7,8 +7,8 @@ import (
 	"encoding/json"
 	"fmt"
 
-	pb "github.com/anthropics/chromerpc/proto/cdp/page"
-	"github.com/anthropics/chromerpc/internal/cdpclient"
+	pb "github.com/accretional/chromerpc/proto/cdp/page"
+	"github.com/accretional/chromerpc/internal/cdpclient"
 )
 
 // Server implements the cdp.page.PageService gRPC service.

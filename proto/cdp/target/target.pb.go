@@ -2111,7 +2111,7 @@ const file_proto_cdp_target_target_proto_rawDesc = "" +
 	"\rGetTargetInfo\x12 .cdp.target.GetTargetInfoRequest\x1a!.cdp.target.GetTargetInfoResponse\x12T\n" +
 	"\rSetAutoAttach\x12 .cdp.target.SetAutoAttachRequest\x1a!.cdp.target.SetAutoAttachResponse\x12c\n" +
 	"\x12SetDiscoverTargets\x12%.cdp.target.SetDiscoverTargetsRequest\x1a&.cdp.target.SetDiscoverTargetsResponse\x12V\n" +
-	"\x0fSubscribeEvents\x12(.cdp.target.SubscribeTargetEventsRequest\x1a\x17.cdp.target.TargetEvent0\x01B2Z0github.com/anthropics/chromerpc/proto/cdp/targetb\x06proto3"
+	"\x0fSubscribeEvents\x12(.cdp.target.SubscribeTargetEventsRequest\x1a\x17.cdp.target.TargetEvent0\x01B3Z1github.com/accretional/chromerpc/proto/cdp/targetb\x06proto3"
 
 var (
 	file_proto_cdp_target_target_proto_rawDescOnce sync.Once

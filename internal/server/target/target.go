@@ -6,8 +6,8 @@ import (
 	"encoding/json"
 	"fmt"
 
-	pb "github.com/anthropics/chromerpc/proto/cdp/target"
-	"github.com/anthropics/chromerpc/internal/cdpclient"
+	pb "github.com/accretional/chromerpc/proto/cdp/target"
+	"github.com/accretional/chromerpc/internal/cdpclient"
 )
 
 // Server implements the cdp.target.TargetService gRPC service.
@@ -21,11 +21,18 @@ func New(client *cdpclient.Client) *Server {
 	return &Server{client: client}
 }
 
+// sendBrowser sends a CDP command at the browser level (no session ID),
+// regardless of the client's default session. Target domain commands that
+// manage browser contexts, targets, and discovery must use this.
+func (s *Server) sendBrowser(ctx context.Context, method string, params interface{}) (json.RawMessage, error) {
+	return s.client.SendWithSession(ctx, method, params, "")
+}
+
 func (s *Server) ActivateTarget(ctx context.Context, req *pb.ActivateTargetRequest) (*pb.ActivateTargetResponse, error) {
 	params := map[string]interface{}{
 		"targetId": req.TargetId,
 	}
-	if _, err := s.client.Send(ctx, "Target.activateTarget", params); err != nil {
+	if _, err := s.sendBrowser(ctx, "Target.activateTarget", params); err != nil {
 		return nil, fmt.Errorf("Target.activateTarget: %w", err)
 	}
 	return &pb.ActivateTargetResponse{}, nil
@@ -36,7 +43,7 @@ func (s *Server) AttachToTarget(ctx context.Context, req *pb.AttachToTargetReque
 		"targetId": req.TargetId,
 		"flatten":  req.Flatten,
 	}
-	result, err := s.client.Send(ctx, "Target.attachToTarget", params)
+	result, err := s.sendBrowser(ctx, "Target.attachToTarget", params)
 	if err != nil {
 		return nil, fmt.Errorf("Target.attachToTarget: %w", err)
 	}
@@ -50,7 +57,7 @@ func (s *Server) AttachToTarget(ctx context.Context, req *pb.AttachToTargetReque
 }
 
 func (s *Server) AttachToBrowserTarget(ctx context.Context, req *pb.AttachToBrowserTargetRequest) (*pb.AttachToBrowserTargetResponse, error) {
-	result, err := s.client.Send(ctx, "Target.attachToBrowserTarget", nil)
+	result, err := s.sendBrowser(ctx, "Target.attachToBrowserTarget", nil)
 	if err != nil {
 		return nil, fmt.Errorf("Target.attachToBrowserTarget: %w", err)
 	}
@@ -67,7 +74,7 @@ func (s *Server) CloseTarget(ctx context.Context, req *pb.CloseTargetRequest) (*
 	params := map[string]interface{}{
 		"targetId": req.TargetId,
 	}
-	result, err := s.client.Send(ctx, "Target.closeTarget", params)
+	result, err := s.sendBrowser(ctx, "Target.closeTarget", params)
 	if err != nil {
 		return nil, fmt.Errorf("Target.closeTarget: %w", err)
 	}
@@ -95,7 +102,7 @@ func (s *Server) CreateBrowserContext(ctx context.Context, req *pb.CreateBrowser
 		params["originsWithUniversalNetworkAccess"] = req.OriginsWithUniversalNetworkAccess
 	}
 
-	result, err := s.client.Send(ctx, "Target.createBrowserContext", params)
+	result, err := s.sendBrowser(ctx, "Target.createBrowserContext", params)
 	if err != nil {
 		return nil, fmt.Errorf("Target.createBrowserContext: %w", err)
 	}
@@ -134,7 +141,7 @@ func (s *Server) CreateTarget(ctx context.Context, req *pb.CreateTargetRequest) 
 		params["forTab"] = true
 	}
 
-	result, err := s.client.Send(ctx, "Target.createTarget", params)
+	result, err := s.sendBrowser(ctx, "Target.createTarget", params)
 	if err != nil {
 		return nil, fmt.Errorf("Target.createTarget: %w", err)
 	}
@@ -155,7 +162,7 @@ func (s *Server) DetachFromTarget(ctx context.Context, req *pb.DetachFromTargetR
 	if req.TargetId != "" {
 		params["targetId"] = req.TargetId
 	}
-	if _, err := s.client.Send(ctx, "Target.detachFromTarget", params); err != nil {
+	if _, err := s.sendBrowser(ctx, "Target.detachFromTarget", params); err != nil {
 		return nil, fmt.Errorf("Target.detachFromTarget: %w", err)
 	}
 	return &pb.DetachFromTargetResponse{}, nil
@@ -165,14 +172,14 @@ func (s *Server) DisposeBrowserContext(ctx context.Context, req *pb.DisposeBrows
 	params := map[string]interface{}{
 		"browserContextId": req.BrowserContextId,
 	}
-	if _, err := s.client.Send(ctx, "Target.disposeBrowserContext", params); err != nil {
+	if _, err := s.sendBrowser(ctx, "Target.disposeBrowserContext", params); err != nil {
 		return nil, fmt.Errorf("Target.disposeBrowserContext: %w", err)
 	}
 	return &pb.DisposeBrowserContextResponse{}, nil
 }
 
 func (s *Server) GetBrowserContexts(ctx context.Context, req *pb.GetBrowserContextsRequest) (*pb.GetBrowserContextsResponse, error) {
-	result, err := s.client.Send(ctx, "Target.getBrowserContexts", nil)
+	result, err := s.sendBrowser(ctx, "Target.getBrowserContexts", nil)
 	if err != nil {
 		return nil, fmt.Errorf("Target.getBrowserContexts: %w", err)
 	}
@@ -205,9 +212,9 @@ func (s *Server) GetTargets(ctx context.Context, req *pb.GetTargetsRequest) (*pb
 	var result json.RawMessage
 	var err error
 	if len(params) > 0 {
-		result, err = s.client.Send(ctx, "Target.getTargets", params)
+		result, err = s.sendBrowser(ctx, "Target.getTargets", params)
 	} else {
-		result, err = s.client.Send(ctx, "Target.getTargets", nil)
+		result, err = s.sendBrowser(ctx, "Target.getTargets", nil)
 	}
 	if err != nil {
 		return nil, fmt.Errorf("Target.getTargets: %w", err)
@@ -231,7 +238,7 @@ func (s *Server) GetTargetInfo(ctx context.Context, req *pb.GetTargetInfoRequest
 	params := map[string]interface{}{
 		"targetId": req.TargetId,
 	}
-	result, err := s.client.Send(ctx, "Target.getTargetInfo", params)
+	result, err := s.sendBrowser(ctx, "Target.getTargetInfo", params)
 	if err != nil {
 		return nil, fmt.Errorf("Target.getTargetInfo: %w", err)
 	}
@@ -266,7 +273,7 @@ func (s *Server) SetAutoAttach(ctx context.Context, req *pb.SetAutoAttachRequest
 		}
 		params["filter"] = filter
 	}
-	if _, err := s.client.Send(ctx, "Target.setAutoAttach", params); err != nil {
+	if _, err := s.sendBrowser(ctx, "Target.setAutoAttach", params); err != nil {
 		return nil, fmt.Errorf("Target.setAutoAttach: %w", err)
 	}
 	return &pb.SetAutoAttachResponse{}, nil
@@ -290,7 +297,7 @@ func (s *Server) SetDiscoverTargets(ctx context.Context, req *pb.SetDiscoverTarg
 		}
 		params["filter"] = filter
 	}
-	if _, err := s.client.Send(ctx, "Target.setDiscoverTargets", params); err != nil {
+	if _, err := s.sendBrowser(ctx, "Target.setDiscoverTargets", params); err != nil {
 		return nil, fmt.Errorf("Target.setDiscoverTargets: %w", err)
 	}
 	return &pb.SetDiscoverTargetsResponse{}, nil

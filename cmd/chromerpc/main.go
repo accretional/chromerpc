@@ -24,11 +24,11 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 
-	"github.com/anthropics/chromerpc/internal/cdpclient"
-	pageserver "github.com/anthropics/chromerpc/internal/server/page"
-	targetserver "github.com/anthropics/chromerpc/internal/server/target"
-	pagepb "github.com/anthropics/chromerpc/proto/cdp/page"
-	targetpb "github.com/anthropics/chromerpc/proto/cdp/target"
+	"github.com/accretional/chromerpc/internal/cdpclient"
+	pageserver "github.com/accretional/chromerpc/internal/server/page"
+	targetserver "github.com/accretional/chromerpc/internal/server/target"
+	pagepb "github.com/accretional/chromerpc/proto/cdp/page"
+	targetpb "github.com/accretional/chromerpc/proto/cdp/target"
 )
 
 func main() {

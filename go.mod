@@ -1,4 +1,4 @@
-module github.com/anthropics/chromerpc
+module github.com/accretional/chromerpc
 
 go 1.25.1
 
