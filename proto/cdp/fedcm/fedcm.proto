@@ -1,0 +1,68 @@
+syntax = "proto3";
+
+package cdp.fedcm;
+
+option go_package = "github.com/accretional/chromerpc/proto/cdp/fedcm";
+
+// FedCm domain provides Federated Credential Management functionality.
+
+service FedCmService {
+  // Enables the FedCm domain.
+  rpc Enable(EnableRequest) returns (EnableResponse);
+
+  // Disables the FedCm domain.
+  rpc Disable(DisableRequest) returns (DisableResponse);
+
+  // Selects an account from the FedCm dialog.
+  rpc SelectAccount(SelectAccountRequest) returns (SelectAccountResponse);
+
+  // Clicks a button in the FedCm dialog.
+  rpc ClickDialogButton(ClickDialogButtonRequest) returns (ClickDialogButtonResponse);
+
+  // Opens a URL from the FedCm dialog.
+  rpc OpenUrl(OpenUrlRequest) returns (OpenUrlResponse);
+
+  // Dismisses the FedCm dialog.
+  rpc DismissDialog(DismissDialogRequest) returns (DismissDialogResponse);
+
+  // Resets the cooldown for the FedCm dialog.
+  rpc ResetCooldown(ResetCooldownRequest) returns (ResetCooldownResponse);
+}
+
+// ==================== Requests / Responses ====================
+
+message EnableRequest {
+  optional bool disable_rejection_delay = 1;
+}
+message EnableResponse {}
+
+message DisableRequest {}
+message DisableResponse {}
+
+message SelectAccountRequest {
+  string dialog_id = 1;
+  int32 account_index = 2;
+}
+message SelectAccountResponse {}
+
+message ClickDialogButtonRequest {
+  string dialog_id = 1;
+  string dialog_button = 2;
+}
+message ClickDialogButtonResponse {}
+
+message OpenUrlRequest {
+  string dialog_id = 1;
+  int32 account_index = 2;
+  string account_url_type = 3;
+}
+message OpenUrlResponse {}
+
+message DismissDialogRequest {
+  string dialog_id = 1;
+  optional bool trigger_cooldown = 2;
+}
+message DismissDialogResponse {}
+
+message ResetCooldownRequest {}
+message ResetCooldownResponse {}

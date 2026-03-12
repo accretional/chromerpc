@@ -21,11 +21,13 @@ import (
 
 	"github.com/accretional/chromerpc/internal/cdpclient"
 	accessibilityserver "github.com/accretional/chromerpc/internal/server/accessibility"
+	autofillserver "github.com/accretional/chromerpc/internal/server/autofill"
 	animationserver "github.com/accretional/chromerpc/internal/server/animation"
 	auditsserver "github.com/accretional/chromerpc/internal/server/audits"
 	backgroundserviceserver "github.com/accretional/chromerpc/internal/server/backgroundservice"
 	browserserver "github.com/accretional/chromerpc/internal/server/browser"
 	cachestorageserver "github.com/accretional/chromerpc/internal/server/cachestorage"
+	castserver "github.com/accretional/chromerpc/internal/server/cast"
 	consoleserver "github.com/accretional/chromerpc/internal/server/console"
 	cssserver "github.com/accretional/chromerpc/internal/server/css"
 	databaseserver "github.com/accretional/chromerpc/internal/server/database"
@@ -33,6 +35,7 @@ import (
 	deviceorientationserver "github.com/accretional/chromerpc/internal/server/deviceorientation"
 	domserver "github.com/accretional/chromerpc/internal/server/dom"
 	domdebuggerserver "github.com/accretional/chromerpc/internal/server/domdebugger"
+	domsnapshotserver "github.com/accretional/chromerpc/internal/server/domsnapshot"
 	domstorageserver "github.com/accretional/chromerpc/internal/server/domstorage"
 	emulationserver "github.com/accretional/chromerpc/internal/server/emulation"
 	fetchserver "github.com/accretional/chromerpc/internal/server/fetch"
@@ -58,6 +61,8 @@ import (
 	targetserver "github.com/accretional/chromerpc/internal/server/target"
 	tracingserver "github.com/accretional/chromerpc/internal/server/tracing"
 	eventbreakpointsserver "github.com/accretional/chromerpc/internal/server/eventbreakpoints"
+	extensionsserver "github.com/accretional/chromerpc/internal/server/extensions"
+	fedcmserver "github.com/accretional/chromerpc/internal/server/fedcm"
 	headlessexperimentalserver "github.com/accretional/chromerpc/internal/server/headlessexperimental"
 	performancetimelineserver "github.com/accretional/chromerpc/internal/server/performancetimeline"
 	preloadserver "github.com/accretional/chromerpc/internal/server/preload"
@@ -67,11 +72,13 @@ import (
 	webaudioserver "github.com/accretional/chromerpc/internal/server/webaudio"
 	webauthnserver "github.com/accretional/chromerpc/internal/server/webauthn"
 	accessibilitypb "github.com/accretional/chromerpc/proto/cdp/accessibility"
+	autofillpb "github.com/accretional/chromerpc/proto/cdp/autofill"
 	animationpb "github.com/accretional/chromerpc/proto/cdp/animation"
 	auditspb "github.com/accretional/chromerpc/proto/cdp/audits"
 	backgroundservicepb "github.com/accretional/chromerpc/proto/cdp/backgroundservice"
 	browserpb "github.com/accretional/chromerpc/proto/cdp/browser"
 	cachestoragepb "github.com/accretional/chromerpc/proto/cdp/cachestorage"
+	castpb "github.com/accretional/chromerpc/proto/cdp/cast"
 	consolepb "github.com/accretional/chromerpc/proto/cdp/console"
 	csspb "github.com/accretional/chromerpc/proto/cdp/css"
 	databasepb "github.com/accretional/chromerpc/proto/cdp/database"
@@ -79,6 +86,7 @@ import (
 	deviceorientationpb "github.com/accretional/chromerpc/proto/cdp/deviceorientation"
 	dompb "github.com/accretional/chromerpc/proto/cdp/dom"
 	domdebuggerpb "github.com/accretional/chromerpc/proto/cdp/domdebugger"
+	domsnapshotpb "github.com/accretional/chromerpc/proto/cdp/domsnapshot"
 	domstoragepb "github.com/accretional/chromerpc/proto/cdp/domstorage"
 	emulationpb "github.com/accretional/chromerpc/proto/cdp/emulation"
 	fetchpb "github.com/accretional/chromerpc/proto/cdp/fetch"
@@ -104,6 +112,8 @@ import (
 	targetpb "github.com/accretional/chromerpc/proto/cdp/target"
 	tracingpb "github.com/accretional/chromerpc/proto/cdp/tracing"
 	eventbreakpointspb "github.com/accretional/chromerpc/proto/cdp/eventbreakpoints"
+	extensionspb "github.com/accretional/chromerpc/proto/cdp/extensions"
+	fedcmpb "github.com/accretional/chromerpc/proto/cdp/fedcm"
 	headlessexperimentalpb "github.com/accretional/chromerpc/proto/cdp/headlessexperimental"
 	performancetimelinepb "github.com/accretional/chromerpc/proto/cdp/performancetimeline"
 	preloadpb "github.com/accretional/chromerpc/proto/cdp/preload"
@@ -166,6 +176,11 @@ type testEnv struct {
 	pwaClient                        pwapb.PWAServiceClient
 	schemaClient                     schemapb.SchemaServiceClient
 	tetheringClient                  tetheringpb.TetheringServiceClient
+	castClient                       castpb.CastServiceClient
+	domSnapshotClient                domsnapshotpb.DOMSnapshotServiceClient
+	fedCmClient                      fedcmpb.FedCmServiceClient
+	autofillClient                   autofillpb.AutofillServiceClient
+	extensionsClient                 extensionspb.ExtensionsServiceClient
 	conn                             *grpc.ClientConn
 }
 
@@ -280,6 +295,11 @@ func setupTestEnv(t *testing.T) *testEnv {
 	pwapb.RegisterPWAServiceServer(grpcServer, pwaserver.New(client))
 	schemapb.RegisterSchemaServiceServer(grpcServer, schemaserver.New(client))
 	tetheringpb.RegisterTetheringServiceServer(grpcServer, tetheringserver.New(client))
+	castpb.RegisterCastServiceServer(grpcServer, castserver.New(client))
+	domsnapshotpb.RegisterDOMSnapshotServiceServer(grpcServer, domsnapshotserver.New(client))
+	fedcmpb.RegisterFedCmServiceServer(grpcServer, fedcmserver.New(client))
+	autofillpb.RegisterAutofillServiceServer(grpcServer, autofillserver.New(client))
+	extensionspb.RegisterExtensionsServiceServer(grpcServer, extensionsserver.New(client))
 
 	go grpcServer.Serve(lis)
 
@@ -343,6 +363,11 @@ func setupTestEnv(t *testing.T) *testEnv {
 		pwaClient:                        pwapb.NewPWAServiceClient(conn),
 		schemaClient:                     schemapb.NewSchemaServiceClient(conn),
 		tetheringClient:                  tetheringpb.NewTetheringServiceClient(conn),
+		castClient:                       castpb.NewCastServiceClient(conn),
+		domSnapshotClient:                domsnapshotpb.NewDOMSnapshotServiceClient(conn),
+		fedCmClient:                      fedcmpb.NewFedCmServiceClient(conn),
+		autofillClient:                   autofillpb.NewAutofillServiceClient(conn),
+		extensionsClient:                 extensionspb.NewExtensionsServiceClient(conn),
 		conn:                             conn,
 	}
 

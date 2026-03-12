@@ -1,0 +1,63 @@
+syntax = "proto3";
+
+package cdp.autofill;
+
+option go_package = "github.com/accretional/chromerpc/proto/cdp/autofill";
+
+// Autofill domain defines methods for interacting with the browser autofill system.
+
+service AutofillService {
+  // Enables the Autofill domain.
+  rpc Enable(EnableRequest) returns (EnableResponse);
+
+  // Disables the Autofill domain.
+  rpc Disable(DisableRequest) returns (DisableResponse);
+
+  // Triggers autofill on a form field.
+  rpc Trigger(TriggerRequest) returns (TriggerResponse);
+
+  // Sets addresses for autofill.
+  rpc SetAddresses(SetAddressesRequest) returns (SetAddressesResponse);
+}
+
+// ==================== Types ====================
+
+message CreditCard {
+  string number = 1;
+  string name = 2;
+  string expiry_month = 3;
+  string expiry_year = 4;
+  string cvc = 5;
+}
+
+message AddressField {
+  string name = 1;
+  string value = 2;
+}
+
+message Address {
+  repeated AddressField fields = 1;
+}
+
+// ==================== Requests / Responses ====================
+
+message EnableRequest {}
+message EnableResponse {}
+
+message DisableRequest {}
+message DisableResponse {}
+
+message TriggerRequest {
+  // The id of the field to trigger autofill on.
+  int32 field_id = 1;
+  // The frame id of the field (optional).
+  string frame_id = 2;
+  // The credit card to fill.
+  CreditCard card = 3;
+}
+message TriggerResponse {}
+
+message SetAddressesRequest {
+  repeated Address addresses = 1;
+}
+message SetAddressesResponse {}

@@ -1,0 +1,59 @@
+syntax = "proto3";
+
+package cdp.cast;
+
+option go_package = "github.com/accretional/chromerpc/proto/cdp/cast";
+
+// Cast domain allows interaction with Cast, Presentation API, and Remote Playback API.
+
+service CastService {
+  // Starts observing for sinks that can be used for tab mirroring, and if set,
+  // sinks compatible with |presentationUrl| as well.
+  rpc Enable(EnableRequest) returns (EnableResponse);
+
+  // Stops observing for sinks and issues.
+  rpc Disable(DisableRequest) returns (DisableResponse);
+
+  // Sets a sink to be used when the web page requests the browser to choose a sink via
+  // Presentation API, Remote Playback API, or Cast SDK.
+  rpc SetSinkToUse(SetSinkToUseRequest) returns (SetSinkToUseResponse);
+
+  // Starts mirroring the desktop to the sink.
+  rpc StartDesktopMirroring(StartDesktopMirroringRequest) returns (StartDesktopMirroringResponse);
+
+  // Starts mirroring the tab to the sink.
+  rpc StartTabMirroring(StartTabMirroringRequest) returns (StartTabMirroringResponse);
+
+  // Stops the active Cast session on the sink.
+  rpc StopCasting(StopCastingRequest) returns (StopCastingResponse);
+}
+
+// ==================== Requests / Responses ====================
+
+message EnableRequest {
+  optional string presentation_url = 1;
+}
+message EnableResponse {}
+
+message DisableRequest {}
+message DisableResponse {}
+
+message SetSinkToUseRequest {
+  string sink_name = 1;
+}
+message SetSinkToUseResponse {}
+
+message StartDesktopMirroringRequest {
+  string sink_name = 1;
+}
+message StartDesktopMirroringResponse {}
+
+message StartTabMirroringRequest {
+  string sink_name = 1;
+}
+message StartTabMirroringResponse {}
+
+message StopCastingRequest {
+  string sink_name = 1;
+}
+message StopCastingResponse {}

@@ -1,0 +1,28 @@
+syntax = "proto3";
+package cdp.domsnapshot;
+option go_package = "github.com/accretional/chromerpc/proto/cdp/domsnapshot";
+
+service DOMSnapshotService {
+  rpc Enable(EnableRequest) returns (EnableResponse);
+  rpc Disable(DisableRequest) returns (DisableResponse);
+  rpc CaptureSnapshot(CaptureSnapshotRequest) returns (CaptureSnapshotResponse);
+}
+
+message EnableRequest {}
+message EnableResponse {}
+message DisableRequest {}
+message DisableResponse {}
+
+message CaptureSnapshotRequest {
+  repeated string computed_styles = 1;
+  bool include_paint_order = 2;
+  bool include_dom_rects = 3;
+  bool include_blended_background_colors = 4;
+  bool include_text_color_opacities = 5;
+}
+
+message CaptureSnapshotResponse {
+  // Raw JSON of the snapshot documents and strings arrays.
+  bytes documents_json = 1;
+  repeated string strings = 2;
+}

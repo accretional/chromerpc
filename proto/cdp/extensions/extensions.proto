@@ -1,0 +1,62 @@
+syntax = "proto3";
+
+package cdp.extensions;
+
+option go_package = "github.com/accretional/chromerpc/proto/cdp/extensions";
+
+// Extensions domain allows managing Chrome extensions via CDP.
+
+service ExtensionsService {
+  // Loads an unpacked extension from a directory.
+  rpc LoadUnpacked(LoadUnpackedRequest) returns (LoadUnpackedResponse);
+
+  // Gets storage items for an extension.
+  rpc GetStorageItems(GetStorageItemsRequest) returns (GetStorageItemsResponse);
+
+  // Removes storage items for an extension.
+  rpc RemoveStorageItems(RemoveStorageItemsRequest) returns (RemoveStorageItemsResponse);
+
+  // Clears all storage items for an extension in a given storage area.
+  rpc ClearStorageItems(ClearStorageItemsRequest) returns (ClearStorageItemsResponse);
+
+  // Sets storage items for an extension.
+  rpc SetStorageItems(SetStorageItemsRequest) returns (SetStorageItemsResponse);
+}
+
+// ==================== Requests / Responses ====================
+
+message LoadUnpackedRequest {
+  string path = 1;
+}
+message LoadUnpackedResponse {
+  string id = 1;
+}
+
+message GetStorageItemsRequest {
+  string id = 1;
+  string storage_area = 2; // session, local, sync, managed
+  repeated string keys = 3; // optional: if empty, returns all items
+}
+message GetStorageItemsResponse {
+  bytes data = 1; // JSON-encoded object
+}
+
+message RemoveStorageItemsRequest {
+  string id = 1;
+  string storage_area = 2;
+  repeated string keys = 3;
+}
+message RemoveStorageItemsResponse {}
+
+message ClearStorageItemsRequest {
+  string id = 1;
+  string storage_area = 2;
+}
+message ClearStorageItemsResponse {}
+
+message SetStorageItemsRequest {
+  string id = 1;
+  string storage_area = 2;
+  string values = 3; // JSON-encoded object
+}
+message SetStorageItemsResponse {}

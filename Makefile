@@ -58,7 +58,12 @@ proto:
 		proto/cdp/headlessexperimental/headlessexperimental.proto \
 		proto/cdp/pwa/pwa.proto \
 		proto/cdp/schema/schema.proto \
-		proto/cdp/tethering/tethering.proto
+		proto/cdp/tethering/tethering.proto \
+		proto/cdp/cast/cast.proto \
+		proto/cdp/domsnapshot/domsnapshot.proto \
+		proto/cdp/fedcm/fedcm.proto \
+		proto/cdp/autofill/autofill.proto \
+		proto/cdp/extensions/extensions.proto
 
 # Build Docker image
 docker:
