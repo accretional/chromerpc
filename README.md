@@ -24,6 +24,99 @@ We're writing our binaries in Go, and setting up a common linker in https://gith
 
 Might be worth using https://github.com/bitfield/script to chain commands/convert to http calls.
 
+## HeadlessBrowser Automation
+
+The `HeadlessBrowserService` is a high-level automation layer built on top of the CDP domain services. Instead of wiring together individual gRPC calls, you define automation as a **sequence of steps in a text proto file**, then execute the whole sequence with a single RPC.
+
+### Quick Start
+
+1. Start the server:
+
+```bash
+make run   # launches headless Chrome + gRPC on :50051
+```
+
+2. Write an automation file (`my_automation.textproto`):
+
+```textproto
+name: "screenshot_example"
+
+steps: {
+  label: "set_viewport"
+  set_viewport: {
+    width: 1280
+    height: 800
+    device_scale_factor: 2
+  }
+}
+
+steps: {
+  label: "navigate"
+  navigate: {
+    url: "https://example.com"
+  }
+}
+
+steps: {
+  label: "wait_for_render"
+  wait: {
+    milliseconds: 500
+  }
+}
+
+steps: {
+  label: "capture"
+  screenshot: {
+    output_path: "screenshot.png"
+    format: "png"
+  }
+}
+```
+
+3. Run it:
+
+```bash
+go run ./cmd/automate -input my_automation.textproto
+```
+
+### Available Step Types
+
+| Step | Description | Key Fields |
+|------|-------------|------------|
+| `set_viewport` | Set browser viewport size | `width`, `height`, `device_scale_factor`, `mobile` |
+| `navigate` | Navigate to a URL | `url` |
+| `wait` | Pause for a fixed duration | `milliseconds` |
+| `screenshot` | Capture the page as an image | `output_path`, `format` (png/jpeg), `quality`, `full_page` |
+| `evaluate_script` | Run JavaScript in the page | `expression` |
+| `click` | Click at coordinates or a CSS selector | `x`, `y`, `selector` |
+| `type_text` | Type text into a focused element or selector | `text`, `selector` |
+| `wait_for_selector` | Wait until a CSS selector appears in the DOM | `selector`, `timeout_ms` |
+| `reload` | Reload the current page | `ignore_cache` |
+| `scroll_to` | Scroll to coordinates | `x`, `y` |
+
+### Modularity
+
+Automations are plain text proto files (`AutomationSequence` messages). This means you can:
+
+- **Reorder steps** by moving `steps: { ... }` blocks around.
+- **Compose sequences** by concatenating multiple `.textproto` files or merging them with tooling.
+- **Version control** your automations alongside code — they're human-readable diffs.
+- **Extend** with new step types by adding a new action to the `AutomationStep` oneof in `proto/cdp/headlessbrowser/headlessbrowser.proto` and implementing the handler in `internal/server/headlessbrowser/headlessbrowser.go`.
+
+### Proto Definition
+
+The full service definition is at [`proto/cdp/headlessbrowser/headlessbrowser.proto`](proto/cdp/headlessbrowser/headlessbrowser.proto). The service exposes a single RPC:
+
+```protobuf
+service HeadlessBrowserService {
+  rpc RunAutomation(AutomationSequence) returns (AutomationResult);
+}
+```
+
+### Example Automations
+
+See the [`automations/`](automations/) directory for ready-to-use text proto files.
+
 ## Testing
 
 Let's invest in some utility for testing that will make it easier to validate our implementations in a way that is uniform and agnostic/not tied to the implementations.

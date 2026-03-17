@@ -1,0 +1,116 @@
+syntax = "proto3";
+
+package cdp.headlessbrowser;
+
+option go_package = "github.com/accretional/chromerpc/proto/cdp/headlessbrowser";
+
+// HeadlessBrowser service — high-level browser automation as sequences of steps.
+// Automation sequences can be authored as text proto files and reorganized modularly.
+
+service HeadlessBrowserService {
+  // Execute a sequence of automation steps in order.
+  rpc RunAutomation(AutomationSequence) returns (AutomationResult);
+}
+
+// A complete automation sequence: an ordered list of steps.
+message AutomationSequence {
+  string name = 1;
+  repeated AutomationStep steps = 2;
+}
+
+// A single automation step. Each step is one of the supported actions.
+message AutomationStep {
+  string label = 1;
+  oneof action {
+    SetViewport set_viewport = 2;
+    Navigate navigate = 3;
+    Wait wait = 4;
+    Screenshot screenshot = 5;
+    EvaluateScript evaluate_script = 6;
+    Click click = 7;
+    TypeText type_text = 8;
+    WaitForSelector wait_for_selector = 9;
+    Reload reload = 10;
+    ScrollTo scroll_to = 11;
+  }
+}
+
+// Set the browser viewport dimensions.
+message SetViewport {
+  int32 width = 1;
+  int32 height = 2;
+  double device_scale_factor = 3;
+  bool mobile = 4;
+}
+
+// Navigate to a URL.
+message Navigate {
+  string url = 1;
+}
+
+// Wait for a fixed duration.
+message Wait {
+  int32 milliseconds = 1;
+}
+
+// Capture a screenshot and save to a file path on the server.
+message Screenshot {
+  string output_path = 1;
+  // PNG or JPEG.
+  string format = 2;
+  int32 quality = 3;
+  bool full_page = 4;
+}
+
+// Evaluate JavaScript in the page context.
+message EvaluateScript {
+  string expression = 1;
+}
+
+// Click at coordinates or a CSS selector.
+message Click {
+  double x = 1;
+  double y = 2;
+  string selector = 3;
+}
+
+// Type text (simulates keyboard input).
+message TypeText {
+  string text = 1;
+  string selector = 2;
+}
+
+// Wait for a CSS selector to appear in the DOM.
+message WaitForSelector {
+  string selector = 1;
+  int32 timeout_ms = 2;
+}
+
+// Reload the current page.
+message Reload {
+  bool ignore_cache = 1;
+}
+
+// Scroll to coordinates.
+message ScrollTo {
+  double x = 1;
+  double y = 2;
+}
+
+// Result of a full automation sequence run.
+message AutomationResult {
+  bool success = 1;
+  repeated StepResult step_results = 2;
+  string error = 3;
+}
+
+// Result of a single step.
+message StepResult {
+  string label = 1;
+  bool success = 2;
+  string error = 3;
+  // For screenshot steps, the bytes of the captured image.
+  bytes screenshot_data = 4;
+  // For evaluate_script steps, the return value.
+  string script_result = 5;
+}

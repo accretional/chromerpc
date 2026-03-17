@@ -66,7 +66,8 @@ proto:
 		proto/cdp/extensions/extensions.proto \
 		proto/cdp/deviceaccess/deviceaccess.proto \
 		proto/cdp/filesystem/filesystem.proto \
-		proto/cdp/bluetoothemulation/bluetoothemulation.proto
+		proto/cdp/bluetoothemulation/bluetoothemulation.proto \
+		proto/cdp/headlessbrowser/headlessbrowser.proto
 
 # Build Docker image
 docker:

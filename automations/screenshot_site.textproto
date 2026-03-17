@@ -1,0 +1,32 @@
+name: "screenshot_statue_site"
+
+steps: {
+  label: "set_viewport"
+  set_viewport: {
+    width: 1280
+    height: 800
+    device_scale_factor: 2
+  }
+}
+
+steps: {
+  label: "navigate_to_site"
+  navigate: {
+    url: "http://localhost:3000"
+  }
+}
+
+steps: {
+  label: "wait_for_render"
+  wait: {
+    milliseconds: 500
+  }
+}
+
+steps: {
+  label: "capture_screenshot"
+  screenshot: {
+    output_path: "/Users/fred/chrometemp/statue_site_screenshot.png"
+    format: "png"
+  }
+}

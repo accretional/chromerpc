@@ -28,6 +28,7 @@ import (
 	accessibilityserver "github.com/accretional/chromerpc/internal/server/accessibility"
 	autofillserver "github.com/accretional/chromerpc/internal/server/autofill"
 	bluetoothemulationserver "github.com/accretional/chromerpc/internal/server/bluetoothemulation"
+	headlessbrowserserver "github.com/accretional/chromerpc/internal/server/headlessbrowser"
 	animationserver "github.com/accretional/chromerpc/internal/server/animation"
 	auditsserver "github.com/accretional/chromerpc/internal/server/audits"
 	backgroundserviceserver "github.com/accretional/chromerpc/internal/server/backgroundservice"
@@ -82,6 +83,7 @@ import (
 	accessibilitypb "github.com/accretional/chromerpc/proto/cdp/accessibility"
 	autofillpb "github.com/accretional/chromerpc/proto/cdp/autofill"
 	bluetoothemulationpb "github.com/accretional/chromerpc/proto/cdp/bluetoothemulation"
+	headlessbrowserpb "github.com/accretional/chromerpc/proto/cdp/headlessbrowser"
 	animationpb "github.com/accretional/chromerpc/proto/cdp/animation"
 	auditspb "github.com/accretional/chromerpc/proto/cdp/audits"
 	backgroundservicepb "github.com/accretional/chromerpc/proto/cdp/backgroundservice"
@@ -257,6 +259,7 @@ func main() {
 	deviceaccesspb.RegisterDeviceAccessServiceServer(grpcServer, deviceaccessserver.New(client))
 	filesystempb.RegisterFileSystemServiceServer(grpcServer, filesystemserver.New(client))
 	bluetoothemulationpb.RegisterBluetoothEmulationServiceServer(grpcServer, bluetoothemulationserver.New(client))
+	headlessbrowserpb.RegisterHeadlessBrowserServiceServer(grpcServer, headlessbrowserserver.New(client))
 
 	// Enable gRPC reflection for tools like grpcurl.
 	reflection.Register(grpcServer)
