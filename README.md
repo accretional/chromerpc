@@ -36,6 +36,16 @@ The `HeadlessBrowserService` is a high-level automation layer built on top of th
 make run   # launches headless Chrome + gRPC on :50051
 ```
 
+Or connect to an existing Chrome instance with remote debugging enabled:
+
+```bash
+# Get the WebSocket URL from a running Chrome
+WS_URL=$(curl -s http://127.0.0.1:9222/json/version | python3 -c \
+  "import sys,json; print(json.load(sys.stdin)['webSocketDebuggerUrl'])")
+
+./bin/chromerpc --ws-url "$WS_URL" --port 50051
+```
+
 2. Write an automation file (`my_automation.textproto`):
 
 ```textproto
@@ -86,13 +96,52 @@ go run ./cmd/automate -input my_automation.textproto
 | `set_viewport` | Set browser viewport size | `width`, `height`, `device_scale_factor`, `mobile` |
 | `navigate` | Navigate to a URL | `url` |
 | `wait` | Pause for a fixed duration | `milliseconds` |
-| `screenshot` | Capture the page as an image | `output_path`, `format` (png/jpeg), `quality`, `full_page` |
+| `screenshot` | Capture the visible page as an image | `output_path`, `format` (png/jpeg), `quality`, `full_page` |
+| `full_page_screenshot` | Capture the entire scrollable page | `output_path`, `format`, `quality` |
 | `evaluate_script` | Run JavaScript in the page | `expression` |
 | `click` | Click at coordinates or a CSS selector | `x`, `y`, `selector` |
-| `type_text` | Type text into a focused element or selector | `text`, `selector` |
+| `type_text` | Insert text into a focused element or selector | `text`, `selector` |
+| `type_key_by_key` | Type text character-by-character with realistic delays | `text`, `delay_ms`, `selector` |
+| `press_key` | Press a special key (Enter, Tab, Escape, arrows, etc.) | `key` |
 | `wait_for_selector` | Wait until a CSS selector appears in the DOM | `selector`, `timeout_ms` |
 | `reload` | Reload the current page | `ignore_cache` |
 | `scroll_to` | Scroll to coordinates | `x`, `y` |
+| `open_tab` | Open a URL in a new browser tab | `url` |
+| `switch_tab` | Switch CDP session to a different tab | `target_id` |
+| `close_tab` | Close a browser tab | `target_id` |
+| `download_file` | Download a file via browser-native download | `url`, `output_path` |
+
+### RPCs
+
+The service exposes two RPCs:
+
+```protobuf
+service HeadlessBrowserService {
+  // Run a full sequence of steps.
+  rpc RunAutomation(AutomationSequence) returns (AutomationResult);
+  // Run a single step (for orchestrators that need to branch on results).
+  rpc ExecuteStep(AutomationStep) returns (StepResult);
+}
+```
+
+`RunAutomation` executes a linear sequence and stops on first failure. `ExecuteStep` runs one step at a time, returning the result so the caller can make decisions (e.g., extract links from a page, then open each in a loop). This makes it possible to build complex orchestrators as standalone Go programs that call `ExecuteStep` in a loop.
+
+### Multi-Tab Support
+
+The `open_tab`, `switch_tab`, and `close_tab` steps enable multi-tab workflows. When you open a new tab, the returned `StepResult.script_result` contains the target ID. Pass this to `switch_tab` to route subsequent commands to that tab, and `close_tab` to clean up.
+
+```
+open_tab(url) → target_id
+switch_tab(target_id) → session_id (commands now go to this tab)
+... do work in the tab ...
+close_tab(target_id) → tab destroyed
+```
+
+The server manages CDP sessions internally via `Target.attachToTarget` with `flatten=true`.
+
+### File Downloads
+
+The `download_file` step handles browser-native downloads. It opens the URL in a new tab, sets `Browser.setDownloadBehavior` to auto-save to the output directory, finds and clicks the download button (supporting pdf.js viewer's `#download` button, generic download buttons, and `<a download>` links), then waits for the file to appear on disk. This preserves the browser's cookies and session, avoiding issues with authenticated or CDN-protected resources.
 
 ### Modularity
 
@@ -103,19 +152,26 @@ Automations are plain text proto files (`AutomationSequence` messages). This mea
 - **Version control** your automations alongside code — they're human-readable diffs.
 - **Extend** with new step types by adding a new action to the `AutomationStep` oneof in `proto/cdp/headlessbrowser/headlessbrowser.proto` and implementing the handler in `internal/server/headlessbrowser/headlessbrowser.go`.
 
-### Proto Definition
-
-The full service definition is at [`proto/cdp/headlessbrowser/headlessbrowser.proto`](proto/cdp/headlessbrowser/headlessbrowser.proto). The service exposes a single RPC:
-
-```protobuf
-service HeadlessBrowserService {
-  rpc RunAutomation(AutomationSequence) returns (AutomationResult);
-}
-```
-
 ### Example Automations
 
 See the [`automations/`](automations/) directory for ready-to-use text proto files.
+
+### Connecting to an Existing Chrome
+
+For sites with bot detection, you can connect to a real (non-headless) Chrome instance:
+
+```bash
+# Launch Chrome with remote debugging
+"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" \
+  --remote-debugging-port=9222 &
+
+# Connect chromerpc to it
+WS_URL=$(curl -s http://127.0.0.1:9222/json/version | python3 -c \
+  "import sys,json; print(json.load(sys.stdin)['webSocketDebuggerUrl'])")
+./bin/chromerpc --ws-url "$WS_URL"
+```
+
+The server includes `--disable-blink-features=AutomationControlled` by default and supports `--user-agent` overrides.
 
 ## Testing
 

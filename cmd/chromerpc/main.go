@@ -143,6 +143,7 @@ func main() {
 	chromePath := flag.String("chrome", "", "Path to Chrome/Chromium binary")
 	headless := flag.Bool("headless", true, "Run Chrome in headless mode")
 	port := flag.Int("port", 0, "Chrome remote debugging port (0=auto)")
+	userAgent := flag.String("user-agent", "", "Override Chrome user agent string")
 	flag.Parse()
 
 	ctx, cancel := context.WithCancel(context.Background())
@@ -158,10 +159,18 @@ func main() {
 	}()
 
 	// Connect to (or launch) Chrome.
+	var extraArgs []string
+	if *userAgent != "" {
+		extraArgs = append(extraArgs, "--user-agent="+*userAgent)
+	}
+	// Always add anti-detection flags.
+	extraArgs = append(extraArgs, "--disable-blink-features=AutomationControlled")
+
 	client, launchResult, err := cdpclient.ConnectOrLaunch(ctx, *wsURL, cdpclient.LaunchConfig{
 		ChromePath: *chromePath,
 		Port:       *port,
 		Headless:   *headless,
+		ExtraArgs:  extraArgs,
 		Stderr:     os.Stderr,
 	})
 	if err != nil {

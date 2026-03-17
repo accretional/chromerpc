@@ -10,6 +10,10 @@ option go_package = "github.com/accretional/chromerpc/proto/cdp/headlessbrowser"
 service HeadlessBrowserService {
   // Execute a sequence of automation steps in order.
   rpc RunAutomation(AutomationSequence) returns (AutomationResult);
+
+  // Execute a single automation step and return its result.
+  // Useful for orchestrators that need to branch on step results.
+  rpc ExecuteStep(AutomationStep) returns (StepResult);
 }
 
 // A complete automation sequence: an ordered list of steps.
@@ -32,6 +36,13 @@ message AutomationStep {
     WaitForSelector wait_for_selector = 9;
     Reload reload = 10;
     ScrollTo scroll_to = 11;
+    TypeKeyByKey type_key_by_key = 12;
+    PressKey press_key = 13;
+    FullPageScreenshot full_page_screenshot = 14;
+    OpenTab open_tab = 15;
+    CloseTab close_tab = 16;
+    SwitchTab switch_tab = 17;
+    DownloadFile download_file = 18;
   }
 }
 
@@ -74,7 +85,7 @@ message Click {
   string selector = 3;
 }
 
-// Type text (simulates keyboard input).
+// Type text (simulates keyboard input via insertText).
 message TypeText {
   string text = 1;
   string selector = 2;
@@ -95,6 +106,48 @@ message Reload {
 message ScrollTo {
   double x = 1;
   double y = 2;
+}
+
+// Type text key-by-key with realistic delays between keystrokes.
+message TypeKeyByKey {
+  string text = 1;
+  // Delay in milliseconds between each keystroke. Default 50.
+  int32 delay_ms = 2;
+  // Optional selector to focus before typing.
+  string selector = 3;
+}
+
+// Press a special key (Enter, Tab, Escape, Backspace, etc.).
+message PressKey {
+  string key = 1;
+}
+
+// Capture a full-page screenshot (resizes viewport to full page height).
+message FullPageScreenshot {
+  string output_path = 1;
+  string format = 2;
+  int32 quality = 3;
+}
+
+// Open a new browser tab with a URL. Returns target_id in script_result.
+message OpenTab {
+  string url = 1;
+}
+
+// Close a tab by target_id. If empty, closes the current tab.
+message CloseTab {
+  string target_id = 1;
+}
+
+// Switch to a tab by target_id. Attaches a new session.
+message SwitchTab {
+  string target_id = 1;
+}
+
+// Download a file from a URL and save to disk.
+message DownloadFile {
+  string url = 1;
+  string output_path = 2;
 }
 
 // Result of a full automation sequence run.

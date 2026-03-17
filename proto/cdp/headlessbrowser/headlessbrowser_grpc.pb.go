@@ -20,6 +20,7 @@ const _ = grpc.SupportPackageIsVersion9
 
 const (
 	HeadlessBrowserService_RunAutomation_FullMethodName = "/cdp.headlessbrowser.HeadlessBrowserService/RunAutomation"
+	HeadlessBrowserService_ExecuteStep_FullMethodName   = "/cdp.headlessbrowser.HeadlessBrowserService/ExecuteStep"
 )
 
 // HeadlessBrowserServiceClient is the client API for HeadlessBrowserService service.
@@ -28,6 +29,9 @@ const (
 type HeadlessBrowserServiceClient interface {
 	// Execute a sequence of automation steps in order.
 	RunAutomation(ctx context.Context, in *AutomationSequence, opts ...grpc.CallOption) (*AutomationResult, error)
+	// Execute a single automation step and return its result.
+	// Useful for orchestrators that need to branch on step results.
+	ExecuteStep(ctx context.Context, in *AutomationStep, opts ...grpc.CallOption) (*StepResult, error)
 }
 
 type headlessBrowserServiceClient struct {
@@ -48,12 +52,25 @@ func (c *headlessBrowserServiceClient) RunAutomation(ctx context.Context, in *Au
 	return out, nil
 }
 
+func (c *headlessBrowserServiceClient) ExecuteStep(ctx context.Context, in *AutomationStep, opts ...grpc.CallOption) (*StepResult, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(StepResult)
+	err := c.cc.Invoke(ctx, HeadlessBrowserService_ExecuteStep_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // HeadlessBrowserServiceServer is the server API for HeadlessBrowserService service.
 // All implementations must embed UnimplementedHeadlessBrowserServiceServer
 // for forward compatibility.
 type HeadlessBrowserServiceServer interface {
 	// Execute a sequence of automation steps in order.
 	RunAutomation(context.Context, *AutomationSequence) (*AutomationResult, error)
+	// Execute a single automation step and return its result.
+	// Useful for orchestrators that need to branch on step results.
+	ExecuteStep(context.Context, *AutomationStep) (*StepResult, error)
 	mustEmbedUnimplementedHeadlessBrowserServiceServer()
 }
 
@@ -66,6 +83,9 @@ type UnimplementedHeadlessBrowserServiceServer struct{}
 
 func (UnimplementedHeadlessBrowserServiceServer) RunAutomation(context.Context, *AutomationSequence) (*AutomationResult, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RunAutomation not implemented")
+}
+func (UnimplementedHeadlessBrowserServiceServer) ExecuteStep(context.Context, *AutomationStep) (*StepResult, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ExecuteStep not implemented")
 }
 func (UnimplementedHeadlessBrowserServiceServer) mustEmbedUnimplementedHeadlessBrowserServiceServer() {
 }
@@ -107,6 +127,24 @@ func _HeadlessBrowserService_RunAutomation_Handler(srv interface{}, ctx context.
 	return interceptor(ctx, in, info, handler)
 }
 
+func _HeadlessBrowserService_ExecuteStep_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AutomationStep)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(HeadlessBrowserServiceServer).ExecuteStep(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: HeadlessBrowserService_ExecuteStep_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(HeadlessBrowserServiceServer).ExecuteStep(ctx, req.(*AutomationStep))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // HeadlessBrowserService_ServiceDesc is the grpc.ServiceDesc for HeadlessBrowserService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -117,6 +155,10 @@ var HeadlessBrowserService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "RunAutomation",
 			Handler:    _HeadlessBrowserService_RunAutomation_Handler,
+		},
+		{
+			MethodName: "ExecuteStep",
+			Handler:    _HeadlessBrowserService_ExecuteStep_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -80,7 +80,6 @@ func Launch(ctx context.Context, cfg LaunchConfig) (*LaunchResult, error) {
 
 	args := []string{
 		fmt.Sprintf("--remote-debugging-port=%d", port),
-		"--enable-logging",
 		"--no-first-run",
 		"--no-default-browser-check",
 	}
