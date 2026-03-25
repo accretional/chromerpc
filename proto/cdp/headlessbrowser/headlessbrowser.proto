@@ -43,6 +43,7 @@ message AutomationStep {
     CloseTab close_tab = 16;
     SwitchTab switch_tab = 17;
     DownloadFile download_file = 18;
+    ListTabs list_tabs = 19;
   }
 }
 
@@ -83,6 +84,7 @@ message Click {
   double x = 1;
   double y = 2;
   string selector = 3;
+  string button = 4; // Left, right or middle mouse click. Default is left.
 }
 
 // Type text (simulates keyboard input via insertText).
@@ -149,6 +151,9 @@ message DownloadFile {
   string url = 1;
   string output_path = 2;
 }
+
+// List all open browser tabs. Returns a JSON array of target IDs in script_result.
+message ListTabs {}
 
 // Result of a full automation sequence run.
 message AutomationResult {

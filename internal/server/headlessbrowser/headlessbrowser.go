@@ -131,6 +131,8 @@ func (s *Server) executeStep(ctx context.Context, step *pb.AutomationStep) (*pb.
 		return s.doOpenTab(ctx, a.OpenTab)
 	case *pb.AutomationStep_CloseTab:
 		return s.doCloseTab(ctx, a.CloseTab)
+	case *pb.AutomationStep_ListTabs:
+		return s.doListTabs(ctx)
 	case *pb.AutomationStep_SwitchTab:
 		return s.doSwitchTab(ctx, a.SwitchTab)
 	case *pb.AutomationStep_DownloadFile:
@@ -288,12 +290,17 @@ func (s *Server) doClick(ctx context.Context, c *pb.Click) (*pb.StepResult, erro
 		x, y = resp.Result.Value.X, resp.Result.Value.Y
 	}
 
+	button := c.Button
+	if button == "" {
+		button = "left"
+	}
+
 	for _, evType := range []string{"mousePressed", "mouseReleased"} {
 		params := map[string]interface{}{
-			"type":        evType,
+			"type":       evType,
 			"x":          x,
 			"y":          y,
-			"button":     "left",
+			"button":     button,
 			"clickCount": 1,
 		}
 		if _, err := s.send(ctx, "Input.dispatchMouseEvent", params); err != nil {
@@ -384,10 +391,10 @@ func (s *Server) doTypeKeyByKey(ctx context.Context, t *pb.TypeKeyByKey) (*pb.St
 		text := string(ch)
 		// keyDown
 		params := map[string]interface{}{
-			"type":                  "keyDown",
-			"text":                  text,
-			"unmodifiedText":        text,
-			"key":                   text,
+			"type":           "keyDown",
+			"text":           text,
+			"unmodifiedText": text,
+			"key":            text,
 		}
 		if _, err := s.send(ctx, "Input.dispatchKeyEvent", params); err != nil {
 			return nil, fmt.Errorf("keyDown %q: %w", text, err)
@@ -593,6 +600,32 @@ func (s *Server) doCloseTab(ctx context.Context, ct *pb.CloseTab) (*pb.StepResul
 	}
 	log.Printf("    Closed tab: %s", targetID)
 	return &pb.StepResult{}, nil
+}
+
+// doListTabs returns a JSON array of all open browser tab target IDs.
+func (s *Server) doListTabs(ctx context.Context) (*pb.StepResult, error) {
+	result, err := s.sendBrowser(ctx, "Target.getTargets", nil)
+	if err != nil {
+		return nil, fmt.Errorf("Target.getTargets: %w", err)
+	}
+	var resp struct {
+		TargetInfos []struct {
+			TargetID string `json:"targetId"`
+			Type     string `json:"type"`
+		} `json:"targetInfos"`
+	}
+	if err := json.Unmarshal(result, &resp); err != nil {
+		return nil, fmt.Errorf("list_tabs: unmarshal: %w", err)
+	}
+	var ids []string
+	for _, t := range resp.TargetInfos {
+		if t.Type == "page" {
+			ids = append(ids, `"`+t.TargetID+`"`)
+		}
+	}
+	out := "[" + strings.Join(ids, ",") + "]"
+	log.Printf("    ListTabs: %s", out)
+	return &pb.StepResult{ScriptResult: out}, nil
 }
 
 // doSwitchTab attaches to a target and switches the default session.
