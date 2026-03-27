@@ -98,6 +98,8 @@ type AutomationStep struct {
 	//	*AutomationStep_SwitchTab
 	//	*AutomationStep_DownloadFile
 	//	*AutomationStep_ListTabs
+	//	*AutomationStep_Hover
+	//	*AutomationStep_Drag
 	Action        isAutomationStep_Action `protobuf_oneof:"action"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -309,6 +311,24 @@ func (x *AutomationStep) GetListTabs() *ListTabs {
 	return nil
 }
 
+func (x *AutomationStep) GetHover() *Hover {
+	if x != nil {
+		if x, ok := x.Action.(*AutomationStep_Hover); ok {
+			return x.Hover
+		}
+	}
+	return nil
+}
+
+func (x *AutomationStep) GetDrag() *Drag {
+	if x != nil {
+		if x, ok := x.Action.(*AutomationStep_Drag); ok {
+			return x.Drag
+		}
+	}
+	return nil
+}
+
 type isAutomationStep_Action interface {
 	isAutomationStep_Action()
 }
@@ -385,6 +405,14 @@ type AutomationStep_ListTabs struct {
 	ListTabs *ListTabs `protobuf:"bytes,19,opt,name=list_tabs,json=listTabs,proto3,oneof"`
 }
 
+type AutomationStep_Hover struct {
+	Hover *Hover `protobuf:"bytes,20,opt,name=hover,proto3,oneof"`
+}
+
+type AutomationStep_Drag struct {
+	Drag *Drag `protobuf:"bytes,21,opt,name=drag,proto3,oneof"`
+}
+
 func (*AutomationStep_SetViewport) isAutomationStep_Action() {}
 
 func (*AutomationStep_Navigate) isAutomationStep_Action() {}
@@ -420,6 +448,10 @@ func (*AutomationStep_SwitchTab) isAutomationStep_Action() {}
 func (*AutomationStep_DownloadFile) isAutomationStep_Action() {}
 
 func (*AutomationStep_ListTabs) isAutomationStep_Action() {}
+
+func (*AutomationStep_Hover) isAutomationStep_Action() {}
+
+func (*AutomationStep_Drag) isAutomationStep_Action() {}
 
 // Set the browser viewport dimensions.
 type SetViewport struct {
@@ -1362,6 +1394,128 @@ func (*ListTabs) Descriptor() ([]byte, []int) {
 	return file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescGZIP(), []int{19}
 }
 
+// Move the mouse cursor to coordinates.
+type Hover struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	X             float64                `protobuf:"fixed64,1,opt,name=x,proto3" json:"x,omitempty"`
+	Y             float64                `protobuf:"fixed64,2,opt,name=y,proto3" json:"y,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Hover) Reset() {
+	*x = Hover{}
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[20]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Hover) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Hover) ProtoMessage() {}
+
+func (x *Hover) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[20]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Hover.ProtoReflect.Descriptor instead.
+func (*Hover) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescGZIP(), []int{20}
+}
+
+func (x *Hover) GetX() float64 {
+	if x != nil {
+		return x.X
+	}
+	return 0
+}
+
+func (x *Hover) GetY() float64 {
+	if x != nil {
+		return x.Y
+	}
+	return 0
+}
+
+// Drag from one coordinate to another.
+type Drag struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	StartX        float64                `protobuf:"fixed64,1,opt,name=start_x,json=startX,proto3" json:"start_x,omitempty"`
+	StartY        float64                `protobuf:"fixed64,2,opt,name=start_y,json=startY,proto3" json:"start_y,omitempty"`
+	EndX          float64                `protobuf:"fixed64,3,opt,name=end_x,json=endX,proto3" json:"end_x,omitempty"`
+	EndY          float64                `protobuf:"fixed64,4,opt,name=end_y,json=endY,proto3" json:"end_y,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Drag) Reset() {
+	*x = Drag{}
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[21]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Drag) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Drag) ProtoMessage() {}
+
+func (x *Drag) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[21]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Drag.ProtoReflect.Descriptor instead.
+func (*Drag) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescGZIP(), []int{21}
+}
+
+func (x *Drag) GetStartX() float64 {
+	if x != nil {
+		return x.StartX
+	}
+	return 0
+}
+
+func (x *Drag) GetStartY() float64 {
+	if x != nil {
+		return x.StartY
+	}
+	return 0
+}
+
+func (x *Drag) GetEndX() float64 {
+	if x != nil {
+		return x.EndX
+	}
+	return 0
+}
+
+func (x *Drag) GetEndY() float64 {
+	if x != nil {
+		return x.EndY
+	}
+	return 0
+}
+
 // Result of a full automation sequence run.
 type AutomationResult struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -1374,7 +1528,7 @@ type AutomationResult struct {
 
 func (x *AutomationResult) Reset() {
 	*x = AutomationResult{}
-	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[20]
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[22]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1386,7 +1540,7 @@ func (x *AutomationResult) String() string {
 func (*AutomationResult) ProtoMessage() {}
 
 func (x *AutomationResult) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[20]
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[22]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1399,7 +1553,7 @@ func (x *AutomationResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AutomationResult.ProtoReflect.Descriptor instead.
 func (*AutomationResult) Descriptor() ([]byte, []int) {
-	return file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescGZIP(), []int{20}
+	return file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescGZIP(), []int{22}
 }
 
 func (x *AutomationResult) GetSuccess() bool {
@@ -1439,7 +1593,7 @@ type StepResult struct {
 
 func (x *StepResult) Reset() {
 	*x = StepResult{}
-	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[21]
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[23]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1451,7 +1605,7 @@ func (x *StepResult) String() string {
 func (*StepResult) ProtoMessage() {}
 
 func (x *StepResult) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[21]
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[23]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1464,7 +1618,7 @@ func (x *StepResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StepResult.ProtoReflect.Descriptor instead.
 func (*StepResult) Descriptor() ([]byte, []int) {
-	return file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescGZIP(), []int{21}
+	return file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescGZIP(), []int{23}
 }
 
 func (x *StepResult) GetLabel() string {
@@ -1509,7 +1663,8 @@ const file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDesc = "" +
 	"/proto/cdp/headlessbrowser/headlessbrowser.proto\x12\x13cdp.headlessbrowser\"c\n" +
 	"\x12AutomationSequence\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x129\n" +
-	"\x05steps\x18\x02 \x03(\v2#.cdp.headlessbrowser.AutomationStepR\x05steps\"\xdc\t\n" +
+	"\x05steps\x18\x02 \x03(\v2#.cdp.headlessbrowser.AutomationStepR\x05steps\"\xc1\n" +
+	"\n" +
 	"\x0eAutomationStep\x12\x14\n" +
 	"\x05label\x18\x01 \x01(\tR\x05label\x12E\n" +
 	"\fset_viewport\x18\x02 \x01(\v2 .cdp.headlessbrowser.SetViewportH\x00R\vsetViewport\x12;\n" +
@@ -1533,7 +1688,9 @@ const file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDesc = "" +
 	"\n" +
 	"switch_tab\x18\x11 \x01(\v2\x1e.cdp.headlessbrowser.SwitchTabH\x00R\tswitchTab\x12H\n" +
 	"\rdownload_file\x18\x12 \x01(\v2!.cdp.headlessbrowser.DownloadFileH\x00R\fdownloadFile\x12<\n" +
-	"\tlist_tabs\x18\x13 \x01(\v2\x1d.cdp.headlessbrowser.ListTabsH\x00R\blistTabsB\b\n" +
+	"\tlist_tabs\x18\x13 \x01(\v2\x1d.cdp.headlessbrowser.ListTabsH\x00R\blistTabs\x122\n" +
+	"\x05hover\x18\x14 \x01(\v2\x1a.cdp.headlessbrowser.HoverH\x00R\x05hover\x12/\n" +
+	"\x04drag\x18\x15 \x01(\v2\x19.cdp.headlessbrowser.DragH\x00R\x04dragB\b\n" +
 	"\x06action\"\x83\x01\n" +
 	"\vSetViewport\x12\x14\n" +
 	"\x05width\x18\x01 \x01(\x05R\x05width\x12\x16\n" +
@@ -1594,7 +1751,15 @@ const file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDesc = "" +
 	"\voutput_path\x18\x02 \x01(\tR\n" +
 	"outputPath\"\n" +
 	"\n" +
-	"\bListTabs\"\x86\x01\n" +
+	"\bListTabs\"#\n" +
+	"\x05Hover\x12\f\n" +
+	"\x01x\x18\x01 \x01(\x01R\x01x\x12\f\n" +
+	"\x01y\x18\x02 \x01(\x01R\x01y\"b\n" +
+	"\x04Drag\x12\x17\n" +
+	"\astart_x\x18\x01 \x01(\x01R\x06startX\x12\x17\n" +
+	"\astart_y\x18\x02 \x01(\x01R\x06startY\x12\x13\n" +
+	"\x05end_x\x18\x03 \x01(\x01R\x04endX\x12\x13\n" +
+	"\x05end_y\x18\x04 \x01(\x01R\x04endY\"\x86\x01\n" +
 	"\x10AutomationResult\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12B\n" +
 	"\fstep_results\x18\x02 \x03(\v2\x1f.cdp.headlessbrowser.StepResultR\vstepResults\x12\x14\n" +
@@ -1622,7 +1787,7 @@ func file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescGZIP() []byte {
 	return file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescData
 }
 
-var file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes = make([]protoimpl.MessageInfo, 22)
+var file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes = make([]protoimpl.MessageInfo, 24)
 var file_proto_cdp_headlessbrowser_headlessbrowser_proto_goTypes = []any{
 	(*AutomationSequence)(nil), // 0: cdp.headlessbrowser.AutomationSequence
 	(*AutomationStep)(nil),     // 1: cdp.headlessbrowser.AutomationStep
@@ -1644,8 +1809,10 @@ var file_proto_cdp_headlessbrowser_headlessbrowser_proto_goTypes = []any{
 	(*SwitchTab)(nil),          // 17: cdp.headlessbrowser.SwitchTab
 	(*DownloadFile)(nil),       // 18: cdp.headlessbrowser.DownloadFile
 	(*ListTabs)(nil),           // 19: cdp.headlessbrowser.ListTabs
-	(*AutomationResult)(nil),   // 20: cdp.headlessbrowser.AutomationResult
-	(*StepResult)(nil),         // 21: cdp.headlessbrowser.StepResult
+	(*Hover)(nil),              // 20: cdp.headlessbrowser.Hover
+	(*Drag)(nil),               // 21: cdp.headlessbrowser.Drag
+	(*AutomationResult)(nil),   // 22: cdp.headlessbrowser.AutomationResult
+	(*StepResult)(nil),         // 23: cdp.headlessbrowser.StepResult
 }
 var file_proto_cdp_headlessbrowser_headlessbrowser_proto_depIdxs = []int32{
 	1,  // 0: cdp.headlessbrowser.AutomationSequence.steps:type_name -> cdp.headlessbrowser.AutomationStep
@@ -1667,16 +1834,18 @@ var file_proto_cdp_headlessbrowser_headlessbrowser_proto_depIdxs = []int32{
 	17, // 16: cdp.headlessbrowser.AutomationStep.switch_tab:type_name -> cdp.headlessbrowser.SwitchTab
 	18, // 17: cdp.headlessbrowser.AutomationStep.download_file:type_name -> cdp.headlessbrowser.DownloadFile
 	19, // 18: cdp.headlessbrowser.AutomationStep.list_tabs:type_name -> cdp.headlessbrowser.ListTabs
-	21, // 19: cdp.headlessbrowser.AutomationResult.step_results:type_name -> cdp.headlessbrowser.StepResult
-	0,  // 20: cdp.headlessbrowser.HeadlessBrowserService.RunAutomation:input_type -> cdp.headlessbrowser.AutomationSequence
-	1,  // 21: cdp.headlessbrowser.HeadlessBrowserService.ExecuteStep:input_type -> cdp.headlessbrowser.AutomationStep
-	20, // 22: cdp.headlessbrowser.HeadlessBrowserService.RunAutomation:output_type -> cdp.headlessbrowser.AutomationResult
-	21, // 23: cdp.headlessbrowser.HeadlessBrowserService.ExecuteStep:output_type -> cdp.headlessbrowser.StepResult
-	22, // [22:24] is the sub-list for method output_type
-	20, // [20:22] is the sub-list for method input_type
-	20, // [20:20] is the sub-list for extension type_name
-	20, // [20:20] is the sub-list for extension extendee
-	0,  // [0:20] is the sub-list for field type_name
+	20, // 19: cdp.headlessbrowser.AutomationStep.hover:type_name -> cdp.headlessbrowser.Hover
+	21, // 20: cdp.headlessbrowser.AutomationStep.drag:type_name -> cdp.headlessbrowser.Drag
+	23, // 21: cdp.headlessbrowser.AutomationResult.step_results:type_name -> cdp.headlessbrowser.StepResult
+	0,  // 22: cdp.headlessbrowser.HeadlessBrowserService.RunAutomation:input_type -> cdp.headlessbrowser.AutomationSequence
+	1,  // 23: cdp.headlessbrowser.HeadlessBrowserService.ExecuteStep:input_type -> cdp.headlessbrowser.AutomationStep
+	22, // 24: cdp.headlessbrowser.HeadlessBrowserService.RunAutomation:output_type -> cdp.headlessbrowser.AutomationResult
+	23, // 25: cdp.headlessbrowser.HeadlessBrowserService.ExecuteStep:output_type -> cdp.headlessbrowser.StepResult
+	24, // [24:26] is the sub-list for method output_type
+	22, // [22:24] is the sub-list for method input_type
+	22, // [22:22] is the sub-list for extension type_name
+	22, // [22:22] is the sub-list for extension extendee
+	0,  // [0:22] is the sub-list for field type_name
 }
 
 func init() { file_proto_cdp_headlessbrowser_headlessbrowser_proto_init() }
@@ -1703,6 +1872,8 @@ func file_proto_cdp_headlessbrowser_headlessbrowser_proto_init() {
 		(*AutomationStep_SwitchTab)(nil),
 		(*AutomationStep_DownloadFile)(nil),
 		(*AutomationStep_ListTabs)(nil),
+		(*AutomationStep_Hover)(nil),
+		(*AutomationStep_Drag)(nil),
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -1710,7 +1881,7 @@ func file_proto_cdp_headlessbrowser_headlessbrowser_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDesc), len(file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   22,
+			NumMessages:   24,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

@@ -137,6 +137,10 @@ func (s *Server) executeStep(ctx context.Context, step *pb.AutomationStep) (*pb.
 		return s.doSwitchTab(ctx, a.SwitchTab)
 	case *pb.AutomationStep_DownloadFile:
 		return s.doDownloadFile(ctx, a.DownloadFile)
+	case *pb.AutomationStep_Hover:
+		return s.doHover(ctx, a.Hover)
+	case *pb.AutomationStep_Drag:
+		return s.doDrag(ctx, a.Drag)
 	default:
 		return nil, fmt.Errorf("unknown action type")
 	}
@@ -810,4 +814,33 @@ func (s *Server) doDownloadFile(ctx context.Context, df *pb.DownloadFile) (*pb.S
 
 	log.Printf("    Downloaded: %s (%d bytes)", downloadedPath, size)
 	return &pb.StepResult{ScriptResult: fmt.Sprintf("%d bytes", size)}, nil
+}
+
+// doHover moves the mouse cursor to the given coordinates.
+func (s *Server) doHover(ctx context.Context, h *pb.Hover) (*pb.StepResult, error) {
+	params := map[string]interface{}{
+		"type": "mouseMoved",
+		"x":    h.X,
+		"y":    h.Y,
+	}
+	if _, err := s.send(ctx, "Input.dispatchMouseEvent", params); err != nil {
+		return nil, fmt.Errorf("Input.dispatchMouseEvent(mouseMoved): %w", err)
+	}
+	return &pb.StepResult{}, nil
+}
+
+// doDrag performs a drag from (start_x, start_y) to (end_x, end_y) using CDP
+// mouse events: mousePressed → mouseMoved → mouseReleased.
+func (s *Server) doDrag(ctx context.Context, d *pb.Drag) (*pb.StepResult, error) {
+	steps := []map[string]interface{}{
+		{"type": "mousePressed", "x": d.StartX, "y": d.StartY, "button": "left", "clickCount": 1},
+		{"type": "mouseMoved", "x": d.EndX, "y": d.EndY, "button": "left", "buttons": 1},
+		{"type": "mouseReleased", "x": d.EndX, "y": d.EndY, "button": "left", "clickCount": 1},
+	}
+	for _, params := range steps {
+		if _, err := s.send(ctx, "Input.dispatchMouseEvent", params); err != nil {
+			return nil, fmt.Errorf("Input.dispatchMouseEvent(%s): %w", params["type"], err)
+		}
+	}
+	return &pb.StepResult{}, nil
 }

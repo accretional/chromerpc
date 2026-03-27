@@ -44,6 +44,8 @@ message AutomationStep {
     SwitchTab switch_tab = 17;
     DownloadFile download_file = 18;
     ListTabs list_tabs = 19;
+    Hover hover = 20;
+    Drag drag = 21;
   }
 }
 
@@ -154,6 +156,20 @@ message DownloadFile {
 
 // List all open browser tabs. Returns a JSON array of target IDs in script_result.
 message ListTabs {}
+
+// Move the mouse cursor to coordinates.
+message Hover {
+  double x = 1;
+  double y = 2;
+}
+
+// Drag from one coordinate to another.
+message Drag {
+  double start_x = 1;
+  double start_y = 2;
+  double end_x = 3;
+  double end_y = 4;
+}
 
 // Result of a full automation sequence run.
 message AutomationResult {
