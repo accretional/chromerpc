@@ -46,6 +46,7 @@ message AutomationStep {
     ListTabs list_tabs = 19;
     Hover hover = 20;
     Drag drag = 21;
+    WaitForStable wait_for_stable = 22;
   }
 }
 
@@ -169,6 +170,14 @@ message Drag {
   double start_y = 2;
   double end_x = 3;
   double end_y = 4;
+}
+
+// Wait until the page DOM has been mutation-free for quiet_period_ms.
+message WaitForStable {
+  // How long the DOM must be mutation-free to be considered stable.
+  int32 quiet_period_ms = 1;
+  // Maximum total wait before giving up.
+  int32 timeout_ms = 2;
 }
 
 // Result of a full automation sequence run.

@@ -141,6 +141,8 @@ func (s *Server) executeStep(ctx context.Context, step *pb.AutomationStep) (*pb.
 		return s.doHover(ctx, a.Hover)
 	case *pb.AutomationStep_Drag:
 		return s.doDrag(ctx, a.Drag)
+	case *pb.AutomationStep_WaitForStable:
+		return s.doWaitForStable(ctx, a.WaitForStable)
 	default:
 		return nil, fmt.Errorf("unknown action type")
 	}
@@ -628,7 +630,6 @@ func (s *Server) doListTabs(ctx context.Context) (*pb.StepResult, error) {
 		}
 	}
 	out := "[" + strings.Join(ids, ",") + "]"
-	log.Printf("    ListTabs: %s", out)
 	return &pb.StepResult{ScriptResult: out}, nil
 }
 
@@ -814,6 +815,64 @@ func (s *Server) doDownloadFile(ctx context.Context, df *pb.DownloadFile) (*pb.S
 
 	log.Printf("    Downloaded: %s (%d bytes)", downloadedPath, size)
 	return &pb.StepResult{ScriptResult: fmt.Sprintf("%d bytes", size)}, nil
+}
+
+// doWaitForStable injects a MutationObserver that tracks the last DOM change
+// timestamp, then polls until the DOM has been quiet for quiet_period_ms or
+// timeout_ms elapses.
+func (s *Server) doWaitForStable(ctx context.Context, w *pb.WaitForStable) (*pb.StepResult, error) {
+	quietPeriod := time.Duration(w.QuietPeriodMs) * time.Millisecond
+	if quietPeriod == 0 {
+		quietPeriod = 500 * time.Millisecond
+	}
+	timeout := time.Duration(w.TimeoutMs) * time.Millisecond
+	if timeout == 0 {
+		timeout = 5 * time.Second
+	}
+
+	// Install a MutationObserver that resets a timestamp on every DOM change.
+	// The guard flag makes re-injection on subsequent calls a no-op.
+	installJS := `(function(){
+		if(window.__cdp_stable_observer) return 'already installed';
+		window.__cdp_stable_ts = Date.now();
+		window.__cdp_stable_observer = new MutationObserver(function(){
+			window.__cdp_stable_ts = Date.now();
+		});
+		window.__cdp_stable_observer.observe(document.documentElement, {
+			childList: true, subtree: true, attributes: true
+		});
+		return 'installed';
+	})()`
+
+	if _, err := s.send(ctx, "Runtime.evaluate", map[string]interface{}{
+		"expression": installJS, "returnByValue": true,
+	}); err != nil {
+		return nil, fmt.Errorf("WaitForStable: install observer: %w", err)
+	}
+
+	// Poll until quiet period elapses or timeout is reached.
+	deadline := time.Now().Add(timeout)
+	for time.Now().Before(deadline) {
+		time.Sleep(100 * time.Millisecond)
+		result, err := s.send(ctx, "Runtime.evaluate", map[string]interface{}{
+			"expression": "Date.now() - window.__cdp_stable_ts", "returnByValue": true,
+		})
+		if err != nil {
+			continue
+		}
+		var resp struct {
+			Result struct {
+				Value float64 `json:"value"`
+			} `json:"result"`
+		}
+		if json.Unmarshal(result, &resp) == nil {
+			if time.Duration(resp.Result.Value)*time.Millisecond >= quietPeriod {
+				log.Printf("    WaitForStable: DOM quiet for %.0fms", resp.Result.Value)
+				return &pb.StepResult{}, nil
+			}
+		}
+	}
+	return nil, fmt.Errorf("WaitForStable: timed out after %v waiting for %v of DOM quiet", timeout, quietPeriod)
 }
 
 // doHover moves the mouse cursor to the given coordinates.

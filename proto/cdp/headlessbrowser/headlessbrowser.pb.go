@@ -100,6 +100,7 @@ type AutomationStep struct {
 	//	*AutomationStep_ListTabs
 	//	*AutomationStep_Hover
 	//	*AutomationStep_Drag
+	//	*AutomationStep_WaitForStable
 	Action        isAutomationStep_Action `protobuf_oneof:"action"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -329,6 +330,15 @@ func (x *AutomationStep) GetDrag() *Drag {
 	return nil
 }
 
+func (x *AutomationStep) GetWaitForStable() *WaitForStable {
+	if x != nil {
+		if x, ok := x.Action.(*AutomationStep_WaitForStable); ok {
+			return x.WaitForStable
+		}
+	}
+	return nil
+}
+
 type isAutomationStep_Action interface {
 	isAutomationStep_Action()
 }
@@ -413,6 +423,10 @@ type AutomationStep_Drag struct {
 	Drag *Drag `protobuf:"bytes,21,opt,name=drag,proto3,oneof"`
 }
 
+type AutomationStep_WaitForStable struct {
+	WaitForStable *WaitForStable `protobuf:"bytes,22,opt,name=wait_for_stable,json=waitForStable,proto3,oneof"`
+}
+
 func (*AutomationStep_SetViewport) isAutomationStep_Action() {}
 
 func (*AutomationStep_Navigate) isAutomationStep_Action() {}
@@ -452,6 +466,8 @@ func (*AutomationStep_ListTabs) isAutomationStep_Action() {}
 func (*AutomationStep_Hover) isAutomationStep_Action() {}
 
 func (*AutomationStep_Drag) isAutomationStep_Action() {}
+
+func (*AutomationStep_WaitForStable) isAutomationStep_Action() {}
 
 // Set the browser viewport dimensions.
 type SetViewport struct {
@@ -1516,6 +1532,63 @@ func (x *Drag) GetEndY() float64 {
 	return 0
 }
 
+// Wait until the page DOM has been mutation-free for quiet_period_ms.
+// A MutationObserver tracks the last change timestamp; this step polls until
+// now - lastMutation >= quiet_period_ms, or timeout_ms is exceeded.
+type WaitForStable struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// How long the DOM must be mutation-free to be considered stable. Default 500ms.
+	QuietPeriodMs int32 `protobuf:"varint,1,opt,name=quiet_period_ms,json=quietPeriodMs,proto3" json:"quiet_period_ms,omitempty"`
+	// Maximum total wait before giving up. Default 5000ms.
+	TimeoutMs     int32 `protobuf:"varint,2,opt,name=timeout_ms,json=timeoutMs,proto3" json:"timeout_ms,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *WaitForStable) Reset() {
+	*x = WaitForStable{}
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[22]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *WaitForStable) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*WaitForStable) ProtoMessage() {}
+
+func (x *WaitForStable) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[22]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use WaitForStable.ProtoReflect.Descriptor instead.
+func (*WaitForStable) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescGZIP(), []int{22}
+}
+
+func (x *WaitForStable) GetQuietPeriodMs() int32 {
+	if x != nil {
+		return x.QuietPeriodMs
+	}
+	return 0
+}
+
+func (x *WaitForStable) GetTimeoutMs() int32 {
+	if x != nil {
+		return x.TimeoutMs
+	}
+	return 0
+}
+
 // Result of a full automation sequence run.
 type AutomationResult struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -1528,7 +1601,7 @@ type AutomationResult struct {
 
 func (x *AutomationResult) Reset() {
 	*x = AutomationResult{}
-	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[22]
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[23]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1540,7 +1613,7 @@ func (x *AutomationResult) String() string {
 func (*AutomationResult) ProtoMessage() {}
 
 func (x *AutomationResult) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[22]
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[23]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1553,7 +1626,7 @@ func (x *AutomationResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AutomationResult.ProtoReflect.Descriptor instead.
 func (*AutomationResult) Descriptor() ([]byte, []int) {
-	return file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescGZIP(), []int{22}
+	return file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescGZIP(), []int{23}
 }
 
 func (x *AutomationResult) GetSuccess() bool {
@@ -1593,7 +1666,7 @@ type StepResult struct {
 
 func (x *StepResult) Reset() {
 	*x = StepResult{}
-	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[23]
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[24]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1605,7 +1678,7 @@ func (x *StepResult) String() string {
 func (*StepResult) ProtoMessage() {}
 
 func (x *StepResult) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[23]
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[24]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1618,7 +1691,7 @@ func (x *StepResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StepResult.ProtoReflect.Descriptor instead.
 func (*StepResult) Descriptor() ([]byte, []int) {
-	return file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescGZIP(), []int{23}
+	return file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescGZIP(), []int{24}
 }
 
 func (x *StepResult) GetLabel() string {
@@ -1663,8 +1736,7 @@ const file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDesc = "" +
 	"/proto/cdp/headlessbrowser/headlessbrowser.proto\x12\x13cdp.headlessbrowser\"c\n" +
 	"\x12AutomationSequence\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x129\n" +
-	"\x05steps\x18\x02 \x03(\v2#.cdp.headlessbrowser.AutomationStepR\x05steps\"\xc1\n" +
-	"\n" +
+	"\x05steps\x18\x02 \x03(\v2#.cdp.headlessbrowser.AutomationStepR\x05steps\"\x8f\v\n" +
 	"\x0eAutomationStep\x12\x14\n" +
 	"\x05label\x18\x01 \x01(\tR\x05label\x12E\n" +
 	"\fset_viewport\x18\x02 \x01(\v2 .cdp.headlessbrowser.SetViewportH\x00R\vsetViewport\x12;\n" +
@@ -1690,7 +1762,8 @@ const file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDesc = "" +
 	"\rdownload_file\x18\x12 \x01(\v2!.cdp.headlessbrowser.DownloadFileH\x00R\fdownloadFile\x12<\n" +
 	"\tlist_tabs\x18\x13 \x01(\v2\x1d.cdp.headlessbrowser.ListTabsH\x00R\blistTabs\x122\n" +
 	"\x05hover\x18\x14 \x01(\v2\x1a.cdp.headlessbrowser.HoverH\x00R\x05hover\x12/\n" +
-	"\x04drag\x18\x15 \x01(\v2\x19.cdp.headlessbrowser.DragH\x00R\x04dragB\b\n" +
+	"\x04drag\x18\x15 \x01(\v2\x19.cdp.headlessbrowser.DragH\x00R\x04drag\x12L\n" +
+	"\x0fwait_for_stable\x18\x16 \x01(\v2\".cdp.headlessbrowser.WaitForStableH\x00R\rwaitForStableB\b\n" +
 	"\x06action\"\x83\x01\n" +
 	"\vSetViewport\x12\x14\n" +
 	"\x05width\x18\x01 \x01(\x05R\x05width\x12\x16\n" +
@@ -1759,7 +1832,11 @@ const file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDesc = "" +
 	"\astart_x\x18\x01 \x01(\x01R\x06startX\x12\x17\n" +
 	"\astart_y\x18\x02 \x01(\x01R\x06startY\x12\x13\n" +
 	"\x05end_x\x18\x03 \x01(\x01R\x04endX\x12\x13\n" +
-	"\x05end_y\x18\x04 \x01(\x01R\x04endY\"\x86\x01\n" +
+	"\x05end_y\x18\x04 \x01(\x01R\x04endY\"V\n" +
+	"\rWaitForStable\x12&\n" +
+	"\x0fquiet_period_ms\x18\x01 \x01(\x05R\rquietPeriodMs\x12\x1d\n" +
+	"\n" +
+	"timeout_ms\x18\x02 \x01(\x05R\ttimeoutMs\"\x86\x01\n" +
 	"\x10AutomationResult\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12B\n" +
 	"\fstep_results\x18\x02 \x03(\v2\x1f.cdp.headlessbrowser.StepResultR\vstepResults\x12\x14\n" +
@@ -1787,7 +1864,7 @@ func file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescGZIP() []byte {
 	return file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescData
 }
 
-var file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes = make([]protoimpl.MessageInfo, 24)
+var file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes = make([]protoimpl.MessageInfo, 25)
 var file_proto_cdp_headlessbrowser_headlessbrowser_proto_goTypes = []any{
 	(*AutomationSequence)(nil), // 0: cdp.headlessbrowser.AutomationSequence
 	(*AutomationStep)(nil),     // 1: cdp.headlessbrowser.AutomationStep
@@ -1811,8 +1888,9 @@ var file_proto_cdp_headlessbrowser_headlessbrowser_proto_goTypes = []any{
 	(*ListTabs)(nil),           // 19: cdp.headlessbrowser.ListTabs
 	(*Hover)(nil),              // 20: cdp.headlessbrowser.Hover
 	(*Drag)(nil),               // 21: cdp.headlessbrowser.Drag
-	(*AutomationResult)(nil),   // 22: cdp.headlessbrowser.AutomationResult
-	(*StepResult)(nil),         // 23: cdp.headlessbrowser.StepResult
+	(*WaitForStable)(nil),      // 22: cdp.headlessbrowser.WaitForStable
+	(*AutomationResult)(nil),   // 23: cdp.headlessbrowser.AutomationResult
+	(*StepResult)(nil),         // 24: cdp.headlessbrowser.StepResult
 }
 var file_proto_cdp_headlessbrowser_headlessbrowser_proto_depIdxs = []int32{
 	1,  // 0: cdp.headlessbrowser.AutomationSequence.steps:type_name -> cdp.headlessbrowser.AutomationStep
@@ -1836,16 +1914,17 @@ var file_proto_cdp_headlessbrowser_headlessbrowser_proto_depIdxs = []int32{
 	19, // 18: cdp.headlessbrowser.AutomationStep.list_tabs:type_name -> cdp.headlessbrowser.ListTabs
 	20, // 19: cdp.headlessbrowser.AutomationStep.hover:type_name -> cdp.headlessbrowser.Hover
 	21, // 20: cdp.headlessbrowser.AutomationStep.drag:type_name -> cdp.headlessbrowser.Drag
-	23, // 21: cdp.headlessbrowser.AutomationResult.step_results:type_name -> cdp.headlessbrowser.StepResult
-	0,  // 22: cdp.headlessbrowser.HeadlessBrowserService.RunAutomation:input_type -> cdp.headlessbrowser.AutomationSequence
-	1,  // 23: cdp.headlessbrowser.HeadlessBrowserService.ExecuteStep:input_type -> cdp.headlessbrowser.AutomationStep
-	22, // 24: cdp.headlessbrowser.HeadlessBrowserService.RunAutomation:output_type -> cdp.headlessbrowser.AutomationResult
-	23, // 25: cdp.headlessbrowser.HeadlessBrowserService.ExecuteStep:output_type -> cdp.headlessbrowser.StepResult
-	24, // [24:26] is the sub-list for method output_type
-	22, // [22:24] is the sub-list for method input_type
-	22, // [22:22] is the sub-list for extension type_name
-	22, // [22:22] is the sub-list for extension extendee
-	0,  // [0:22] is the sub-list for field type_name
+	22, // 21: cdp.headlessbrowser.AutomationStep.wait_for_stable:type_name -> cdp.headlessbrowser.WaitForStable
+	24, // 22: cdp.headlessbrowser.AutomationResult.step_results:type_name -> cdp.headlessbrowser.StepResult
+	0,  // 23: cdp.headlessbrowser.HeadlessBrowserService.RunAutomation:input_type -> cdp.headlessbrowser.AutomationSequence
+	1,  // 24: cdp.headlessbrowser.HeadlessBrowserService.ExecuteStep:input_type -> cdp.headlessbrowser.AutomationStep
+	23, // 25: cdp.headlessbrowser.HeadlessBrowserService.RunAutomation:output_type -> cdp.headlessbrowser.AutomationResult
+	24, // 26: cdp.headlessbrowser.HeadlessBrowserService.ExecuteStep:output_type -> cdp.headlessbrowser.StepResult
+	25, // [25:27] is the sub-list for method output_type
+	23, // [23:25] is the sub-list for method input_type
+	23, // [23:23] is the sub-list for extension type_name
+	23, // [23:23] is the sub-list for extension extendee
+	0,  // [0:23] is the sub-list for field type_name
 }
 
 func init() { file_proto_cdp_headlessbrowser_headlessbrowser_proto_init() }
@@ -1874,6 +1953,7 @@ func file_proto_cdp_headlessbrowser_headlessbrowser_proto_init() {
 		(*AutomationStep_ListTabs)(nil),
 		(*AutomationStep_Hover)(nil),
 		(*AutomationStep_Drag)(nil),
+		(*AutomationStep_WaitForStable)(nil),
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -1881,7 +1961,7 @@ func file_proto_cdp_headlessbrowser_headlessbrowser_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDesc), len(file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   24,
+			NumMessages:   25,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
