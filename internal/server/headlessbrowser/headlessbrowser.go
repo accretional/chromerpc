@@ -143,6 +143,8 @@ func (s *Server) executeStep(ctx context.Context, step *pb.AutomationStep) (*pb.
 		return s.doDrag(ctx, a.Drag)
 	case *pb.AutomationStep_WaitForStable:
 		return s.doWaitForStable(ctx, a.WaitForStable)
+	case *pb.AutomationStep_MouseWheel:
+		return s.doMouseWheel(ctx, a.MouseWheel)
 	default:
 		return nil, fmt.Errorf("unknown action type")
 	}
@@ -301,30 +303,44 @@ func (s *Server) doClick(ctx context.Context, c *pb.Click) (*pb.StepResult, erro
 		button = "left"
 	}
 
-	for _, evType := range []string{"mousePressed", "mouseReleased"} {
-		params := map[string]interface{}{
-			"type":       evType,
-			"x":          x,
-			"y":          y,
-			"button":     button,
-			"clickCount": 1,
-		}
-		if _, err := s.send(ctx, "Input.dispatchMouseEvent", params); err != nil {
-			return nil, fmt.Errorf("Input.dispatchMouseEvent(%s): %w", evType, err)
-		}
+	// buttons is the MouseEvent.buttons bitmask: left=1, right=2, middle=4.
+	buttonsBitmask := map[string]int{"left": 1, "right": 2, "middle": 4}
+	pressedButtons := buttonsBitmask[button]
+
+	pressParams := map[string]interface{}{
+		"type":        "mousePressed",
+		"x":           x,
+		"y":           y,
+		"button":      button,
+		"buttons":     pressedButtons,
+		"clickCount":  1,
+		"modifiers":   0,
+		"pointerType": "mouse",
+	}
+	if _, err := s.send(ctx, "Input.dispatchMouseEvent", pressParams); err != nil {
+		return nil, fmt.Errorf("Input.dispatchMouseEvent(mousePressed): %w", err)
+	}
+
+	releaseParams := map[string]interface{}{
+		"type":        "mouseReleased",
+		"x":           x,
+		"y":           y,
+		"button":      button,
+		"buttons":     0,
+		"clickCount":  1,
+		"modifiers":   0,
+		"pointerType": "mouse",
+	}
+	if _, err := s.send(ctx, "Input.dispatchMouseEvent", releaseParams); err != nil {
+		return nil, fmt.Errorf("Input.dispatchMouseEvent(mouseReleased): %w", err)
 	}
 	return &pb.StepResult{}, nil
 }
 
 func (s *Server) doTypeText(ctx context.Context, t *pb.TypeText) (*pb.StepResult, error) {
 	if t.Selector != "" {
-		expr := fmt.Sprintf(`document.querySelector(%q).focus()`, t.Selector)
-		params := map[string]interface{}{"expression": expr}
-		if _, err := s.send(ctx, "Runtime.evaluate", params); err != nil {
-			return nil, fmt.Errorf("focus selector: %w", err)
-		}
+		log.Printf("Warning: TypeText.selector is deprecated; click the target element first to focus it, then call TypeText without a selector")
 	}
-
 	params := map[string]interface{}{"text": t.Text}
 	if _, err := s.send(ctx, "Input.insertText", params); err != nil {
 		return nil, fmt.Errorf("Input.insertText: %w", err)
@@ -381,11 +397,7 @@ func (s *Server) doScrollTo(ctx context.Context, st *pb.ScrollTo) (*pb.StepResul
 // doTypeKeyByKey types each character individually with delays.
 func (s *Server) doTypeKeyByKey(ctx context.Context, t *pb.TypeKeyByKey) (*pb.StepResult, error) {
 	if t.Selector != "" {
-		expr := fmt.Sprintf(`document.querySelector(%q).focus()`, t.Selector)
-		params := map[string]interface{}{"expression": expr}
-		if _, err := s.send(ctx, "Runtime.evaluate", params); err != nil {
-			return nil, fmt.Errorf("focus selector: %w", err)
-		}
+		log.Printf("Warning: TypeKeyByKey.selector is deprecated; click the target element first to focus it, then call TypeKeyByKey without a selector")
 	}
 
 	delay := time.Duration(t.DelayMs) * time.Millisecond
@@ -817,6 +829,23 @@ func (s *Server) doDownloadFile(ctx context.Context, df *pb.DownloadFile) (*pb.S
 	return &pb.StepResult{ScriptResult: fmt.Sprintf("%d bytes", size)}, nil
 }
 
+// doMouseWheel dispatches a single mouse wheel event.
+func (s *Server) doMouseWheel(ctx context.Context, mw *pb.MouseWheel) (*pb.StepResult, error) {
+	params := map[string]interface{}{
+		"type":        "mouseWheel",
+		"x":           mw.X,
+		"y":           mw.Y,
+		"deltaX":      mw.DeltaX,
+		"deltaY":      mw.DeltaY,
+		"modifiers":   0,
+		"pointerType": "mouse",
+	}
+	if _, err := s.send(ctx, "Input.dispatchMouseEvent", params); err != nil {
+		return nil, fmt.Errorf("Input.dispatchMouseEvent(mouseWheel): %w", err)
+	}
+	return &pb.StepResult{}, nil
+}
+
 // doWaitForStable injects a MutationObserver that tracks the last DOM change
 // timestamp, then polls until the DOM has been quiet for quiet_period_ms or
 // timeout_ms elapses.
@@ -878,9 +907,12 @@ func (s *Server) doWaitForStable(ctx context.Context, w *pb.WaitForStable) (*pb.
 // doHover moves the mouse cursor to the given coordinates.
 func (s *Server) doHover(ctx context.Context, h *pb.Hover) (*pb.StepResult, error) {
 	params := map[string]interface{}{
-		"type": "mouseMoved",
-		"x":    h.X,
-		"y":    h.Y,
+		"type":        "mouseMoved",
+		"x":           h.X,
+		"y":           h.Y,
+		"buttons":     0,
+		"modifiers":   0,
+		"pointerType": "mouse",
 	}
 	if _, err := s.send(ctx, "Input.dispatchMouseEvent", params); err != nil {
 		return nil, fmt.Errorf("Input.dispatchMouseEvent(mouseMoved): %w", err)
@@ -888,13 +920,12 @@ func (s *Server) doHover(ctx context.Context, h *pb.Hover) (*pb.StepResult, erro
 	return &pb.StepResult{}, nil
 }
 
-// doDrag performs a drag from (start_x, start_y) to (end_x, end_y) using CDP
-// mouse events: mousePressed → mouseMoved → mouseReleased.
+// doDrag performs a drag from (start_x, start_y) to (end_x, end_y).
 func (s *Server) doDrag(ctx context.Context, d *pb.Drag) (*pb.StepResult, error) {
 	steps := []map[string]interface{}{
-		{"type": "mousePressed", "x": d.StartX, "y": d.StartY, "button": "left", "clickCount": 1},
-		{"type": "mouseMoved", "x": d.EndX, "y": d.EndY, "button": "left", "buttons": 1},
-		{"type": "mouseReleased", "x": d.EndX, "y": d.EndY, "button": "left", "clickCount": 1},
+		{"type": "mousePressed", "x": d.StartX, "y": d.StartY, "button": "left", "buttons": 1, "clickCount": 1, "modifiers": 0, "pointerType": "mouse"},
+		{"type": "mouseMoved", "x": d.EndX, "y": d.EndY, "button": "left", "buttons": 1, "modifiers": 0, "pointerType": "mouse"},
+		{"type": "mouseReleased", "x": d.EndX, "y": d.EndY, "button": "left", "buttons": 0, "clickCount": 1, "modifiers": 0, "pointerType": "mouse"},
 	}
 	for _, params := range steps {
 		if _, err := s.send(ctx, "Input.dispatchMouseEvent", params); err != nil {

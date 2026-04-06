@@ -47,6 +47,7 @@ message AutomationStep {
     Hover hover = 20;
     Drag drag = 21;
     WaitForStable wait_for_stable = 22;
+    MouseWheel mouse_wheel = 23;
   }
 }
 
@@ -172,11 +173,17 @@ message Drag {
   double end_y = 4;
 }
 
+// Dispatch a single mouse wheel event.
+message MouseWheel {
+  double delta_x = 1;
+  double delta_y = 2; // positive = scroll down
+  double x = 3;
+  double y = 4;
+}
+
 // Wait until the page DOM has been mutation-free for quiet_period_ms.
 message WaitForStable {
-  // How long the DOM must be mutation-free to be considered stable.
   int32 quiet_period_ms = 1;
-  // Maximum total wait before giving up.
   int32 timeout_ms = 2;
 }
 
