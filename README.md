@@ -173,15 +173,15 @@ WS_URL=$(curl -s http://127.0.0.1:9222/json/version | python3 -c \
 
 The server includes `--disable-blink-features=AutomationControlled` by default and supports `--user-agent` overrides.
 
-## Testing
+## Chrome Testing
 
-The `testing/` folder contains a self-contained screenshot testing module. It handles the full lifecycle — building chromerpc, launching Chrome, serving HTML, capturing PNGs, and tearing down — in a single script.
+The `chrome-testing/` folder contains a self-contained screenshot testing module. It handles the full lifecycle — building chromerpc, launching Chrome, serving HTML, capturing PNGs, and tearing down — in a single script.
 
 ```bash
-./testing/snap.sh my-page.html screenshots/my-page.png
+./chrome-testing/snap.sh my-page.html screenshots/my-page.png
 ```
 
-See [`testing/USAGE_INSTRUCTIONS.md`](testing/USAGE_INSTRUCTIONS.md) for the full guide, including how any other project can copy this folder and use it for their own visual validation.
+See [`chrome-testing/USAGE_INSTRUCTIONS.md`](testing/USAGE_INSTRUCTIONS.md) for the full guide, including how any other project can copy this folder and use it for their own visual validation.
 
 ### Example output
 
