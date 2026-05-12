@@ -188,10 +188,6 @@ PROTO
 
   echo "Screenshotting: $url -> $abs_out"
   "$AUTOMATE_BIN" -addr "$CHROMERPC_ADDR" -input "$textproto"
-
-  # Pop it open
-  if command -v open &>/dev/null;     then open "$abs_out"; fi
-  if command -v xdg-open &>/dev/null; then xdg-open "$abs_out" &>/dev/null & fi
 }
 
 # ── Run ───────────────────────────────────────────────────────────────────────
