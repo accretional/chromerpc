@@ -178,7 +178,7 @@ The server includes `--disable-blink-features=AutomationControlled` by default a
 The `testing/` folder contains a self-contained screenshot testing module. It handles the full lifecycle — building chromerpc, launching Chrome, serving HTML, capturing PNGs, and tearing down — in a single script.
 
 ```bash
-./testing/scripts/snap.sh my-page.html screenshots/my-page.png
+./testing/snap.sh my-page.html screenshots/my-page.png
 ```
 
 See [`testing/USAGE_INSTRUCTIONS.md`](testing/USAGE_INSTRUCTIONS.md) for the full guide, including how any other project can copy this folder and use it for their own visual validation.
