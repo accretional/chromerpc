@@ -175,7 +175,17 @@ The server includes `--disable-blink-features=AutomationControlled` by default a
 
 ## Testing
 
-Let's invest in some utility for testing that will make it easier to validate our implementations in a way that is uniform and agnostic/not tied to the implementations.
+The `testing/` folder contains a self-contained screenshot testing module. It handles the full lifecycle — building chromerpc, launching Chrome, serving HTML, capturing PNGs, and tearing down — in a single script.
+
+```bash
+./testing/scripts/snap.sh my-page.html screenshots/my-page.png
+```
+
+See [`testing/USAGE_INSTRUCTIONS.md`](testing/USAGE_INSTRUCTIONS.md) for the full guide, including how any other project can copy this folder and use it for their own visual validation.
+
+### Example output
+
+![chromerpc demo](testing/snapshots/demo.png)
 
 ## Resources / Notes
 
