@@ -29,14 +29,14 @@ The script handles building and running chromerpc itself.
 
 2. Create simple HTML files that demonstrates the capabilities of your project. The HTML files should render whatever your project produces and that you want to show off. Put them in a folder.
 
-3. Run the script `./testing/snap.sh` on the html file (or the directory containing the HTML files) and wait for the screenshot PNGs to be captured. Verify that the screenshots are valid.
+3. Run the script `./chrome-testing/snap.sh` on the html file (or the directory containing the HTML files) and wait for the screenshot PNGs to be captured. Verify that the screenshots are valid.
 
 ```bash
 # Single HTML file
-./testing/snap.sh path/to/page.html path/to/output.png
+./chrome-testing/snap.sh path/to/page.html path/to/output.png
 
 # Directory of HTML files
-./testing/snap.sh path/to/html_dir/ path/to/output_dir/
+./chrome-testing/snap.sh path/to/html_dir/ path/to/output_dir/
 ```
 
 4. Reference the screenshot PNG files from your project README file.
