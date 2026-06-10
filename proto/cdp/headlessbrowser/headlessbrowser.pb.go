@@ -97,6 +97,10 @@ type AutomationStep struct {
 	//	*AutomationStep_CloseTab
 	//	*AutomationStep_SwitchTab
 	//	*AutomationStep_DownloadFile
+	//	*AutomationStep_Hover
+	//	*AutomationStep_PrintToPdf
+	//	*AutomationStep_Touch
+	//	*AutomationStep_SetEmulatedMedia
 	Action        isAutomationStep_Action `protobuf_oneof:"action"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -299,6 +303,42 @@ func (x *AutomationStep) GetDownloadFile() *DownloadFile {
 	return nil
 }
 
+func (x *AutomationStep) GetHover() *Hover {
+	if x != nil {
+		if x, ok := x.Action.(*AutomationStep_Hover); ok {
+			return x.Hover
+		}
+	}
+	return nil
+}
+
+func (x *AutomationStep) GetPrintToPdf() *PrintToPdf {
+	if x != nil {
+		if x, ok := x.Action.(*AutomationStep_PrintToPdf); ok {
+			return x.PrintToPdf
+		}
+	}
+	return nil
+}
+
+func (x *AutomationStep) GetTouch() *DispatchTouch {
+	if x != nil {
+		if x, ok := x.Action.(*AutomationStep_Touch); ok {
+			return x.Touch
+		}
+	}
+	return nil
+}
+
+func (x *AutomationStep) GetSetEmulatedMedia() *SetEmulatedMedia {
+	if x != nil {
+		if x, ok := x.Action.(*AutomationStep_SetEmulatedMedia); ok {
+			return x.SetEmulatedMedia
+		}
+	}
+	return nil
+}
+
 type isAutomationStep_Action interface {
 	isAutomationStep_Action()
 }
@@ -371,6 +411,22 @@ type AutomationStep_DownloadFile struct {
 	DownloadFile *DownloadFile `protobuf:"bytes,18,opt,name=download_file,json=downloadFile,proto3,oneof"`
 }
 
+type AutomationStep_Hover struct {
+	Hover *Hover `protobuf:"bytes,19,opt,name=hover,proto3,oneof"`
+}
+
+type AutomationStep_PrintToPdf struct {
+	PrintToPdf *PrintToPdf `protobuf:"bytes,20,opt,name=print_to_pdf,json=printToPdf,proto3,oneof"`
+}
+
+type AutomationStep_Touch struct {
+	Touch *DispatchTouch `protobuf:"bytes,21,opt,name=touch,proto3,oneof"`
+}
+
+type AutomationStep_SetEmulatedMedia struct {
+	SetEmulatedMedia *SetEmulatedMedia `protobuf:"bytes,22,opt,name=set_emulated_media,json=setEmulatedMedia,proto3,oneof"`
+}
+
 func (*AutomationStep_SetViewport) isAutomationStep_Action() {}
 
 func (*AutomationStep_Navigate) isAutomationStep_Action() {}
@@ -404,6 +460,14 @@ func (*AutomationStep_CloseTab) isAutomationStep_Action() {}
 func (*AutomationStep_SwitchTab) isAutomationStep_Action() {}
 
 func (*AutomationStep_DownloadFile) isAutomationStep_Action() {}
+
+func (*AutomationStep_Hover) isAutomationStep_Action() {}
+
+func (*AutomationStep_PrintToPdf) isAutomationStep_Action() {}
+
+func (*AutomationStep_Touch) isAutomationStep_Action() {}
+
+func (*AutomationStep_SetEmulatedMedia) isAutomationStep_Action() {}
 
 // Set the browser viewport dimensions.
 type SetViewport struct {
@@ -1325,6 +1389,280 @@ func (x *DownloadFile) GetOutputPath() string {
 	return ""
 }
 
+// Move the mouse pointer over coordinates or a CSS selector (mouseMoved). This
+// updates the rendered cursor shape and fires :hover, without pressing.
+type Hover struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	X             float64                `protobuf:"fixed64,1,opt,name=x,proto3" json:"x,omitempty"`
+	Y             float64                `protobuf:"fixed64,2,opt,name=y,proto3" json:"y,omitempty"`
+	Selector      string                 `protobuf:"bytes,3,opt,name=selector,proto3" json:"selector,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Hover) Reset() {
+	*x = Hover{}
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[19]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Hover) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Hover) ProtoMessage() {}
+
+func (x *Hover) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[19]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Hover.ProtoReflect.Descriptor instead.
+func (*Hover) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescGZIP(), []int{19}
+}
+
+func (x *Hover) GetX() float64 {
+	if x != nil {
+		return x.X
+	}
+	return 0
+}
+
+func (x *Hover) GetY() float64 {
+	if x != nil {
+		return x.Y
+	}
+	return 0
+}
+
+func (x *Hover) GetSelector() string {
+	if x != nil {
+		return x.Selector
+	}
+	return ""
+}
+
+// Render the current page to a PDF on disk via Page.printToPDF. Used to capture
+// paged-media behaviour (page breaks, orphans/widows) that only exists when the
+// document is fragmented into pages.
+type PrintToPdf struct {
+	state             protoimpl.MessageState `protogen:"open.v1"`
+	OutputPath        string                 `protobuf:"bytes,1,opt,name=output_path,json=outputPath,proto3" json:"output_path,omitempty"`
+	PrintBackground   bool                   `protobuf:"varint,2,opt,name=print_background,json=printBackground,proto3" json:"print_background,omitempty"`
+	PreferCssPageSize bool                   `protobuf:"varint,3,opt,name=prefer_css_page_size,json=preferCssPageSize,proto3" json:"prefer_css_page_size,omitempty"`
+	PaperWidth        float64                `protobuf:"fixed64,4,opt,name=paper_width,json=paperWidth,proto3" json:"paper_width,omitempty"`    // inches; 0 -> Chrome default (8.5)
+	PaperHeight       float64                `protobuf:"fixed64,5,opt,name=paper_height,json=paperHeight,proto3" json:"paper_height,omitempty"` // inches; 0 -> Chrome default (11)
+	Scale             float64                `protobuf:"fixed64,6,opt,name=scale,proto3" json:"scale,omitempty"`                                // 0 -> 1.0
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
+}
+
+func (x *PrintToPdf) Reset() {
+	*x = PrintToPdf{}
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[20]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PrintToPdf) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PrintToPdf) ProtoMessage() {}
+
+func (x *PrintToPdf) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[20]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PrintToPdf.ProtoReflect.Descriptor instead.
+func (*PrintToPdf) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescGZIP(), []int{20}
+}
+
+func (x *PrintToPdf) GetOutputPath() string {
+	if x != nil {
+		return x.OutputPath
+	}
+	return ""
+}
+
+func (x *PrintToPdf) GetPrintBackground() bool {
+	if x != nil {
+		return x.PrintBackground
+	}
+	return false
+}
+
+func (x *PrintToPdf) GetPreferCssPageSize() bool {
+	if x != nil {
+		return x.PreferCssPageSize
+	}
+	return false
+}
+
+func (x *PrintToPdf) GetPaperWidth() float64 {
+	if x != nil {
+		return x.PaperWidth
+	}
+	return 0
+}
+
+func (x *PrintToPdf) GetPaperHeight() float64 {
+	if x != nil {
+		return x.PaperHeight
+	}
+	return 0
+}
+
+func (x *PrintToPdf) GetScale() float64 {
+	if x != nil {
+		return x.Scale
+	}
+	return 0
+}
+
+// Dispatch a touch pan gesture from a start point by (dx, dy) over the given
+// selector/coords, used to exercise touch-action. Emits touchStart, a few
+// touchMove steps, then touchEnd.
+type DispatchTouch struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	X             float64                `protobuf:"fixed64,1,opt,name=x,proto3" json:"x,omitempty"`
+	Y             float64                `protobuf:"fixed64,2,opt,name=y,proto3" json:"y,omitempty"`
+	Selector      string                 `protobuf:"bytes,3,opt,name=selector,proto3" json:"selector,omitempty"`
+	Dx            float64                `protobuf:"fixed64,4,opt,name=dx,proto3" json:"dx,omitempty"`
+	Dy            float64                `protobuf:"fixed64,5,opt,name=dy,proto3" json:"dy,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DispatchTouch) Reset() {
+	*x = DispatchTouch{}
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[21]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DispatchTouch) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DispatchTouch) ProtoMessage() {}
+
+func (x *DispatchTouch) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[21]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DispatchTouch.ProtoReflect.Descriptor instead.
+func (*DispatchTouch) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescGZIP(), []int{21}
+}
+
+func (x *DispatchTouch) GetX() float64 {
+	if x != nil {
+		return x.X
+	}
+	return 0
+}
+
+func (x *DispatchTouch) GetY() float64 {
+	if x != nil {
+		return x.Y
+	}
+	return 0
+}
+
+func (x *DispatchTouch) GetSelector() string {
+	if x != nil {
+		return x.Selector
+	}
+	return ""
+}
+
+func (x *DispatchTouch) GetDx() float64 {
+	if x != nil {
+		return x.Dx
+	}
+	return 0
+}
+
+func (x *DispatchTouch) GetDy() float64 {
+	if x != nil {
+		return x.Dy
+	}
+	return 0
+}
+
+// Override the page's emulated media type (e.g. "print", "screen") and/or
+// features via Emulation.setEmulatedMedia.
+type SetEmulatedMedia struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Media         string                 `protobuf:"bytes,1,opt,name=media,proto3" json:"media,omitempty"` // "print" | "screen" | "" to clear
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SetEmulatedMedia) Reset() {
+	*x = SetEmulatedMedia{}
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[22]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SetEmulatedMedia) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SetEmulatedMedia) ProtoMessage() {}
+
+func (x *SetEmulatedMedia) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[22]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SetEmulatedMedia.ProtoReflect.Descriptor instead.
+func (*SetEmulatedMedia) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescGZIP(), []int{22}
+}
+
+func (x *SetEmulatedMedia) GetMedia() string {
+	if x != nil {
+		return x.Media
+	}
+	return ""
+}
+
 // Result of a full automation sequence run.
 type AutomationResult struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -1337,7 +1675,7 @@ type AutomationResult struct {
 
 func (x *AutomationResult) Reset() {
 	*x = AutomationResult{}
-	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[19]
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[23]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1349,7 +1687,7 @@ func (x *AutomationResult) String() string {
 func (*AutomationResult) ProtoMessage() {}
 
 func (x *AutomationResult) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[19]
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[23]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1362,7 +1700,7 @@ func (x *AutomationResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AutomationResult.ProtoReflect.Descriptor instead.
 func (*AutomationResult) Descriptor() ([]byte, []int) {
-	return file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescGZIP(), []int{19}
+	return file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescGZIP(), []int{23}
 }
 
 func (x *AutomationResult) GetSuccess() bool {
@@ -1402,7 +1740,7 @@ type StepResult struct {
 
 func (x *StepResult) Reset() {
 	*x = StepResult{}
-	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[20]
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[24]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1414,7 +1752,7 @@ func (x *StepResult) String() string {
 func (*StepResult) ProtoMessage() {}
 
 func (x *StepResult) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[20]
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[24]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1427,7 +1765,7 @@ func (x *StepResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StepResult.ProtoReflect.Descriptor instead.
 func (*StepResult) Descriptor() ([]byte, []int) {
-	return file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescGZIP(), []int{20}
+	return file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescGZIP(), []int{24}
 }
 
 func (x *StepResult) GetLabel() string {
@@ -1472,7 +1810,7 @@ const file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDesc = "" +
 	"/proto/cdp/headlessbrowser/headlessbrowser.proto\x12\x13cdp.headlessbrowser\"c\n" +
 	"\x12AutomationSequence\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x129\n" +
-	"\x05steps\x18\x02 \x03(\v2#.cdp.headlessbrowser.AutomationStepR\x05steps\"\x9e\t\n" +
+	"\x05steps\x18\x02 \x03(\v2#.cdp.headlessbrowser.AutomationStepR\x05steps\"\xaa\v\n" +
 	"\x0eAutomationStep\x12\x14\n" +
 	"\x05label\x18\x01 \x01(\tR\x05label\x12E\n" +
 	"\fset_viewport\x18\x02 \x01(\v2 .cdp.headlessbrowser.SetViewportH\x00R\vsetViewport\x12;\n" +
@@ -1495,7 +1833,12 @@ const file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDesc = "" +
 	"\tclose_tab\x18\x10 \x01(\v2\x1d.cdp.headlessbrowser.CloseTabH\x00R\bcloseTab\x12?\n" +
 	"\n" +
 	"switch_tab\x18\x11 \x01(\v2\x1e.cdp.headlessbrowser.SwitchTabH\x00R\tswitchTab\x12H\n" +
-	"\rdownload_file\x18\x12 \x01(\v2!.cdp.headlessbrowser.DownloadFileH\x00R\fdownloadFileB\b\n" +
+	"\rdownload_file\x18\x12 \x01(\v2!.cdp.headlessbrowser.DownloadFileH\x00R\fdownloadFile\x122\n" +
+	"\x05hover\x18\x13 \x01(\v2\x1a.cdp.headlessbrowser.HoverH\x00R\x05hover\x12C\n" +
+	"\fprint_to_pdf\x18\x14 \x01(\v2\x1f.cdp.headlessbrowser.PrintToPdfH\x00R\n" +
+	"printToPdf\x12:\n" +
+	"\x05touch\x18\x15 \x01(\v2\".cdp.headlessbrowser.DispatchTouchH\x00R\x05touch\x12U\n" +
+	"\x12set_emulated_media\x18\x16 \x01(\v2%.cdp.headlessbrowser.SetEmulatedMediaH\x00R\x10setEmulatedMediaB\b\n" +
 	"\x06action\"\x83\x01\n" +
 	"\vSetViewport\x12\x14\n" +
 	"\x05width\x18\x01 \x01(\x05R\x05width\x12\x16\n" +
@@ -1557,7 +1900,29 @@ const file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDesc = "" +
 	"\fDownloadFile\x12\x10\n" +
 	"\x03url\x18\x01 \x01(\tR\x03url\x12\x1f\n" +
 	"\voutput_path\x18\x02 \x01(\tR\n" +
-	"outputPath\"\x86\x01\n" +
+	"outputPath\"?\n" +
+	"\x05Hover\x12\f\n" +
+	"\x01x\x18\x01 \x01(\x01R\x01x\x12\f\n" +
+	"\x01y\x18\x02 \x01(\x01R\x01y\x12\x1a\n" +
+	"\bselector\x18\x03 \x01(\tR\bselector\"\xe3\x01\n" +
+	"\n" +
+	"PrintToPdf\x12\x1f\n" +
+	"\voutput_path\x18\x01 \x01(\tR\n" +
+	"outputPath\x12)\n" +
+	"\x10print_background\x18\x02 \x01(\bR\x0fprintBackground\x12/\n" +
+	"\x14prefer_css_page_size\x18\x03 \x01(\bR\x11preferCssPageSize\x12\x1f\n" +
+	"\vpaper_width\x18\x04 \x01(\x01R\n" +
+	"paperWidth\x12!\n" +
+	"\fpaper_height\x18\x05 \x01(\x01R\vpaperHeight\x12\x14\n" +
+	"\x05scale\x18\x06 \x01(\x01R\x05scale\"g\n" +
+	"\rDispatchTouch\x12\f\n" +
+	"\x01x\x18\x01 \x01(\x01R\x01x\x12\f\n" +
+	"\x01y\x18\x02 \x01(\x01R\x01y\x12\x1a\n" +
+	"\bselector\x18\x03 \x01(\tR\bselector\x12\x0e\n" +
+	"\x02dx\x18\x04 \x01(\x01R\x02dx\x12\x0e\n" +
+	"\x02dy\x18\x05 \x01(\x01R\x02dy\"(\n" +
+	"\x10SetEmulatedMedia\x12\x14\n" +
+	"\x05media\x18\x01 \x01(\tR\x05media\"\x86\x01\n" +
 	"\x10AutomationResult\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12B\n" +
 	"\fstep_results\x18\x02 \x03(\v2\x1f.cdp.headlessbrowser.StepResultR\vstepResults\x12\x14\n" +
@@ -1585,7 +1950,7 @@ func file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescGZIP() []byte {
 	return file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescData
 }
 
-var file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes = make([]protoimpl.MessageInfo, 21)
+var file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes = make([]protoimpl.MessageInfo, 25)
 var file_proto_cdp_headlessbrowser_headlessbrowser_proto_goTypes = []any{
 	(*AutomationSequence)(nil), // 0: cdp.headlessbrowser.AutomationSequence
 	(*AutomationStep)(nil),     // 1: cdp.headlessbrowser.AutomationStep
@@ -1606,8 +1971,12 @@ var file_proto_cdp_headlessbrowser_headlessbrowser_proto_goTypes = []any{
 	(*CloseTab)(nil),           // 16: cdp.headlessbrowser.CloseTab
 	(*SwitchTab)(nil),          // 17: cdp.headlessbrowser.SwitchTab
 	(*DownloadFile)(nil),       // 18: cdp.headlessbrowser.DownloadFile
-	(*AutomationResult)(nil),   // 19: cdp.headlessbrowser.AutomationResult
-	(*StepResult)(nil),         // 20: cdp.headlessbrowser.StepResult
+	(*Hover)(nil),              // 19: cdp.headlessbrowser.Hover
+	(*PrintToPdf)(nil),         // 20: cdp.headlessbrowser.PrintToPdf
+	(*DispatchTouch)(nil),      // 21: cdp.headlessbrowser.DispatchTouch
+	(*SetEmulatedMedia)(nil),   // 22: cdp.headlessbrowser.SetEmulatedMedia
+	(*AutomationResult)(nil),   // 23: cdp.headlessbrowser.AutomationResult
+	(*StepResult)(nil),         // 24: cdp.headlessbrowser.StepResult
 }
 var file_proto_cdp_headlessbrowser_headlessbrowser_proto_depIdxs = []int32{
 	1,  // 0: cdp.headlessbrowser.AutomationSequence.steps:type_name -> cdp.headlessbrowser.AutomationStep
@@ -1628,16 +1997,20 @@ var file_proto_cdp_headlessbrowser_headlessbrowser_proto_depIdxs = []int32{
 	16, // 15: cdp.headlessbrowser.AutomationStep.close_tab:type_name -> cdp.headlessbrowser.CloseTab
 	17, // 16: cdp.headlessbrowser.AutomationStep.switch_tab:type_name -> cdp.headlessbrowser.SwitchTab
 	18, // 17: cdp.headlessbrowser.AutomationStep.download_file:type_name -> cdp.headlessbrowser.DownloadFile
-	20, // 18: cdp.headlessbrowser.AutomationResult.step_results:type_name -> cdp.headlessbrowser.StepResult
-	0,  // 19: cdp.headlessbrowser.HeadlessBrowserService.RunAutomation:input_type -> cdp.headlessbrowser.AutomationSequence
-	1,  // 20: cdp.headlessbrowser.HeadlessBrowserService.ExecuteStep:input_type -> cdp.headlessbrowser.AutomationStep
-	19, // 21: cdp.headlessbrowser.HeadlessBrowserService.RunAutomation:output_type -> cdp.headlessbrowser.AutomationResult
-	20, // 22: cdp.headlessbrowser.HeadlessBrowserService.ExecuteStep:output_type -> cdp.headlessbrowser.StepResult
-	21, // [21:23] is the sub-list for method output_type
-	19, // [19:21] is the sub-list for method input_type
-	19, // [19:19] is the sub-list for extension type_name
-	19, // [19:19] is the sub-list for extension extendee
-	0,  // [0:19] is the sub-list for field type_name
+	19, // 18: cdp.headlessbrowser.AutomationStep.hover:type_name -> cdp.headlessbrowser.Hover
+	20, // 19: cdp.headlessbrowser.AutomationStep.print_to_pdf:type_name -> cdp.headlessbrowser.PrintToPdf
+	21, // 20: cdp.headlessbrowser.AutomationStep.touch:type_name -> cdp.headlessbrowser.DispatchTouch
+	22, // 21: cdp.headlessbrowser.AutomationStep.set_emulated_media:type_name -> cdp.headlessbrowser.SetEmulatedMedia
+	24, // 22: cdp.headlessbrowser.AutomationResult.step_results:type_name -> cdp.headlessbrowser.StepResult
+	0,  // 23: cdp.headlessbrowser.HeadlessBrowserService.RunAutomation:input_type -> cdp.headlessbrowser.AutomationSequence
+	1,  // 24: cdp.headlessbrowser.HeadlessBrowserService.ExecuteStep:input_type -> cdp.headlessbrowser.AutomationStep
+	23, // 25: cdp.headlessbrowser.HeadlessBrowserService.RunAutomation:output_type -> cdp.headlessbrowser.AutomationResult
+	24, // 26: cdp.headlessbrowser.HeadlessBrowserService.ExecuteStep:output_type -> cdp.headlessbrowser.StepResult
+	25, // [25:27] is the sub-list for method output_type
+	23, // [23:25] is the sub-list for method input_type
+	23, // [23:23] is the sub-list for extension type_name
+	23, // [23:23] is the sub-list for extension extendee
+	0,  // [0:23] is the sub-list for field type_name
 }
 
 func init() { file_proto_cdp_headlessbrowser_headlessbrowser_proto_init() }
@@ -1663,6 +2036,10 @@ func file_proto_cdp_headlessbrowser_headlessbrowser_proto_init() {
 		(*AutomationStep_CloseTab)(nil),
 		(*AutomationStep_SwitchTab)(nil),
 		(*AutomationStep_DownloadFile)(nil),
+		(*AutomationStep_Hover)(nil),
+		(*AutomationStep_PrintToPdf)(nil),
+		(*AutomationStep_Touch)(nil),
+		(*AutomationStep_SetEmulatedMedia)(nil),
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -1670,7 +2047,7 @@ func file_proto_cdp_headlessbrowser_headlessbrowser_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDesc), len(file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   21,
+			NumMessages:   25,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

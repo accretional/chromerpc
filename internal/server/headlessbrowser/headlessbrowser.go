@@ -251,9 +251,141 @@ func (s *Server) executeStep(ctx context.Context, step *pb.AutomationStep) (*pb.
 		return s.doSwitchTab(ctx, a.SwitchTab)
 	case *pb.AutomationStep_DownloadFile:
 		return s.doDownloadFile(ctx, a.DownloadFile)
+	case *pb.AutomationStep_Hover:
+		return s.doHover(ctx, a.Hover)
+	case *pb.AutomationStep_PrintToPdf:
+		return s.doPrintToPdf(ctx, a.PrintToPdf)
+	case *pb.AutomationStep_Touch:
+		return s.doTouch(ctx, a.Touch)
+	case *pb.AutomationStep_SetEmulatedMedia:
+		return s.doSetEmulatedMedia(ctx, a.SetEmulatedMedia)
 	default:
 		return nil, fmt.Errorf("unknown action type")
 	}
+}
+
+// resolveSelectorCenter returns the viewport-center coordinates of the first
+// element matching selector, or (x, y) unchanged if selector is empty.
+func (s *Server) resolveSelectorCenter(ctx context.Context, selector string, x, y float64) (float64, float64, error) {
+	if selector == "" {
+		return x, y, nil
+	}
+	expr := fmt.Sprintf(`(function() {
+		var el = document.querySelector(%q);
+		if (!el) return null;
+		var r = el.getBoundingClientRect();
+		return {x: r.x + r.width/2, y: r.y + r.height/2};
+	})()`, selector)
+	result, err := s.send(ctx, "Runtime.evaluate", map[string]interface{}{"expression": expr, "returnByValue": true})
+	if err != nil {
+		return x, y, fmt.Errorf("resolve selector: %w", err)
+	}
+	var resp struct {
+		Result struct {
+			Value *struct {
+				X float64 `json:"x"`
+				Y float64 `json:"y"`
+			} `json:"value"`
+		} `json:"result"`
+	}
+	if err := json.Unmarshal(result, &resp); err != nil || resp.Result.Value == nil {
+		return x, y, fmt.Errorf("selector %q not found", selector)
+	}
+	return resp.Result.Value.X, resp.Result.Value.Y, nil
+}
+
+// doHover moves the pointer over a selector/coords without pressing, so the
+// cursor shape (the `cursor` property) and :hover styles render.
+func (s *Server) doHover(ctx context.Context, h *pb.Hover) (*pb.StepResult, error) {
+	x, y, err := s.resolveSelectorCenter(ctx, h.Selector, h.X, h.Y)
+	if err != nil {
+		return nil, err
+	}
+	params := map[string]interface{}{"type": "mouseMoved", "x": x, "y": y}
+	if _, err := s.send(ctx, "Input.dispatchMouseEvent", params); err != nil {
+		return nil, fmt.Errorf("Input.dispatchMouseEvent(mouseMoved): %w", err)
+	}
+	return &pb.StepResult{}, nil
+}
+
+// doPrintToPdf renders the current page to a PDF file via Page.printToPDF, so
+// paged-media properties (page breaks, orphans/widows) become observable.
+func (s *Server) doPrintToPdf(ctx context.Context, p *pb.PrintToPdf) (*pb.StepResult, error) {
+	params := map[string]interface{}{
+		"printBackground":   p.PrintBackground,
+		"preferCSSPageSize": p.PreferCssPageSize,
+	}
+	if p.PaperWidth > 0 {
+		params["paperWidth"] = p.PaperWidth
+	}
+	if p.PaperHeight > 0 {
+		params["paperHeight"] = p.PaperHeight
+	}
+	if p.Scale > 0 {
+		params["scale"] = p.Scale
+	}
+	result, err := s.send(ctx, "Page.printToPDF", params)
+	if err != nil {
+		return nil, fmt.Errorf("Page.printToPDF: %w", err)
+	}
+	var resp struct {
+		Data string `json:"data"`
+	}
+	if err := json.Unmarshal(result, &resp); err != nil {
+		return nil, fmt.Errorf("printToPDF unmarshal: %w", err)
+	}
+	pdfData, err := base64.StdEncoding.DecodeString(resp.Data)
+	if err != nil {
+		return nil, fmt.Errorf("printToPDF decode: %w", err)
+	}
+	if p.OutputPath != "" {
+		if err := os.MkdirAll(filepath.Dir(p.OutputPath), 0755); err != nil {
+			return nil, fmt.Errorf("mkdir for pdf: %w", err)
+		}
+		if err := os.WriteFile(p.OutputPath, pdfData, 0644); err != nil {
+			return nil, fmt.Errorf("write pdf %s: %w", p.OutputPath, err)
+		}
+		log.Printf("    PDF saved: %s (%d bytes)", p.OutputPath, len(pdfData))
+	}
+	return &pb.StepResult{ScreenshotData: pdfData}, nil
+}
+
+// doTouch performs a short pan gesture (touchStart -> touchMove* -> touchEnd)
+// from a point, used to exercise touch-action.
+func (s *Server) doTouch(ctx context.Context, t *pb.DispatchTouch) (*pb.StepResult, error) {
+	x, y, err := s.resolveSelectorCenter(ctx, t.Selector, t.X, t.Y)
+	if err != nil {
+		return nil, err
+	}
+	point := func(px, py float64) []map[string]interface{} {
+		return []map[string]interface{}{{"x": px, "y": py}}
+	}
+	if _, err := s.send(ctx, "Input.dispatchTouchEvent", map[string]interface{}{
+		"type": "touchStart", "touchPoints": point(x, y)}); err != nil {
+		return nil, fmt.Errorf("dispatchTouchEvent(touchStart): %w", err)
+	}
+	const steps = 4
+	for i := 1; i <= steps; i++ {
+		f := float64(i) / float64(steps)
+		if _, err := s.send(ctx, "Input.dispatchTouchEvent", map[string]interface{}{
+			"type": "touchMove", "touchPoints": point(x+t.Dx*f, y+t.Dy*f)}); err != nil {
+			return nil, fmt.Errorf("dispatchTouchEvent(touchMove): %w", err)
+		}
+	}
+	if _, err := s.send(ctx, "Input.dispatchTouchEvent", map[string]interface{}{
+		"type": "touchEnd", "touchPoints": []map[string]interface{}{}}); err != nil {
+		return nil, fmt.Errorf("dispatchTouchEvent(touchEnd): %w", err)
+	}
+	return &pb.StepResult{}, nil
+}
+
+// doSetEmulatedMedia overrides the page media type (e.g. "print") so paged /
+// print styles apply.
+func (s *Server) doSetEmulatedMedia(ctx context.Context, m *pb.SetEmulatedMedia) (*pb.StepResult, error) {
+	if _, err := s.send(ctx, "Emulation.setEmulatedMedia", map[string]interface{}{"media": m.Media}); err != nil {
+		return nil, fmt.Errorf("Emulation.setEmulatedMedia: %w", err)
+	}
+	return &pb.StepResult{}, nil
 }
 
 func (s *Server) doSetViewport(ctx context.Context, v *pb.SetViewport) (*pb.StepResult, error) {
@@ -277,6 +409,9 @@ func (s *Server) doNavigate(ctx context.Context, n *pb.Navigate) (*pb.StepResult
 	if _, err := s.send(ctx, "Page.enable", nil); err != nil {
 		return nil, fmt.Errorf("Page.enable: %w", err)
 	}
+	// Emulate page focus so the text caret (caret-color/-shape/-animation, :focus
+	// styles) actually renders in headless screenshots. Best-effort.
+	_, _ = s.send(ctx, "Emulation.setFocusEmulationEnabled", map[string]interface{}{"enabled": true})
 
 	wu := strings.ToLower(strings.TrimSpace(n.WaitUntil))
 	timeout := time.Duration(n.TimeoutMs) * time.Millisecond
