@@ -164,3 +164,122 @@ var HeadlessBrowserService_ServiceDesc = grpc.ServiceDesc{
 	Streams:  []grpc.StreamDesc{},
 	Metadata: "proto/cdp/headlessbrowser/headlessbrowser.proto",
 }
+
+const (
+	InteractiveSessionService_Session_FullMethodName = "/cdp.headlessbrowser.InteractiveSessionService/Session"
+)
+
+// InteractiveSessionServiceClient is the client API for InteractiveSessionService service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+//
+// InteractiveSessionService is a bidirectional-streaming interface for stateful,
+// interactive browser sessions. The client opens one Session stream, sends steps
+// one at a time (reacting to each result before sending the next), and the server
+// runs them against a single dedicated Chrome whose state PERSISTS for the life of
+// the stream. When the stream closes, the server recycles (kills and relaunches)
+// its Chrome child process, so the next client connecting to that instance gets a
+// completely fresh browser — providing process-level isolation between tenants.
+//
+// Intended deployment: a dedicated Cloud Run service with concurrency=1 so each
+// instance serves exactly one session at a time.
+type InteractiveSessionServiceClient interface {
+	Session(ctx context.Context, opts ...grpc.CallOption) (grpc.BidiStreamingClient[SessionRequest, SessionResponse], error)
+}
+
+type interactiveSessionServiceClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewInteractiveSessionServiceClient(cc grpc.ClientConnInterface) InteractiveSessionServiceClient {
+	return &interactiveSessionServiceClient{cc}
+}
+
+func (c *interactiveSessionServiceClient) Session(ctx context.Context, opts ...grpc.CallOption) (grpc.BidiStreamingClient[SessionRequest, SessionResponse], error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	stream, err := c.cc.NewStream(ctx, &InteractiveSessionService_ServiceDesc.Streams[0], InteractiveSessionService_Session_FullMethodName, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &grpc.GenericClientStream[SessionRequest, SessionResponse]{ClientStream: stream}
+	return x, nil
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type InteractiveSessionService_SessionClient = grpc.BidiStreamingClient[SessionRequest, SessionResponse]
+
+// InteractiveSessionServiceServer is the server API for InteractiveSessionService service.
+// All implementations must embed UnimplementedInteractiveSessionServiceServer
+// for forward compatibility.
+//
+// InteractiveSessionService is a bidirectional-streaming interface for stateful,
+// interactive browser sessions. The client opens one Session stream, sends steps
+// one at a time (reacting to each result before sending the next), and the server
+// runs them against a single dedicated Chrome whose state PERSISTS for the life of
+// the stream. When the stream closes, the server recycles (kills and relaunches)
+// its Chrome child process, so the next client connecting to that instance gets a
+// completely fresh browser — providing process-level isolation between tenants.
+//
+// Intended deployment: a dedicated Cloud Run service with concurrency=1 so each
+// instance serves exactly one session at a time.
+type InteractiveSessionServiceServer interface {
+	Session(grpc.BidiStreamingServer[SessionRequest, SessionResponse]) error
+	mustEmbedUnimplementedInteractiveSessionServiceServer()
+}
+
+// UnimplementedInteractiveSessionServiceServer must be embedded to have
+// forward compatible implementations.
+//
+// NOTE: this should be embedded by value instead of pointer to avoid a nil
+// pointer dereference when methods are called.
+type UnimplementedInteractiveSessionServiceServer struct{}
+
+func (UnimplementedInteractiveSessionServiceServer) Session(grpc.BidiStreamingServer[SessionRequest, SessionResponse]) error {
+	return status.Error(codes.Unimplemented, "method Session not implemented")
+}
+func (UnimplementedInteractiveSessionServiceServer) mustEmbedUnimplementedInteractiveSessionServiceServer() {
+}
+func (UnimplementedInteractiveSessionServiceServer) testEmbeddedByValue() {}
+
+// UnsafeInteractiveSessionServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to InteractiveSessionServiceServer will
+// result in compilation errors.
+type UnsafeInteractiveSessionServiceServer interface {
+	mustEmbedUnimplementedInteractiveSessionServiceServer()
+}
+
+func RegisterInteractiveSessionServiceServer(s grpc.ServiceRegistrar, srv InteractiveSessionServiceServer) {
+	// If the following call panics, it indicates UnimplementedInteractiveSessionServiceServer was
+	// embedded by pointer and is nil.  This will cause panics if an
+	// unimplemented method is ever invoked, so we test this at initialization
+	// time to prevent it from happening at runtime later due to I/O.
+	if t, ok := srv.(interface{ testEmbeddedByValue() }); ok {
+		t.testEmbeddedByValue()
+	}
+	s.RegisterService(&InteractiveSessionService_ServiceDesc, srv)
+}
+
+func _InteractiveSessionService_Session_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(InteractiveSessionServiceServer).Session(&grpc.GenericServerStream[SessionRequest, SessionResponse]{ServerStream: stream})
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type InteractiveSessionService_SessionServer = grpc.BidiStreamingServer[SessionRequest, SessionResponse]
+
+// InteractiveSessionService_ServiceDesc is the grpc.ServiceDesc for InteractiveSessionService service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var InteractiveSessionService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "cdp.headlessbrowser.InteractiveSessionService",
+	HandlerType: (*InteractiveSessionServiceServer)(nil),
+	Methods:     []grpc.MethodDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "Session",
+			Handler:       _InteractiveSessionService_Session_Handler,
+			ServerStreams: true,
+			ClientStreams: true,
+		},
+	},
+	Metadata: "proto/cdp/headlessbrowser/headlessbrowser.proto",
+}

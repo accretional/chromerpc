@@ -3,17 +3,55 @@ package cdpclient
 import (
 	"bufio"
 	"context"
+	crand "crypto/rand"
+	"encoding/hex"
 	"fmt"
 	"io"
+	"log"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"regexp"
 	"strings"
 	"time"
 )
 
+// randomID returns an unguessable 128-bit hex id used to name per-process Chrome
+// directories so concurrent processes can't locate each other's files.
+func randomID() string {
+	b := make([]byte, 16)
+	if _, err := crand.Read(b); err != nil {
+		return fmt.Sprintf("ts%d", time.Now().UnixNano())
+	}
+	return hex.EncodeToString(b)
+}
+
 // wsURLPattern matches "DevTools listening on ws://..." from Chrome's stderr.
 var wsURLPattern = regexp.MustCompile(`DevTools listening on (ws://\S+)`)
+
+// containerFlags disable background services that have no place in a headless
+// automation container and that otherwise spin and time out (wasting CPU and
+// slowing startup): GPU, GCM/background networking, sync, component updates,
+// the on-device model, default apps/extensions, etc. Observed on Cloud Run as
+// GCM "PHONE_REGISTRATION_ERROR", on_device_model "Error loading backend", GPU
+// CreateCommandBuffer failures, and multi-second compositor stalls.
+var containerFlags = []string{
+	"--disable-gpu",
+	"--disable-background-networking",
+	"--disable-background-timer-throttling",
+	"--disable-backgrounding-occluded-windows",
+	"--disable-renderer-backgrounding",
+	"--disable-sync",
+	"--disable-component-update",
+	"--disable-default-apps",
+	"--disable-extensions",
+	"--disable-client-side-phishing-detection",
+	"--disable-hang-monitor",
+	"--mute-audio",
+	"--metrics-recording-only",
+	"--no-pings",
+	"--disable-features=Translate,OptimizationHints,OptimizationGuideModelDownloading,MediaRouter,BackForwardCache,InterestFeedContentSuggestions",
+}
 
 // LaunchConfig configures how Chrome is launched.
 type LaunchConfig struct {
@@ -41,6 +79,12 @@ type LaunchConfig struct {
 	// Stderr is where to forward Chrome's stderr after parsing the WS URL.
 	// If nil, stderr is discarded.
 	Stderr io.Writer
+
+	// NoTmpCleanup, when true, leaves the per-process temp directory on disk
+	// after the Chrome process exits (for local debugging). On servers this must
+	// stay false: the dirs live in tmpfs and would otherwise grow instance
+	// memory over its lifetime.
+	NoTmpCleanup bool
 }
 
 // LaunchResult contains the result of launching Chrome.
@@ -54,9 +98,32 @@ type LaunchResult struct {
 	// Cmd is the underlying exec.Cmd for full control.
 	Cmd *exec.Cmd
 
-	// TempDir is the temp user data dir created, if any.
-	// Caller should clean this up when done.
+	// TempDir is the per-process temp directory tree created, if any.
+	// Use Cleanup() (or call the caller's lifecycle teardown) to remove it.
 	TempDir string
+
+	// keepTempDir mirrors LaunchConfig.NoTmpCleanup so Cleanup() knows whether
+	// to delete TempDir.
+	keepTempDir bool
+}
+
+// Cleanup kills the Chrome process, waits for it, and removes its temp directory
+// tree (unless NoTmpCleanup was set). Safe to call on a nil result and to call
+// more than once. This is the single place process+disk lifecycle is released.
+func (r *LaunchResult) Cleanup() {
+	if r == nil {
+		return
+	}
+	if r.Process != nil {
+		r.Process.Kill()
+	}
+	if r.Cmd != nil {
+		r.Cmd.Wait()
+	}
+	if r.TempDir != "" && !r.keepTempDir {
+		os.RemoveAll(r.TempDir)
+		r.TempDir = ""
+	}
 }
 
 // Launch starts a Chrome process with remote debugging enabled and returns
@@ -88,16 +155,26 @@ func Launch(ctx context.Context, cfg LaunchConfig) (*LaunchResult, error) {
 		args = append(args, "--headless=new")
 	}
 
-	var tempDir string
+	var tempDir, scratchDir string
 	if cfg.UserDataDir != "" {
 		args = append(args, "--user-data-dir="+cfg.UserDataDir)
 	} else {
-		var err error
-		tempDir, err = os.MkdirTemp("", "chromerpc-*")
-		if err != nil {
-			return nil, fmt.Errorf("launcher: create temp dir: %w", err)
+		// Isolated, unguessable per-process directory tree so concurrent Chrome
+		// processes can't find, enumerate, or read each other's profile, cache,
+		// or temp files: a 0700 base named with a random 128-bit id, with the
+		// profile, disk cache, and scratch space all confined inside it.
+		base := filepath.Join(os.TempDir(), "chromerpc-"+randomID())
+		userDataDir := filepath.Join(base, "user-data")
+		cacheDir := filepath.Join(base, "cache")
+		scratchDir = filepath.Join(base, "tmp")
+		for _, d := range []string{base, userDataDir, cacheDir, scratchDir} {
+			if err := os.MkdirAll(d, 0700); err != nil {
+				os.RemoveAll(base)
+				return nil, fmt.Errorf("launcher: create profile dir: %w", err)
+			}
 		}
-		args = append(args, "--user-data-dir="+tempDir)
+		tempDir = base
+		args = append(args, "--user-data-dir="+userDataDir, "--disk-cache-dir="+cacheDir)
 	}
 
 	args = append(args, cfg.ExtraArgs...)
@@ -106,17 +183,22 @@ func Launch(ctx context.Context, cfg LaunchConfig) (*LaunchResult, error) {
 	args = append(args, "about:blank")
 
 	cmd := exec.CommandContext(ctx, chromePath, args...)
+	if scratchDir != "" {
+		// Confine Chrome's scratch/temp files to its isolated tree too.
+		cmd.Env = append(os.Environ(), "TMPDIR="+scratchDir, "TMP="+scratchDir, "TEMP="+scratchDir)
+	}
 
 	stderrPipe, err := cmd.StderrPipe()
 	if err != nil {
-		if tempDir != "" {
+		if tempDir != "" && !cfg.NoTmpCleanup {
 			os.RemoveAll(tempDir)
 		}
 		return nil, fmt.Errorf("launcher: stderr pipe: %w", err)
 	}
 
+	launchStart := time.Now()
 	if err := cmd.Start(); err != nil {
-		if tempDir != "" {
+		if tempDir != "" && !cfg.NoTmpCleanup {
 			os.RemoveAll(tempDir)
 		}
 		return nil, fmt.Errorf("launcher: start chrome: %w", err)
@@ -127,17 +209,21 @@ func Launch(ctx context.Context, cfg LaunchConfig) (*LaunchResult, error) {
 	if err != nil {
 		cmd.Process.Kill()
 		cmd.Wait()
-		if tempDir != "" {
+		if tempDir != "" && !cfg.NoTmpCleanup {
 			os.RemoveAll(tempDir)
 		}
 		return nil, fmt.Errorf("launcher: %w", err)
 	}
+	// Time from exec to DevTools WebSocket URL — Chrome's own startup cost, with
+	// no image-pull/container-start confound.
+	log.Printf("launcher: Chrome ready in %s (exec -> WebSocket URL)", time.Since(launchStart).Round(time.Millisecond))
 
 	return &LaunchResult{
 		WebSocketURL: wsURL,
 		Process:      cmd.Process,
 		Cmd:          cmd,
 		TempDir:      tempDir,
+		keepTempDir:  cfg.NoTmpCleanup,
 	}, nil
 }
 
@@ -240,11 +326,7 @@ func ConnectOrLaunch(ctx context.Context, wsURL string, cfg LaunchConfig) (*Clie
 
 	client, err := Dial(ctx, result.WebSocketURL)
 	if err != nil {
-		result.Process.Kill()
-		result.Cmd.Wait()
-		if result.TempDir != "" {
-			os.RemoveAll(result.TempDir)
-		}
+		result.Cleanup()
 		return nil, nil, err
 	}
 

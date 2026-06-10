@@ -7,6 +7,10 @@ bin/
 # Temp files
 temp/
 
+# Session screenshots (contain PII: addresses, OTP/checkout pages, gift card) —
+# archived locally (~/claude-amazon.zip), not committed
+**/shots/
+
 # macOS
 .DS_Store
 **/.DS_Store

@@ -14,9 +14,7 @@ package main
 
 import (
 	"context"
-	"encoding/json"
 	"flag"
-	"fmt"
 	"log"
 	"net"
 	"os"
@@ -27,6 +25,8 @@ import (
 	"google.golang.org/grpc/reflection"
 
 	"github.com/accretional/chromerpc/internal/cdpclient"
+	"github.com/accretional/chromerpc/internal/cdpsession"
+	interactive "github.com/accretional/chromerpc/internal/server/interactive"
 	accessibilityserver "github.com/accretional/chromerpc/internal/server/accessibility"
 	autofillserver "github.com/accretional/chromerpc/internal/server/autofill"
 	bluetoothemulationserver "github.com/accretional/chromerpc/internal/server/bluetoothemulation"
@@ -148,6 +148,9 @@ func main() {
 	userAgent := flag.String("user-agent", "", "Override Chrome user agent string")
 	noSandbox := flag.Bool("no-sandbox", false, "Pass --no-sandbox to Chrome (required in restricted sandboxes like Cloud Run)")
 	disableDevShmUsage := flag.Bool("disable-dev-shm-usage", false, "Pass --disable-dev-shm-usage to Chrome (avoid small /dev/shm in containers)")
+	interactive := flag.Bool("interactive", false, "Run only InteractiveSessionService (bidi streaming; recycles Chrome between sessions).")
+	poolSize := flag.Int("pool-size", 1, "Interactive mode: number of pre-warmed Chrome processes. 1 = single Chrome (deploy concurrency=1); N>1 = pool (deploy concurrency<=N).")
+	noTmpCleanup := flag.Bool("no-tmp-cleanup", false, "Leave per-process Chrome temp dirs on disk (local debugging only; on servers they live in tmpfs and would grow instance memory).")
 	flag.Parse()
 
 	// Resolve the listen address. Cloud Run (and similar platforms) inject the
@@ -188,12 +191,27 @@ func main() {
 		extraArgs = append(extraArgs, "--disable-dev-shm-usage")
 	}
 
+	// Interactive (bidi streaming) mode runs its own Chrome lifecycle so it can
+	// recycle the browser between sessions. It serves only InteractiveSessionService.
+	if *interactive {
+		runInteractive(ctx, listenAddr, cdpclient.LaunchConfig{
+			ChromePath: *chromePath,
+			Port:       *port,
+			Headless:   *headless,
+			ExtraArgs:    extraArgs,
+			Stderr:       os.Stderr,
+			NoTmpCleanup: *noTmpCleanup,
+		}, *poolSize)
+		return
+	}
+
 	client, launchResult, err := cdpclient.ConnectOrLaunch(ctx, *wsURL, cdpclient.LaunchConfig{
 		ChromePath: *chromePath,
 		Port:       *port,
 		Headless:   *headless,
-		ExtraArgs:  extraArgs,
-		Stderr:     os.Stderr,
+		ExtraArgs:    extraArgs,
+		Stderr:       os.Stderr,
+		NoTmpCleanup: *noTmpCleanup,
 	})
 	if err != nil {
 		log.Fatalf("Failed to connect to Chrome: %v", err)
@@ -202,18 +220,12 @@ func main() {
 
 	if launchResult != nil {
 		log.Printf("Chrome launched, WebSocket: %s", launchResult.WebSocketURL)
-		defer func() {
-			launchResult.Process.Kill()
-			launchResult.Cmd.Wait()
-			if launchResult.TempDir != "" {
-				os.RemoveAll(launchResult.TempDir)
-			}
-		}()
+		defer launchResult.Cleanup()
 	}
 
 	// For Page domain commands, we need to attach to a page target.
 	// Discover targets and attach to the first page.
-	if err := setupDefaultSession(ctx, client); err != nil {
+	if err := cdpsession.SetupDefault(ctx, client); err != nil {
 		log.Printf("Warning: could not set up default session: %v", err)
 		log.Printf("Page commands may fail without a session. Use Target.AttachToTarget first.")
 	}
@@ -221,7 +233,7 @@ func main() {
 	// Re-establish the default session after reconnection.
 	client.OnReconnect = func(rctx context.Context, c *cdpclient.Client) error {
 		log.Println("Re-establishing default session after reconnect...")
-		if err := setupDefaultSession(rctx, c); err != nil {
+		if err := cdpsession.SetupDefault(rctx, c); err != nil {
 			log.Printf("Warning: could not re-establish session: %v", err)
 			return err
 		}
@@ -308,61 +320,41 @@ func main() {
 	}
 }
 
-// setupDefaultSession discovers page targets and attaches to the first one
-// with flatten=true, setting the session ID on the client so that Page
-// domain commands are routed to the correct target.
-func setupDefaultSession(ctx context.Context, client *cdpclient.Client) error {
-	// Get all targets.
-	result, err := client.Send(ctx, "Target.getTargets", nil)
-	if err != nil {
-		return fmt.Errorf("getTargets: %w", err)
-	}
-
-	type targetInfo struct {
-		TargetID string `json:"targetId"`
-		Type     string `json:"type"`
-		URL      string `json:"url"`
-	}
-	var resp struct {
-		TargetInfos []targetInfo `json:"targetInfos"`
-	}
-	if err := json.Unmarshal(result, &resp); err != nil {
-		return fmt.Errorf("unmarshal targets: %w", err)
-	}
-
-	// Find first page target.
-	var pageTarget *targetInfo
-	for _, t := range resp.TargetInfos {
-		if t.Type == "page" {
-			t := t
-			pageTarget = &t
-			break
+// runInteractive serves only InteractiveSessionService, backed by a ChromeManager
+// that owns the Chrome lifecycle and recycles the browser between sessions.
+func runInteractive(ctx context.Context, listenAddr string, cfg cdpclient.LaunchConfig, poolSize int) {
+	var srv *interactive.Server
+	if poolSize > 1 {
+		log.Printf("interactive: warming a pool of %d Chrome processes in the background...", poolSize)
+		pool := interactive.NewChromePool()
+		pool.Start(ctx, cfg, poolSize) // non-blocking; server listens immediately
+		srv = interactive.NewPool(pool)
+	} else {
+		mgr := interactive.NewChromeManager(cfg)
+		if err := mgr.Start(ctx); err != nil {
+			log.Fatalf("interactive: failed to start Chrome: %v", err)
 		}
+		defer mgr.Close()
+		srv = interactive.NewSingle(mgr)
 	}
 
-	if pageTarget == nil {
-		return fmt.Errorf("no page target found")
-	}
-
-	log.Printf("Attaching to page target %s (%s)", pageTarget.TargetID, pageTarget.URL)
-
-	// Attach with flatten=true.
-	attachResult, err := client.Send(ctx, "Target.attachToTarget", map[string]interface{}{
-		"targetId": pageTarget.TargetID,
-		"flatten":  true,
-	})
+	lis, err := net.Listen("tcp", listenAddr)
 	if err != nil {
-		return fmt.Errorf("attachToTarget: %w", err)
+		log.Fatalf("Failed to listen on %s: %v", listenAddr, err)
 	}
 
-	var attachResp struct {
-		SessionID string `json:"sessionId"`
-	}
-	if err := json.Unmarshal(attachResult, &attachResp); err != nil {
-		return fmt.Errorf("unmarshal attach: %w", err)
-	}
+	grpcServer := grpc.NewServer()
+	headlessbrowserpb.RegisterInteractiveSessionServiceServer(grpcServer, srv)
+	reflection.Register(grpcServer)
 
-	client.SetSessionID(attachResp.SessionID)
-	log.Printf("Session established: %s", attachResp.SessionID)
-	return nil
+	log.Printf("interactive gRPC server listening on %s", listenAddr)
+
+	go func() {
+		<-ctx.Done()
+		grpcServer.GracefulStop()
+	}()
+
+	if err := grpcServer.Serve(lis); err != nil {
+		log.Fatalf("gRPC server error: %v", err)
+	}
 }

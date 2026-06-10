@@ -21,6 +21,442 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// SessionRequest is one message a client sends on the Session stream.
+type SessionRequest struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Client-chosen correlation id, echoed back on the matching SessionResponse.
+	Id uint64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	// Types that are valid to be assigned to Command:
+	//
+	//	*SessionRequest_Step
+	//	*SessionRequest_Reset_
+	//	*SessionRequest_Ping
+	Command       isSessionRequest_Command `protobuf_oneof:"command"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SessionRequest) Reset() {
+	*x = SessionRequest{}
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[0]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SessionRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SessionRequest) ProtoMessage() {}
+
+func (x *SessionRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[0]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SessionRequest.ProtoReflect.Descriptor instead.
+func (*SessionRequest) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescGZIP(), []int{0}
+}
+
+func (x *SessionRequest) GetId() uint64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *SessionRequest) GetCommand() isSessionRequest_Command {
+	if x != nil {
+		return x.Command
+	}
+	return nil
+}
+
+func (x *SessionRequest) GetStep() *AutomationStep {
+	if x != nil {
+		if x, ok := x.Command.(*SessionRequest_Step); ok {
+			return x.Step
+		}
+	}
+	return nil
+}
+
+func (x *SessionRequest) GetReset_() *ResetSession {
+	if x != nil {
+		if x, ok := x.Command.(*SessionRequest_Reset_); ok {
+			return x.Reset_
+		}
+	}
+	return nil
+}
+
+func (x *SessionRequest) GetPing() *Ping {
+	if x != nil {
+		if x, ok := x.Command.(*SessionRequest_Ping); ok {
+			return x.Ping
+		}
+	}
+	return nil
+}
+
+type isSessionRequest_Command interface {
+	isSessionRequest_Command()
+}
+
+type SessionRequest_Step struct {
+	// Run a single automation step against the persistent session.
+	Step *AutomationStep `protobuf:"bytes,2,opt,name=step,proto3,oneof"`
+}
+
+type SessionRequest_Reset_ struct {
+	// Explicitly wipe browser state mid-session (recycle Chrome now).
+	Reset_ *ResetSession `protobuf:"bytes,3,opt,name=reset,proto3,oneof"`
+}
+
+type SessionRequest_Ping struct {
+	// Liveness check.
+	Ping *Ping `protobuf:"bytes,4,opt,name=ping,proto3,oneof"`
+}
+
+func (*SessionRequest_Step) isSessionRequest_Command() {}
+
+func (*SessionRequest_Reset_) isSessionRequest_Command() {}
+
+func (*SessionRequest_Ping) isSessionRequest_Command() {}
+
+// SessionResponse is one message the server sends on the Session stream.
+type SessionResponse struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Correlation id from the originating SessionRequest (0 for unsolicited events).
+	Id uint64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	// Types that are valid to be assigned to Event:
+	//
+	//	*SessionResponse_Ready
+	//	*SessionResponse_Result
+	//	*SessionResponse_Pong
+	//	*SessionResponse_Error
+	Event         isSessionResponse_Event `protobuf_oneof:"event"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SessionResponse) Reset() {
+	*x = SessionResponse{}
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SessionResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SessionResponse) ProtoMessage() {}
+
+func (x *SessionResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SessionResponse.ProtoReflect.Descriptor instead.
+func (*SessionResponse) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *SessionResponse) GetId() uint64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *SessionResponse) GetEvent() isSessionResponse_Event {
+	if x != nil {
+		return x.Event
+	}
+	return nil
+}
+
+func (x *SessionResponse) GetReady() *SessionReady {
+	if x != nil {
+		if x, ok := x.Event.(*SessionResponse_Ready); ok {
+			return x.Ready
+		}
+	}
+	return nil
+}
+
+func (x *SessionResponse) GetResult() *StepResult {
+	if x != nil {
+		if x, ok := x.Event.(*SessionResponse_Result); ok {
+			return x.Result
+		}
+	}
+	return nil
+}
+
+func (x *SessionResponse) GetPong() *Pong {
+	if x != nil {
+		if x, ok := x.Event.(*SessionResponse_Pong); ok {
+			return x.Pong
+		}
+	}
+	return nil
+}
+
+func (x *SessionResponse) GetError() *SessionError {
+	if x != nil {
+		if x, ok := x.Event.(*SessionResponse_Error); ok {
+			return x.Error
+		}
+	}
+	return nil
+}
+
+type isSessionResponse_Event interface {
+	isSessionResponse_Event()
+}
+
+type SessionResponse_Ready struct {
+	// Sent once when the session is ready to accept commands.
+	Ready *SessionReady `protobuf:"bytes,2,opt,name=ready,proto3,oneof"`
+}
+
+type SessionResponse_Result struct {
+	// Result of an AutomationStep.
+	Result *StepResult `protobuf:"bytes,3,opt,name=result,proto3,oneof"`
+}
+
+type SessionResponse_Pong struct {
+	// Reply to a Ping.
+	Pong *Pong `protobuf:"bytes,4,opt,name=pong,proto3,oneof"`
+}
+
+type SessionResponse_Error struct {
+	// A session-level error (the stream may continue or end after this).
+	Error *SessionError `protobuf:"bytes,5,opt,name=error,proto3,oneof"`
+}
+
+func (*SessionResponse_Ready) isSessionResponse_Event() {}
+
+func (*SessionResponse_Result) isSessionResponse_Event() {}
+
+func (*SessionResponse_Pong) isSessionResponse_Event() {}
+
+func (*SessionResponse_Error) isSessionResponse_Event() {}
+
+type ResetSession struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ResetSession) Reset() {
+	*x = ResetSession{}
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ResetSession) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ResetSession) ProtoMessage() {}
+
+func (x *ResetSession) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ResetSession.ProtoReflect.Descriptor instead.
+func (*ResetSession) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescGZIP(), []int{2}
+}
+
+type Ping struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Ping) Reset() {
+	*x = Ping{}
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Ping) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Ping) ProtoMessage() {}
+
+func (x *Ping) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Ping.ProtoReflect.Descriptor instead.
+func (*Ping) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescGZIP(), []int{3}
+}
+
+type Pong struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Pong) Reset() {
+	*x = Pong{}
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Pong) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Pong) ProtoMessage() {}
+
+func (x *Pong) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Pong.ProtoReflect.Descriptor instead.
+func (*Pong) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescGZIP(), []int{4}
+}
+
+type SessionReady struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Opaque id for the session (for logging/correlation).
+	SessionId     string `protobuf:"bytes,1,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SessionReady) Reset() {
+	*x = SessionReady{}
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SessionReady) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SessionReady) ProtoMessage() {}
+
+func (x *SessionReady) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SessionReady.ProtoReflect.Descriptor instead.
+func (*SessionReady) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *SessionReady) GetSessionId() string {
+	if x != nil {
+		return x.SessionId
+	}
+	return ""
+}
+
+type SessionError struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Message       string                 `protobuf:"bytes,1,opt,name=message,proto3" json:"message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SessionError) Reset() {
+	*x = SessionError{}
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SessionError) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SessionError) ProtoMessage() {}
+
+func (x *SessionError) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SessionError.ProtoReflect.Descriptor instead.
+func (*SessionError) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *SessionError) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
 // A complete automation sequence: an ordered list of steps.
 type AutomationSequence struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -32,7 +468,7 @@ type AutomationSequence struct {
 
 func (x *AutomationSequence) Reset() {
 	*x = AutomationSequence{}
-	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[0]
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -44,7 +480,7 @@ func (x *AutomationSequence) String() string {
 func (*AutomationSequence) ProtoMessage() {}
 
 func (x *AutomationSequence) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[0]
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -57,7 +493,7 @@ func (x *AutomationSequence) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AutomationSequence.ProtoReflect.Descriptor instead.
 func (*AutomationSequence) Descriptor() ([]byte, []int) {
-	return file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescGZIP(), []int{0}
+	return file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *AutomationSequence) GetName() string {
@@ -104,7 +540,7 @@ type AutomationStep struct {
 
 func (x *AutomationStep) Reset() {
 	*x = AutomationStep{}
-	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[1]
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -116,7 +552,7 @@ func (x *AutomationStep) String() string {
 func (*AutomationStep) ProtoMessage() {}
 
 func (x *AutomationStep) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[1]
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -129,7 +565,7 @@ func (x *AutomationStep) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AutomationStep.ProtoReflect.Descriptor instead.
 func (*AutomationStep) Descriptor() ([]byte, []int) {
-	return file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescGZIP(), []int{1}
+	return file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *AutomationStep) GetLabel() string {
@@ -418,7 +854,7 @@ type SetViewport struct {
 
 func (x *SetViewport) Reset() {
 	*x = SetViewport{}
-	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[2]
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -430,7 +866,7 @@ func (x *SetViewport) String() string {
 func (*SetViewport) ProtoMessage() {}
 
 func (x *SetViewport) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[2]
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -443,7 +879,7 @@ func (x *SetViewport) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SetViewport.ProtoReflect.Descriptor instead.
 func (*SetViewport) Descriptor() ([]byte, []int) {
-	return file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescGZIP(), []int{2}
+	return file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *SetViewport) GetWidth() int32 {
@@ -494,7 +930,7 @@ type Navigate struct {
 
 func (x *Navigate) Reset() {
 	*x = Navigate{}
-	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[3]
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -506,7 +942,7 @@ func (x *Navigate) String() string {
 func (*Navigate) ProtoMessage() {}
 
 func (x *Navigate) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[3]
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -519,7 +955,7 @@ func (x *Navigate) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Navigate.ProtoReflect.Descriptor instead.
 func (*Navigate) Descriptor() ([]byte, []int) {
-	return file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescGZIP(), []int{3}
+	return file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *Navigate) GetUrl() string {
@@ -553,7 +989,7 @@ type Wait struct {
 
 func (x *Wait) Reset() {
 	*x = Wait{}
-	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[4]
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -565,7 +1001,7 @@ func (x *Wait) String() string {
 func (*Wait) ProtoMessage() {}
 
 func (x *Wait) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[4]
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -578,7 +1014,7 @@ func (x *Wait) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Wait.ProtoReflect.Descriptor instead.
 func (*Wait) Descriptor() ([]byte, []int) {
-	return file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescGZIP(), []int{4}
+	return file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *Wait) GetMilliseconds() int32 {
@@ -602,7 +1038,7 @@ type Screenshot struct {
 
 func (x *Screenshot) Reset() {
 	*x = Screenshot{}
-	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[5]
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -614,7 +1050,7 @@ func (x *Screenshot) String() string {
 func (*Screenshot) ProtoMessage() {}
 
 func (x *Screenshot) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[5]
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -627,7 +1063,7 @@ func (x *Screenshot) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Screenshot.ProtoReflect.Descriptor instead.
 func (*Screenshot) Descriptor() ([]byte, []int) {
-	return file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescGZIP(), []int{5}
+	return file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *Screenshot) GetOutputPath() string {
@@ -668,7 +1104,7 @@ type EvaluateScript struct {
 
 func (x *EvaluateScript) Reset() {
 	*x = EvaluateScript{}
-	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[6]
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -680,7 +1116,7 @@ func (x *EvaluateScript) String() string {
 func (*EvaluateScript) ProtoMessage() {}
 
 func (x *EvaluateScript) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[6]
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -693,7 +1129,7 @@ func (x *EvaluateScript) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EvaluateScript.ProtoReflect.Descriptor instead.
 func (*EvaluateScript) Descriptor() ([]byte, []int) {
-	return file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescGZIP(), []int{6}
+	return file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *EvaluateScript) GetExpression() string {
@@ -715,7 +1151,7 @@ type Click struct {
 
 func (x *Click) Reset() {
 	*x = Click{}
-	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[7]
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -727,7 +1163,7 @@ func (x *Click) String() string {
 func (*Click) ProtoMessage() {}
 
 func (x *Click) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[7]
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -740,7 +1176,7 @@ func (x *Click) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Click.ProtoReflect.Descriptor instead.
 func (*Click) Descriptor() ([]byte, []int) {
-	return file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescGZIP(), []int{7}
+	return file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *Click) GetX() float64 {
@@ -775,7 +1211,7 @@ type TypeText struct {
 
 func (x *TypeText) Reset() {
 	*x = TypeText{}
-	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[8]
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -787,7 +1223,7 @@ func (x *TypeText) String() string {
 func (*TypeText) ProtoMessage() {}
 
 func (x *TypeText) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[8]
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -800,7 +1236,7 @@ func (x *TypeText) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TypeText.ProtoReflect.Descriptor instead.
 func (*TypeText) Descriptor() ([]byte, []int) {
-	return file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescGZIP(), []int{8}
+	return file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *TypeText) GetText() string {
@@ -828,7 +1264,7 @@ type WaitForSelector struct {
 
 func (x *WaitForSelector) Reset() {
 	*x = WaitForSelector{}
-	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[9]
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -840,7 +1276,7 @@ func (x *WaitForSelector) String() string {
 func (*WaitForSelector) ProtoMessage() {}
 
 func (x *WaitForSelector) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[9]
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -853,7 +1289,7 @@ func (x *WaitForSelector) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use WaitForSelector.ProtoReflect.Descriptor instead.
 func (*WaitForSelector) Descriptor() ([]byte, []int) {
-	return file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescGZIP(), []int{9}
+	return file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *WaitForSelector) GetSelector() string {
@@ -880,7 +1316,7 @@ type Reload struct {
 
 func (x *Reload) Reset() {
 	*x = Reload{}
-	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[10]
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[17]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -892,7 +1328,7 @@ func (x *Reload) String() string {
 func (*Reload) ProtoMessage() {}
 
 func (x *Reload) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[10]
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[17]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -905,7 +1341,7 @@ func (x *Reload) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Reload.ProtoReflect.Descriptor instead.
 func (*Reload) Descriptor() ([]byte, []int) {
-	return file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescGZIP(), []int{10}
+	return file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescGZIP(), []int{17}
 }
 
 func (x *Reload) GetIgnoreCache() bool {
@@ -926,7 +1362,7 @@ type ScrollTo struct {
 
 func (x *ScrollTo) Reset() {
 	*x = ScrollTo{}
-	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[11]
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[18]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -938,7 +1374,7 @@ func (x *ScrollTo) String() string {
 func (*ScrollTo) ProtoMessage() {}
 
 func (x *ScrollTo) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[11]
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[18]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -951,7 +1387,7 @@ func (x *ScrollTo) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ScrollTo.ProtoReflect.Descriptor instead.
 func (*ScrollTo) Descriptor() ([]byte, []int) {
-	return file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescGZIP(), []int{11}
+	return file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescGZIP(), []int{18}
 }
 
 func (x *ScrollTo) GetX() float64 {
@@ -982,7 +1418,7 @@ type TypeKeyByKey struct {
 
 func (x *TypeKeyByKey) Reset() {
 	*x = TypeKeyByKey{}
-	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[12]
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[19]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -994,7 +1430,7 @@ func (x *TypeKeyByKey) String() string {
 func (*TypeKeyByKey) ProtoMessage() {}
 
 func (x *TypeKeyByKey) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[12]
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[19]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1007,7 +1443,7 @@ func (x *TypeKeyByKey) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TypeKeyByKey.ProtoReflect.Descriptor instead.
 func (*TypeKeyByKey) Descriptor() ([]byte, []int) {
-	return file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescGZIP(), []int{12}
+	return file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescGZIP(), []int{19}
 }
 
 func (x *TypeKeyByKey) GetText() string {
@@ -1041,7 +1477,7 @@ type PressKey struct {
 
 func (x *PressKey) Reset() {
 	*x = PressKey{}
-	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[13]
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[20]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1053,7 +1489,7 @@ func (x *PressKey) String() string {
 func (*PressKey) ProtoMessage() {}
 
 func (x *PressKey) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[13]
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[20]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1066,7 +1502,7 @@ func (x *PressKey) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PressKey.ProtoReflect.Descriptor instead.
 func (*PressKey) Descriptor() ([]byte, []int) {
-	return file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescGZIP(), []int{13}
+	return file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescGZIP(), []int{20}
 }
 
 func (x *PressKey) GetKey() string {
@@ -1088,7 +1524,7 @@ type FullPageScreenshot struct {
 
 func (x *FullPageScreenshot) Reset() {
 	*x = FullPageScreenshot{}
-	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[14]
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[21]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1100,7 +1536,7 @@ func (x *FullPageScreenshot) String() string {
 func (*FullPageScreenshot) ProtoMessage() {}
 
 func (x *FullPageScreenshot) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[14]
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[21]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1113,7 +1549,7 @@ func (x *FullPageScreenshot) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FullPageScreenshot.ProtoReflect.Descriptor instead.
 func (*FullPageScreenshot) Descriptor() ([]byte, []int) {
-	return file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescGZIP(), []int{14}
+	return file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescGZIP(), []int{21}
 }
 
 func (x *FullPageScreenshot) GetOutputPath() string {
@@ -1147,7 +1583,7 @@ type OpenTab struct {
 
 func (x *OpenTab) Reset() {
 	*x = OpenTab{}
-	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[15]
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[22]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1159,7 +1595,7 @@ func (x *OpenTab) String() string {
 func (*OpenTab) ProtoMessage() {}
 
 func (x *OpenTab) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[15]
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[22]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1172,7 +1608,7 @@ func (x *OpenTab) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use OpenTab.ProtoReflect.Descriptor instead.
 func (*OpenTab) Descriptor() ([]byte, []int) {
-	return file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescGZIP(), []int{15}
+	return file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescGZIP(), []int{22}
 }
 
 func (x *OpenTab) GetUrl() string {
@@ -1192,7 +1628,7 @@ type CloseTab struct {
 
 func (x *CloseTab) Reset() {
 	*x = CloseTab{}
-	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[16]
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[23]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1204,7 +1640,7 @@ func (x *CloseTab) String() string {
 func (*CloseTab) ProtoMessage() {}
 
 func (x *CloseTab) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[16]
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[23]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1217,7 +1653,7 @@ func (x *CloseTab) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CloseTab.ProtoReflect.Descriptor instead.
 func (*CloseTab) Descriptor() ([]byte, []int) {
-	return file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescGZIP(), []int{16}
+	return file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescGZIP(), []int{23}
 }
 
 func (x *CloseTab) GetTargetId() string {
@@ -1237,7 +1673,7 @@ type SwitchTab struct {
 
 func (x *SwitchTab) Reset() {
 	*x = SwitchTab{}
-	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[17]
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[24]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1249,7 +1685,7 @@ func (x *SwitchTab) String() string {
 func (*SwitchTab) ProtoMessage() {}
 
 func (x *SwitchTab) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[17]
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[24]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1262,7 +1698,7 @@ func (x *SwitchTab) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SwitchTab.ProtoReflect.Descriptor instead.
 func (*SwitchTab) Descriptor() ([]byte, []int) {
-	return file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescGZIP(), []int{17}
+	return file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescGZIP(), []int{24}
 }
 
 func (x *SwitchTab) GetTargetId() string {
@@ -1283,7 +1719,7 @@ type DownloadFile struct {
 
 func (x *DownloadFile) Reset() {
 	*x = DownloadFile{}
-	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[18]
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[25]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1295,7 +1731,7 @@ func (x *DownloadFile) String() string {
 func (*DownloadFile) ProtoMessage() {}
 
 func (x *DownloadFile) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[18]
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[25]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1308,7 +1744,7 @@ func (x *DownloadFile) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DownloadFile.ProtoReflect.Descriptor instead.
 func (*DownloadFile) Descriptor() ([]byte, []int) {
-	return file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescGZIP(), []int{18}
+	return file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescGZIP(), []int{25}
 }
 
 func (x *DownloadFile) GetUrl() string {
@@ -1337,7 +1773,7 @@ type AutomationResult struct {
 
 func (x *AutomationResult) Reset() {
 	*x = AutomationResult{}
-	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[19]
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[26]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1349,7 +1785,7 @@ func (x *AutomationResult) String() string {
 func (*AutomationResult) ProtoMessage() {}
 
 func (x *AutomationResult) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[19]
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[26]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1362,7 +1798,7 @@ func (x *AutomationResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AutomationResult.ProtoReflect.Descriptor instead.
 func (*AutomationResult) Descriptor() ([]byte, []int) {
-	return file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescGZIP(), []int{19}
+	return file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescGZIP(), []int{26}
 }
 
 func (x *AutomationResult) GetSuccess() bool {
@@ -1402,7 +1838,7 @@ type StepResult struct {
 
 func (x *StepResult) Reset() {
 	*x = StepResult{}
-	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[20]
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[27]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1414,7 +1850,7 @@ func (x *StepResult) String() string {
 func (*StepResult) ProtoMessage() {}
 
 func (x *StepResult) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[20]
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[27]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1427,7 +1863,7 @@ func (x *StepResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StepResult.ProtoReflect.Descriptor instead.
 func (*StepResult) Descriptor() ([]byte, []int) {
-	return file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescGZIP(), []int{20}
+	return file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescGZIP(), []int{27}
 }
 
 func (x *StepResult) GetLabel() string {
@@ -1469,7 +1905,28 @@ var File_proto_cdp_headlessbrowser_headlessbrowser_proto protoreflect.FileDescri
 
 const file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDesc = "" +
 	"\n" +
-	"/proto/cdp/headlessbrowser/headlessbrowser.proto\x12\x13cdp.headlessbrowser\"c\n" +
+	"/proto/cdp/headlessbrowser/headlessbrowser.proto\x12\x13cdp.headlessbrowser\"\xd2\x01\n" +
+	"\x0eSessionRequest\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\x04R\x02id\x129\n" +
+	"\x04step\x18\x02 \x01(\v2#.cdp.headlessbrowser.AutomationStepH\x00R\x04step\x129\n" +
+	"\x05reset\x18\x03 \x01(\v2!.cdp.headlessbrowser.ResetSessionH\x00R\x05reset\x12/\n" +
+	"\x04ping\x18\x04 \x01(\v2\x19.cdp.headlessbrowser.PingH\x00R\x04pingB\t\n" +
+	"\acommand\"\x8c\x02\n" +
+	"\x0fSessionResponse\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\x04R\x02id\x129\n" +
+	"\x05ready\x18\x02 \x01(\v2!.cdp.headlessbrowser.SessionReadyH\x00R\x05ready\x129\n" +
+	"\x06result\x18\x03 \x01(\v2\x1f.cdp.headlessbrowser.StepResultH\x00R\x06result\x12/\n" +
+	"\x04pong\x18\x04 \x01(\v2\x19.cdp.headlessbrowser.PongH\x00R\x04pong\x129\n" +
+	"\x05error\x18\x05 \x01(\v2!.cdp.headlessbrowser.SessionErrorH\x00R\x05errorB\a\n" +
+	"\x05event\"\x0e\n" +
+	"\fResetSession\"\x06\n" +
+	"\x04Ping\"\x06\n" +
+	"\x04Pong\"-\n" +
+	"\fSessionReady\x12\x1d\n" +
+	"\n" +
+	"session_id\x18\x01 \x01(\tR\tsessionId\"(\n" +
+	"\fSessionError\x12\x18\n" +
+	"\amessage\x18\x01 \x01(\tR\amessage\"c\n" +
 	"\x12AutomationSequence\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x129\n" +
 	"\x05steps\x18\x02 \x03(\v2#.cdp.headlessbrowser.AutomationStepR\x05steps\"\x9e\t\n" +
@@ -1571,7 +2028,9 @@ const file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDesc = "" +
 	"\rscript_result\x18\x05 \x01(\tR\fscriptResult2\xce\x01\n" +
 	"\x16HeadlessBrowserService\x12_\n" +
 	"\rRunAutomation\x12'.cdp.headlessbrowser.AutomationSequence\x1a%.cdp.headlessbrowser.AutomationResult\x12S\n" +
-	"\vExecuteStep\x12#.cdp.headlessbrowser.AutomationStep\x1a\x1f.cdp.headlessbrowser.StepResultB<Z:github.com/accretional/chromerpc/proto/cdp/headlessbrowserb\x06proto3"
+	"\vExecuteStep\x12#.cdp.headlessbrowser.AutomationStep\x1a\x1f.cdp.headlessbrowser.StepResult2u\n" +
+	"\x19InteractiveSessionService\x12X\n" +
+	"\aSession\x12#.cdp.headlessbrowser.SessionRequest\x1a$.cdp.headlessbrowser.SessionResponse(\x010\x01B<Z:github.com/accretional/chromerpc/proto/cdp/headlessbrowserb\x06proto3"
 
 var (
 	file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescOnce sync.Once
@@ -1585,59 +2044,75 @@ func file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescGZIP() []byte {
 	return file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescData
 }
 
-var file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes = make([]protoimpl.MessageInfo, 21)
+var file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes = make([]protoimpl.MessageInfo, 28)
 var file_proto_cdp_headlessbrowser_headlessbrowser_proto_goTypes = []any{
-	(*AutomationSequence)(nil), // 0: cdp.headlessbrowser.AutomationSequence
-	(*AutomationStep)(nil),     // 1: cdp.headlessbrowser.AutomationStep
-	(*SetViewport)(nil),        // 2: cdp.headlessbrowser.SetViewport
-	(*Navigate)(nil),           // 3: cdp.headlessbrowser.Navigate
-	(*Wait)(nil),               // 4: cdp.headlessbrowser.Wait
-	(*Screenshot)(nil),         // 5: cdp.headlessbrowser.Screenshot
-	(*EvaluateScript)(nil),     // 6: cdp.headlessbrowser.EvaluateScript
-	(*Click)(nil),              // 7: cdp.headlessbrowser.Click
-	(*TypeText)(nil),           // 8: cdp.headlessbrowser.TypeText
-	(*WaitForSelector)(nil),    // 9: cdp.headlessbrowser.WaitForSelector
-	(*Reload)(nil),             // 10: cdp.headlessbrowser.Reload
-	(*ScrollTo)(nil),           // 11: cdp.headlessbrowser.ScrollTo
-	(*TypeKeyByKey)(nil),       // 12: cdp.headlessbrowser.TypeKeyByKey
-	(*PressKey)(nil),           // 13: cdp.headlessbrowser.PressKey
-	(*FullPageScreenshot)(nil), // 14: cdp.headlessbrowser.FullPageScreenshot
-	(*OpenTab)(nil),            // 15: cdp.headlessbrowser.OpenTab
-	(*CloseTab)(nil),           // 16: cdp.headlessbrowser.CloseTab
-	(*SwitchTab)(nil),          // 17: cdp.headlessbrowser.SwitchTab
-	(*DownloadFile)(nil),       // 18: cdp.headlessbrowser.DownloadFile
-	(*AutomationResult)(nil),   // 19: cdp.headlessbrowser.AutomationResult
-	(*StepResult)(nil),         // 20: cdp.headlessbrowser.StepResult
+	(*SessionRequest)(nil),     // 0: cdp.headlessbrowser.SessionRequest
+	(*SessionResponse)(nil),    // 1: cdp.headlessbrowser.SessionResponse
+	(*ResetSession)(nil),       // 2: cdp.headlessbrowser.ResetSession
+	(*Ping)(nil),               // 3: cdp.headlessbrowser.Ping
+	(*Pong)(nil),               // 4: cdp.headlessbrowser.Pong
+	(*SessionReady)(nil),       // 5: cdp.headlessbrowser.SessionReady
+	(*SessionError)(nil),       // 6: cdp.headlessbrowser.SessionError
+	(*AutomationSequence)(nil), // 7: cdp.headlessbrowser.AutomationSequence
+	(*AutomationStep)(nil),     // 8: cdp.headlessbrowser.AutomationStep
+	(*SetViewport)(nil),        // 9: cdp.headlessbrowser.SetViewport
+	(*Navigate)(nil),           // 10: cdp.headlessbrowser.Navigate
+	(*Wait)(nil),               // 11: cdp.headlessbrowser.Wait
+	(*Screenshot)(nil),         // 12: cdp.headlessbrowser.Screenshot
+	(*EvaluateScript)(nil),     // 13: cdp.headlessbrowser.EvaluateScript
+	(*Click)(nil),              // 14: cdp.headlessbrowser.Click
+	(*TypeText)(nil),           // 15: cdp.headlessbrowser.TypeText
+	(*WaitForSelector)(nil),    // 16: cdp.headlessbrowser.WaitForSelector
+	(*Reload)(nil),             // 17: cdp.headlessbrowser.Reload
+	(*ScrollTo)(nil),           // 18: cdp.headlessbrowser.ScrollTo
+	(*TypeKeyByKey)(nil),       // 19: cdp.headlessbrowser.TypeKeyByKey
+	(*PressKey)(nil),           // 20: cdp.headlessbrowser.PressKey
+	(*FullPageScreenshot)(nil), // 21: cdp.headlessbrowser.FullPageScreenshot
+	(*OpenTab)(nil),            // 22: cdp.headlessbrowser.OpenTab
+	(*CloseTab)(nil),           // 23: cdp.headlessbrowser.CloseTab
+	(*SwitchTab)(nil),          // 24: cdp.headlessbrowser.SwitchTab
+	(*DownloadFile)(nil),       // 25: cdp.headlessbrowser.DownloadFile
+	(*AutomationResult)(nil),   // 26: cdp.headlessbrowser.AutomationResult
+	(*StepResult)(nil),         // 27: cdp.headlessbrowser.StepResult
 }
 var file_proto_cdp_headlessbrowser_headlessbrowser_proto_depIdxs = []int32{
-	1,  // 0: cdp.headlessbrowser.AutomationSequence.steps:type_name -> cdp.headlessbrowser.AutomationStep
-	2,  // 1: cdp.headlessbrowser.AutomationStep.set_viewport:type_name -> cdp.headlessbrowser.SetViewport
-	3,  // 2: cdp.headlessbrowser.AutomationStep.navigate:type_name -> cdp.headlessbrowser.Navigate
-	4,  // 3: cdp.headlessbrowser.AutomationStep.wait:type_name -> cdp.headlessbrowser.Wait
-	5,  // 4: cdp.headlessbrowser.AutomationStep.screenshot:type_name -> cdp.headlessbrowser.Screenshot
-	6,  // 5: cdp.headlessbrowser.AutomationStep.evaluate_script:type_name -> cdp.headlessbrowser.EvaluateScript
-	7,  // 6: cdp.headlessbrowser.AutomationStep.click:type_name -> cdp.headlessbrowser.Click
-	8,  // 7: cdp.headlessbrowser.AutomationStep.type_text:type_name -> cdp.headlessbrowser.TypeText
-	9,  // 8: cdp.headlessbrowser.AutomationStep.wait_for_selector:type_name -> cdp.headlessbrowser.WaitForSelector
-	10, // 9: cdp.headlessbrowser.AutomationStep.reload:type_name -> cdp.headlessbrowser.Reload
-	11, // 10: cdp.headlessbrowser.AutomationStep.scroll_to:type_name -> cdp.headlessbrowser.ScrollTo
-	12, // 11: cdp.headlessbrowser.AutomationStep.type_key_by_key:type_name -> cdp.headlessbrowser.TypeKeyByKey
-	13, // 12: cdp.headlessbrowser.AutomationStep.press_key:type_name -> cdp.headlessbrowser.PressKey
-	14, // 13: cdp.headlessbrowser.AutomationStep.full_page_screenshot:type_name -> cdp.headlessbrowser.FullPageScreenshot
-	15, // 14: cdp.headlessbrowser.AutomationStep.open_tab:type_name -> cdp.headlessbrowser.OpenTab
-	16, // 15: cdp.headlessbrowser.AutomationStep.close_tab:type_name -> cdp.headlessbrowser.CloseTab
-	17, // 16: cdp.headlessbrowser.AutomationStep.switch_tab:type_name -> cdp.headlessbrowser.SwitchTab
-	18, // 17: cdp.headlessbrowser.AutomationStep.download_file:type_name -> cdp.headlessbrowser.DownloadFile
-	20, // 18: cdp.headlessbrowser.AutomationResult.step_results:type_name -> cdp.headlessbrowser.StepResult
-	0,  // 19: cdp.headlessbrowser.HeadlessBrowserService.RunAutomation:input_type -> cdp.headlessbrowser.AutomationSequence
-	1,  // 20: cdp.headlessbrowser.HeadlessBrowserService.ExecuteStep:input_type -> cdp.headlessbrowser.AutomationStep
-	19, // 21: cdp.headlessbrowser.HeadlessBrowserService.RunAutomation:output_type -> cdp.headlessbrowser.AutomationResult
-	20, // 22: cdp.headlessbrowser.HeadlessBrowserService.ExecuteStep:output_type -> cdp.headlessbrowser.StepResult
-	21, // [21:23] is the sub-list for method output_type
-	19, // [19:21] is the sub-list for method input_type
-	19, // [19:19] is the sub-list for extension type_name
-	19, // [19:19] is the sub-list for extension extendee
-	0,  // [0:19] is the sub-list for field type_name
+	8,  // 0: cdp.headlessbrowser.SessionRequest.step:type_name -> cdp.headlessbrowser.AutomationStep
+	2,  // 1: cdp.headlessbrowser.SessionRequest.reset:type_name -> cdp.headlessbrowser.ResetSession
+	3,  // 2: cdp.headlessbrowser.SessionRequest.ping:type_name -> cdp.headlessbrowser.Ping
+	5,  // 3: cdp.headlessbrowser.SessionResponse.ready:type_name -> cdp.headlessbrowser.SessionReady
+	27, // 4: cdp.headlessbrowser.SessionResponse.result:type_name -> cdp.headlessbrowser.StepResult
+	4,  // 5: cdp.headlessbrowser.SessionResponse.pong:type_name -> cdp.headlessbrowser.Pong
+	6,  // 6: cdp.headlessbrowser.SessionResponse.error:type_name -> cdp.headlessbrowser.SessionError
+	8,  // 7: cdp.headlessbrowser.AutomationSequence.steps:type_name -> cdp.headlessbrowser.AutomationStep
+	9,  // 8: cdp.headlessbrowser.AutomationStep.set_viewport:type_name -> cdp.headlessbrowser.SetViewport
+	10, // 9: cdp.headlessbrowser.AutomationStep.navigate:type_name -> cdp.headlessbrowser.Navigate
+	11, // 10: cdp.headlessbrowser.AutomationStep.wait:type_name -> cdp.headlessbrowser.Wait
+	12, // 11: cdp.headlessbrowser.AutomationStep.screenshot:type_name -> cdp.headlessbrowser.Screenshot
+	13, // 12: cdp.headlessbrowser.AutomationStep.evaluate_script:type_name -> cdp.headlessbrowser.EvaluateScript
+	14, // 13: cdp.headlessbrowser.AutomationStep.click:type_name -> cdp.headlessbrowser.Click
+	15, // 14: cdp.headlessbrowser.AutomationStep.type_text:type_name -> cdp.headlessbrowser.TypeText
+	16, // 15: cdp.headlessbrowser.AutomationStep.wait_for_selector:type_name -> cdp.headlessbrowser.WaitForSelector
+	17, // 16: cdp.headlessbrowser.AutomationStep.reload:type_name -> cdp.headlessbrowser.Reload
+	18, // 17: cdp.headlessbrowser.AutomationStep.scroll_to:type_name -> cdp.headlessbrowser.ScrollTo
+	19, // 18: cdp.headlessbrowser.AutomationStep.type_key_by_key:type_name -> cdp.headlessbrowser.TypeKeyByKey
+	20, // 19: cdp.headlessbrowser.AutomationStep.press_key:type_name -> cdp.headlessbrowser.PressKey
+	21, // 20: cdp.headlessbrowser.AutomationStep.full_page_screenshot:type_name -> cdp.headlessbrowser.FullPageScreenshot
+	22, // 21: cdp.headlessbrowser.AutomationStep.open_tab:type_name -> cdp.headlessbrowser.OpenTab
+	23, // 22: cdp.headlessbrowser.AutomationStep.close_tab:type_name -> cdp.headlessbrowser.CloseTab
+	24, // 23: cdp.headlessbrowser.AutomationStep.switch_tab:type_name -> cdp.headlessbrowser.SwitchTab
+	25, // 24: cdp.headlessbrowser.AutomationStep.download_file:type_name -> cdp.headlessbrowser.DownloadFile
+	27, // 25: cdp.headlessbrowser.AutomationResult.step_results:type_name -> cdp.headlessbrowser.StepResult
+	7,  // 26: cdp.headlessbrowser.HeadlessBrowserService.RunAutomation:input_type -> cdp.headlessbrowser.AutomationSequence
+	8,  // 27: cdp.headlessbrowser.HeadlessBrowserService.ExecuteStep:input_type -> cdp.headlessbrowser.AutomationStep
+	0,  // 28: cdp.headlessbrowser.InteractiveSessionService.Session:input_type -> cdp.headlessbrowser.SessionRequest
+	26, // 29: cdp.headlessbrowser.HeadlessBrowserService.RunAutomation:output_type -> cdp.headlessbrowser.AutomationResult
+	27, // 30: cdp.headlessbrowser.HeadlessBrowserService.ExecuteStep:output_type -> cdp.headlessbrowser.StepResult
+	1,  // 31: cdp.headlessbrowser.InteractiveSessionService.Session:output_type -> cdp.headlessbrowser.SessionResponse
+	29, // [29:32] is the sub-list for method output_type
+	26, // [26:29] is the sub-list for method input_type
+	26, // [26:26] is the sub-list for extension type_name
+	26, // [26:26] is the sub-list for extension extendee
+	0,  // [0:26] is the sub-list for field type_name
 }
 
 func init() { file_proto_cdp_headlessbrowser_headlessbrowser_proto_init() }
@@ -1645,7 +2120,18 @@ func file_proto_cdp_headlessbrowser_headlessbrowser_proto_init() {
 	if File_proto_cdp_headlessbrowser_headlessbrowser_proto != nil {
 		return
 	}
+	file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[0].OneofWrappers = []any{
+		(*SessionRequest_Step)(nil),
+		(*SessionRequest_Reset_)(nil),
+		(*SessionRequest_Ping)(nil),
+	}
 	file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[1].OneofWrappers = []any{
+		(*SessionResponse_Ready)(nil),
+		(*SessionResponse_Result)(nil),
+		(*SessionResponse_Pong)(nil),
+		(*SessionResponse_Error)(nil),
+	}
+	file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[8].OneofWrappers = []any{
 		(*AutomationStep_SetViewport)(nil),
 		(*AutomationStep_Navigate)(nil),
 		(*AutomationStep_Wait)(nil),
@@ -1670,9 +2156,9 @@ func file_proto_cdp_headlessbrowser_headlessbrowser_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDesc), len(file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   21,
+			NumMessages:   28,
 			NumExtensions: 0,
-			NumServices:   1,
+			NumServices:   2,
 		},
 		GoTypes:           file_proto_cdp_headlessbrowser_headlessbrowser_proto_goTypes,
 		DependencyIndexes: file_proto_cdp_headlessbrowser_headlessbrowser_proto_depIdxs,

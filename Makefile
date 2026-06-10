@@ -108,6 +108,15 @@ deploy:
 deploy-local:
 	INVOKER_AUTH=require ./scripts/deploy-local-image.sh
 
+# Deploy the interactive bidi service (concurrency=1). Run `make deploy` first to
+# build & push the image; this deploys it as a second service with --interactive.
+deploy-bidi:
+	INVOKER_AUTH=require ./scripts/deploy-bidi.sh
+
 # Clean build artifacts
 clean:
 	rm -rf bin/
+
+# Deploy the multi-process interactive pool service (concurrency=N).
+deploy-pool:
+	INVOKER_AUTH=require ./scripts/deploy-pool.sh

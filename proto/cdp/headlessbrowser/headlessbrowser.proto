@@ -16,6 +16,63 @@ service HeadlessBrowserService {
   rpc ExecuteStep(AutomationStep) returns (StepResult);
 }
 
+// InteractiveSessionService is a bidirectional-streaming interface for stateful,
+// interactive browser sessions. The client opens one Session stream, sends steps
+// one at a time (reacting to each result before sending the next), and the server
+// runs them against a single dedicated Chrome whose state PERSISTS for the life of
+// the stream. When the stream closes, the server recycles (kills and relaunches)
+// its Chrome child process, so the next client connecting to that instance gets a
+// completely fresh browser — providing process-level isolation between tenants.
+//
+// Intended deployment: a dedicated Cloud Run service with concurrency=1 so each
+// instance serves exactly one session at a time.
+service InteractiveSessionService {
+  rpc Session(stream SessionRequest) returns (stream SessionResponse);
+}
+
+// SessionRequest is one message a client sends on the Session stream.
+message SessionRequest {
+  // Client-chosen correlation id, echoed back on the matching SessionResponse.
+  uint64 id = 1;
+  oneof command {
+    // Run a single automation step against the persistent session.
+    AutomationStep step = 2;
+    // Explicitly wipe browser state mid-session (recycle Chrome now).
+    ResetSession reset = 3;
+    // Liveness check.
+    Ping ping = 4;
+  }
+}
+
+// SessionResponse is one message the server sends on the Session stream.
+message SessionResponse {
+  // Correlation id from the originating SessionRequest (0 for unsolicited events).
+  uint64 id = 1;
+  oneof event {
+    // Sent once when the session is ready to accept commands.
+    SessionReady ready = 2;
+    // Result of an AutomationStep.
+    StepResult result = 3;
+    // Reply to a Ping.
+    Pong pong = 4;
+    // A session-level error (the stream may continue or end after this).
+    SessionError error = 5;
+  }
+}
+
+message ResetSession {}
+message Ping {}
+message Pong {}
+
+message SessionReady {
+  // Opaque id for the session (for logging/correlation).
+  string session_id = 1;
+}
+
+message SessionError {
+  string message = 1;
+}
+
 // A complete automation sequence: an ordered list of steps.
 message AutomationSequence {
   string name = 1;

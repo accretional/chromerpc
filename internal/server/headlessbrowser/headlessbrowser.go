@@ -215,6 +215,26 @@ func (s *Server) ExecuteStep(ctx context.Context, req *pb.AutomationStep) (*pb.S
 	return result, nil
 }
 
+// ExecuteStepShared runs a single step against the client's default (persistent)
+// session, WITHOUT creating a per-call isolated browser context. State (cookies,
+// navigation, open tabs) carries across calls. Used by the interactive streaming
+// service, where one Chrome is dedicated to one client for the life of a stream
+// and isolation is achieved by recycling Chrome between streams instead.
+func (s *Server) ExecuteStepShared(ctx context.Context, step *pb.AutomationStep) *pb.StepResult {
+	label := step.Label
+	if label == "" {
+		label = "step"
+	}
+	// No runContext on ctx => send() routes to the client's default session.
+	res, err := s.executeStep(ctx, step)
+	if err != nil {
+		return &pb.StepResult{Label: label, Success: false, Error: err.Error()}
+	}
+	res.Label = label
+	res.Success = true
+	return res
+}
+
 func (s *Server) executeStep(ctx context.Context, step *pb.AutomationStep) (*pb.StepResult, error) {
 	switch a := step.Action.(type) {
 	case *pb.AutomationStep_SetViewport:
@@ -284,7 +304,10 @@ func (s *Server) doNavigate(ctx context.Context, n *pb.Navigate) (*pb.StepResult
 		timeout = 30 * time.Second
 	}
 
-	sid := ""
+	// Determine which session the load/network events will carry. With a
+	// runContext, it's that isolated session; otherwise it's the client's
+	// default (persistent) session — used by the interactive streaming service.
+	sid := s.client.SessionID()
 	if rc := runContextFrom(ctx); rc != nil {
 		sid = rc.sessionID
 	}
