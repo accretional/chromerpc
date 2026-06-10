@@ -173,6 +173,48 @@ WS_URL=$(curl -s http://127.0.0.1:9222/json/version | python3 -c \
 
 The server includes `--disable-blink-features=AutomationControlled` by default and supports `--user-agent` overrides.
 
+## Low-Level CDP Interface (all domains)
+
+`HeadlessBrowserService` is the high-level, ergonomic surface. Underneath, every
+Chrome DevTools Protocol domain is also exposed as its own gRPC service —
+`cdp.page.PageService`, `cdp.runtime.RuntimeService`, `cdp.network.NetworkService`,
+`cdp.dom.DOMService`, `cdp.input.InputService`, `cdp.target.TargetService`, and
+~50 more. Each method maps 1:1 to a CDP command (e.g.
+`PageService.CaptureScreenshot`, `NetworkService.SetCookie`,
+`RuntimeService.Evaluate`), and `PageService` alone has 46 methods.
+
+**gRPC reflection is enabled**, so you can discover the full surface without any
+local `.proto` files. Capabilities are **methods**, not services — listing
+services only gives you the ~55 domains; the actual ~**480 commands** live in the
+methods *inside* each service. Discovery has three levels:
+
+```bash
+grpcurl $ADDR list                                          # 1. all ~55 services (domains)
+grpcurl $ADDR list cdp.network.NetworkService               # 2. that domain's methods = capabilities
+grpcurl $ADDR describe cdp.network.NetworkService.SetCookie # 3. a method's request/response
+grpcurl $ADDR describe cdp.network.SetCookieRequest         #    a message's fields
+```
+
+To dump **every** method across every domain (the whole capability list):
+
+```bash
+for s in $(grpcurl $ADDR list | grep '^cdp\.'); do grpcurl $ADDR list "$s"; done
+```
+
+(Locally use `grpcurl -plaintext localhost:50051 …`; on Cloud Run add
+`-H "$AUTH"` and target `$HOST:443` — see below.)
+
+When to use which:
+
+- **`RunAutomation` (high-level)** — recommended default. Self-contained
+  sequences, and **each call is isolated** in its own browser context, so it's
+  safe under concurrency.
+- **Low-level domain services** — full, fine-grained CDP power for things the
+  step types don't cover. Note these currently share the **process-wide default
+  session** and are **not** per-call isolated, so they're best for single-session
+  or local use (or low, careful concurrency). For most automation, prefer
+  `RunAutomation`, and reach for the domains when you need a specific CDP command.
+
 ## Running on Cloud Run
 
 chromerpc ships as a self-contained container (Go server + bundled
