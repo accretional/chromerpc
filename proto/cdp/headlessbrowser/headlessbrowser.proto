@@ -100,6 +100,10 @@ message AutomationStep {
     CloseTab close_tab = 16;
     SwitchTab switch_tab = 17;
     DownloadFile download_file = 18;
+    Hover hover = 19;
+    PrintToPdf print_to_pdf = 20;
+    DispatchTouch touch = 21;
+    SetEmulatedMedia set_emulated_media = 22;
   }
 }
 
@@ -214,6 +218,43 @@ message SwitchTab {
 message DownloadFile {
   string url = 1;
   string output_path = 2;
+}
+
+// Move the mouse pointer over coordinates or a CSS selector (mouseMoved). This
+// updates the rendered cursor shape and fires :hover, without pressing.
+message Hover {
+  double x = 1;
+  double y = 2;
+  string selector = 3;
+}
+
+// Render the current page to a PDF on disk via Page.printToPDF. Used to capture
+// paged-media behaviour (page breaks, orphans/widows) that only exists when the
+// document is fragmented into pages.
+message PrintToPdf {
+  string output_path = 1;
+  bool print_background = 2;
+  bool prefer_css_page_size = 3;
+  double paper_width = 4;   // inches; 0 -> Chrome default (8.5)
+  double paper_height = 5;  // inches; 0 -> Chrome default (11)
+  double scale = 6;         // 0 -> 1.0
+}
+
+// Dispatch a touch pan gesture from a start point by (dx, dy) over the given
+// selector/coords, used to exercise touch-action. Emits touchStart, a few
+// touchMove steps, then touchEnd.
+message DispatchTouch {
+  double x = 1;
+  double y = 2;
+  string selector = 3;
+  double dx = 4;
+  double dy = 5;
+}
+
+// Override the page's emulated media type (e.g. "print", "screen") and/or
+// features via Emulation.setEmulatedMedia.
+message SetEmulatedMedia {
+  string media = 1;  // "print" | "screen" | "" to clear
 }
 
 // Result of a full automation sequence run.
