@@ -173,6 +173,121 @@ WS_URL=$(curl -s http://127.0.0.1:9222/json/version | python3 -c \
 
 The server includes `--disable-blink-features=AutomationControlled` by default and supports `--user-agent` overrides.
 
+## Running on Cloud Run
+
+chromerpc ships as a self-contained container (Go server + bundled
+`google-chrome-stable`) and runs on Google Cloud Run as a hosted gRPC service
+with reflection enabled. Full details — image/version tagging, IAM, scaling, and
+the dev workflow — are in [`DEPLOY.md`](DEPLOY.md).
+
+```bash
+gcloud auth login
+gcloud config set project <YOUR_PROJECT>
+make deploy            # Cloud Build -> Artifact Registry -> Cloud Run (IAM-gated)
+```
+
+Key properties of the deployed service:
+
+- **gRPC over TLS/HTTP2 on `:443`** (Cloud Run terminates TLS at the edge).
+- **IAM-gated** — every call needs a bearer identity token; unauthenticated
+  callers get `403`. (Deploy publicly with `INVOKER_AUTH=allow` only if you
+  accept that a public browser-automation endpoint is effectively an open
+  fetch/SSRF proxy.)
+- **Per-call isolation** — each `RunAutomation`/`ExecuteStep` runs in its own
+  incognito browser context, so concurrent calls don't share cookies/storage.
+- **Scale-to-zero, concurrency 8** — the first call after idle pays a cold start
+  (Chrome launch, a few seconds); subsequent calls are fast.
+
+### Calling the deployed service
+
+Set the endpoint and a token once (the principal must have `roles/run.invoker`):
+
+```bash
+HOST=$(gcloud run services describe chromerpc --region us-central1 \
+        --format='value(status.url)'); HOST=${HOST#https://}
+TOKEN=$(gcloud auth print-identity-token)
+AUTH="authorization: Bearer ${TOKEN}"
+```
+
+**Discover the API** (reflection is on — no local `.proto` needed):
+
+```bash
+grpcurl -H "$AUTH" $HOST:443 list
+grpcurl -H "$AUTH" $HOST:443 describe cdp.headlessbrowser.HeadlessBrowserService
+```
+
+**Run an automation and save the screenshot** (PNG bytes come back inline in
+`stepResults[].screenshotData`, base64):
+
+```bash
+grpcurl -H "$AUTH" -d '{
+  "steps": [
+    { "navigate": { "url": "https://example.com", "wait_until": "networkidle" } },
+    { "screenshot": { "format": "png" } }
+  ]
+}' $HOST:443 cdp.headlessbrowser.HeadlessBrowserService/RunAutomation \
+  | jq -r '.stepResults[]|select(.screenshotData).screenshotData' \
+  | base64 -d > out.png && open out.png
+```
+
+**Run a saved recipe** (handles textproto→JSON→call→save/open for you):
+
+```bash
+HOST=$HOST ./scripts/recipe-run.sh recipes/search_and_screenshot.textproto
+```
+
+See [`recipes/`](recipes/) for reusable playbooks (load-then-screenshot, search,
+dismiss-consent, scroll-to-lazy-load) and [`recipes/README.md`](recipes/README.md)
+for the building blocks.
+
+**Grant another caller** access:
+
+```bash
+gcloud run services add-iam-policy-binding chromerpc --region us-central1 \
+  --member 'user:someone@example.com' --role roles/run.invoker
+```
+
+### Calling from code (Go)
+
+Any gRPC client works — point it at `HOST:443` with **TLS** and attach a **bearer
+identity token per call**:
+
+```go
+import (
+    "crypto/tls"
+    "google.golang.org/grpc"
+    "google.golang.org/grpc/credentials"
+    "google.golang.org/grpc/credentials/oauth"
+    "google.golang.org/api/idtoken"
+    pb "github.com/accretional/chromerpc/proto/cdp/headlessbrowser"
+)
+
+audience := "https://" + host // the Cloud Run service URL
+ts, _ := idtoken.NewTokenSource(ctx, audience)        // service-account or ADC creds
+conn, _ := grpc.NewClient(host+":443",
+    grpc.WithTransportCredentials(credentials.NewTLS(&tls.Config{})),
+    grpc.WithPerRPCCredentials(oauth.TokenSource{TokenSource: ts}))
+defer conn.Close()
+
+client := pb.NewHeadlessBrowserServiceClient(conn)
+res, err := client.RunAutomation(ctx, &pb.AutomationSequence{
+    Steps: []*pb.AutomationStep{
+        {Action: &pb.AutomationStep_Navigate{Navigate: &pb.Navigate{
+            Url: "https://example.com", WaitUntil: "networkidle"}}},
+        {Action: &pb.AutomationStep_Screenshot{Screenshot: &pb.Screenshot{Format: "png"}}},
+    },
+})
+// res.StepResults[i].ScreenshotData holds the PNG bytes.
+```
+
+For other languages: open a TLS channel to `:443` and send an
+`authorization: Bearer <id-token>` metadata header on each RPC, using the
+service URL as the token audience.
+
+> Treat every call as a **self-contained, isolated session** — don't rely on
+> state (cookies, navigation, open tabs) persisting across calls; put the whole
+> flow (navigate → act → screenshot) in one `RunAutomation`.
+
 ## Chrome Testing
 
 The `chrome-testing/` folder contains a self-contained screenshot testing module. It handles the full lifecycle — building chromerpc, launching Chrome, serving HTML, capturing PNGs, and tearing down — in a single script.
