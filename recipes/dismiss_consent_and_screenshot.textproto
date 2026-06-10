@@ -1,0 +1,40 @@
+# Recipe: dismiss a cookie/consent banner, then screenshot.
+#
+# Consent UIs vary per site, so this uses a best-effort evaluate_script that
+# tries several common "accept" patterns and reports which (if any) it clicked
+# in step_results[].script_result. Tune the selectors for your target site.
+name: "dismiss_consent_and_screenshot"
+steps: {
+  label: "viewport"
+  set_viewport: { width: 1440 height: 900 device_scale_factor: 2 }
+}
+steps: {
+  label: "navigate"
+  navigate: { url: "https://www.cnn.com" wait_until: "networkidle" timeout_ms: 30000 }
+}
+steps: {
+  label: "dismiss_consent"
+  evaluate_script: {
+    expression:
+      "(function(){"
+      "  var sels = ["
+      "    '#onetrust-accept-btn-handler',"
+      "    'button[aria-label*=\"Accept\" i]',"
+      "    'button[title*=\"Accept\" i]',"
+      "    '[id*=\"accept\" i] button',"
+      "    'button[mode=\"primary\"]'"
+      "  ];"
+      "  for (var i=0;i<sels.length;i++){var b=document.querySelector(sels[i]);"
+      "    if(b){b.click();return 'clicked '+sels[i];}}"
+      "  return 'no-consent-button';"
+      "})()"
+  }
+}
+steps: {
+  label: "settle"
+  wait: { milliseconds: 1500 }
+}
+steps: {
+  label: "capture"
+  screenshot: { format: "png" }
+}

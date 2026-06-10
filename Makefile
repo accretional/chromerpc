@@ -1,4 +1,4 @@
-.PHONY: build test proto clean docker run
+.PHONY: build test proto clean docker run dev recipe deploy deploy-local
 
 # Build the chromerpc binary
 build:
@@ -85,6 +85,28 @@ run: build
 run-connect: build
 	@echo "Start Chrome with: google-chrome --remote-debugging-port=9222 --headless=new"
 	./bin/chromerpc --ws-url ws://127.0.0.1:9222/json/version --addr :50051
+
+# Fast inner loop: run the server locally against your local Chrome (no Docker,
+# no emulation). Use this to functionally test changes before deploying.
+dev:
+	go run ./cmd/chromerpc --headless --addr :50051
+
+# Run a recipe against a server. Defaults to the local server on :50051.
+# Override ADDR for a different local port; use scripts/recipe-run.sh for remote.
+#   make recipe RECIPE=recipes/search_and_screenshot.textproto
+recipe:
+	@test -n "$(RECIPE)" || { echo "usage: make recipe RECIPE=recipes/<file>.textproto"; exit 2; }
+	@go run ./cmd/recipe2json "$(RECIPE)" | \
+		grpcurl -plaintext -max-time 120 -d @ $(ADDR) cdp.headlessbrowser.HeadlessBrowserService/RunAutomation
+ADDR ?= localhost:50051
+
+# Deploy to Cloud Run. Default path is Cloud Build (native amd64, recommended on
+# Apple Silicon). deploy-local builds the image locally (see script for caveats).
+deploy:
+	INVOKER_AUTH=require ./scripts/deploy-cloudrun.sh
+
+deploy-local:
+	INVOKER_AUTH=require ./scripts/deploy-local-image.sh
 
 # Clean build artifacts
 clean:

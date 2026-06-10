@@ -1,0 +1,30 @@
+# Recipe: trigger lazy-loaded content by scrolling, then screenshot.
+#
+# Many sites defer images/sections until they scroll into view. This scrolls to
+# the bottom (loading lazy content), waits, scrolls back to the top, then takes a
+# full-page screenshot so the whole rendered page is captured.
+name: "scroll_to_load_lazy"
+steps: {
+  label: "viewport"
+  set_viewport: { width: 1440 height: 900 device_scale_factor: 2 }
+}
+steps: {
+  label: "navigate"
+  navigate: { url: "https://www.amazon.com" wait_until: "load" timeout_ms: 30000 }
+}
+steps: {
+  label: "scroll_to_bottom"
+  evaluate_script: { expression: "window.scrollTo(0, document.body.scrollHeight); document.body.scrollHeight" }
+}
+steps: {
+  label: "let_lazy_content_load"
+  wait: { milliseconds: 2500 }
+}
+steps: {
+  label: "scroll_to_top"
+  evaluate_script: { expression: "window.scrollTo(0, 0); ''" }
+}
+steps: {
+  label: "capture_full_page"
+  full_page_screenshot: { format: "png" }
+}

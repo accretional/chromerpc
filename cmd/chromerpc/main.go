@@ -3,11 +3,13 @@
 // Usage:
 //
 //	chromerpc [flags]
-//	  -addr       gRPC listen address (default ":50051")
-//	  -ws-url     Connect to existing CDP WebSocket URL (skip Chrome launch)
-//	  -chrome     Path to Chrome/Chromium binary
-//	  -headless   Run Chrome in headless mode (default true)
-//	  -port       Chrome remote debugging port (0=auto, default 0)
+//	  -addr                   gRPC listen address (default: :$PORT, else :50051)
+//	  -ws-url                 Connect to existing CDP WebSocket URL (skip Chrome launch)
+//	  -chrome                 Path to Chrome/Chromium binary
+//	  -headless               Run Chrome in headless mode (default true)
+//	  -port                   Chrome remote debugging port (0=auto, default 0)
+//	  -no-sandbox             Pass --no-sandbox to Chrome (required on Cloud Run)
+//	  -disable-dev-shm-usage  Pass --disable-dev-shm-usage to Chrome
 package main
 
 import (
@@ -138,13 +140,26 @@ import (
 )
 
 func main() {
-	addr := flag.String("addr", ":50051", "gRPC listen address")
+	addr := flag.String("addr", "", "gRPC listen address (default: :$PORT, else :50051)")
 	wsURL := flag.String("ws-url", "", "CDP WebSocket URL (skip Chrome launch)")
 	chromePath := flag.String("chrome", "", "Path to Chrome/Chromium binary")
 	headless := flag.Bool("headless", true, "Run Chrome in headless mode")
 	port := flag.Int("port", 0, "Chrome remote debugging port (0=auto)")
 	userAgent := flag.String("user-agent", "", "Override Chrome user agent string")
+	noSandbox := flag.Bool("no-sandbox", false, "Pass --no-sandbox to Chrome (required in restricted sandboxes like Cloud Run)")
+	disableDevShmUsage := flag.Bool("disable-dev-shm-usage", false, "Pass --disable-dev-shm-usage to Chrome (avoid small /dev/shm in containers)")
 	flag.Parse()
+
+	// Resolve the listen address. Cloud Run (and similar platforms) inject the
+	// port to listen on via the PORT env var; honor it when -addr is not set.
+	listenAddr := *addr
+	if listenAddr == "" {
+		if p := os.Getenv("PORT"); p != "" {
+			listenAddr = ":" + p
+		} else {
+			listenAddr = ":50051"
+		}
+	}
 
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
@@ -165,6 +180,13 @@ func main() {
 	}
 	// Always add anti-detection flags.
 	extraArgs = append(extraArgs, "--disable-blink-features=AutomationControlled")
+	// Container/Cloud Run hardening flags.
+	if *noSandbox {
+		extraArgs = append(extraArgs, "--no-sandbox")
+	}
+	if *disableDevShmUsage {
+		extraArgs = append(extraArgs, "--disable-dev-shm-usage")
+	}
 
 	client, launchResult, err := cdpclient.ConnectOrLaunch(ctx, *wsURL, cdpclient.LaunchConfig{
 		ChromePath: *chromePath,
@@ -208,9 +230,9 @@ func main() {
 	}
 
 	// Start gRPC server.
-	lis, err := net.Listen("tcp", *addr)
+	lis, err := net.Listen("tcp", listenAddr)
 	if err != nil {
-		log.Fatalf("Failed to listen on %s: %v", *addr, err)
+		log.Fatalf("Failed to listen on %s: %v", listenAddr, err)
 	}
 
 	grpcServer := grpc.NewServer()
@@ -273,7 +295,7 @@ func main() {
 	// Enable gRPC reflection for tools like grpcurl.
 	reflection.Register(grpcServer)
 
-	log.Printf("gRPC server listening on %s", *addr)
+	log.Printf("gRPC server listening on %s", listenAddr)
 
 	// Shutdown on context cancellation.
 	go func() {

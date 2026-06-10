@@ -45,8 +45,12 @@ RUN useradd -m -s /bin/bash chromerpc
 USER chromerpc
 WORKDIR /home/chromerpc
 
-# gRPC port
-EXPOSE 50051
+# gRPC port. Cloud Run injects $PORT (8080) and the server honors it; this is
+# informational. Locally the server falls back to :50051 when PORT is unset.
+EXPOSE 8080
 
 ENTRYPOINT ["chromerpc"]
-CMD ["--headless", "--addr", ":50051"]
+# No --addr: the server listens on :$PORT (Cloud Run) or :50051 (local default).
+# --no-sandbox / --disable-dev-shm-usage are required in restricted sandboxes
+# such as Cloud Run, which cannot grant SYS_ADMIN or a large /dev/shm.
+CMD ["--headless", "--no-sandbox", "--disable-dev-shm-usage"]

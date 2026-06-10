@@ -1,0 +1,14 @@
+# Keep the build context small and the image build hermetic. The Go build runs
+# inside the builder stage from source; none of these are needed.
+.git
+.github
+.DS_Store
+**/.DS_Store
+bin/
+*.md
+docker-compose.yml
+cloudbuild.yaml
+scripts/
+chrome-testing/
+automations/*/output/
+**/*_test.go

@@ -1,0 +1,52 @@
+# Recipe: search a site's search box and screenshot the results page.
+#
+# Example: search "nvidia 6000" on Amazon.
+#   1. Load the homepage (networkidle).
+#   2. Wait for the search box, type the query into it.
+#   3. Press Enter to submit.
+#   4. Wait for a result element to render, then screenshot.
+#
+# Note: a fresh isolated context has no cookies, so sites with aggressive bot
+# detection (Amazon included) may serve a CAPTCHA/"continue shopping" wall
+# instead of results. If that happens, see dismiss_consent_and_screenshot for
+# the click-through pattern, or retry.
+name: "search_nvidia_6000_amazon"
+steps: {
+  label: "viewport"
+  set_viewport: { width: 1440 height: 900 device_scale_factor: 2 }
+}
+steps: {
+  label: "open_amazon"
+  navigate: { url: "https://www.amazon.com" wait_until: "networkidle" timeout_ms: 30000 }
+}
+steps: {
+  label: "wait_for_search_box"
+  wait_for_selector: { selector: "#twotabsearchtextbox" timeout_ms: 10000 }
+}
+steps: {
+  label: "type_query"
+  type_text: { selector: "#twotabsearchtextbox" text: "nvidia 6000" }
+}
+# Note: Input.insertText fills the box but a synthetic Enter often does NOT submit
+# the form, so click the search button (fall back to submitting the form).
+steps: {
+  label: "submit"
+  evaluate_script: {
+    expression:
+      "(function(){"
+      "  var b=document.querySelector('#nav-search-submit-button');"
+      "  if(b){b.click();return 'clicked-button';}"
+      "  var f=document.querySelector('form[role=search]')||document.querySelector('#nav-search-bar-form');"
+      "  if(f){f.submit();return 'form-submit';}"
+      "  return 'no-submit';"
+      "})()"
+  }
+}
+steps: {
+  label: "wait_for_results"
+  wait_for_selector: { selector: "[data-component-type=\"s-search-result\"]" timeout_ms: 15000 }
+}
+steps: {
+  label: "capture"
+  screenshot: { format: "png" }
+}

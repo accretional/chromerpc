@@ -1,5 +1,12 @@
 # Binaries
 bin/
+# Stray top-level build artifacts (go build ./cmd/... without -o)
+/chromerpc
+/recipe2json
 
 # Temp files
 temp/
+
+# macOS
+.DS_Store
+**/.DS_Store

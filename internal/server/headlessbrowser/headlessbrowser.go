@@ -11,6 +11,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/accretional/chromerpc/internal/cdpclient"
@@ -28,7 +29,35 @@ func New(client *cdpclient.Client) *Server {
 	return &Server{client: client}
 }
 
+// runContext holds the per-call isolation state: a dedicated incognito browser
+// context and the currently-active page session within it. It is carried on the
+// request context so the existing send() calls route to the right session, and
+// switch_tab can mutate the active session mid-sequence. Each RunAutomation /
+// ExecuteStep call gets its own runContext, giving cookie/storage/cache
+// isolation between concurrent calls and between consecutive calls.
+type runContext struct {
+	browserContextID string // empty => fell back to the shared default session
+	sessionID        string // active page session for send()
+}
+
+type rcCtxKey struct{}
+
+func withRunContext(ctx context.Context, rc *runContext) context.Context {
+	return context.WithValue(ctx, rcCtxKey{}, rc)
+}
+
+func runContextFrom(ctx context.Context) *runContext {
+	rc, _ := ctx.Value(rcCtxKey{}).(*runContext)
+	return rc
+}
+
+// send dispatches a CDP command. When the request carries a runContext it routes
+// to that call's isolated page session; otherwise it falls back to the client's
+// shared default session (used by the low-level per-domain services).
 func (s *Server) send(ctx context.Context, method string, params interface{}) (json.RawMessage, error) {
+	if rc := runContextFrom(ctx); rc != nil && rc.sessionID != "" {
+		return s.client.SendWithSession(ctx, method, params, rc.sessionID)
+	}
 	return s.client.Send(ctx, method, params)
 }
 
@@ -44,9 +73,91 @@ func (s *Server) sendBrowser(ctx context.Context, method string, params interfac
 	return s.client.SendWithSession(ctx, method, params, "")
 }
 
+// newRunContext creates an isolated incognito browser context with a fresh
+// about:blank page target and attaches to it. If the browser does not support
+// browser contexts (or creation fails) it degrades gracefully to the shared
+// default session with no isolation.
+func (s *Server) newRunContext(ctx context.Context) *runContext {
+	bcRes, err := s.sendBrowser(ctx, "Target.createBrowserContext", map[string]interface{}{
+		"disposeOnDetach": false,
+	})
+	if err != nil {
+		log.Printf("isolation: createBrowserContext failed (%v); using shared session", err)
+		return &runContext{sessionID: s.client.SessionID()}
+	}
+	var bc struct {
+		BrowserContextID string `json:"browserContextId"`
+	}
+	if err := json.Unmarshal(bcRes, &bc); err != nil || bc.BrowserContextID == "" {
+		log.Printf("isolation: bad createBrowserContext response (%v); using shared session", err)
+		return &runContext{sessionID: s.client.SessionID()}
+	}
+
+	rc := &runContext{browserContextID: bc.BrowserContextID}
+
+	tRes, err := s.sendBrowser(ctx, "Target.createTarget", map[string]interface{}{
+		"url":              "about:blank",
+		"browserContextId": bc.BrowserContextID,
+	})
+	if err != nil {
+		log.Printf("isolation: createTarget failed (%v); using shared session", err)
+		s.disposeRunContext(rc)
+		return &runContext{sessionID: s.client.SessionID()}
+	}
+	var t struct {
+		TargetID string `json:"targetId"`
+	}
+	if err := json.Unmarshal(tRes, &t); err != nil || t.TargetID == "" {
+		s.disposeRunContext(rc)
+		return &runContext{sessionID: s.client.SessionID()}
+	}
+
+	aRes, err := s.sendBrowser(ctx, "Target.attachToTarget", map[string]interface{}{
+		"targetId": t.TargetID,
+		"flatten":  true,
+	})
+	if err != nil {
+		log.Printf("isolation: attachToTarget failed (%v); using shared session", err)
+		s.disposeRunContext(rc)
+		return &runContext{sessionID: s.client.SessionID()}
+	}
+	var a struct {
+		SessionID string `json:"sessionId"`
+	}
+	if err := json.Unmarshal(aRes, &a); err != nil || a.SessionID == "" {
+		s.disposeRunContext(rc)
+		return &runContext{sessionID: s.client.SessionID()}
+	}
+
+	rc.sessionID = a.SessionID
+	return rc
+}
+
+// disposeRunContext tears down the isolated browser context (and all targets,
+// cookies, and storage within it). It uses a detached context so cleanup still
+// runs if the request was cancelled.
+func (s *Server) disposeRunContext(rc *runContext) {
+	if rc == nil || rc.browserContextID == "" {
+		return
+	}
+	dctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	if _, err := s.sendBrowser(dctx, "Target.disposeBrowserContext", map[string]interface{}{
+		"browserContextId": rc.browserContextID,
+	}); err != nil {
+		log.Printf("isolation: disposeBrowserContext: %v", err)
+	}
+}
+
 // RunAutomation executes a sequence of automation steps in order.
 func (s *Server) RunAutomation(ctx context.Context, req *pb.AutomationSequence) (*pb.AutomationResult, error) {
 	log.Printf("Running automation: %s (%d steps)", req.Name, len(req.Steps))
+
+	// Each automation runs in its own isolated browser context so that
+	// concurrent and consecutive calls do not share cookies, storage, or tabs.
+	rc := s.newRunContext(ctx)
+	defer s.disposeRunContext(rc)
+	ctx = withRunContext(ctx, rc)
 
 	result := &pb.AutomationResult{Success: true}
 
@@ -85,6 +196,11 @@ func (s *Server) ExecuteStep(ctx context.Context, req *pb.AutomationStep) (*pb.S
 	if label == "" {
 		label = "step"
 	}
+
+	// A single step is its own isolated session under the stateless contract.
+	rc := s.newRunContext(ctx)
+	defer s.disposeRunContext(rc)
+	ctx = withRunContext(ctx, rc)
 
 	result, err := s.executeStep(ctx, req)
 	if err != nil {
@@ -162,6 +278,46 @@ func (s *Server) doNavigate(ctx context.Context, n *pb.Navigate) (*pb.StepResult
 		return nil, fmt.Errorf("Page.enable: %w", err)
 	}
 
+	wu := strings.ToLower(strings.TrimSpace(n.WaitUntil))
+	timeout := time.Duration(n.TimeoutMs) * time.Millisecond
+	if timeout <= 0 {
+		timeout = 30 * time.Second
+	}
+
+	sid := ""
+	if rc := runContextFrom(ctx); rc != nil {
+		sid = rc.sessionID
+	}
+
+	// Register load-event and network-idle tracking BEFORE navigating so fast
+	// events are not missed.
+	var (
+		loadCh chan struct{}
+		idle   *networkIdleTracker
+	)
+	switch wu {
+	case "", "commit":
+		// no waiting setup needed
+	case "load", "networkidle":
+		loadCh = make(chan struct{})
+		var once sync.Once
+		unsub := s.client.On("Page.loadEventFired", func(_ string, _ json.RawMessage, evSid string) {
+			if evSid == sid {
+				once.Do(func() { close(loadCh) })
+			}
+		})
+		defer unsub()
+		if wu == "networkidle" {
+			if _, err := s.send(ctx, "Network.enable", nil); err != nil {
+				return nil, fmt.Errorf("Network.enable: %w", err)
+			}
+			idle = s.newNetworkIdleTracker(sid)
+			defer idle.stop()
+		}
+	default:
+		return nil, fmt.Errorf("unknown wait_until %q (use commit|load|networkidle)", wu)
+	}
+
 	params := map[string]interface{}{"url": n.Url}
 	result, err := s.send(ctx, "Page.navigate", params)
 	if err != nil {
@@ -177,7 +333,101 @@ func (s *Server) doNavigate(ctx context.Context, n *pb.Navigate) (*pb.StepResult
 	if resp.ErrorText != "" {
 		return nil, fmt.Errorf("navigation error: %s", resp.ErrorText)
 	}
+
+	// Wait for the requested completion signal (best-effort: a timeout is not
+	// treated as a navigation failure).
+	switch wu {
+	case "load":
+		waitForSignal(ctx, loadCh, timeout)
+	case "networkidle":
+		waitForSignal(ctx, loadCh, timeout)
+		idle.wait(ctx, 500*time.Millisecond, timeout)
+	}
 	return &pb.StepResult{}, nil
+}
+
+// waitForSignal blocks until ch is closed, the timeout elapses, or ctx is done.
+func waitForSignal(ctx context.Context, ch chan struct{}, timeout time.Duration) {
+	if ch == nil {
+		return
+	}
+	timer := time.NewTimer(timeout)
+	defer timer.Stop()
+	select {
+	case <-ch:
+	case <-timer.C:
+	case <-ctx.Done():
+	}
+}
+
+// networkIdleTracker counts in-flight network requests for a session so callers
+// can wait until the network goes quiet.
+type networkIdleTracker struct {
+	mu       sync.Mutex
+	inflight int
+	lastZero time.Time
+	unsub    []func()
+}
+
+func (s *Server) newNetworkIdleTracker(sid string) *networkIdleTracker {
+	t := &networkIdleTracker{lastZero: time.Now()}
+	inc := func(_ string, _ json.RawMessage, evSid string) {
+		if evSid != sid {
+			return
+		}
+		t.mu.Lock()
+		t.inflight++
+		t.mu.Unlock()
+	}
+	dec := func(_ string, _ json.RawMessage, evSid string) {
+		if evSid != sid {
+			return
+		}
+		t.mu.Lock()
+		if t.inflight > 0 {
+			t.inflight--
+		}
+		if t.inflight == 0 {
+			t.lastZero = time.Now()
+		}
+		t.mu.Unlock()
+	}
+	t.unsub = append(t.unsub,
+		s.client.On("Network.requestWillBeSent", inc),
+		s.client.On("Network.loadingFinished", dec),
+		s.client.On("Network.loadingFailed", dec),
+	)
+	return t
+}
+
+func (t *networkIdleTracker) stop() {
+	for _, u := range t.unsub {
+		u()
+	}
+}
+
+// wait blocks until the network has been idle (zero in-flight requests) for at
+// least quiet, or until the timeout elapses / ctx is done.
+func (t *networkIdleTracker) wait(ctx context.Context, quiet, timeout time.Duration) {
+	deadline := time.Now().Add(timeout)
+	ticker := time.NewTicker(50 * time.Millisecond)
+	defer ticker.Stop()
+	for {
+		select {
+		case <-ctx.Done():
+			return
+		case <-ticker.C:
+			t.mu.Lock()
+			idleFor := time.Duration(0)
+			if t.inflight == 0 {
+				idleFor = time.Since(t.lastZero)
+			}
+			t.mu.Unlock()
+			if idleFor >= quiet || time.Now().After(deadline) {
+				return
+			}
+		}
+	}
 }
 
 func (s *Server) doWait(_ context.Context, w *pb.Wait) (*pb.StepResult, error) {
@@ -563,6 +813,11 @@ func (s *Server) doOpenTab(ctx context.Context, ot *pb.OpenTab) (*pb.StepResult,
 	params := map[string]interface{}{
 		"url": ot.Url,
 	}
+	// Open the tab inside the call's isolated context so it shares cookies/
+	// storage with the rest of the sequence and is cleaned up on disposal.
+	if rc := runContextFrom(ctx); rc != nil && rc.browserContextID != "" {
+		params["browserContextId"] = rc.browserContextID
+	}
 	result, err := s.sendBrowser(ctx, "Target.createTarget", params)
 	if err != nil {
 		return nil, fmt.Errorf("Target.createTarget: %w", err)
@@ -613,7 +868,13 @@ func (s *Server) doSwitchTab(ctx context.Context, st *pb.SwitchTab) (*pb.StepRes
 		return nil, fmt.Errorf("unmarshal attach: %w", err)
 	}
 
-	s.client.SetSessionID(resp.SessionID)
+	// Switch the active session for this call. When isolated, mutate the
+	// per-call runContext; otherwise fall back to the shared default session.
+	if rc := runContextFrom(ctx); rc != nil {
+		rc.sessionID = resp.SessionID
+	} else {
+		s.client.SetSessionID(resp.SessionID)
+	}
 	log.Printf("    Switched to tab %s (session %s)", st.TargetId, resp.SessionID)
 	return &pb.StepResult{ScriptResult: resp.SessionID}, nil
 }
@@ -627,10 +888,12 @@ func (s *Server) doDownloadFile(ctx context.Context, df *pb.DownloadFile) (*pb.S
 		return nil, fmt.Errorf("mkdir: %w", err)
 	}
 
-	// Open the URL in a new tab.
-	createResult, err := s.sendBrowser(ctx, "Target.createTarget", map[string]interface{}{
-		"url": df.Url,
-	})
+	// Open the URL in a new tab, inside the call's isolated context when present.
+	createParams := map[string]interface{}{"url": df.Url}
+	if rc := runContextFrom(ctx); rc != nil && rc.browserContextID != "" {
+		createParams["browserContextId"] = rc.browserContextID
+	}
+	createResult, err := s.sendBrowser(ctx, "Target.createTarget", createParams)
 	if err != nil {
 		return nil, fmt.Errorf("create tab: %w", err)
 	}

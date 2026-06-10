@@ -57,6 +57,15 @@ message SetViewport {
 // Navigate to a URL.
 message Navigate {
   string url = 1;
+  // wait_until controls when navigation is considered complete:
+  //   "" / "commit"  - return as soon as navigation is committed (default)
+  //   "load"         - wait for the page 'load' event
+  //   "networkidle"  - wait for 'load', then until network is idle (~500ms with
+  //                    no in-flight requests)
+  string wait_until = 2;
+  // timeout_ms bounds the wait_until wait. Default 30000. On timeout, navigation
+  // is treated as successful (best-effort) rather than failing the step.
+  int32 timeout_ms = 3;
 }
 
 // Wait for a fixed duration.

@@ -1,0 +1,18 @@
+# Recipe: screenshot a page after it has fully loaded.
+#
+# Uses wait_until: "networkidle" so the server blocks until the load event fires
+# AND the network goes quiet (~500ms with no in-flight requests) before the
+# screenshot. This replaces hand-tuned "wait" steps for content-heavy pages.
+name: "screenshot_after_load"
+steps: {
+  label: "viewport"
+  set_viewport: { width: 1440 height: 900 device_scale_factor: 2 }
+}
+steps: {
+  label: "navigate_and_wait"
+  navigate: { url: "https://www.cloudflare.com" wait_until: "networkidle" timeout_ms: 30000 }
+}
+steps: {
+  label: "capture"
+  screenshot: { format: "png" }
+}

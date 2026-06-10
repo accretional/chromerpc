@@ -73,10 +73,11 @@ type Client struct {
 	ready   chan struct{}
 	readyMu sync.Mutex
 
-	eventMu   sync.RWMutex
-	handlers  map[string][]EventHandler // keyed by method name
-	wildcard  []EventHandler            // handlers for all events
-	sessionID string                    // default session ID for flat mode
+	eventMu      sync.RWMutex
+	handlers     map[string][]handlerEntry // keyed by method name
+	wildcard     []EventHandler            // handlers for all events
+	nextHandler  atomic.Int64              // ids for handler (de)registration
+	sessionID    string                    // default session ID for flat mode
 
 	userClosed atomic.Bool // true when Close() is called intentionally
 
@@ -106,7 +107,7 @@ func Dial(ctx context.Context, wsURL string) (*Client, error) {
 		pending:  make(map[int64]*pendingCommand),
 		closed:   make(chan struct{}),
 		ready:    ready,
-		handlers: make(map[string][]EventHandler),
+		handlers: make(map[string][]handlerEntry),
 	}
 
 	go c.readLoop()
@@ -281,19 +282,27 @@ func (c *Client) SendWithSession(ctx context.Context, method string, params inte
 	}
 }
 
+// handlerEntry pairs an event handler with a unique id so it can be reliably
+// unregistered (Go funcs are not comparable, so we key on the id).
+type handlerEntry struct {
+	id int64
+	fn EventHandler
+}
+
 // On registers an event handler for a specific CDP event method.
 // Returns a function to unregister the handler.
 func (c *Client) On(method string, handler EventHandler) func() {
+	id := c.nextHandler.Add(1)
 	c.eventMu.Lock()
-	defer c.eventMu.Unlock()
-	c.handlers[method] = append(c.handlers[method], handler)
+	c.handlers[method] = append(c.handlers[method], handlerEntry{id: id, fn: handler})
+	c.eventMu.Unlock()
 	return func() {
 		c.eventMu.Lock()
 		defer c.eventMu.Unlock()
-		handlers := c.handlers[method]
-		for i, h := range handlers {
-			if &h == &handler {
-				c.handlers[method] = append(handlers[:i], handlers[i+1:]...)
+		entries := c.handlers[method]
+		for i, e := range entries {
+			if e.id == id {
+				c.handlers[method] = append(entries[:i], entries[i+1:]...)
 				break
 			}
 		}
@@ -494,8 +503,11 @@ func (c *Client) reconnectLoop() {
 // dispatchEvent calls registered event handlers.
 func (c *Client) dispatchEvent(method string, params json.RawMessage, sessionID string) {
 	c.eventMu.RLock()
-	handlers := make([]EventHandler, 0, len(c.handlers[method])+len(c.wildcard))
-	handlers = append(handlers, c.handlers[method]...)
+	entries := c.handlers[method]
+	handlers := make([]EventHandler, 0, len(entries)+len(c.wildcard))
+	for _, e := range entries {
+		handlers = append(handlers, e.fn)
+	}
 	handlers = append(handlers, c.wildcard...)
 	c.eventMu.RUnlock()
 

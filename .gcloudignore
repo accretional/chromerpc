@@ -1,0 +1,6 @@
+# Files not uploaded to Cloud Build. Keep source + Dockerfile + cloudbuild.yaml.
+.git
+.gitignore
+.DS_Store
+**/.DS_Store
+bin/
