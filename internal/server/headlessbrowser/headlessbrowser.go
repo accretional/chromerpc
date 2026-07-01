@@ -279,6 +279,8 @@ func (s *Server) executeStep(ctx context.Context, step *pb.AutomationStep) (*pb.
 		return s.doTouch(ctx, a.Touch)
 	case *pb.AutomationStep_SetEmulatedMedia:
 		return s.doSetEmulatedMedia(ctx, a.SetEmulatedMedia)
+	case *pb.AutomationStep_Record:
+		return s.doRecord(ctx, a.Record)
 	default:
 		return nil, fmt.Errorf("unknown action type")
 	}

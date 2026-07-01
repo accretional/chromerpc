@@ -98,6 +98,7 @@ go run ./cmd/automate -input my_automation.textproto
 | `wait` | Pause for a fixed duration | `milliseconds` |
 | `screenshot` | Capture the visible page as an image | `output_path`, `format` (png/jpeg), `quality`, `full_page` |
 | `full_page_screenshot` | Capture the entire scrollable page | `output_path`, `format`, `quality` |
+| `record` | Record an **audio+visual** capture of the tab to a video file | `output_path`, `audio_path`, `pre_delay_ms`, `max_duration_ms`, `stop_condition`, `start_script`, `output_fps` |
 | `evaluate_script` | Run JavaScript in the page | `expression` |
 | `click` | Click at coordinates or a CSS selector | `x`, `y`, `selector` |
 | `type_text` | Insert text into a focused element or selector | `text`, `selector` |
@@ -142,6 +143,53 @@ The server manages CDP sessions internally via `Target.attachToTarget` with `fla
 ### File Downloads
 
 The `download_file` step handles browser-native downloads. It opens the URL in a new tab, sets `Browser.setDownloadBehavior` to auto-save to the output directory, finds and clicks the download button (supporting pdf.js viewer's `#download` button, generic download buttons, and `<a download>` links), then waits for the file to appear on disk. This preserves the browser's cookies and session, avoiding issues with authenticated or CDN-protected resources.
+
+### Audio + Visual Recording
+
+The `record` step captures an **audio+visual** recording of the current tab to a
+video file (WebM/MP4) on the server.
+
+- **Video** is captured with `Page.startScreencast` — real rendered frames, so it
+  works on **any** page (DOM, SVG, canvas) in headless Chrome. Frames arrive at
+  the page's actual repaint rate, which in headless is bounded by page weight and
+  how often the page repaints (a media page driven by `ontimeupdate` repaints only
+  a few times/second; a light page screencasts faster).
+- **Audio** is muxed in from a caller-supplied source file (`audio_path`) with
+  **ffmpeg**. Headless Chrome exposes **no** way to capture the tab's own audio
+  over CDP — there is no tab-audio-capture command, screencast is video-only, and
+  `getDisplayMedia`/`chrome.tabCapture` need a GUI/extension/user gesture or a
+  real audio device. Muxing the *source* audio is exact (not a lossy
+  re-recording) and is the natural model whenever you already own the audio you
+  fed the page. Omit `audio_path` for a video-only clip.
+
+Lifecycle: enable Page → wait `pre_delay_ms` → run `start_script` (e.g. begin
+playback) → screencast → collect frames until a **stop condition**:
+`max_duration_ms` elapses, `stop_condition` (a polled JS expression) returns
+truthy, **or** the request context is cancelled (e.g. the interactive bidi stream
+disconnects — the partial recording is still encoded and written). The step
+returns a JSON summary in `script_result`:
+`{"output","bytes","frames","video_seconds","has_audio","stop":"max_duration|stop_condition|disconnect"}`.
+
+Requirements: **ffmpeg** on the server's `PATH`, and — to let `start_script`
+begin `<audio>`/`<video>` playback without a user gesture — run the server with
+**`--autoplay`** (adds `--autoplay-policy=no-user-gesture-required`). Paths in
+`output_path`/`audio_path` are on the **server's** filesystem, so this is best on
+the local/bidi path rather than the stateless Cloud Run deployment. Container
+format is inferred from the extension (`.mp4` → H.264/AAC, `.webm` → VP9/Opus).
+
+```json
+{ "record": {
+    "output_path": "out/clip.mp4",
+    "audio_path": "source.wav",
+    "pre_delay_ms": 400,
+    "max_duration_ms": 12000,
+    "start_script": "document.querySelector('audio,video').play()",
+    "stop_condition": "document.querySelector('audio,video').ended",
+    "output_fps": 30
+} }
+```
+
+See [`recipes/record_av.textproto`](recipes/record_av.textproto).
 
 ### Modularity
 

@@ -16,6 +16,7 @@ is why anti-bot/consent walls show up (see notes per recipe).
 | `search_and_screenshot.textproto` | Type a query into a site's search box, submit, wait for results, screenshot. |
 | `dismiss_consent_and_screenshot.textproto` | Click a cookie/consent banner via JS, then screenshot. |
 | `scroll_to_load_lazy.textproto` | Scroll down to trigger lazy-loaded content/images, then screenshot. |
+| `record_av.textproto` | Record an **audio+visual** capture of a page to a video file (screencast video + ffmpeg-muxed source audio). |
 
 ## Key building blocks
 
@@ -34,6 +35,15 @@ is why anti-bot/consent walls show up (see notes per recipe).
   the PNG bytes back in `step_results[].screenshot_data` (the right choice for the
   stateless Cloud Run deployment; `output_path` writes to the container's
   ephemeral disk).
+- **`record { output_path, audio_path, pre_delay_ms, max_duration_ms,
+  stop_condition, start_script, output_fps }`** — record an audio+visual clip to
+  a video file on the server. Video is captured with `Page.startScreencast`
+  (real frames, any page); audio is muxed from `audio_path` with ffmpeg (headless
+  Chrome exposes no tab-audio capture over CDP). Stops on `stop_condition` (a
+  polled JS expression), `max_duration_ms`, or context cancellation. Needs
+  **ffmpeg** on the server and the server run with **`--autoplay`** to script
+  playback. Returns a JSON summary in `step_results[].script_result`. Best on the
+  local/bidi path, not stateless Cloud Run (writes to the server's disk).
 
 ## Running a recipe
 
