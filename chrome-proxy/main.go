@@ -35,6 +35,7 @@
 package main
 
 import (
+	"bytes"
 	"context"
 	"crypto/tls"
 	"encoding/json"
@@ -56,6 +57,7 @@ import (
 	"google.golang.org/protobuf/encoding/protojson"
 
 	pb "github.com/accretional/chromerpc/proto/cdp/headlessbrowser"
+	cmpb "github.com/accretional/chromerpc/proto/chromeman"
 )
 
 type proxy struct {
@@ -64,6 +66,9 @@ type proxy struct {
 	shotsDir string
 	stepN    int
 	shotN    int
+
+	store  *histStore // records calls/media for the ChromeMan monitoring UI
+	connID uint32     // this proxy's single connection id in the store
 }
 
 type stepResultJSON struct {
@@ -81,13 +86,9 @@ func (p *proxy) runSteps(steps []*pb.AutomationStep) ([]stepResultJSON, error) {
 	defer p.mu.Unlock()
 	out := make([]stepResultJSON, 0, len(steps))
 	for _, st := range steps {
-		p.stepN++
-		if err := p.stream.Send(&pb.SessionRequest{Id: uint64(p.stepN), Command: &pb.SessionRequest_Step{Step: st}}); err != nil {
-			return out, fmt.Errorf("send: %w", err)
-		}
-		resp, err := p.stream.Recv()
+		resp, err := p.exchange(st)
 		if err != nil {
-			return out, fmt.Errorf("recv: %w", err)
+			return out, err
 		}
 		r := stepResultJSON{Index: p.stepN}
 		if e := resp.GetError(); e != nil {
@@ -127,13 +128,9 @@ func (p *proxy) runSteps(steps []*pb.AutomationStep) ([]stepResultJSON, error) {
 func (p *proxy) sendStep(st *pb.AutomationStep) (*pb.StepResult, error) {
 	p.mu.Lock()
 	defer p.mu.Unlock()
-	p.stepN++
-	if err := p.stream.Send(&pb.SessionRequest{Id: uint64(p.stepN), Command: &pb.SessionRequest_Step{Step: st}}); err != nil {
-		return nil, fmt.Errorf("send: %w", err)
-	}
-	resp, err := p.stream.Recv()
+	resp, err := p.exchange(st)
 	if err != nil {
-		return nil, fmt.Errorf("recv: %w", err)
+		return nil, err
 	}
 	if e := resp.GetError(); e != nil {
 		return nil, fmt.Errorf("session: %s", e.Message)
@@ -143,6 +140,71 @@ func (p *proxy) sendStep(st *pb.AutomationStep) (*pb.StepResult, error) {
 		return nil, fmt.Errorf("no result")
 	}
 	return res, nil
+}
+
+// exchange sends one step on the single bidi stream, receives its response, and
+// records the call into the history store for the monitoring UI. Transport
+// (send/recv) failures are returned as err and mark the connection ERRORED;
+// session-level errors are carried inside the returned response. The caller must
+// hold p.mu — the bidi stream cannot be used concurrently.
+func (p *proxy) exchange(st *pb.AutomationStep) (*pb.SessionResponse, error) {
+	p.stepN++
+	seq := uint64(p.stepN)
+	startNs := nowNs()
+	if err := p.stream.Send(&pb.SessionRequest{Id: seq, Command: &pb.SessionRequest_Step{Step: st}}); err != nil {
+		p.recordCall(seq, st, nil, startNs)
+		p.store.setErrored(p.connID, "send: "+err.Error())
+		return nil, fmt.Errorf("send: %w", err)
+	}
+	resp, err := p.stream.Recv()
+	if err != nil {
+		p.recordCall(seq, st, nil, startNs)
+		p.store.setErrored(p.connID, "recv: "+err.Error())
+		return nil, fmt.Errorf("recv: %w", err)
+	}
+	p.recordCall(seq, st, resp, startNs)
+	return resp, nil
+}
+
+// recordCall appends one CallRecord to the history store. Screenshot bytes are
+// moved out of the StepResult into a typed MediaCapture so the image travels the
+// wire exactly once.
+func (p *proxy) recordCall(seq uint64, st *pb.AutomationStep, resp *pb.SessionResponse, startNs uint64) {
+	if p.store == nil {
+		return
+	}
+	rec := &cmpb.CallRecord{
+		Seq:         seq,
+		Request:     st,
+		StartedAtNs: startNs,
+		DurationNs:  nowNs() - startNs,
+	}
+	if resp != nil {
+		if e := resp.GetError(); e != nil {
+			rec.Result = &pb.StepResult{Label: st.Label, Success: false, Error: "session: " + e.Message}
+		} else if res := resp.GetResult(); res != nil {
+			rec.Result = &pb.StepResult{Label: res.Label, Success: res.Success, Error: res.Error, ScriptResult: res.ScriptResult}
+			if len(res.ScreenshotData) > 0 {
+				rec.Media = mediaFromBytes(res.ScreenshotData)
+			}
+		}
+	}
+	p.store.appendCall(p.connID, rec)
+}
+
+// mediaFromBytes wraps raw image bytes in a MediaCapture, detecting the format
+// from its magic bytes (no transcoding). Unknown data is best-effort tagged png.
+func mediaFromBytes(b []byte) *cmpb.MediaCapture {
+	switch {
+	case bytes.HasPrefix(b, []byte{0x89, 'P', 'N', 'G', '\r', '\n', 0x1a, '\n'}):
+		return &cmpb.MediaCapture{Kind: &cmpb.MediaCapture_Png{Png: b}}
+	case len(b) >= 3 && b[0] == 0xff && b[1] == 0xd8 && b[2] == 0xff:
+		return &cmpb.MediaCapture{Kind: &cmpb.MediaCapture_Jpeg{Jpeg: b}}
+	case len(b) >= 12 && bytes.HasPrefix(b, []byte("RIFF")) && bytes.Equal(b[8:12], []byte("WEBP")):
+		return &cmpb.MediaCapture{Kind: &cmpb.MediaCapture_Webp{Webp: b}}
+	default:
+		return &cmpb.MediaCapture{Kind: &cmpb.MediaCapture_Png{Png: b}}
+	}
 }
 
 // shot returns a fresh PNG screenshot of the live session along with the CSS
@@ -234,17 +296,32 @@ func main() {
 	if *token != "" {
 		ctx = metadata.AppendToOutgoingContext(ctx, "authorization", "Bearer "+*token)
 	}
+
+	// Record this session's history for the monitoring UI, starting as CONNECTING.
+	store := newHistStore()
+	connID := store.openConn(*addr)
+
 	stream, err := pb.NewInteractiveSessionServiceClient(conn).Session(ctx)
 	if err != nil {
 		log.Fatalf("open session: %v", err)
 	}
 	ready, err := stream.Recv()
 	if err != nil {
+		store.setErrored(connID, err.Error())
 		log.Fatalf("await ready: %v", err)
 	}
 	log.Printf("session ready: %v", ready.GetReady().GetSessionId())
+	store.setReady(connID, ready.GetReady().GetSessionId())
 
-	p := &proxy{stream: stream, shotsDir: *shots}
+	p := &proxy{stream: stream, shotsDir: *shots, store: store, connID: connID}
+
+	// ChromeMan serves the recorded history over an in-process gRPC (bufconn); the
+	// dashboard websocket in ui.go is its only client.
+	cmClient, cmStop, err := startChromeMan(store)
+	if err != nil {
+		log.Fatalf("chromeman: %v", err)
+	}
+	defer cmStop()
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) { fmt.Fprintln(w, "ok") })
@@ -334,18 +411,22 @@ func main() {
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
 		fmt.Fprint(w, capturePage)
 	})
+	// Read-only monitoring dashboard ("/") + its data socket ("/ws").
+	registerUI(mux, cmClient)
 
 	srv := &http.Server{Addr: *listen, Handler: mux}
 	mux.HandleFunc("/close", func(w http.ResponseWriter, r *http.Request) {
 		p.mu.Lock()
 		p.stream.CloseSend()
 		p.mu.Unlock()
+		p.store.setClosed(p.connID)
 		fmt.Fprintln(w, "closing")
 		go func() { time.Sleep(300 * time.Millisecond); srv.Close() }()
 	})
 
 	log.Printf("chrome-proxy: steering %s  ->  http://%s  (shots in %s)", *addr, *listen, *shots)
-	log.Printf("human click-through capture: http://%s/capture", *listen)
+	log.Printf("monitor dashboard:            http://%s/", *listen)
+	log.Printf("human click-through capture:  http://%s/capture", *listen)
 	if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 		log.Fatalf("http: %v", err)
 	}

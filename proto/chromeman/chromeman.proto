@@ -1,0 +1,86 @@
+syntax = "proto3";
+
+package chromeman;
+
+option go_package = "github.com/accretional/chromerpc/proto/chromeman";
+
+import "google/protobuf/empty.proto";
+import "proto/cdp/headlessbrowser/headlessbrowser.proto";
+
+// ChromeMan is the read-only management/monitoring surface of the bidi proxy
+// (chrome-proxy). It exposes the history of the proxy's connections to remote
+// chromerpc interactive sessions so an operator UI can render and follow them
+// live. There is intentionally NO mutation surface in this first pass.
+service ChromeMan {
+  // History streams the state of every connection the proxy holds. The first
+  // message(s) carry each connection's existing (ring-buffered) calls; after
+  // that, a message is pushed whenever a connection changes — a new call was
+  // made (carried in `calls`) or its state/error changed (empty `calls`).
+  //
+  // Streaming is APPEND-ONLY: a client keys by connection_id, updates the
+  // connection-level fields to the latest values, and APPENDS every `calls`
+  // entry. Screenshot media therefore travels exactly once (when the call
+  // happens), never re-sent. The stream lives for the life of the RPC — the
+  // proxy forwards it into an operator websocket.
+  rpc History(google.protobuf.Empty) returns (stream ConnectionHistory);
+}
+
+// ConnectionState is the lifecycle of one bidi session the proxy holds.
+enum ConnectionState {
+  CONNECTION_STATE_UNSPECIFIED = 0;
+  CONNECTING = 1;
+  READY = 2;
+  CLOSED = 3;
+  ERRORED = 4;
+}
+
+// ConnectionHistory is the state of one bidi Session the proxy holds to a
+// remote chromerpc, plus the calls made over it. See the History streaming
+// semantics above (append-only).
+message ConnectionHistory {
+  // Stable proxy-assigned id for this session (a local counter).
+  uint32 connection_id = 1;
+  // Remote chromerpc address the session is connected to.
+  string target = 2;
+  // Server-assigned session id (from SessionReady). Opaque string, e.g.
+  // "isess-3" — the interactive service assigns it, so it stays a string.
+  string session_id = 3;
+  ConnectionState state = 4;
+  // Wall-clock nanoseconds (time.Now().UnixNano()).
+  uint64 created_at_ns = 5;
+  uint64 updated_at_ns = 6;
+  // New call records to APPEND (see streaming semantics). Empty on a
+  // state-only update.
+  repeated CallRecord calls = 7;
+  // Last connection-level error, if any.
+  string error = 8;
+}
+
+// CallRecord is one automation step exchanged on the session stream.
+message CallRecord {
+  // Proxy step number (monotonic per proxy).
+  uint64 seq = 1;
+  // The request as sent to the interactive session.
+  cdp.headlessbrowser.AutomationStep request = 2;
+  // The result as returned. Any screenshot_data is stripped out into `media`
+  // (typed) so image bytes travel once; the rest (label/success/error/
+  // script_result) stays here.
+  cdp.headlessbrowser.StepResult result = 3;
+  // Optional captured media for this call (e.g. a screenshot).
+  MediaCapture media = 4;
+  // Wall-clock nanoseconds when the step was sent, and how long it took.
+  uint64 started_at_ns = 5;
+  uint64 duration_ns = 6;
+}
+
+// MediaCapture carries a captured media artifact. Image bytes are stored in
+// the format the session produced them (no transcoding) — browsers render all
+// three. wav is reserved for future audio capture; more kinds can be added.
+message MediaCapture {
+  oneof kind {
+    bytes webp = 1;
+    bytes wav = 2;
+    bytes png = 3;
+    bytes jpeg = 4;
+  }
+}

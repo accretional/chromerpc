@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>chromerpc · bidi proxy monitor</title>
+<style>
+  :root {
+    --bg: #14171c; --panel: #1e232b; --panel2: #262d37; --line: #333c49;
+    --fg: #d7dee7; --muted: #8b97a7; --ok: #57c98a; --err: #e2686b; --accent: #5aa9e6;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--fg);
+    font: 14px/1.45 system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  }
+  header {
+    position: sticky; top: 0; z-index: 5; display: flex; align-items: center; gap: 12px;
+    padding: 10px 16px; background: var(--panel); border-bottom: 1px solid var(--line);
+  }
+  header h1 { font-size: 15px; font-weight: 600; margin: 0; }
+  header .sub { color: var(--muted); font-size: 12px; }
+  #status { margin-left: auto; font-size: 12px; padding: 3px 10px; border-radius: 999px;
+    background: var(--panel2); color: var(--muted); border: 1px solid var(--line); }
+  #status.connected { color: var(--ok); border-color: #2c5a41; }
+  #status.down { color: var(--err); border-color: #5a2c2e; }
+
+  /* CSS grid of session windows. */
+  .grid {
+    display: grid; gap: 14px; padding: 16px;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    align-items: start;
+  }
+  #empty { color: var(--muted); padding: 40px 16px; grid-column: 1 / -1; text-align: center; }
+
+  .window {
+    background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
+    overflow: hidden; display: flex; flex-direction: column; min-width: 0;
+  }
+  /* Checkbox trick: a checked in-window sizer expands the cell across the grid. */
+  .window .sizer { display: none; }
+  .window:has(.sizer:checked) { grid-column: span 2; grid-row: span 2; }
+
+  .win-head { display: flex; align-items: center; gap: 8px; padding: 8px 10px;
+    background: var(--panel2); border-bottom: 1px solid var(--line); }
+  .win-head .title { font-weight: 600; font-size: 13px; white-space: nowrap;
+    overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+  .win-head .state { margin-left: auto; font-size: 11px; text-transform: lowercase;
+    padding: 2px 8px; border-radius: 999px; background: #2a323d; color: var(--muted);
+    border: 1px solid var(--line); flex: none; }
+  .state.READY { color: var(--ok); }
+  .state.CONNECTING { color: var(--accent); }
+  .state.ERRORED { color: var(--err); }
+  .state.CLOSED { color: var(--muted); }
+
+  .win-head .btn, .win-head .expand-toggle {
+    cursor: pointer; user-select: none; font-size: 14px; line-height: 1; text-decoration: none;
+    color: var(--muted); padding: 2px 6px; border: 1px solid var(--line); border-radius: 6px;
+    background: #2a323d; flex: none;
+  }
+  .win-head .btn:hover, .win-head .expand-toggle:hover { color: var(--fg); }
+
+  .shot-link { display: block; background: #0d1013; min-height: 60px; }
+  .shot { display: block; width: 100%; height: auto; }
+  .shot.empty { min-height: 140px; }
+  .shot-link .placeholder { display: flex; align-items: center; justify-content: center;
+    min-height: 140px; color: var(--muted); font-size: 12px; }
+
+  details.history { border-top: 1px solid var(--line); }
+  details.history > summary { cursor: pointer; padding: 8px 10px; color: var(--muted);
+    font-size: 12px; user-select: none; }
+  details.history[open] > summary { color: var(--fg); }
+  ol.calls { list-style: none; margin: 0; padding: 0 0 4px; max-height: 320px; overflow: auto; }
+  ol.calls li { border-top: 1px solid #262d37; }
+  ol.calls details > summary { cursor: pointer; padding: 5px 10px; font-size: 12px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+  ol.calls details > summary.ok::marker { color: var(--ok); }
+  ol.calls details > summary.err { color: var(--err); }
+  ol.calls pre { margin: 0; padding: 6px 10px 10px 20px; background: #0d1013; color: #b9c4d0;
+    font-size: 11px; white-space: pre-wrap; word-break: break-word; }
+
+  /* Modal viewer via :target — near-fullscreen overlay, no JS. */
+  .modal { display: none; }
+  .modal:target {
+    display: flex; flex-direction: column; position: fixed; inset: 3vh 3vw; z-index: 20;
+    background: #0d1013; border: 1px solid var(--line); border-radius: 10px;
+    box-shadow: 0 20px 60px rgba(0,0,0,.6); overflow: hidden;
+  }
+  .modal-head { display: flex; align-items: center; gap: 10px; padding: 8px 12px;
+    background: var(--panel2); border-bottom: 1px solid var(--line); }
+  .modal-close { margin-left: auto; text-decoration: none; color: var(--fg);
+    background: #2a323d; border: 1px solid var(--line); border-radius: 6px; padding: 3px 10px; }
+  .modal-body { flex: 1; overflow: auto; display: flex; align-items: flex-start;
+    justify-content: center; background: #0d1013; }
+  .modal-body img { max-width: 100%; height: auto; }
+</style>
+</head>
+<body>
+<header>
+  <h1>chromerpc <span class="sub">bidi proxy monitor</span></h1>
+  <span id="status">connecting…</span>
+</header>
+
+<main id="grid" class="grid">
+  <div id="empty">Waiting for sessions… run a step through the proxy to populate history.</div>
+</main>
+
+<!-- One session window. JS clones this per connection and fills the blanks. -->
+<template id="win-tpl">
+  <section class="window">
+    <input type="checkbox" class="sizer">
+    <div class="win-head">
+      <label class="expand-toggle" title="expand in grid">⤢</label>
+      <a class="btn fullscreen-link" title="fullscreen viewer">⛶</a>
+      <span class="title"></span>
+      <span class="state"></span>
+    </div>
+    <a class="shot-link"><span class="placeholder">no capture yet</span><img class="shot empty" alt="latest capture" hidden></a>
+    <details class="history">
+      <summary>history · <span class="callcount">0</span> calls</summary>
+      <ol class="calls"></ol>
+    </details>
+    <div class="modal">
+      <div class="modal-head"><span class="modal-title"></span><a class="modal-close">✕ close</a></div>
+      <div class="modal-body"><img class="modal-shot" alt="capture"></div>
+    </div>
+  </section>
+</template>
+
+<script>
+(function () {
+  var grid = document.getElementById('grid');
+  var emptyEl = document.getElementById('empty');
+  var statusEl = document.getElementById('status');
+  var tpl = document.getElementById('win-tpl');
+  var wins = new Map(); // connectionId -> refs
+
+  function setStatus(text, cls) { statusEl.textContent = text; statusEl.className = cls || ''; }
+
+  // The method name is the AutomationStep action — the one key that isn't "label".
+  function methodOf(req) {
+    if (!req) return '(none)';
+    for (var k in req) { if (k !== 'label' && req.hasOwnProperty(k)) return k; }
+    return '(step)';
+  }
+
+  function mediaSrc(media) {
+    if (!media) return null;
+    if (media.webp) return 'data:image/webp;base64,' + media.webp;
+    if (media.png)  return 'data:image/png;base64,'  + media.png;
+    if (media.jpeg) return 'data:image/jpeg;base64,' + media.jpeg;
+    return null; // wav / unset — no image
+  }
+
+  function createWindow(id) {
+    var node = tpl.content.firstElementChild.cloneNode(true);
+    var sizerId = 'sizer-' + id, modalId = 'conn-' + id;
+    var refs = {
+      root: node,
+      sizer: node.querySelector('.sizer'),
+      toggle: node.querySelector('.expand-toggle'),
+      full: node.querySelector('.fullscreen-link'),
+      title: node.querySelector('.title'),
+      state: node.querySelector('.state'),
+      shotLink: node.querySelector('.shot-link'),
+      placeholder: node.querySelector('.placeholder'),
+      shot: node.querySelector('.shot'),
+      callcount: node.querySelector('.callcount'),
+      calls: node.querySelector('.calls'),
+      modal: node.querySelector('.modal'),
+      modalTitle: node.querySelector('.modal-title'),
+      modalShot: node.querySelector('.modal-shot')
+    };
+    refs.sizer.id = sizerId;
+    refs.toggle.setAttribute('for', sizerId);
+    refs.full.href = '#' + modalId;
+    refs.shotLink.href = '#' + modalId;
+    refs.modal.id = modalId;
+    refs.modalClose = node.querySelector('.modal-close');
+    refs.modalClose.href = '#_';
+    if (emptyEl) { emptyEl.remove(); emptyEl = null; }
+    grid.appendChild(node);
+    return refs;
+  }
+
+  function appendCall(w, c) {
+    var li = document.createElement('li');
+    var det = document.createElement('details');
+    var sum = document.createElement('summary');
+    var ok = c.result && c.result.success;
+    sum.textContent = '#' + (c.seq || '?') + '  ' + methodOf(c.request) + (ok ? '  ✓' : '  ✗');
+    sum.className = ok ? 'ok' : 'err';
+    var pre = document.createElement('pre');
+    pre.textContent = 'request:\n' + JSON.stringify(c.request || {}, null, 2) +
+                      '\n\nresult:\n' + JSON.stringify(c.result || {}, null, 2);
+    det.appendChild(sum); det.appendChild(pre);
+    li.appendChild(det);
+    w.calls.appendChild(li);
+    w.callcount.textContent = w.calls.children.length;
+
+    var src = mediaSrc(c.media);
+    if (src) {
+      w.shot.src = src; w.shot.hidden = false; w.shot.classList.remove('empty');
+      if (w.placeholder) { w.placeholder.remove(); w.placeholder = null; }
+      w.modalShot.src = src;
+    }
+  }
+
+  function upsert(ch) {
+    var id = ch.connectionId || 0;
+    var w = wins.get(id);
+    if (!w) { w = createWindow(id); wins.set(id, w); }
+    var label = 'conn ' + id + (ch.sessionId ? ' · ' + ch.sessionId : '') + (ch.target ? ' · ' + ch.target : '');
+    w.title.textContent = label;
+    w.title.title = label;
+    w.modalTitle.textContent = label;
+    if (ch.state) { w.state.textContent = ch.state; w.state.className = 'state ' + ch.state; }
+    if (ch.error) { w.state.title = ch.error; }
+    var calls = ch.calls || [];
+    for (var i = 0; i < calls.length; i++) appendCall(w, calls[i]);
+  }
+
+  function connect() {
+    var proto = location.protocol === 'https:' ? 'wss' : 'ws';
+    var ws = new WebSocket(proto + '://' + location.host + '/ws');
+    ws.onopen = function () { setStatus('connected', 'connected'); };
+    ws.onmessage = function (ev) {
+      var ch; try { ch = JSON.parse(ev.data); } catch (e) { return; }
+      upsert(ch);
+    };
+    ws.onerror = function () { ws.close(); };
+    ws.onclose = function () { setStatus('disconnected — retrying', 'down'); setTimeout(connect, 2000); };
+  }
+  connect();
+})();
+</script>
+</body>
+</html>
