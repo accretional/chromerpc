@@ -537,6 +537,7 @@ type AutomationStep struct {
 	//	*AutomationStep_PrintToPdf
 	//	*AutomationStep_Touch
 	//	*AutomationStep_SetEmulatedMedia
+	//	*AutomationStep_Record
 	Action        isAutomationStep_Action `protobuf_oneof:"action"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -775,6 +776,15 @@ func (x *AutomationStep) GetSetEmulatedMedia() *SetEmulatedMedia {
 	return nil
 }
 
+func (x *AutomationStep) GetRecord() *Record {
+	if x != nil {
+		if x, ok := x.Action.(*AutomationStep_Record); ok {
+			return x.Record
+		}
+	}
+	return nil
+}
+
 type isAutomationStep_Action interface {
 	isAutomationStep_Action()
 }
@@ -863,6 +873,10 @@ type AutomationStep_SetEmulatedMedia struct {
 	SetEmulatedMedia *SetEmulatedMedia `protobuf:"bytes,22,opt,name=set_emulated_media,json=setEmulatedMedia,proto3,oneof"`
 }
 
+type AutomationStep_Record struct {
+	Record *Record `protobuf:"bytes,23,opt,name=record,proto3,oneof"`
+}
+
 func (*AutomationStep_SetViewport) isAutomationStep_Action() {}
 
 func (*AutomationStep_Navigate) isAutomationStep_Action() {}
@@ -904,6 +918,8 @@ func (*AutomationStep_PrintToPdf) isAutomationStep_Action() {}
 func (*AutomationStep_Touch) isAutomationStep_Action() {}
 
 func (*AutomationStep_SetEmulatedMedia) isAutomationStep_Action() {}
+
+func (*AutomationStep_Record) isAutomationStep_Action() {}
 
 // Set the browser viewport dimensions.
 type SetViewport struct {
@@ -2099,6 +2115,175 @@ func (x *SetEmulatedMedia) GetMedia() string {
 	return ""
 }
 
+// Record an audio+visual capture of the current tab to a video file on the
+// server. The VISUAL is captured with Page.startScreencast (real rendered
+// frames, works on any page — DOM/SVG/canvas — headless). Because headless
+// Chrome exposes no route to capture the tab's AUDIO over CDP, audio is muxed in
+// from a known source file (audio_path) with ffmpeg — ideal when the caller
+// already owns the source audio (the voicedemos case). If audio_path is empty
+// the output is video-only.
+//
+// Lifecycle: enable Page -> wait pre_delay_ms -> run start_script (e.g. begin
+// playback) -> start screencast -> collect frames until a STOP condition:
+//
+//	(a) max_duration_ms elapses (hard cap), OR
+//	(b) stop_condition JS expression evaluates truthy (polled), OR
+//	(c) the request context is cancelled (the bidi stream disconnects).
+//
+// -> stop screencast -> encode frames (+ mux audio_path) -> write output_path.
+//
+// The step returns a JSON summary in StepResult.script_result:
+//
+//	{"output":"<path>","bytes":N,"frames":N,"video_seconds":F,"has_audio":bool,"stop":"<reason>"}
+type Record struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Server-side path for the finished video. Container inferred from the
+	// extension (.mp4 -> H.264/AAC, .webm -> VP9/Opus); defaults to .mp4.
+	OutputPath string `protobuf:"bytes,1,opt,name=output_path,json=outputPath,proto3" json:"output_path,omitempty"`
+	// Delay after the screencast is armed but before recording begins (ms).
+	PreDelayMs int32 `protobuf:"varint,2,opt,name=pre_delay_ms,json=preDelayMs,proto3" json:"pre_delay_ms,omitempty"`
+	// Hard cap on recording length (ms). 0 => default 15000. Recording always
+	// stops by this bound even if stop_condition never fires.
+	MaxDurationMs int32 `protobuf:"varint,3,opt,name=max_duration_ms,json=maxDurationMs,proto3" json:"max_duration_ms,omitempty"`
+	// Optional JS expression polled during recording; recording stops when it
+	// returns a truthy value (e.g. "document.querySelector('audio').ended").
+	StopCondition string `protobuf:"bytes,4,opt,name=stop_condition,json=stopCondition,proto3" json:"stop_condition,omitempty"`
+	// Poll interval for stop_condition (ms). 0 => default 250.
+	StopPollMs int32 `protobuf:"varint,5,opt,name=stop_poll_ms,json=stopPollMs,proto3" json:"stop_poll_ms,omitempty"`
+	// Optional server-side audio file (e.g. the source WAV) muxed into the video.
+	// Empty => video-only output.
+	AudioPath string `protobuf:"bytes,6,opt,name=audio_path,json=audioPath,proto3" json:"audio_path,omitempty"`
+	// Screencast frame-rate throttle: capture every Nth compositor frame. 0/1 =>
+	// every frame. Higher = fewer frames / smaller output.
+	EveryNthFrame int32 `protobuf:"varint,7,opt,name=every_nth_frame,json=everyNthFrame,proto3" json:"every_nth_frame,omitempty"`
+	// JPEG quality for screencast frames, 1-100. 0 => default 90.
+	Quality int32 `protobuf:"varint,8,opt,name=quality,proto3" json:"quality,omitempty"`
+	// Screencast max frame width/height in px (0 => the current viewport size).
+	MaxWidth  int32 `protobuf:"varint,9,opt,name=max_width,json=maxWidth,proto3" json:"max_width,omitempty"`
+	MaxHeight int32 `protobuf:"varint,10,opt,name=max_height,json=maxHeight,proto3" json:"max_height,omitempty"`
+	// Optional JS run once at recording start (after pre_delay_ms), e.g. to begin
+	// playback: "document.getElementById('audio').play()".
+	StartScript string `protobuf:"bytes,11,opt,name=start_script,json=startScript,proto3" json:"start_script,omitempty"`
+	// Constant output frame rate for the encoded video. 0 => default 30.
+	OutputFps     int32 `protobuf:"varint,12,opt,name=output_fps,json=outputFps,proto3" json:"output_fps,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Record) Reset() {
+	*x = Record{}
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[30]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Record) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Record) ProtoMessage() {}
+
+func (x *Record) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[30]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Record.ProtoReflect.Descriptor instead.
+func (*Record) Descriptor() ([]byte, []int) {
+	return file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescGZIP(), []int{30}
+}
+
+func (x *Record) GetOutputPath() string {
+	if x != nil {
+		return x.OutputPath
+	}
+	return ""
+}
+
+func (x *Record) GetPreDelayMs() int32 {
+	if x != nil {
+		return x.PreDelayMs
+	}
+	return 0
+}
+
+func (x *Record) GetMaxDurationMs() int32 {
+	if x != nil {
+		return x.MaxDurationMs
+	}
+	return 0
+}
+
+func (x *Record) GetStopCondition() string {
+	if x != nil {
+		return x.StopCondition
+	}
+	return ""
+}
+
+func (x *Record) GetStopPollMs() int32 {
+	if x != nil {
+		return x.StopPollMs
+	}
+	return 0
+}
+
+func (x *Record) GetAudioPath() string {
+	if x != nil {
+		return x.AudioPath
+	}
+	return ""
+}
+
+func (x *Record) GetEveryNthFrame() int32 {
+	if x != nil {
+		return x.EveryNthFrame
+	}
+	return 0
+}
+
+func (x *Record) GetQuality() int32 {
+	if x != nil {
+		return x.Quality
+	}
+	return 0
+}
+
+func (x *Record) GetMaxWidth() int32 {
+	if x != nil {
+		return x.MaxWidth
+	}
+	return 0
+}
+
+func (x *Record) GetMaxHeight() int32 {
+	if x != nil {
+		return x.MaxHeight
+	}
+	return 0
+}
+
+func (x *Record) GetStartScript() string {
+	if x != nil {
+		return x.StartScript
+	}
+	return ""
+}
+
+func (x *Record) GetOutputFps() int32 {
+	if x != nil {
+		return x.OutputFps
+	}
+	return 0
+}
+
 // Result of a full automation sequence run.
 type AutomationResult struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -2111,7 +2296,7 @@ type AutomationResult struct {
 
 func (x *AutomationResult) Reset() {
 	*x = AutomationResult{}
-	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[30]
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[31]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2123,7 +2308,7 @@ func (x *AutomationResult) String() string {
 func (*AutomationResult) ProtoMessage() {}
 
 func (x *AutomationResult) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[30]
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[31]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2136,7 +2321,7 @@ func (x *AutomationResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AutomationResult.ProtoReflect.Descriptor instead.
 func (*AutomationResult) Descriptor() ([]byte, []int) {
-	return file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescGZIP(), []int{30}
+	return file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescGZIP(), []int{31}
 }
 
 func (x *AutomationResult) GetSuccess() bool {
@@ -2176,7 +2361,7 @@ type StepResult struct {
 
 func (x *StepResult) Reset() {
 	*x = StepResult{}
-	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[31]
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[32]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2188,7 +2373,7 @@ func (x *StepResult) String() string {
 func (*StepResult) ProtoMessage() {}
 
 func (x *StepResult) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[31]
+	mi := &file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes[32]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2201,7 +2386,7 @@ func (x *StepResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StepResult.ProtoReflect.Descriptor instead.
 func (*StepResult) Descriptor() ([]byte, []int) {
-	return file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescGZIP(), []int{31}
+	return file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescGZIP(), []int{32}
 }
 
 func (x *StepResult) GetLabel() string {
@@ -2267,7 +2452,7 @@ const file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDesc = "" +
 	"\amessage\x18\x01 \x01(\tR\amessage\"c\n" +
 	"\x12AutomationSequence\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x129\n" +
-	"\x05steps\x18\x02 \x03(\v2#.cdp.headlessbrowser.AutomationStepR\x05steps\"\xaa\v\n" +
+	"\x05steps\x18\x02 \x03(\v2#.cdp.headlessbrowser.AutomationStepR\x05steps\"\xe1\v\n" +
 	"\x0eAutomationStep\x12\x14\n" +
 	"\x05label\x18\x01 \x01(\tR\x05label\x12E\n" +
 	"\fset_viewport\x18\x02 \x01(\v2 .cdp.headlessbrowser.SetViewportH\x00R\vsetViewport\x12;\n" +
@@ -2295,7 +2480,8 @@ const file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDesc = "" +
 	"\fprint_to_pdf\x18\x14 \x01(\v2\x1f.cdp.headlessbrowser.PrintToPdfH\x00R\n" +
 	"printToPdf\x12:\n" +
 	"\x05touch\x18\x15 \x01(\v2\".cdp.headlessbrowser.DispatchTouchH\x00R\x05touch\x12U\n" +
-	"\x12set_emulated_media\x18\x16 \x01(\v2%.cdp.headlessbrowser.SetEmulatedMediaH\x00R\x10setEmulatedMediaB\b\n" +
+	"\x12set_emulated_media\x18\x16 \x01(\v2%.cdp.headlessbrowser.SetEmulatedMediaH\x00R\x10setEmulatedMedia\x125\n" +
+	"\x06record\x18\x17 \x01(\v2\x1b.cdp.headlessbrowser.RecordH\x00R\x06recordB\b\n" +
 	"\x06action\"\x83\x01\n" +
 	"\vSetViewport\x12\x14\n" +
 	"\x05width\x18\x01 \x01(\x05R\x05width\x12\x16\n" +
@@ -2379,7 +2565,27 @@ const file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDesc = "" +
 	"\x02dx\x18\x04 \x01(\x01R\x02dx\x12\x0e\n" +
 	"\x02dy\x18\x05 \x01(\x01R\x02dy\"(\n" +
 	"\x10SetEmulatedMedia\x12\x14\n" +
-	"\x05media\x18\x01 \x01(\tR\x05media\"\x86\x01\n" +
+	"\x05media\x18\x01 \x01(\tR\x05media\"\x9b\x03\n" +
+	"\x06Record\x12\x1f\n" +
+	"\voutput_path\x18\x01 \x01(\tR\n" +
+	"outputPath\x12 \n" +
+	"\fpre_delay_ms\x18\x02 \x01(\x05R\n" +
+	"preDelayMs\x12&\n" +
+	"\x0fmax_duration_ms\x18\x03 \x01(\x05R\rmaxDurationMs\x12%\n" +
+	"\x0estop_condition\x18\x04 \x01(\tR\rstopCondition\x12 \n" +
+	"\fstop_poll_ms\x18\x05 \x01(\x05R\n" +
+	"stopPollMs\x12\x1d\n" +
+	"\n" +
+	"audio_path\x18\x06 \x01(\tR\taudioPath\x12&\n" +
+	"\x0fevery_nth_frame\x18\a \x01(\x05R\reveryNthFrame\x12\x18\n" +
+	"\aquality\x18\b \x01(\x05R\aquality\x12\x1b\n" +
+	"\tmax_width\x18\t \x01(\x05R\bmaxWidth\x12\x1d\n" +
+	"\n" +
+	"max_height\x18\n" +
+	" \x01(\x05R\tmaxHeight\x12!\n" +
+	"\fstart_script\x18\v \x01(\tR\vstartScript\x12\x1d\n" +
+	"\n" +
+	"output_fps\x18\f \x01(\x05R\toutputFps\"\x86\x01\n" +
 	"\x10AutomationResult\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12B\n" +
 	"\fstep_results\x18\x02 \x03(\v2\x1f.cdp.headlessbrowser.StepResultR\vstepResults\x12\x14\n" +
@@ -2409,7 +2615,7 @@ func file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescGZIP() []byte {
 	return file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDescData
 }
 
-var file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes = make([]protoimpl.MessageInfo, 32)
+var file_proto_cdp_headlessbrowser_headlessbrowser_proto_msgTypes = make([]protoimpl.MessageInfo, 33)
 var file_proto_cdp_headlessbrowser_headlessbrowser_proto_goTypes = []any{
 	(*SessionRequest)(nil),     // 0: cdp.headlessbrowser.SessionRequest
 	(*SessionResponse)(nil),    // 1: cdp.headlessbrowser.SessionResponse
@@ -2441,15 +2647,16 @@ var file_proto_cdp_headlessbrowser_headlessbrowser_proto_goTypes = []any{
 	(*PrintToPdf)(nil),         // 27: cdp.headlessbrowser.PrintToPdf
 	(*DispatchTouch)(nil),      // 28: cdp.headlessbrowser.DispatchTouch
 	(*SetEmulatedMedia)(nil),   // 29: cdp.headlessbrowser.SetEmulatedMedia
-	(*AutomationResult)(nil),   // 30: cdp.headlessbrowser.AutomationResult
-	(*StepResult)(nil),         // 31: cdp.headlessbrowser.StepResult
+	(*Record)(nil),             // 30: cdp.headlessbrowser.Record
+	(*AutomationResult)(nil),   // 31: cdp.headlessbrowser.AutomationResult
+	(*StepResult)(nil),         // 32: cdp.headlessbrowser.StepResult
 }
 var file_proto_cdp_headlessbrowser_headlessbrowser_proto_depIdxs = []int32{
 	8,  // 0: cdp.headlessbrowser.SessionRequest.step:type_name -> cdp.headlessbrowser.AutomationStep
 	2,  // 1: cdp.headlessbrowser.SessionRequest.reset:type_name -> cdp.headlessbrowser.ResetSession
 	3,  // 2: cdp.headlessbrowser.SessionRequest.ping:type_name -> cdp.headlessbrowser.Ping
 	5,  // 3: cdp.headlessbrowser.SessionResponse.ready:type_name -> cdp.headlessbrowser.SessionReady
-	31, // 4: cdp.headlessbrowser.SessionResponse.result:type_name -> cdp.headlessbrowser.StepResult
+	32, // 4: cdp.headlessbrowser.SessionResponse.result:type_name -> cdp.headlessbrowser.StepResult
 	4,  // 5: cdp.headlessbrowser.SessionResponse.pong:type_name -> cdp.headlessbrowser.Pong
 	6,  // 6: cdp.headlessbrowser.SessionResponse.error:type_name -> cdp.headlessbrowser.SessionError
 	8,  // 7: cdp.headlessbrowser.AutomationSequence.steps:type_name -> cdp.headlessbrowser.AutomationStep
@@ -2474,18 +2681,19 @@ var file_proto_cdp_headlessbrowser_headlessbrowser_proto_depIdxs = []int32{
 	27, // 26: cdp.headlessbrowser.AutomationStep.print_to_pdf:type_name -> cdp.headlessbrowser.PrintToPdf
 	28, // 27: cdp.headlessbrowser.AutomationStep.touch:type_name -> cdp.headlessbrowser.DispatchTouch
 	29, // 28: cdp.headlessbrowser.AutomationStep.set_emulated_media:type_name -> cdp.headlessbrowser.SetEmulatedMedia
-	31, // 29: cdp.headlessbrowser.AutomationResult.step_results:type_name -> cdp.headlessbrowser.StepResult
-	7,  // 30: cdp.headlessbrowser.HeadlessBrowserService.RunAutomation:input_type -> cdp.headlessbrowser.AutomationSequence
-	8,  // 31: cdp.headlessbrowser.HeadlessBrowserService.ExecuteStep:input_type -> cdp.headlessbrowser.AutomationStep
-	0,  // 32: cdp.headlessbrowser.InteractiveSessionService.Session:input_type -> cdp.headlessbrowser.SessionRequest
-	30, // 33: cdp.headlessbrowser.HeadlessBrowserService.RunAutomation:output_type -> cdp.headlessbrowser.AutomationResult
-	31, // 34: cdp.headlessbrowser.HeadlessBrowserService.ExecuteStep:output_type -> cdp.headlessbrowser.StepResult
-	1,  // 35: cdp.headlessbrowser.InteractiveSessionService.Session:output_type -> cdp.headlessbrowser.SessionResponse
-	33, // [33:36] is the sub-list for method output_type
-	30, // [30:33] is the sub-list for method input_type
-	30, // [30:30] is the sub-list for extension type_name
-	30, // [30:30] is the sub-list for extension extendee
-	0,  // [0:30] is the sub-list for field type_name
+	30, // 29: cdp.headlessbrowser.AutomationStep.record:type_name -> cdp.headlessbrowser.Record
+	32, // 30: cdp.headlessbrowser.AutomationResult.step_results:type_name -> cdp.headlessbrowser.StepResult
+	7,  // 31: cdp.headlessbrowser.HeadlessBrowserService.RunAutomation:input_type -> cdp.headlessbrowser.AutomationSequence
+	8,  // 32: cdp.headlessbrowser.HeadlessBrowserService.ExecuteStep:input_type -> cdp.headlessbrowser.AutomationStep
+	0,  // 33: cdp.headlessbrowser.InteractiveSessionService.Session:input_type -> cdp.headlessbrowser.SessionRequest
+	31, // 34: cdp.headlessbrowser.HeadlessBrowserService.RunAutomation:output_type -> cdp.headlessbrowser.AutomationResult
+	32, // 35: cdp.headlessbrowser.HeadlessBrowserService.ExecuteStep:output_type -> cdp.headlessbrowser.StepResult
+	1,  // 36: cdp.headlessbrowser.InteractiveSessionService.Session:output_type -> cdp.headlessbrowser.SessionResponse
+	34, // [34:37] is the sub-list for method output_type
+	31, // [31:34] is the sub-list for method input_type
+	31, // [31:31] is the sub-list for extension type_name
+	31, // [31:31] is the sub-list for extension extendee
+	0,  // [0:31] is the sub-list for field type_name
 }
 
 func init() { file_proto_cdp_headlessbrowser_headlessbrowser_proto_init() }
@@ -2526,6 +2734,7 @@ func file_proto_cdp_headlessbrowser_headlessbrowser_proto_init() {
 		(*AutomationStep_PrintToPdf)(nil),
 		(*AutomationStep_Touch)(nil),
 		(*AutomationStep_SetEmulatedMedia)(nil),
+		(*AutomationStep_Record)(nil),
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -2533,7 +2742,7 @@ func file_proto_cdp_headlessbrowser_headlessbrowser_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDesc), len(file_proto_cdp_headlessbrowser_headlessbrowser_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   32,
+			NumMessages:   33,
 			NumExtensions: 0,
 			NumServices:   2,
 		},

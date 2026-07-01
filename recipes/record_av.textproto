@@ -1,0 +1,33 @@
+# Recipe: record an audio+visual capture of a page to a video file.
+#
+# The `record` step captures VIDEO with Page.startScreencast (real rendered
+# frames — works on any page, headless) and, because headless Chrome can't tap
+# tab audio over CDP, muxes AUDIO from a source file you already have
+# (audio_path) using ffmpeg. Recording begins after pre_delay_ms, runs
+# start_script to begin playback, and stops when stop_condition returns truthy,
+# max_duration_ms elapses, or the stream/context is cancelled.
+#
+# Requires: ffmpeg on the server's PATH; run the server with --autoplay so
+# scripted <audio>/<video>.play() is allowed without a user gesture. Paths are
+# on the SERVER's filesystem. Fill in url / output_path / audio_path.
+name: "record_av"
+steps: {
+  label: "viewport"
+  set_viewport: { width: 1100 height: 900 device_scale_factor: 1 }
+}
+steps: {
+  label: "navigate_and_wait"
+  navigate: { url: "http://127.0.0.1:8000/visualize.html" wait_until: "load" timeout_ms: 30000 }
+}
+steps: {
+  label: "record"
+  record: {
+    output_path: "out/recording.mp4"          # .mp4 -> H.264/AAC, .webm -> VP9/Opus
+    audio_path: "source.wav"                    # muxed in; omit for video-only
+    pre_delay_ms: 400
+    max_duration_ms: 12000                       # hard cap
+    start_script: "document.querySelector('audio,video').play()"
+    stop_condition: "document.querySelector('audio,video').ended"
+    output_fps: 30
+  }
+}

@@ -104,6 +104,7 @@ message AutomationStep {
     PrintToPdf print_to_pdf = 20;
     DispatchTouch touch = 21;
     SetEmulatedMedia set_emulated_media = 22;
+    Record record = 23;
   }
 }
 
@@ -255,6 +256,55 @@ message DispatchTouch {
 // features via Emulation.setEmulatedMedia.
 message SetEmulatedMedia {
   string media = 1;  // "print" | "screen" | "" to clear
+}
+
+// Record an audio+visual capture of the current tab to a video file on the
+// server. The VISUAL is captured with Page.startScreencast (real rendered
+// frames, works on any page — DOM/SVG/canvas — headless). Because headless
+// Chrome exposes no route to capture the tab's AUDIO over CDP, audio is muxed in
+// from a known source file (audio_path) with ffmpeg — ideal when the caller
+// already owns the source audio (the voicedemos case). If audio_path is empty
+// the output is video-only.
+//
+// Lifecycle: enable Page -> wait pre_delay_ms -> run start_script (e.g. begin
+// playback) -> start screencast -> collect frames until a STOP condition:
+//   (a) max_duration_ms elapses (hard cap), OR
+//   (b) stop_condition JS expression evaluates truthy (polled), OR
+//   (c) the request context is cancelled (the bidi stream disconnects).
+// -> stop screencast -> encode frames (+ mux audio_path) -> write output_path.
+//
+// The step returns a JSON summary in StepResult.script_result:
+//   {"output":"<path>","bytes":N,"frames":N,"video_seconds":F,"has_audio":bool,"stop":"<reason>"}
+message Record {
+  // Server-side path for the finished video. Container inferred from the
+  // extension (.mp4 -> H.264/AAC, .webm -> VP9/Opus); defaults to .mp4.
+  string output_path = 1;
+  // Delay after the screencast is armed but before recording begins (ms).
+  int32 pre_delay_ms = 2;
+  // Hard cap on recording length (ms). 0 => default 15000. Recording always
+  // stops by this bound even if stop_condition never fires.
+  int32 max_duration_ms = 3;
+  // Optional JS expression polled during recording; recording stops when it
+  // returns a truthy value (e.g. "document.querySelector('audio').ended").
+  string stop_condition = 4;
+  // Poll interval for stop_condition (ms). 0 => default 250.
+  int32 stop_poll_ms = 5;
+  // Optional server-side audio file (e.g. the source WAV) muxed into the video.
+  // Empty => video-only output.
+  string audio_path = 6;
+  // Screencast frame-rate throttle: capture every Nth compositor frame. 0/1 =>
+  // every frame. Higher = fewer frames / smaller output.
+  int32 every_nth_frame = 7;
+  // JPEG quality for screencast frames, 1-100. 0 => default 90.
+  int32 quality = 8;
+  // Screencast max frame width/height in px (0 => the current viewport size).
+  int32 max_width = 9;
+  int32 max_height = 10;
+  // Optional JS run once at recording start (after pre_delay_ms), e.g. to begin
+  // playback: "document.getElementById('audio').play()".
+  string start_script = 11;
+  // Constant output frame rate for the encoded video. 0 => default 30.
+  int32 output_fps = 12;
 }
 
 // Result of a full automation sequence run.

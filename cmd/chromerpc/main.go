@@ -10,6 +10,7 @@
 //	  -port                   Chrome remote debugging port (0=auto, default 0)
 //	  -no-sandbox             Pass --no-sandbox to Chrome (required on Cloud Run)
 //	  -disable-dev-shm-usage  Pass --disable-dev-shm-usage to Chrome
+//	  -autoplay               Allow media autoplay without a user gesture (for A/V recording)
 package main
 
 import (
@@ -20,8 +21,10 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+	"time"
 
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/keepalive"
 	"google.golang.org/grpc/reflection"
 
 	"github.com/accretional/chromerpc/internal/cdpclient"
@@ -148,6 +151,7 @@ func main() {
 	userAgent := flag.String("user-agent", "", "Override Chrome user agent string")
 	noSandbox := flag.Bool("no-sandbox", false, "Pass --no-sandbox to Chrome (required in restricted sandboxes like Cloud Run)")
 	disableDevShmUsage := flag.Bool("disable-dev-shm-usage", false, "Pass --disable-dev-shm-usage to Chrome (avoid small /dev/shm in containers)")
+	autoplay := flag.Bool("autoplay", false, "Allow media to autoplay without a user gesture (--autoplay-policy=no-user-gesture-required); needed to script <audio>/<video> playback for A/V recording.")
 	interactive := flag.Bool("interactive", false, "Run only InteractiveSessionService (bidi streaming; recycles Chrome between sessions).")
 	poolSize := flag.Int("pool-size", 1, "Interactive mode: number of pre-warmed Chrome processes. 1 = single Chrome (deploy concurrency=1); N>1 = pool (deploy concurrency<=N).")
 	noTmpCleanup := flag.Bool("no-tmp-cleanup", false, "Leave per-process Chrome temp dirs on disk (local debugging only; on servers they live in tmpfs and would grow instance memory).")
@@ -183,12 +187,22 @@ func main() {
 	}
 	// Always add anti-detection flags.
 	extraArgs = append(extraArgs, "--disable-blink-features=AutomationControlled")
+	// Keep timers/rAF running at full rate even when the (offscreen, headless)
+	// page is treated as backgrounded/occluded — otherwise requestAnimationFrame
+	// throttles to a few Hz, which makes screencast A/V recordings choppy.
+	extraArgs = append(extraArgs,
+		"--disable-background-timer-throttling",
+		"--disable-backgrounding-occluded-windows",
+		"--disable-renderer-backgrounding")
 	// Container/Cloud Run hardening flags.
 	if *noSandbox {
 		extraArgs = append(extraArgs, "--no-sandbox")
 	}
 	if *disableDevShmUsage {
 		extraArgs = append(extraArgs, "--disable-dev-shm-usage")
+	}
+	if *autoplay {
+		extraArgs = append(extraArgs, "--autoplay-policy=no-user-gesture-required")
 	}
 
 	// Interactive (bidi streaming) mode runs its own Chrome lifecycle so it can
@@ -343,7 +357,23 @@ func runInteractive(ctx context.Context, listenAddr string, cfg cdpclient.Launch
 		log.Fatalf("Failed to listen on %s: %v", listenAddr, err)
 	}
 
-	grpcServer := grpc.NewServer()
+	// The interactive service is built for long-lived, often-idle bidi streams
+	// (e.g. chrome-proxy holds one open for the life of a session, and an A/V
+	// recording keeps a single step running for many seconds). Its client keeps
+	// the HTTP/2 connection alive with keepalive pings — including between RPCs.
+	// Permit those pings; the server default (min 5m, no pings without an active
+	// stream) would otherwise GOAWAY the connection with "too_many_pings",
+	// dropping the session.
+	grpcServer := grpc.NewServer(
+		grpc.KeepaliveEnforcementPolicy(keepalive.EnforcementPolicy{
+			MinTime:             10 * time.Second,
+			PermitWithoutStream: true,
+		}),
+		grpc.KeepaliveParams(keepalive.ServerParameters{
+			Time:    60 * time.Second,
+			Timeout: 20 * time.Second,
+		}),
+	)
 	headlessbrowserpb.RegisterInteractiveSessionServiceServer(grpcServer, srv)
 	reflection.Register(grpcServer)
 
