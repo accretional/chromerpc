@@ -48,6 +48,41 @@ go run ./chrome-proxy \
   -listen 127.0.0.1:8099 -shots redsocks-test/shots
 ```
 
+## Monitoring dashboard
+
+A **read-only** web dashboard for *watching* (not steering) the proxy's live
+session. With the proxy running, open it in a browser:
+
+```bash
+open "http://127.0.0.1:8099/"      # macOS
+```
+
+Each connection the proxy holds is a grid **window** showing its latest capture,
+its state (`connecting`/`ready`/`closed`/`errored`), and a default-closed,
+expandable history of the gRPC calls made over it (each call expands to its full
+request/result). Two pure-CSS controls per window:
+
+- **⤢** enlarges the window within the grid (a `<label>` toggling a hidden
+  checkbox; `:has(.sizer:checked)` widens the cell).
+- **⛶** opens a near-fullscreen viewer of the latest capture (a `#conn-N` link
+  that `:target` styles as an overlay). `✕ close` dismisses it.
+
+**How it works.** The page (`monitor.html`) is one static file embedded with
+`go:embed`; its only script opens a single websocket to `/ws`. On connect the
+proxy calls its in-process `ChromeMan.History` — a gRPC server-streaming method
+dialed over an in-memory bufconn — and forwards each `ConnectionHistory` message
+to the socket as protojson. Streaming is **append-only**: a connection's calls
+arrive one at a time and screenshot bytes (a typed `MediaCapture` — webp/png/jpeg,
+whatever the session produced) travel exactly once. Navigation, sizing, the modal,
+and history expansion are all CSS — JavaScript only relays socket data into the DOM.
+
+**Scope.** This first pass has no mutation surface: `ChromeMan` exposes only
+`History`. The dashboard shows whatever the session itself produces (e.g. the
+screenshots your steps take) and never injects steps of its own. It is separate
+from, and additive to, the `/capture` click-through console below.
+
+Endpoints it adds: `GET /` (dashboard), `GET /ws` (ConnectionHistory over a websocket).
+
 ## Design notes / gotchas
 
 - **Keepalive is mandatory.** A long-lived interactive stream sits idle while the
