@@ -78,6 +78,10 @@
   ol.calls details > summary.err { color: var(--err); }
   ol.calls pre { margin: 0; padding: 6px 10px 10px 20px; background: #0d1013; color: #b9c4d0;
     font-size: 11px; white-space: pre-wrap; word-break: break-word; }
+  /* Per-call capture: each screenshot call renders its own image inline, so the
+     history is a chronological sequence of captures, not just the latest. */
+  ol.calls .call-shot { display: block; max-width: 100%; max-height: 340px;
+    margin: 6px 10px 6px 20px; border: 1px solid var(--line); border-radius: 6px; background: #0d1013; }
 
   /* Modal viewer via :target — near-fullscreen overlay, no JS. */
   .modal { display: none; }
@@ -190,15 +194,28 @@
     var ok = c.result && c.result.success;
     sum.textContent = '#' + (c.seq || '?') + '  ' + methodOf(c.request) + (ok ? '  ✓' : '  ✗');
     sum.className = ok ? 'ok' : 'err';
+    det.appendChild(sum);
+
+    var src = mediaSrc(c.media);
+    if (src) {
+      // Inline the capture for this specific call, so expanding it shows the
+      // image as it was at that point — chronological, not just the latest.
+      var cimg = document.createElement('img');
+      cimg.className = 'call-shot';
+      cimg.src = src;
+      cimg.alt = 'capture #' + (c.seq || '');
+      det.appendChild(cimg);
+    }
+
     var pre = document.createElement('pre');
     pre.textContent = 'request:\n' + JSON.stringify(c.request || {}, null, 2) +
                       '\n\nresult:\n' + JSON.stringify(c.result || {}, null, 2);
-    det.appendChild(sum); det.appendChild(pre);
+    det.appendChild(pre);
     li.appendChild(det);
     w.calls.appendChild(li);
     w.callcount.textContent = w.calls.children.length;
 
-    var src = mediaSrc(c.media);
+    // The window thumbnail and modal track the most recent capture (current view).
     if (src) {
       w.shot.src = src; w.shot.hidden = false; w.shot.classList.remove('empty');
       if (w.placeholder) { w.placeholder.remove(); w.placeholder = null; }
