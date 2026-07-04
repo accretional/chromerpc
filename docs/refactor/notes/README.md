@@ -30,9 +30,11 @@ non-obvious, write it here so the next instance doesn't repeat it.
 | [0001-kickoff](0001-kickoff.md) | Refactor kickoff: scope, phases, decisions, open questions |
 | [0002-environment-setup](0002-environment-setup.md) | Getting chromerpc running locally (Chrome install, build, verify) + headless bot-detection finding |
 | [0003-testing-strategy](0003-testing-strategy.md) | Design of the single end-to-end test harness + chrome-proxy meta-test |
-| [0004-accretional-repos](0004-accretional-repos.md) | Ecosystem repos (proto-linker=gluon?, proto-merge, cdp-agent) relevant to later phases |
+| [0004-accretional-repos](0004-accretional-repos.md) | Ecosystem repos: proto-linker=**proto-go** (`src/linker`; gluon=astkit substrate), proto-merge, cdp-agent |
 | [0005-baseline-test-triage](0005-baseline-test-triage.md) | First Phase-A run (1 failure: dead Database domain), file provenance, cleanup candidates |
 | [0006-bidi-agent-lessons](0006-bidi-agent-lessons.md) | Preserved lessons (keepalive, pool-recycle, CAPTCHA auto-resume) from the deleted narrative logs |
+| [0007-first-cloud-run](0007-first-cloud-run.md) | First Cloud Run deploy (2 services) + live Phase-C validation (all green) |
+| [0008-phase3-cdp-diff](0008-phase3-cdp-diff.md) | Phase 3: CDP upstream/Chrome-150 diff, cdp-pull tracking, cdpgen generator (57/57), stale-call fixes |
 
 ## Where things live
 
