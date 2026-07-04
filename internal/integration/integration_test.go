@@ -31,7 +31,6 @@ import (
 	castserver "github.com/accretional/chromerpc/internal/server/cast"
 	consoleserver "github.com/accretional/chromerpc/internal/server/console"
 	cssserver "github.com/accretional/chromerpc/internal/server/css"
-	databaseserver "github.com/accretional/chromerpc/internal/server/database"
 	deviceaccessserver "github.com/accretional/chromerpc/internal/server/deviceaccess"
 	debuggerserver "github.com/accretional/chromerpc/internal/server/debugger"
 	deviceorientationserver "github.com/accretional/chromerpc/internal/server/deviceorientation"
@@ -85,7 +84,6 @@ import (
 	castpb "github.com/accretional/chromerpc/proto/cdp/cast"
 	consolepb "github.com/accretional/chromerpc/proto/cdp/console"
 	csspb "github.com/accretional/chromerpc/proto/cdp/css"
-	databasepb "github.com/accretional/chromerpc/proto/cdp/database"
 	deviceaccesspb "github.com/accretional/chromerpc/proto/cdp/deviceaccess"
 	debuggerpb "github.com/accretional/chromerpc/proto/cdp/debugger"
 	deviceorientationpb "github.com/accretional/chromerpc/proto/cdp/deviceorientation"
@@ -171,7 +169,6 @@ type testEnv struct {
 	domDebuggerClient          domdebuggerpb.DOMDebuggerServiceClient
 	webAudioClient             webaudiopb.WebAudioServiceClient
 	inspectorClient            inspectorpb.InspectorServiceClient
-	databaseClient             databasepb.DatabaseServiceClient
 	backgroundServiceClient    backgroundservicepb.BackgroundServiceServiceClient
 	deviceOrientationClient      deviceorientationpb.DeviceOrientationServiceClient
 	webAuthnClient               webauthnpb.WebAuthnServiceClient
@@ -293,7 +290,6 @@ func setupTestEnv(t *testing.T) *testEnv {
 	domdebuggerpb.RegisterDOMDebuggerServiceServer(grpcServer, domdebuggerserver.New(client))
 	webaudiopb.RegisterWebAudioServiceServer(grpcServer, webaudioserver.New(client))
 	inspectorpb.RegisterInspectorServiceServer(grpcServer, inspectorserver.New(client))
-	databasepb.RegisterDatabaseServiceServer(grpcServer, databaseserver.New(client))
 	backgroundservicepb.RegisterBackgroundServiceServiceServer(grpcServer, backgroundserviceserver.New(client))
 	deviceorientationpb.RegisterDeviceOrientationServiceServer(grpcServer, deviceorientationserver.New(client))
 	webauthnpb.RegisterWebAuthnServiceServer(grpcServer, webauthnserver.New(client))
@@ -364,7 +360,6 @@ func setupTestEnv(t *testing.T) *testEnv {
 		domDebuggerClient:          domdebuggerpb.NewDOMDebuggerServiceClient(conn),
 		webAudioClient:             webaudiopb.NewWebAudioServiceClient(conn),
 		inspectorClient:            inspectorpb.NewInspectorServiceClient(conn),
-		databaseClient:             databasepb.NewDatabaseServiceClient(conn),
 		backgroundServiceClient:    backgroundservicepb.NewBackgroundServiceServiceClient(conn),
 		deviceOrientationClient:      deviceorientationpb.NewDeviceOrientationServiceClient(conn),
 		webAuthnClient:               webauthnpb.NewWebAuthnServiceClient(conn),

@@ -6,7 +6,6 @@ import (
 	"time"
 
 	backgroundservicepb "github.com/accretional/chromerpc/proto/cdp/backgroundservice"
-	databasepb "github.com/accretional/chromerpc/proto/cdp/database"
 	deviceorientationpb "github.com/accretional/chromerpc/proto/cdp/deviceorientation"
 	domdebuggerpb "github.com/accretional/chromerpc/proto/cdp/domdebugger"
 	inspectorpb "github.com/accretional/chromerpc/proto/cdp/inspector"
@@ -208,25 +207,6 @@ func TestInspectorEnableDisable(t *testing.T) {
 	_, err = env.inspectorClient.Disable(ctx, &inspectorpb.DisableRequest{})
 	if err != nil {
 		t.Fatalf("Inspector.Disable: %v", err)
-	}
-}
-
-// =============================================================
-// Database Domain Tests
-// =============================================================
-
-func TestDatabaseEnableDisable(t *testing.T) {
-	env := setupTestEnv(t)
-	ctx := context.Background()
-
-	_, err := env.databaseClient.Enable(ctx, &databasepb.EnableRequest{})
-	if err != nil {
-		t.Fatalf("Database.Enable: %v", err)
-	}
-
-	_, err = env.databaseClient.Disable(ctx, &databasepb.DisableRequest{})
-	if err != nil {
-		t.Fatalf("Database.Disable: %v", err)
 	}
 }
 

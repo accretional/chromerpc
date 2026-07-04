@@ -39,7 +39,6 @@ import (
 	castserver "github.com/accretional/chromerpc/internal/server/cast"
 	consoleserver "github.com/accretional/chromerpc/internal/server/console"
 	cssserver "github.com/accretional/chromerpc/internal/server/css"
-	databaseserver "github.com/accretional/chromerpc/internal/server/database"
 	deviceaccessserver "github.com/accretional/chromerpc/internal/server/deviceaccess"
 	debuggerserver "github.com/accretional/chromerpc/internal/server/debugger"
 	deviceorientationserver "github.com/accretional/chromerpc/internal/server/deviceorientation"
@@ -94,7 +93,6 @@ import (
 	castpb "github.com/accretional/chromerpc/proto/cdp/cast"
 	consolepb "github.com/accretional/chromerpc/proto/cdp/console"
 	csspb "github.com/accretional/chromerpc/proto/cdp/css"
-	databasepb "github.com/accretional/chromerpc/proto/cdp/database"
 	deviceaccesspb "github.com/accretional/chromerpc/proto/cdp/deviceaccess"
 	debuggerpb "github.com/accretional/chromerpc/proto/cdp/debugger"
 	deviceorientationpb "github.com/accretional/chromerpc/proto/cdp/deviceorientation"
@@ -283,7 +281,6 @@ func main() {
 	domdebuggerpb.RegisterDOMDebuggerServiceServer(grpcServer, domdebuggerserver.New(client))
 	webaudiopb.RegisterWebAudioServiceServer(grpcServer, webaudioserver.New(client))
 	inspectorpb.RegisterInspectorServiceServer(grpcServer, inspectorserver.New(client))
-	databasepb.RegisterDatabaseServiceServer(grpcServer, databaseserver.New(client))
 	backgroundservicepb.RegisterBackgroundServiceServiceServer(grpcServer, backgroundserviceserver.New(client))
 	deviceorientationpb.RegisterDeviceOrientationServiceServer(grpcServer, deviceorientationserver.New(client))
 	webauthnpb.RegisterWebAuthnServiceServer(grpcServer, webauthnserver.New(client))

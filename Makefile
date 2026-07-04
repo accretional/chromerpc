@@ -1,4 +1,5 @@
-.PHONY: build test proto clean docker run dev recipe deploy deploy-local
+.PHONY: build test proto clean docker run dev recipe deploy deploy-local \
+        e2e e2e-local e2e-setup metatest agentic
 
 # Build the chromerpc binary
 build:
@@ -48,7 +49,6 @@ proto:
 		proto/cdp/domdebugger/domdebugger.proto \
 		proto/cdp/webaudio/webaudio.proto \
 		proto/cdp/inspector/inspector.proto \
-		proto/cdp/database/database.proto \
 		proto/cdp/backgroundservice/backgroundservice.proto \
 		proto/cdp/deviceorientation/deviceorientation.proto \
 		proto/cdp/webauthn/webauthn.proto \
@@ -112,6 +112,29 @@ deploy-local:
 # build & push the image; this deploys it as a second service with --interactive.
 deploy-bidi:
 	INVOKER_AUTH=require ./scripts/deploy-bidi.sh
+
+# --- Refactor test harness (see docs/refactor/) ---------------------------------
+# Install/verify prerequisites (grpcurl, gcloud, …); guides gcloud auth + project.
+e2e-setup:
+	./scripts/refactor-setup.sh $(ARGS)
+
+# Full end-to-end gate: Phase A (local) -> B (build+deploy) -> C (agentic+automation).
+e2e:
+	./scripts/refactor-e2e.sh $(ARGS)
+
+# Fast inner loop: Phase A only (local CDP smoke; no GCP needed).
+e2e-local:
+	./scripts/refactor-e2e.sh --local-only
+
+# chrome-proxy meta-test against a deployed interactive host (HOST=<interactive-host>).
+metatest:
+	@test -n "$(HOST)" || { echo "usage: make metatest HOST=<interactive-host>"; exit 2; }
+	./scripts/metatest-chrome-proxy.sh --host $(HOST)
+
+# Multi-agent dynamic-navigation suite (HOST=<interactive-host> [AGENTS=n]).
+agentic:
+	@test -n "$(HOST)" || { echo "usage: make agentic HOST=<interactive-host> [AGENTS=2]"; exit 2; }
+	./scripts/agentic-suite.sh --host $(HOST) --agents $(or $(AGENTS),2)
 
 # Clean build artifacts
 clean:

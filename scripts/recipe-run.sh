@@ -32,15 +32,19 @@ resp="$(grpcurl -max-time 180 -H "authorization: Bearer ${TOKEN}" -d "$JSON" \
 echo "$resp" | jq -r '"success=\(.success)  \(if .error then "error=\(.error)" else "" end)",
   (.stepResults[]? | "  - \(.label): success=\(.success) \(if .error then "ERR=\(.error)" elif .scriptResult then "=> \(.scriptResult)" else "" end)")'
 
-# Save & open any screenshots in the response.
+# Save (and, unless NO_OPEN=1, open) any screenshots in the response.
 i=0
 while IFS= read -r b64; do
   [ -n "$b64" ] || continue
   out="$(mktemp -t "$(basename "${RECIPE%.textproto}").XXXX").png"
   echo "$b64" | base64 -d > "$out"
   echo ">> screenshot -> $out ($(wc -c <"$out" | tr -d ' ') bytes)"
-  command -v open >/dev/null && open "$out" || true
+  [ "${NO_OPEN:-0}" = 1 ] || { command -v open >/dev/null && open "$out" || true; }
   i=$((i+1))
 done < <(echo "$resp" | jq -r '.stepResults[]? | select(.screenshotData != null) | .screenshotData')
 [ "$i" -eq 0 ] && echo ">> (no screenshot bytes in response)"
+
+# Gate: fail if the automation itself did not succeed (so this is usable as a test).
+ok="$(echo "$resp" | jq -r '.success')"
+if [ "$ok" != "true" ]; then echo ">> recipe FAILED (success=$ok)"; exit 1; fi
 exit 0

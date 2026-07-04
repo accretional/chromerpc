@@ -10,5 +10,4 @@ docker-compose.yml
 cloudbuild.yaml
 scripts/
 chrome-testing/
-automations/*/output/
 **/*_test.go

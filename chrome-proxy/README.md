@@ -45,7 +45,7 @@ again. State carries over because it's the same session.
 go run ./chrome-proxy \
   -addr <service-host>:443 -tls \
   -token "$(gcloud auth print-identity-token)" \
-  -listen 127.0.0.1:8099 -shots redsocks-test/shots
+  -listen 127.0.0.1:8099 -shots chrome-proxy/shots
 ```
 
 ## Design notes / gotchas
@@ -72,8 +72,9 @@ reflection-driven `grpc`→`goproxy` client) — would generalize this to the wh
 deferred; for steering a single interactive session, this focused proxy is
 enough.
 
-See [`redsocks-test/CLAUDE_RED_SOCKS_TEST.md`](../redsocks-test/CLAUDE_RED_SOCKS_TEST.md)
-for a full agent-steered session driven through this proxy.
+The lessons from real agent-steered sessions through this proxy (bidi keepalive,
+pool recycle, CAPTCHA auto-resume) are preserved in
+[`docs/refactor/notes/0006-bidi-agent-lessons.md`](../docs/refactor/notes/0006-bidi-agent-lessons.md).
 
 ## Human-in-the-loop click-through (CAPTCHAs, image selection, etc.)
 

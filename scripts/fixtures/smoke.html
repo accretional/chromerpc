@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>chromerpc smoke fixture</title>
+<style>
+  html,body{margin:0;padding:0}
+  body{font:16px/1.4 system-ui,sans-serif;background:#0b1021;color:#e6e9f2}
+  .wrap{max-width:900px;margin:40px auto;padding:0 24px}
+  h1{color:#7cc4ff;margin:0 0 12px}
+  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:24px 0}
+  .cell{height:80px;border-radius:8px}
+  .c0{background:#ff5d5d}.c1{background:#ffd166}.c2{background:#06d6a0}.c3{background:#4d96ff}
+  #marker{font-weight:700;color:#06d6a0}
+  code{background:#1a2140;padding:2px 6px;border-radius:4px}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <h1 id="title">chromerpc smoke fixture</h1>
+    <p>Deterministic local page for the refactor test harness. No network, no
+       bot detection (see BUG-001). If you can read this in a screenshot, the
+       low-level CDP proto path (navigate + emulation + capture) works.</p>
+    <div class="grid">
+      <div class="cell c0"></div><div class="cell c1"></div>
+      <div class="cell c2"></div><div class="cell c3"></div>
+    </div>
+    <p>Render marker: <span id="marker">SMOKE_OK</span></p>
+    <p>Viewport: <code id="vp"></code></p>
+  </div>
+  <script>
+    document.getElementById('vp').textContent =
+      window.innerWidth + 'x' + window.innerHeight;
+    // Stable signal a script-evaluate step can read back.
+    window.__smoke = 'SMOKE_OK';
+    document.title = 'chromerpc smoke fixture — ready';
+  </script>
+</body>
+</html>
