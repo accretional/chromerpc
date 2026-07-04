@@ -102,10 +102,12 @@ navigate/act/screenshot sequence in one call, is the recommended entry point.
 
 ## Security note
 
-`INVOKER_AUTH=allow` (the default) makes the service **publicly reachable**. A
-public browser-automation endpoint is effectively an open fetch/SSRF proxy that
-can navigate to internal or arbitrary URLs. For anything beyond a demo, deploy
-with `INVOKER_AUTH=require` and call it with an identity token:
+`INVOKER_AUTH=allow` is the **bare script** default and makes the service
+**publicly reachable**. (`make deploy` overrides this to `INVOKER_AUTH=require`, so
+the Makefile path is IAM-gated.) A public browser-automation endpoint is
+effectively an open fetch/SSRF proxy that can navigate to internal or arbitrary
+URLs. For anything beyond a demo, deploy with `INVOKER_AUTH=require` and call it
+with an identity token:
 
 ```bash
 INVOKER_AUTH=require ./scripts/deploy-cloudrun.sh

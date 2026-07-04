@@ -106,15 +106,37 @@ Executed after user greenlight. Lessons preserved in notes/0006 first.
 - [ ] README.md still has a dangling `automations/` link + "the dream" content →
       Phase 2 docs sweep (left intentionally; part of the larger README rework).
 
-## Phase 2 — Docs sweep (not started)
-- [ ] Audit all existing docs (README, DEPLOY.md, per-dir READMEs, narrative logs).
-- [ ] Preserve useful resources/techniques into `docs/` (CDP discovery, deploy
-      knobs, keepalive/recycle lessons); remove the rest.
+## Phase 2 — Docs sweep (DONE)
+Executed from a full doc audit:
+- [x] Slimmed root README 354→~180 lines: cut the origin story ("dream/Starting
+      Out/Milestone1"); fixed 3 broken links (automations/, testing/ paths, demo
+      image); 55→54 counts; reconciled the default-auth story; added refactor pointer.
+      Preserved the CDP reflection-discovery, Cloud Run calling, and Go-client techniques.
+- [x] Moved `DEPLOY.md` → `docs/deploy.md` (best-written doc; kept knobs table,
+      env tunables, image-tag scheme) + noted `make deploy` uses `require`.
+- [x] `loadtest/README.md`: `chromerpc-bidi-pool` → unified `chromerpc-interactive`.
+- [x] `chrome-proxy/README.md`: 55→54, trimmed speculative gateway para.
+- [x] Left `recipes/README.md` + `chrome-testing/USAGE_INSTRUCTIONS.md` in place
+      (accurate; recipes removal-slated for Phase 4/5).
 
-## Phase 3 — CDP proto sweep + generation (not started)
-- [ ] Diff current 54 CDP domains vs. upstream CDP; note adds/removes since setup.
-- [ ] Design PDL tracking + auto-pull + auto-generation (replace hand-listed protoc).
-- [ ] Evaluate buf vs. custom generator.
+## Phase 3 — CDP proto sweep + generation (CORE MECHANISMS WORKING)
+Full analysis in [notes/0008](notes/0008-phase3-cdp-diff.md). No CDP→proto generator
+existed → built net-new here.
+- [x] **Diff vs upstream** (agent) + **vs the running Chrome 150** (`cdp-pull.sh`):
+      57 domains in 150; 4 missing (all experimental); 0 dead domains; 4 stale calls
+      confirmed absent from 150.
+- [x] **3a Tracking/pull:** `scripts/cdp-pull.sh` dumps the running Chrome's exact
+      `/json/protocol` + master, vendors under `proto/cdp/_upstream/` (chrome-protocol
+      pinned/committed; master gitignored), prints domain/command diff. `make cdp-pull`.
+- [x] **3b Decisions:** skip the 5/4 experimental domains; fix the stale calls.
+      Applied `Media.playersCreated`→`playerCreated`. Deferred 3 dead-method removals
+      to the cdpgen migration (need regen, tracked).
+- [x] **3c Generator:** `tools/cdpgen` reads CDP JSON → `.proto` per domain. **All 57
+      domains generate protoc-valid** (`make cdp-gen DOMAIN=all`). RPC surface matches
+      hand-written. Fixed sessionId + `<Domain>Event` collisions.
+- [ ] **Next (3→4):** full cross-domain `$ref` imports + byte-fidelity to hand-written
+      protos; wire regenerated `.pb.go` into the build; auto-emit the Makefile `proto:`
+      list (or switch to buf); then use regen to drop the 3 dead methods cleanly.
 
 ## Phase 4 — Single CDP server via proto-linker (not started)
 - [ ] Integrate the external proto-linker/build project (repo TBD — DECIDE #3).

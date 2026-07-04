@@ -64,13 +64,10 @@ go run ./chrome-proxy \
 ## Relation to generated proxies
 
 This is a focused, hand-written gateway over the *one* RPC we drive
-(`InteractiveSessionService.Session`). A general reflection→HTTP gateway —
-auto-generating a REST/JSON surface for every reflected gRPC service/method
-(e.g. via accretional's `openapi2proto` / `gluon` codegen + `astkit`, or a
-reflection-driven `grpc`→`goproxy` client) — would generalize this to the whole
-55-domain CDP surface without hand-writing handlers. That generalization is
-deferred; for steering a single interactive session, this focused proxy is
-enough.
+(`InteractiveSessionService.Session`). A general reflection→HTTP gateway could
+auto-generate a REST/JSON surface for every reflected gRPC method across the whole
+54-domain CDP surface without hand-writing handlers; that generalization is
+deferred. For steering a single interactive session, this focused proxy is enough.
 
 The lessons from real agent-steered sessions through this proxy (bidi keepalive,
 pool recycle, CAPTCHA auto-resume) are preserved in

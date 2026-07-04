@@ -1,7 +1,8 @@
 # Interactive pool — load test
 
-Drives the multi-process interactive pool service (`chromerpc-bidi-pool`) under
-concurrent load and checks Cloud Run health metrics afterward.
+Drives the unified interactive+pool service (`chromerpc-interactive`) under
+concurrent load and checks Cloud Run health metrics afterward. ("bidi" and "pool"
+are the same binary — `--interactive --pool-size=N` — so one service covers both.)
 
 ## What it does
 
@@ -25,11 +26,11 @@ visible).
 ## Run
 
 ```bash
-# Service must be deployed first (pool size 2):
-POOL_SIZE=2 ./scripts/deploy-pool.sh
+# Service must be deployed first (unified interactive+pool, size 2):
+SERVICE=chromerpc-interactive POOL_SIZE=2 ./scripts/deploy-pool.sh
 
 # Full run (20 concurrent x 3 pulses, 30s gap) + metrics:
-./loadtest/run.sh
+SERVICE=chromerpc-interactive ./loadtest/run.sh
 
 # Or directly:
 go run ./loadtest -addr <host>:443 -tls \

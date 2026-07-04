@@ -49,9 +49,16 @@ across the org (`gh search code` for `ServerConfig` / `BuildDescriptorProto` /
 
 ## Proto codegen / PDL tooling candidates (Phase 3 — proto sweep + auto-gen)
 
-- **`accretional/proto-merge`** (public) — "Protobuf source code processor — scan,
-  download, bundle, split, and transform .proto files." Directly relevant to the
-  "pull in / bundle / generate protos" goal.
+**Clarified:** there is **no existing CDP→proto generator** in the ecosystem
+(`browser_protocol`/`devtools-protocol` appear only as README references in
+chromerpc/click-chromerpc). The CDP-JSON/PDL→`.proto` generator for Phase 3 is
+net-new — build it in this repo (`tools/cdpgen`).
+
+- **`accretional/proto-merge`** (public) — a **cross-repo `.proto` aggregator**:
+  "scans GitHub orgs for `.proto` files, downloads them" → `proto-download/`,
+  `proto-bundle/` (one merged file), `proto-split/` (one file per message/service).
+  Bundled as a Go package (`github.com/accretional/merge`). **Not** a CDP generator;
+  relevant to **Phase 4** linking/bundling and to tracking `.proto` across the org.
 - **`accretional/protostar`** (public) — "Enhanced protobuf builds, testing, and
   codegen." Candidate to replace the hand-listed `protoc` Makefile target.
 - `accretional/go2proto` (private), `accretional/proto-builder` (private) — possible

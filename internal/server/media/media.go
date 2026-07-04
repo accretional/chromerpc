@@ -147,7 +147,10 @@ func (s *Server) SubscribeEvents(req *pb.SubscribeEventsRequest, stream pb.Media
 	})
 	defer unsub4()
 
-	unsub5 := s.client.On("Media.playersCreated", func(_ string, params json.RawMessage, _ string) {
+	// CDP renamed this event to the singular "Media.playerCreated" (the plural
+	// "playersCreated" no longer exists in Chrome). Proto message names below are
+	// left as-is until the domain is regenerated (see docs/refactor Phase 3).
+	unsub5 := s.client.On("Media.playerCreated", func(_ string, params json.RawMessage, _ string) {
 		var raw struct {
 			Players []struct {
 				PlayerID string `json:"playerId"`

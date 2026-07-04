@@ -47,8 +47,8 @@ Ordered. Each phase should be green on the test harness before the next begins.
 |---|-------|--------|
 | 0 | **Coordination & tracking** — stand up `docs/refactor/` structure & note conventions | ✅ done |
 | 1 | **Testing strategy** — single end-to-end harness (local smoke → build+deploy → agentic+automation suite) + chrome-proxy meta-test | ✅ done (green end-to-end) |
-| 2 | **Docs sweep** — audit all existing docs; preserve useful resources/techniques, remove the rest | ⬜ not started |
-| 3 | **CDP proto sweep + generation** — audit domains for add/remove; set up tracking + auto-pull + auto-generation from CDP PDL changes | ⬜ not started |
+| 2 | **Docs sweep** — audit all existing docs; preserve useful resources/techniques, remove the rest | ✅ done |
+| 3 | **CDP proto sweep + generation** — audit domains for add/remove; set up tracking + auto-pull + auto-generation from CDP PDL changes | 🟡 core working (`cdp-pull` + `cdpgen` 57/57); full migration next |
 | 4 | **Single CDP server via proto-linker** — remove custom `HeadlessBrowserService`; use external proto-linker/build project to combine all CDP gRPC services into one low-level CDP server | ⬜ not started |
 | 5 | **chromescript** — new automation implementation under `proto/chromescript/` (replaces the old step-based automation) | ⬜ not started |
 | 6 | **chromerun** — move bidi/interactive navigation to `proto/chromerun/` | ⬜ not started |

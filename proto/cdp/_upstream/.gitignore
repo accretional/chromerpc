@@ -1,0 +1,5 @@
+# Master (tip-of-tree) snapshots are regenerable via scripts/cdp-pull.sh and churn
+# frequently — don't commit them. The pinned chrome-protocol.json + VERSION ARE
+# committed (the authoritative baseline for the Chrome build we ship).
+browser_protocol.json
+js_protocol.json

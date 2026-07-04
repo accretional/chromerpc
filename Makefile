@@ -1,5 +1,5 @@
 .PHONY: build test proto clean docker run dev recipe deploy deploy-local \
-        e2e e2e-local e2e-setup metatest agentic
+        e2e e2e-local e2e-setup metatest agentic cdp-pull cdp-gen
 
 # Build the chromerpc binary
 build:
@@ -112,6 +112,19 @@ deploy-local:
 # build & push the image; this deploys it as a second service with --interactive.
 deploy-bidi:
 	INVOKER_AUTH=require ./scripts/deploy-bidi.sh
+
+# --- CDP proto tracking + generation (Phase 3; see docs/refactor/) ---------------
+# Pull the running Chrome's exact protocol + upstream master, vendor them under
+# proto/cdp/_upstream/, and print a domains/commands diff vs this repo.
+cdp-pull:
+	./scripts/cdp-pull.sh $(ARGS)
+
+# Generate .proto from the pinned CDP protocol. DOMAIN=<Name|all>, OUT=<dir>.
+#   make cdp-gen DOMAIN=Page OUT=/tmp
+cdp-gen:
+	@test -n "$(DOMAIN)" || { echo "usage: make cdp-gen DOMAIN=<Name|all> [OUT=/tmp]"; exit 2; }
+	go run ./tools/cdpgen -proto proto/cdp/_upstream/chrome-protocol.json \
+		-domain $(DOMAIN) -out $(or $(OUT),/tmp/cdpgen-out)
 
 # --- Refactor test harness (see docs/refactor/) ---------------------------------
 # Install/verify prerequisites (grpcurl, gcloud, …); guides gcloud auth + project.
