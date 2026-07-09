@@ -436,6 +436,15 @@ func (s *Server) doNavigate(ctx context.Context, n *pb.Navigate) (*pb.StepResult
 	_, _ = s.send(ctx, "Emulation.setFocusEmulationEnabled", map[string]interface{}{"enabled": true})
 
 	wu := strings.ToLower(strings.TrimSpace(n.WaitUntil))
+	// Unset defaults to "load", not fire-and-forget. Page.navigate resolves at
+	// commit, but the renderer is still swapping documents then, so an immediately
+	// following step on the same session (classically a batched screenshot) races
+	// the swap and fails with CDP "Not attached to an active page". Waiting for the
+	// load event makes the page usable by the next step. Callers that genuinely
+	// want the fast no-wait path can still ask for it explicitly with "commit".
+	if wu == "" {
+		wu = "load"
+	}
 	timeout := time.Duration(n.TimeoutMs) * time.Millisecond
 	if timeout <= 0 {
 		timeout = 30 * time.Second
@@ -456,8 +465,8 @@ func (s *Server) doNavigate(ctx context.Context, n *pb.Navigate) (*pb.StepResult
 		idle   *networkIdleTracker
 	)
 	switch wu {
-	case "", "commit":
-		// no waiting setup needed
+	case "commit":
+		// no waiting setup needed (explicit fast path)
 	case "load", "networkidle":
 		loadCh = make(chan struct{})
 		var once sync.Once

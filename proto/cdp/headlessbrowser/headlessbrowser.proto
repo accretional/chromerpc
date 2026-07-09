@@ -120,7 +120,11 @@ message SetViewport {
 message Navigate {
   string url = 1;
   // wait_until controls when navigation is considered complete:
-  //   "" / "commit"  - return as soon as navigation is committed (default)
+  //   ""             - unset: same as "load" (safe default — the page is usable
+  //                    by the next step; a bare "commit" leaves the renderer
+  //                    mid-document-swap, so a following step can race it)
+  //   "commit"       - return as soon as navigation is committed (fast, no wait;
+  //                    a subsequent same-session step may need its own wait)
   //   "load"         - wait for the page 'load' event
   //   "networkidle"  - wait for 'load', then until network is idle (~500ms with
   //                    no in-flight requests)
