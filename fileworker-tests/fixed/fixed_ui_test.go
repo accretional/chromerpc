@@ -225,9 +225,25 @@ func jsString(value string) string {
 func TestInspectorIsVisibleAndMoreButtonIsInteractive(t *testing.T) {
 	h := newHarness(t)
 	p := h.newPage()
+	p.command("Emulation.setDeviceMetricsOverride", map[string]any{
+		"width": 756, "height": 900, "deviceScaleFactor": 1, "mobile": false,
+	})
 	name := fmt.Sprintf("inspector-%d.txt", time.Now().UnixNano())
 	dropFile(p, name, "fixed inspector geometry")
 	p.wait(fmt.Sprintf(`document.querySelector('[data-path="%s"]')`, name), 10*time.Second)
+	layout := p.eval(fmt.Sprintf(`(() => {
+		const button = document.querySelector('[data-path="%s"] .more-button');
+		const rect = button.getBoundingClientRect();
+		return {left:rect.left, right:rect.right, width:innerWidth, scrollWidth:document.documentElement.scrollWidth};
+	})()`, name))
+	layoutJSON, _ := json.Marshal(layout)
+	var compact struct{ Left, Right, Width, ScrollWidth float64 }
+	if err := json.Unmarshal(layoutJSON, &compact); err != nil {
+		t.Fatal(err)
+	}
+	if compact.Left < 0 || compact.Right > compact.Width || compact.ScrollWidth > compact.Width {
+		t.Fatalf("More button is offscreen at compact desktop width: %+v", compact)
+	}
 	p.click(fmt.Sprintf(`[data-path="%s"] .more-button`, name))
 	p.wait(`document.querySelector("#inspector").classList.contains("open")`, 3*time.Second)
 
