@@ -259,7 +259,8 @@ func TestInspectorIsVisibleAndMoreButtonIsInteractive(t *testing.T) {
 			scrollTop: drawer.scrollTop,
 			position: getComputedStyle(drawer).position,
 			moreCursor: getComputedStyle(more).cursor,
-			moreTitle: more.title
+			moreTitle: more.title,
+			focused: document.activeElement?.id || ""
 		};
 	})()`)
 	data, _ := json.Marshal(value)
@@ -268,7 +269,7 @@ func TestInspectorIsVisibleAndMoreButtonIsInteractive(t *testing.T) {
 		Drawer                          struct{ Top, Left, Right, Bottom, Width, Height float64 }
 		Content                         struct{ Top, Bottom float64 }
 		ScrollTop                       float64
-		Position, MoreCursor, MoreTitle string
+		Position, MoreCursor, MoreTitle, Focused string
 	}
 	if err := json.Unmarshal(data, &geometry); err != nil {
 		t.Fatal(err)
@@ -291,6 +292,9 @@ func TestInspectorIsVisibleAndMoreButtonIsInteractive(t *testing.T) {
 	}
 	if !strings.Contains(strings.ToLower(geometry.MoreTitle), "inspector") {
 		t.Errorf("more button needs a descriptive title, got %q", geometry.MoreTitle)
+	}
+	if geometry.Focused != "close-inspector" {
+		t.Errorf("inspector focus = %q, want close-inspector", geometry.Focused)
 	}
 	p.screenshot("inspector-open.png")
 }
