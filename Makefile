@@ -1,4 +1,6 @@
-.PHONY: build test proto clean docker run dev recipe deploy deploy-local
+.PHONY: build test test-fileworker proto clean docker run dev recipe deploy deploy-local
+
+GO_TEST_TIMEOUT ?= 10m
 
 # Build the chromerpc binary
 build:
@@ -6,7 +8,12 @@ build:
 
 # Run all tests
 test:
-	go test ./... -v -count=1
+	go test ./... -v -count=1 -timeout=$(GO_TEST_TIMEOUT)
+
+# Deterministic Fileworker browser release gate. Add the live Claude explorer
+# explicitly via fileworker-tests/run_all.sh --with-claude -- <arguments>.
+test-fileworker:
+	./fileworker-tests/run_all.sh
 
 # Regenerate protobuf Go code
 proto:
