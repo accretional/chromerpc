@@ -115,7 +115,9 @@ func (r *LaunchResult) Cleanup() {
 		return
 	}
 	if r.Process != nil {
-		r.Process.Kill()
+		// Kill the whole process group (Chrome + all helpers), not just the
+		// main pid; the group was established via setProcessGroup at launch.
+		killProcessGroup(r.Process.Pid)
 	}
 	if r.Cmd != nil {
 		r.Cmd.Wait()
@@ -142,6 +144,10 @@ func Launch(ctx context.Context, cfg LaunchConfig) (*LaunchResult, error) {
 	if timeout == 0 {
 		timeout = 30 * time.Second
 	}
+
+	// Reap any Chrome instances orphaned by a previously-killed launcher before
+	// adding another, so a crash loop can't accumulate unbounded browsers.
+	sweepOrphansOnce()
 
 	port := cfg.Port // 0 = auto
 
@@ -183,6 +189,16 @@ func Launch(ctx context.Context, cfg LaunchConfig) (*LaunchResult, error) {
 	args = append(args, "about:blank")
 
 	cmd := exec.CommandContext(ctx, chromePath, args...)
+	// Put Chrome in its own process group so its entire tree can be killed at
+	// once, and make context cancellation kill that whole group rather than
+	// only the main pid (which would orphan the renderer/GPU helpers).
+	setProcessGroup(cmd)
+	cmd.Cancel = func() error {
+		if cmd.Process != nil {
+			killProcessGroup(cmd.Process.Pid)
+		}
+		return nil
+	}
 	if scratchDir != "" {
 		// Confine Chrome's scratch/temp files to its isolated tree too.
 		cmd.Env = append(os.Environ(), "TMPDIR="+scratchDir, "TMP="+scratchDir, "TEMP="+scratchDir)
